@@ -45,6 +45,8 @@ export function saveVoiceSettings(settings: VoiceSettings): void {
 }
 
 let cachedVoices: SpeechSynthesisVoice[] = [];
+let activeAiAudio: HTMLAudioElement | null = null;
+const AI_TTS_URL = import.meta.env.VITE_AI_TTS_URL?.trim();
 
 export function getBrowserVoices(): SpeechSynthesisVoice[] {
   if (typeof window === 'undefined' || !('speechSynthesis' in window)) return [];
@@ -127,6 +129,17 @@ export function playSpeech(
     onError?: (err: any) => void;
   } = {}
 ): void {
+  if (AI_TTS_URL && typeof Audio !== 'undefined') {
+    stopAllSpeech();
+    const audio = new Audio(`${AI_TTS_URL}?text=${encodeURIComponent(text.slice(0, 500))}`);
+    activeAiAudio = audio;
+    audio.playbackRate = options.rate ?? loadVoiceSettings().rate ?? 0.9;
+    audio.onplay = () => options.onStart?.();
+    audio.onended = () => { activeAiAudio = null; options.onEnd?.(); };
+    audio.onerror = () => { activeAiAudio = null; options.onError?.(new Error('AI voice playback failed')); };
+    void audio.play().catch(error => options.onError?.(error));
+    return;
+  }
   if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
     console.warn('Web Speech API is not supported in this browser.');
     options.onError?.(new Error('Speech synthesis not supported'));
@@ -168,6 +181,11 @@ export function playSpeech(
 }
 
 export function stopAllSpeech(): void {
+  if (activeAiAudio) {
+    activeAiAudio.pause();
+    activeAiAudio.currentTime = 0;
+    activeAiAudio = null;
+  }
   if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
     window.speechSynthesis.cancel();
   }

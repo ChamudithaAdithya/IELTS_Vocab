@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit"
+    ,"generate:lesson9": "tsx scripts/generate-lesson9.mts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",
