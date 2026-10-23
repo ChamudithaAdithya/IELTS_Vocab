@@ -1,9 +1,0 @@
-{
-  "name": "ielts-vocab-voice",
-  "main": "src/index.ts",
-  "compatibility_date": "2026-10-23",
-  "vars": {
-    "ALLOWED_ORIGIN": "https://chamudithaadithya.github.io",
-    "ELEVENLABS_VOICE_ID": "JBFqnCBsd6RMkjVDRZzb"
-  }
-}

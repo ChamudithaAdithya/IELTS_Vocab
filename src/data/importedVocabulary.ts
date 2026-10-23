@@ -1,5 +1,4 @@
 import rawVocabulary from './academic-vocabulary.txt?raw';
-import generatedVocabulary from './lesson9.generated.json';
 import type { Lesson, Word } from '../types';
 
 const CORRECTIONS: Record<string, string> = {
@@ -32,9 +31,6 @@ const uniqueTerms = importedTerms.filter(
     terms.findIndex(candidate => candidate.toLocaleLowerCase() === term.toLocaleLowerCase()) === index,
 );
 
-const generatedByTerm = new Map(
-  (generatedVocabulary as Word[]).map(word => [word.term.toLocaleLowerCase(), word]),
-);
 
 const inferPartOfSpeech = (term: string): Word['partOfSpeech'] => {
   if (/\s|\//.test(term)) return 'phrase';
@@ -157,8 +153,6 @@ const buildSimpleExamples = (term: string, partOfSpeech: Word['partOfSpeech']) =
 };
 
 const createImportedWord = (term: string, index: number): Word => {
-  const generated = generatedByTerm.get(term.toLocaleLowerCase());
-  if (generated) return { ...generated, id: `l9-w${index + 1}` };
   const partOfSpeech = inferPartOfSpeech(term);
   const label = capitalise(term);
 
