@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IELTS Master Band 7+ Vocabulary | With Sinhala Translations</title>
+    <meta name="description" content="Master Band 7+ IELTS Academic & General vocabulary with comprehensive English definitions, Sinhala translations, authentic collocations, interactive quizzes, speaking challenges, and audio pronunciation." />
+    <meta property="og:title" content="IELTS Master Band 7+ Vocabulary" />
+    <meta property="og:description" content="Master Band 7+ IELTS vocabulary with Sinhala translations, collocations, quizzes, and speaking challenges." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script>
+      (function() {
+        // Fix: 'Cannot set property fetch of #<Window> which has only a getter'
+        // Caused by Chrome extensions attempting to monkey-patch window.fetch in environments where it lacks a setter
+        try {
+          var originalFetch = window.fetch;
+          var customFetch = originalFetch;
+          Object.defineProperty(window, 'fetch', {
+            get: function() {
+              return customFetch || originalFetch;
+            },
+            set: function(fn) {
+              customFetch = fn;
+            },
+            configurable: true,
+            enumerable: true
+          });
+        } catch (e) {
+          try {
+            if (typeof Window !== 'undefined' && Window.prototype) {
+              var protoFetch = Window.prototype.fetch;
+              Object.defineProperty(Window.prototype, 'fetch', {
+                get: function() {
+                  return protoFetch;
+                },
+                set: function(fn) {
+                  protoFetch = fn;
+                },
+                configurable: true,
+                enumerable: true
+              });
+            }
+          } catch (e2) {}
+        }
+
+        // Catch and prevent chrome-extension scripts from breaking runtime or reporting unhandled errors
+        window.addEventListener('error', function(event) {
+          var isExtensionError = event.filename && event.filename.indexOf('chrome-extension://') !== -1;
+          var isFetchGetterError = event.message && event.message.indexOf('Cannot set property fetch') !== -1;
+          if (isExtensionError || isFetchGetterError) {
+            event.preventDefault();
+            event.stopPropagation();
+            return true;
+          }
+        }, true);
+
+        window.addEventListener('unhandledrejection', function(event) {
+          var reasonStr = event.reason ? (event.reason.message || String(event.reason)) : '';
+          if (reasonStr && reasonStr.indexOf('Cannot set property fetch') !== -1) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+        });
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Sinhala:wght@400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

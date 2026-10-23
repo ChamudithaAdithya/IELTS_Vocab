@@ -1,0 +1,6 @@
+{
+  "name": "IELTS Master Band 7+ Vocabulary",
+  "description": "Interactive IELTS Band 7+ vocabulary learning platform with English definitions, Sinhala translations, authentic collocations, audio pronunciation, flashcards, and speaking & writing challenges.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
