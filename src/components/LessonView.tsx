@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { Lesson, Word, UserProgress } from '../types';
 import { LessonRightSidebar } from './LessonRightSidebar';
-import { playSpeech, stopAllSpeech } from '../utils/speech';
+import { loadVoiceSettings, playSpeech, stopAllSpeech } from '../utils/speech';
 
 interface LessonViewProps {
   lesson: Lesson;
@@ -45,6 +45,9 @@ export const LessonView: React.FC<LessonViewProps> = ({
 }) => {
   // Web Speech API state
   const [playingWordId, setPlayingWordId] = useState<string | null>(null);
+  const [showExampleSpeakers, setShowExampleSpeakers] = useState(
+    () => loadVoiceSettings().showExampleSpeakers,
+  );
   const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
 
   // Practice checklist state
@@ -82,6 +85,18 @@ export const LessonView: React.FC<LessonViewProps> = ({
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
       }
+    };
+  }, []);
+
+  useEffect(() => {
+    const syncVoiceSettings = () => {
+      setShowExampleSpeakers(loadVoiceSettings().showExampleSpeakers);
+    };
+    window.addEventListener('voice-settings-changed', syncVoiceSettings);
+    window.addEventListener('storage', syncVoiceSettings);
+    return () => {
+      window.removeEventListener('voice-settings-changed', syncVoiceSettings);
+      window.removeEventListener('storage', syncVoiceSettings);
     };
   }, []);
 
@@ -421,15 +436,28 @@ export const LessonView: React.FC<LessonViewProps> = ({
                       const parts = enText.split(regex);
                       return (
                         <li key={sIdx} className="leading-relaxed pl-1 space-y-0.5">
-                          <div className="text-slate-800">
-                            {parts.map((part, pIdx) =>
-                              regex.test(part) ? (
-                                <strong key={pIdx} className="text-slate-900 font-semibold underline decoration-slate-300 underline-offset-2">
-                                  {part}
-                                </strong>
-                              ) : (
-                                part
-                              )
+                          <div className="text-slate-800 flex items-start gap-2">
+                            <span className="flex-1">
+                              {parts.map((part, pIdx) =>
+                                regex.test(part) ? (
+                                  <strong key={pIdx} className="text-slate-900 font-semibold underline decoration-slate-300 underline-offset-2">
+                                    {part}
+                                  </strong>
+                                ) : (
+                                  part
+                                )
+                              )}
+                            </span>
+                            {showExampleSpeakers && (
+                              <button
+                                type="button"
+                                onClick={() => handlePronounce(enText, `${word.id}-example-${sIdx}`)}
+                                className="shrink-0 p-1 rounded text-slate-400 hover:text-indigo-600 hover:bg-indigo-50"
+                                title="Pronounce this example sentence"
+                                aria-label="Pronounce this example sentence"
+                              >
+                                <Volume2 className={`w-4 h-4 ${playingWordId === `${word.id}-example-${sIdx}` ? 'animate-pulse text-indigo-600' : ''}`} />
+                              </button>
                             )}
                           </div>
                           {showSinhala && siText && (

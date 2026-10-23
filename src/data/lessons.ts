@@ -1,4 +1,5 @@
 import { Lesson } from '../types';
+import { IMPORTED_ACADEMIC_LESSON } from './importedVocabulary';
 
 export const LESSONS: Lesson[] = [
   {
@@ -2709,7 +2710,8 @@ export const LESSONS: Lesson[] = [
         'Use high-band vocabulary: "intangible cultural heritage", "cosmopolitan", "cross-cultural communication".'
       ]
     }
-  }
+  },
+  IMPORTED_ACADEMIC_LESSON
 ];
 
 // Flat list of all words for quick lookup & dictionary

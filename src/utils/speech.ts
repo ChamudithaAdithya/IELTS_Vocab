@@ -9,6 +9,7 @@ export interface VoiceSettings {
   lang: string;
   rate: number;
   pitch: number;
+  showExampleSpeakers: boolean;
 }
 
 const VOICE_SETTINGS_STORAGE_KEY = 'ielts_master_voice_settings_v1';
@@ -19,6 +20,7 @@ export const defaultVoiceSettings: VoiceSettings = {
   lang: 'en-GB',
   rate: 0.9,
   pitch: 1.0,
+  showExampleSpeakers: true,
 };
 
 export function loadVoiceSettings(): VoiceSettings {
@@ -36,6 +38,7 @@ export function saveVoiceSettings(settings: VoiceSettings): void {
   if (typeof window === 'undefined') return;
   try {
     localStorage.setItem(VOICE_SETTINGS_STORAGE_KEY, JSON.stringify(settings));
+    window.dispatchEvent(new CustomEvent('voice-settings-changed', { detail: settings }));
   } catch (e) {
     console.error('Failed to save voice settings:', e);
   }

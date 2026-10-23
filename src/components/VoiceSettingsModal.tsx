@@ -66,6 +66,12 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
     saveVoiceSettings(updated);
   };
 
+  const handleExampleSpeakersChange = (showExampleSpeakers: boolean) => {
+    const updated: VoiceSettings = { ...settings, showExampleSpeakers };
+    setSettings(updated);
+    saveVoiceSettings(updated);
+  };
+
   const handleTestPronounce = () => {
     if (isTesting) {
       stopAllSpeech();
@@ -214,6 +220,19 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
                 <span>1.2x (Fast)</span>
               </div>
             </div>
+
+            <label className="flex items-center justify-between gap-4 p-3.5 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer">
+              <span>
+                <span className="block text-xs font-semibold text-slate-900">Example sentence speaker icons</span>
+                <span className="block text-[11px] text-slate-500 mt-0.5">Show a pronunciation button beside every example.</span>
+              </span>
+              <input
+                type="checkbox"
+                checked={settings.showExampleSpeakers}
+                onChange={(e) => handleExampleSpeakersChange(e.target.checked)}
+                className="h-4 w-4 accent-slate-900"
+              />
+            </label>
 
             {/* Test Pronunciation Preview */}
             <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-lg space-y-2.5">
