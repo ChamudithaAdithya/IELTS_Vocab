@@ -430,6 +430,58 @@ export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ showSinhala,
               <ArrowRight className="w-5 h-5 text-slate-700 group-hover:translate-x-1 transition-transform shrink-0 ml-3" />
             </div>
           </div>
+
+          {/* Direct Links to Reading & Listening Test Banks (ieltsfreepractice.com integration) */}
+          <div>
+            <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-4">
+              Cambridge Reading & Listening Practice Sets (Exam Simulator)
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {/* Reading Practice Card */}
+              <div
+                onClick={() => onNavigateToModule?.('reading')}
+                className="bg-emerald-50/60 border border-emerald-200 hover:border-emerald-400 rounded-2xl p-5 sm:p-6 shadow-xs hover:shadow-md transition-all cursor-pointer flex items-center justify-between group"
+              >
+                <div className="space-y-1.5 max-w-md">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-600 text-white font-mono">
+                      Cambridge 15–18
+                    </span>
+                    <span className="text-xs font-bold text-emerald-800">4 Reading Passages</span>
+                  </div>
+                  <h3 className="text-base font-bold text-slate-900">Academic Reading Practice Tests</h3>
+                  <p className="text-xs text-slate-600">
+                    Urban Farming, History of Pencil, Polar Bears & Driverless Cars. Features Practice & 20-min Exam Mode with instant line citations.
+                  </p>
+                </div>
+                <div className="w-10 h-10 rounded-xl bg-white border border-emerald-200 text-emerald-700 flex items-center justify-center font-bold group-hover:bg-emerald-600 group-hover:text-white transition-colors shrink-0 ml-3 shadow-xs">
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </div>
+
+              {/* Listening Practice Card */}
+              <div
+                onClick={() => onNavigateToModule?.('listening')}
+                className="bg-indigo-50/60 border border-indigo-200 hover:border-indigo-400 rounded-2xl p-5 sm:p-6 shadow-xs hover:shadow-md transition-all cursor-pointer flex items-center justify-between group"
+              >
+                <div className="space-y-1.5 max-w-md">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-600 text-white font-mono">
+                      Sections 1 to 4
+                    </span>
+                    <span className="text-xs font-bold text-indigo-900">4 Listening Sets</span>
+                  </div>
+                  <h3 className="text-base font-bold text-slate-900">Cambridge Listening Practice Tests</h3>
+                  <p className="text-xs text-slate-600">
+                    Buckworth Arts, Redhill Reserve, Wind Farms & Roman Aqueducts. Includes audio speed controller, transcripts & distractor analysis.
+                  </p>
+                </div>
+                <div className="w-10 h-10 rounded-xl bg-white border border-indigo-200 text-indigo-700 flex items-center justify-center font-bold group-hover:bg-indigo-600 group-hover:text-white transition-colors shrink-0 ml-3 shadow-xs">
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 

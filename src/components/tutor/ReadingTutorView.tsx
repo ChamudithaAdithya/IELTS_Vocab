@@ -1,5 +1,17 @@
-import React, { useState } from 'react';
-import { BookOpen, CheckCircle2, XCircle, ArrowLeft, HelpCircle, Sparkles, Award } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { 
+  BookOpen, 
+  CheckCircle2, 
+  XCircle, 
+  ArrowLeft, 
+  HelpCircle, 
+  Sparkles, 
+  Award, 
+  Clock, 
+  RotateCcw,
+  Sliders,
+  Check
+} from 'lucide-react';
 import { CAMBRIDGE_READING_TESTS } from '../../data/readingTests';
 import type { ReadingPassage, ReadingQuestion } from '../../types/tutor';
 
@@ -10,9 +22,26 @@ interface ReadingTutorViewProps {
 
 export const ReadingTutorView: React.FC<ReadingTutorViewProps> = ({ showSinhala, onBackToHub }) => {
   const [selectedPassage, setSelectedPassage] = useState<ReadingPassage>(CAMBRIDGE_READING_TESTS[0]);
+  const [testMode, setTestMode] = useState<'practice' | 'exam'>('practice');
   const [userAnswers, setUserAnswers] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [activeQuestionId, setActiveQuestionId] = useState<string | null>(null);
+
+  // Exam Mode 20-minute countdown timer
+  const [timeLeftSeconds, setTimeLeftSeconds] = useState<number>(20 * 60);
+  const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false);
+
+  useEffect(() => {
+    let interval: any = null;
+    if (testMode === 'exam' && isTimerRunning && timeLeftSeconds > 0 && !submitted) {
+      interval = setInterval(() => {
+        setTimeLeftSeconds(prev => prev - 1);
+      }, 1000);
+    } else if (timeLeftSeconds === 0 && !submitted) {
+      setSubmitted(true);
+    }
+    return () => clearInterval(interval);
+  }, [testMode, isTimerRunning, timeLeftSeconds, submitted]);
 
   const handleSelectAnswer = (qId: string, answer: string) => {
     if (submitted) return;
@@ -29,18 +58,32 @@ export const ReadingTutorView: React.FC<ReadingTutorViewProps> = ({ showSinhala,
     return correct;
   };
 
-  const resetQuiz = () => {
+  const resetTest = () => {
     setUserAnswers({});
     setSubmitted(false);
     setActiveQuestionId(null);
+    setTimeLeftSeconds(20 * 60);
+    setIsTimerRunning(false);
+  };
+
+  const handleChangePassage = (p: ReadingPassage) => {
+    setSelectedPassage(p);
+    resetTest();
   };
 
   const score = calculateScore();
   const total = selectedPassage.questions.length;
-  const estimatedBand = total > 0 ? (score === total ? 8.5 : score >= 3 ? 7.5 : score >= 2 ? 6.5 : 5.5) : 6.0;
+  // Standard IELTS academic reading band conversion formula
+  const estimatedBand = total > 0 ? (score === total ? 9.0 : score >= 3 ? 8.0 : score >= 2 ? 6.5 : 5.0) : 6.0;
+
+  const formatTimer = (s: number) => {
+    const mins = Math.floor(s / 60);
+    const secs = s % 60;
+    return `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
+  };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 animate-in fade-in">
       {/* Top Header & Breadcrumb */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-4">
         <div className="flex items-center gap-3">
@@ -56,8 +99,8 @@ export const ReadingTutorView: React.FC<ReadingTutorViewProps> = ({ showSinhala,
           )}
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-600 text-white">
-                Reading Tutor
+              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-600 text-white font-mono">
+                Academic Reading
               </span>
               <span className="text-xs text-slate-500">{selectedPassage.cambridgeSource}</span>
             </div>
@@ -67,19 +110,80 @@ export const ReadingTutorView: React.FC<ReadingTutorViewProps> = ({ showSinhala,
           </div>
         </div>
 
-        {submitted && (
-          <div className="bg-slate-900 text-white px-4 py-2 rounded-xl flex items-center gap-3 shadow-sm">
-            <div>
-              <p className="text-[10px] uppercase font-bold text-slate-400">Reading Band</p>
-              <p className="text-lg font-extrabold text-emerald-400">{estimatedBand.toFixed(1)} / 9.0</p>
-            </div>
-            <div className="pl-3 border-l border-slate-700">
-              <p className="text-[10px] text-slate-400">Score</p>
-              <p className="text-sm font-bold">{score} / {total} Correct</p>
-            </div>
+        {/* Practice vs Exam Mode Toggle */}
+        <div className="flex items-center gap-2">
+          <div className="flex items-center bg-slate-100 p-1 rounded-xl text-xs font-semibold">
+            <button
+              type="button"
+              onClick={() => {
+                setTestMode('practice');
+                setIsTimerRunning(false);
+              }}
+              className={`px-3 py-1.5 rounded-lg transition-colors ${
+                testMode === 'practice'
+                  ? 'bg-white text-slate-900 font-bold shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              Practice Mode
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setTestMode('exam');
+                setIsTimerRunning(true);
+              }}
+              className={`px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ${
+                testMode === 'exam'
+                  ? 'bg-slate-900 text-white font-bold shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Clock className="w-3.5 h-3.5 text-amber-400" />
+              <span>Exam Mode (20m)</span>
+            </button>
           </div>
-        )}
+
+          {submitted && (
+            <div className="bg-slate-900 text-white px-3.5 py-1.5 rounded-xl flex items-center gap-2 text-xs">
+              <Award className="w-4 h-4 text-emerald-400" />
+              <span className="font-bold text-emerald-400">Band {estimatedBand.toFixed(1)}</span>
+              <span className="text-slate-400">({score}/{total})</span>
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* Test Selector Tabs (All 4 Cambridge Reading Tests) */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+        {CAMBRIDGE_READING_TESTS.map((t, idx) => (
+          <button
+            key={t.id}
+            type="button"
+            onClick={() => handleChangePassage(t)}
+            className={`px-3.5 py-2 rounded-xl font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${
+              selectedPassage.id === t.id
+                ? 'bg-emerald-600 text-white shadow-xs'
+                : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50'
+            }`}
+          >
+            <span>Test {idx + 1}:</span>
+            <span className="font-medium text-[11px] truncate max-w-[180px]">{t.title}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* Exam Mode Status Bar if active */}
+      {testMode === 'exam' && !submitted && (
+        <div className="p-3 bg-slate-900 text-white rounded-xl flex items-center justify-between text-xs">
+          <div className="flex items-center gap-2">
+            <Clock className="w-4 h-4 text-amber-400 animate-pulse" />
+            <span className="font-bold">Exam Timer:</span>
+            <span className="font-mono text-amber-300 font-bold text-sm">{formatTimer(timeLeftSeconds)}</span>
+          </div>
+          <span className="text-slate-300">Answer all questions before the timer reaches 00:00.</span>
+        </div>
+      )}
 
       {/* Main 2-Column Split: Passage vs Questions */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
@@ -88,16 +192,17 @@ export const ReadingTutorView: React.FC<ReadingTutorViewProps> = ({ showSinhala,
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
               <BookOpen className="w-4 h-4 text-emerald-600" />
-              <span>Official Academic Passage</span>
+              <span>Official Reading Passage</span>
             </span>
-            <span className="text-[11px] text-slate-400 font-mono">4 Paragraphs</span>
+            <span className="text-[11px] text-slate-400 font-mono">
+              {selectedPassage.paragraphs.length} Paragraphs
+            </span>
           </div>
 
           <div className="space-y-4 text-xs sm:text-sm text-slate-700 font-serif leading-relaxed">
             {selectedPassage.paragraphs.map(p => (
               <div
                 key={p.label}
-                id={`para-${p.label.toLowerCase().replace(/\s+/g, '-')}`}
                 className="p-3.5 rounded-xl bg-slate-50/50 hover:bg-emerald-50/30 transition-colors border border-transparent hover:border-emerald-200"
               >
                 <span className="block font-sans font-bold text-[11px] text-emerald-800 uppercase tracking-wider mb-1">
@@ -109,19 +214,33 @@ export const ReadingTutorView: React.FC<ReadingTutorViewProps> = ({ showSinhala,
           </div>
         </div>
 
-        {/* Right Column: Interactive Questions & Explanations (5 Cols) */}
+        {/* Right Column: Questions & Instant Analyzer (5 Cols) */}
         <div className="lg:col-span-5 space-y-4">
           <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <span className="text-xs font-bold text-slate-800">Questions 1–{total}</span>
-              <span className="text-[11px] text-slate-500">True / False / Not Given & MCQ</span>
+              {/* Question Navigator Pills */}
+              <div className="flex items-center gap-1">
+                {selectedPassage.questions.map((q, idx) => {
+                  const answered = Boolean(userAnswers[q.id]);
+                  return (
+                    <span
+                      key={q.id}
+                      className={`w-5 h-5 rounded flex items-center justify-center text-[10px] font-bold ${
+                        answered ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-500'
+                      }`}
+                    >
+                      {idx + 1}
+                    </span>
+                  );
+                })}
+              </div>
             </div>
 
             <div className="space-y-5">
               {selectedPassage.questions.map((q, idx) => {
                 const userAns = userAnswers[q.id];
                 const isCorrect = userAns?.trim().toUpperCase() === q.correctAnswer.toUpperCase();
-                const isSelectedForFocus = activeQuestionId === q.id;
 
                 return (
                   <div
@@ -131,13 +250,13 @@ export const ReadingTutorView: React.FC<ReadingTutorViewProps> = ({ showSinhala,
                         ? isCorrect
                           ? 'bg-emerald-50/60 border-emerald-300'
                           : 'bg-red-50/60 border-red-300'
-                        : isSelectedForFocus
-                        ? 'bg-indigo-50/50 border-indigo-300 shadow-xs'
+                        : userAns
+                        ? 'bg-indigo-50/40 border-indigo-200'
                         : 'bg-slate-50 border-slate-200 hover:border-slate-300'
                     }`}
                   >
                     <div className="flex items-start justify-between gap-2">
-                      <span className="font-bold text-xs text-slate-900">
+                      <span className="font-bold text-xs text-slate-900 leading-snug">
                         {idx + 1}. {q.question}
                       </span>
                       {submitted && (
@@ -191,10 +310,10 @@ export const ReadingTutorView: React.FC<ReadingTutorViewProps> = ({ showSinhala,
 
                     {/* Explanation and Vocabulary Focus on Submission */}
                     {submitted && (
-                      <div className="mt-3 pt-3 border-t border-slate-200/80 space-y-2 text-xs">
+                      <div className="mt-3 pt-3 border-t border-slate-200/80 space-y-2 text-xs animate-in fade-in">
                         <div>
                           <span className="font-bold text-slate-900 block">
-                            Correct Answer: <span className="text-emerald-700">{q.correctAnswer}</span> ({q.paragraphReference})
+                            Correct Answer: <span className="text-emerald-700 font-bold">{q.correctAnswer}</span> ({q.paragraphReference})
                           </span>
                           <p className="text-slate-600 mt-0.5">{q.explanation}</p>
                           {showSinhala && q.explanationSi && (
@@ -229,15 +348,15 @@ export const ReadingTutorView: React.FC<ReadingTutorViewProps> = ({ showSinhala,
                   disabled={Object.keys(userAnswers).length === 0}
                   className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white text-xs font-bold rounded-xl transition-colors shadow-xs"
                 >
-                  Submit & Check Reading Band
+                  Submit & Score Reading Band
                 </button>
               ) : (
                 <button
                   type="button"
-                  onClick={resetQuiz}
+                  onClick={resetTest}
                   className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition-colors"
                 >
-                  Try Again / Reset
+                  Try Again / Reset Test
                 </button>
               )}
             </div>
@@ -247,4 +366,3 @@ export const ReadingTutorView: React.FC<ReadingTutorViewProps> = ({ showSinhala,
     </div>
   );
 };
-

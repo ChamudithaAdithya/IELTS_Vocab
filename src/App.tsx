@@ -13,10 +13,11 @@ import { SpeakingTutorView } from './components/tutor/SpeakingTutorView';
 import { ReadingTutorView } from './components/tutor/ReadingTutorView';
 import { ListeningTutorView } from './components/tutor/ListeningTutorView';
 import { AnalyticsView } from './components/tutor/AnalyticsView';
+import { CambridgeLibraryView } from './components/tutor/CambridgeLibraryView';
 import { loadTutorState } from './utils/tutorEngine';
 import { SearchModal } from './components/SearchModal';
 import { VoiceSettingsModal } from './components/VoiceSettingsModal';
-import { Award, BookOpen, Layers, Sparkles, Mic, Heart, CheckCircle2, RotateCcw } from 'lucide-react';
+import { Award, BookOpen, Layers, Sparkles, Mic, Heart, CheckCircle2, RotateCcw, ArrowUp } from 'lucide-react';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -87,6 +88,19 @@ function MainApp() {
   const [userProgress, setUserProgress] = useState<UserProgress>(loadProgress);
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
   const [isVoiceSettingsOpen, setIsVoiceSettingsOpen] = useState<boolean>(false);
+  const [showScrollTop, setShowScrollTop] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 250);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleScrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   useEffect(() => {
     saveProgress(userProgress);
@@ -186,6 +200,14 @@ function MainApp() {
           <WritingTutorView 
             showSinhala={showSinhala} 
             onNavigateToModule={(m) => setCurrentTab(m as AppTab)}
+          />
+        )}
+
+        {/* Cambridge Past Papers Central Library */}
+        {currentTab === 'cambridge' && (
+          <CambridgeLibraryView
+            showSinhala={showSinhala}
+            onSelectTest={(m) => setCurrentTab(m as AppTab)}
           />
         )}
 
@@ -290,6 +312,19 @@ function MainApp() {
         onClose={() => setIsVoiceSettingsOpen(false)}
         showSinhala={showSinhala}
       />
+
+      {/* Floating Bring to Top Button with Arrow */}
+      {showScrollTop && (
+        <button
+          type="button"
+          onClick={handleScrollToTop}
+          className="fixed bottom-6 right-6 z-50 p-3 bg-slate-900/95 hover:bg-indigo-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 backdrop-blur-xs flex items-center justify-center group cursor-pointer border border-white/20 animate-in fade-in zoom-in-95"
+          aria-label="Bring to top"
+          title="Bring to top"
+        >
+          <ArrowUp className="w-5 h-5 text-white group-hover:-translate-y-0.5 transition-transform" />
+        </button>
+      )}
 
       {/* Clean Global Footer */}
       <footer className="border-t border-slate-200 bg-white py-8 mt-16 text-xs text-slate-500">

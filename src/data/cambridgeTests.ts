@@ -842,6 +842,141 @@ export const ALL_CAMBRIDGE_TESTS: CambridgeTestPrompt[] = [
         'Advanced conditional inversion ("Should the timepiece be recovered") demonstrating Band 9 grammar control.'
       ]
     }
+  },
+  /* ------------------------------------------------------------------ */
+  /* Test 5: Cambridge 14 Test 1 (Task 2) - Consumer Goods & Ecology    */
+  /* ------------------------------------------------------------------ */
+  {
+    id: 'c14-t1-task2',
+    cambridgeBook: 'Cambridge IELTS 14, Academic Test 1',
+    taskType: 'task2',
+    category: 'Environment',
+    question:
+      'The production of consumer goods causes substantial environmental damage. What are the principal causes of this, and what sustainable solutions can you suggest?',
+    examinerInstructions: [
+      'Give reasons for your answer and include any relevant examples from your own knowledge or experience.',
+      'Write at least 250 words.'
+    ],
+    suggestedTimeMinutes: 40,
+    minimumWords: 250,
+    weakCandidateEssay: {
+      band: 5.5,
+      title: 'Weak candidate response: Over-generalized causes and informal vocabulary',
+      text:
+        'Nowadays people buy many things and factories make too much pollution. This is very bad problem for world environment. In this essay I will explain causes and give solutions.\n\nFirst cause is that people want newest phone and fashion clothes every month. When they throw away old things, garbage goes to landfill and pollute ground and sea. Also big factories burn fossil fuel like coal which make global warming worse.\n\nTo solve this, government should punish factories that pollute river and air. Also school should teach children not to buy useless things. In conclusion, if everyone try hard we can save our planet.',
+      report: {
+        id: 'c14-t1-weak',
+        createdAt: '2026-10-31',
+        source: 'sample',
+        taskType: 'task2',
+        question:
+          'The production of consumer goods causes substantial environmental damage. What are the principal causes of this, and what sustainable solutions can you suggest?',
+        targetBand: 8.0,
+        overallBand: 5.5,
+        confidence: 'High',
+        criteria: [
+          {
+            key: 'TR',
+            name: 'Task Response',
+            band: 5.5,
+            comment: 'Underlength essay (only 104 words); prompt points briefly touched upon without analytical depth.',
+            commentSi: 'වචන 250 සම්පූර්ණ කර නොමැත. කරුණු සංක්ෂිප්තය.',
+            toReach8: 'Develop both causes (planned obsolescence, manufacturing emissions) and systemic solutions with empirical examples.'
+          },
+          {
+            key: 'CC',
+            name: 'Coherence & Cohesion',
+            band: 5.5,
+            comment: 'Basic sequence markers ("First cause", "To solve this"), with underdeveloped paragraph progression.',
+            commentSi: 'ඡේද විකාශනය ප්‍රමාණවත් නොවේ.',
+            toReach8: 'Employ complex discourse markers and cohesive referencing across all paragraphs.'
+          },
+          {
+            key: 'LR',
+            name: 'Lexical Resource',
+            band: 5.5,
+            comment: 'Elementary vocabulary with frequent colloquial repetitions ("too much pollution", "bad problem", "useless things").',
+            commentSi: 'සරල වචන මාලාව වැඩිපුර භාවිතා කර ඇත.',
+            toReach8: 'Incorporate academic collocations: "rampant consumerism", "built-in obsolescence", "circular economy".'
+          },
+          {
+            key: 'GRA',
+            name: 'Grammar',
+            band: 5.5,
+            comment: 'Restricted range of complex syntax; over-reliance on basic present simple coordinate sentences.',
+            commentSi: 'සංකීර්ණ වාක්‍ය රටා අවමයි.',
+            toReach8: 'Demonstrate non-finite clauses, inverted conditionals, and passive voice constructions.'
+          }
+        ],
+        mainProblems: [
+          {
+            severity: 'High',
+            title: 'Severe Underlength Essay',
+            description: 'The response is only 104 words, incurring a severe Task Response penalty under the 250-word minimum threshold.',
+            descriptionSi: 'වචන 250 ක අවම සීමාව සම්පූර්ණ වී නොමැත.'
+          },
+          {
+            severity: 'Medium',
+            title: 'Colloquial Vocabulary Register',
+            description: 'Expressions like "useless things" and "bad problem" are inappropriate for academic essay register.',
+            descriptionSi: 'ශාස්ත්‍රීය නොවන සරල වචන භාවිතය.'
+          }
+        ],
+        learningOrder: ['task-response', 'academic-vocabulary', 'sentence-structure', 'verb-patterns'],
+        teacherNote: 'The prompt demands both causes and solutions. While you touched on both, the response is underlength and requires substantial expansion of analytical arguments to exceed Band 6.0.',
+        teacherNoteSi: 'ප්‍රශ්නයේ කරුණු දෙකම සාකච්ඡා කර ඇතත්, රචනාව ඉතා කෙටි බැවින් ලකුණු සීමා වේ.',
+        markedEssay: [
+          t('Nowadays people buy many things and factories make too much pollution. This is a very bad problem for the world environment. In this essay I will explain the causes and suggest viable solutions.')
+        ],
+        issues: [
+          {
+            id: 'c14-colloquial',
+            title: 'Colloquial Cliché in Conclusion',
+            category: 'Vocabulary',
+            severity: 'High',
+            original: 'In conclusion, if everyone try hard we can save our planet.',
+            corrected: 'In conclusion, concerted policy interventions and ethical manufacturing are imperative to mitigate ecological degradation.',
+            why: 'Band 5 concluding cliché lacks academic rigor.',
+            whySi: 'නිගමනය ශාස්ත්‍රීය මට්ටමකට ගෙන ආ යුතුය.',
+            rule: 'Formulate an analytical academic conclusion summarizing proposed solutions.',
+            lessonTopic: 'task-response',
+            occurrences: 1
+          }
+        ],
+        improvements: [
+          {
+            original: 'people buy many things',
+            better: 'rampant consumerism and ubiquitous material demand',
+            why: 'Upgrades conversational diction to C1/C2 academic register.',
+            whySi: 'ශාස්ත්‍රීය වචන භාවිතය.'
+          }
+        ],
+        band8Edits: [
+          t('In contemporary industrialized societies, the unchecked proliferation of manufacturing to satisfy relentless consumer demand has exerted immense pressure on global ecosystems. This deleterious trend is driven primarily by built-in obsolescence and excessive reliance on non-renewable energy during manufacturing. Nevertheless, a transition towards circular economic models and rigorous legislative oversight can substantially alleviate these consequences.\n\nAt the root of this environmental crisis lies the prevailing industrial paradigm of planned obsolescence, particularly within the consumer electronics and fast-fashion sectors. Manufacturers routinely design goods with finite lifespans or engineer subtle software updates that render older models obsolete, compelling consumers to discard functioning products prematurely. Consequently, municipal landfills are inundated with non-biodegradable synthetic textiles and hazardous electronic waste containing heavy metals like lead and cadmium. Furthermore, the energy-intensive extraction of raw minerals—such as lithium for batteries—decimates localized biodiversity through deforestation and toxic runoff.\n\nTo counter this ecological degradation, a multifaceted intervention is essential. Foremost among these solutions is the statutory enforcement of "Right to Repair" legislation, obligating corporate manufacturers to supply replacement parts and modular designs that prolong appliance longevity. Additionally, governments must penalize high-carbon packaging and subsidize industries adopting circular economy frameworks, wherein discarded materials are perpetually salvaged and remanufactured. Concurrently, imposing carbon tariffs on single-use commodities would recalibrate consumer purchasing behavior toward durable, environmentally benign alternatives.\n\nTo conclude, while consumer materialism and industrial emissions have catalyzed severe environmental degradation, systemic solutions are within reach. By instituting strict statutory repair standards and rewarding sustainable manufacturing practices, nations can decouple economic prosperity from planetary harm.')
+        ],
+        band8Overall: 8.5,
+        band8Criteria: [
+          { key: 'TR', band: 8.5 },
+          { key: 'CC', band: 8.5 },
+          { key: 'LR', band: 8.5 },
+          { key: 'GRA', band: 8.5 }
+        ],
+        band8Notes: [
+          'Comprehensive response to both causes (planned obsolescence, mineral extraction) and solutions (Right to Repair, circular economy).',
+          'Rich academic collocations: "unchecked proliferation", "deleterious trend", "statutory enforcement", "decouple economic prosperity".',
+          'Cohesive structural devices with balanced paragraph development.'
+        ]
+      }
+    },
+    band8ModelAnswer: {
+      text:
+        'In contemporary industrialized societies, the unchecked proliferation of manufacturing to satisfy relentless consumer demand has exerted immense pressure on global ecosystems. This deleterious trend is driven primarily by built-in obsolescence and excessive reliance on non-renewable energy during manufacturing. Nevertheless, a transition towards circular economic models and rigorous legislative oversight can substantially alleviate these consequences.\n\nAt the root of this environmental crisis lies the prevailing industrial paradigm of planned obsolescence, particularly within the consumer electronics and fast-fashion sectors. Manufacturers routinely design goods with finite lifespans or engineer subtle software updates that render older models obsolete, compelling consumers to discard functioning products prematurely. Consequently, municipal landfills are inundated with non-biodegradable synthetic textiles and hazardous electronic waste containing heavy metals like lead and cadmium. Furthermore, the energy-intensive extraction of raw minerals—such as lithium for batteries—decimates localized biodiversity through deforestation and toxic runoff.\n\nTo counter this ecological degradation, a multifaceted intervention is essential. Foremost among these solutions is the statutory enforcement of "Right to Repair" legislation, obligating corporate manufacturers to supply replacement parts and modular designs that prolong appliance longevity. Additionally, governments must penalize high-carbon packaging and subsidize industries adopting circular economy frameworks, wherein discarded materials are perpetually salvaged and remanufactured. Concurrently, imposing carbon tariffs on single-use commodities would recalibrate consumer purchasing behavior toward durable, environmentally benign alternatives.\n\nTo conclude, while consumer materialism and industrial emissions have catalyzed severe environmental degradation, systemic solutions are within reach. By instituting strict statutory repair standards and rewarding sustainable manufacturing practices, nations can decouple economic prosperity from planetary harm.',
+      examinerComments: [
+        'Band 9 vocabulary precision ("deleterious trend", "planned obsolescence", "circular economic models").',
+        'Directly answers both prompt requirements with sophisticated real-world technical evidence.',
+        'Impeccable structural progression and thematic cohesion throughout.'
+      ]
+    }
   }
 ];
 

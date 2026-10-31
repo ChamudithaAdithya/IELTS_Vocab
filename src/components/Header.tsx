@@ -12,10 +12,11 @@ import {
   PenTool,
   Headphones,
   Award,
-  TrendingUp
+  TrendingUp,
+  Library
 } from 'lucide-react';
 
-export type AppTab = 'tutor' | 'speaking' | 'reading' | 'listening' | 'analytics' | 'lessons' | 'flashcards' | 'quiz' | 'bank';
+export type AppTab = 'tutor' | 'cambridge' | 'speaking' | 'reading' | 'listening' | 'analytics' | 'lessons' | 'flashcards' | 'quiz' | 'bank';
 
 interface HeaderProps {
   currentTab: AppTab;
@@ -120,6 +121,23 @@ export const Header: React.FC<HeaderProps> = ({
             <span>Writing Tutor AI</span>
             <span className="text-[9px] uppercase tracking-wider font-extrabold bg-amber-400 text-slate-950 px-1 py-0.2 rounded font-mono">
               Task 1 & 2
+            </span>
+          </button>
+
+          {/* Cambridge Past Papers Library */}
+          <button
+            type="button"
+            onClick={() => setCurrentTab('cambridge')}
+            className={`px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap flex items-center gap-1.5 ${
+              currentTab === 'cambridge'
+                ? 'bg-slate-900 text-white font-bold shadow-xs'
+                : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100 font-semibold'
+            }`}
+          >
+            <Library className="w-3.5 h-3.5 text-indigo-500" />
+            <span>Cambridge Tests</span>
+            <span className="text-[9px] uppercase tracking-wider font-bold bg-indigo-100 text-indigo-700 px-1.5 py-0.2 rounded">
+              Books 1–18
             </span>
           </button>
 
