@@ -588,7 +588,8 @@ export function evaluateEssayLocally(params: {
   return {
     id: `local-eval-${Date.now()}`,
     createdAt: new Date().toISOString(),
-    source: 'sample',
+    source: 'offline',
+    engineModel: 'Built-in Cambridge Examiner (Offline)',
     taskType,
     question,
     targetBand,

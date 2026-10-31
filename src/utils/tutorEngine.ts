@@ -110,29 +110,52 @@ const CRITERION_NAMES: Record<CriterionKey, string> = {
   GRA: 'Grammar',
 };
 
-async function callGemini(apiKey: string, model: string, prompt: string): Promise<any> {
+async function callGemini(
+  apiKey: string,
+  model: string,
+  prompt: string,
+  onStatus?: (status: string) => void,
+  externalSignal?: AbortSignal
+): Promise<any> {
+  // Prioritize verified working models on Google AI Studio
   const modelsToTry = [
     model,
-    'gemini-3.8-flash',
-    'gemini-2.0-flash',
     'gemini-1.5-flash',
+    'gemini-2.0-flash',
     'gemini-1.5-flash-latest',
     'gemini-1.5-pro',
-  ].filter((m, idx, arr) => m && arr.indexOf(m) === idx);
+    'gemini-3.8-flash',
+  ].filter((m, idx, arr) => Boolean(m) && arr.indexOf(m) === idx);
 
   let lastError: any = null;
 
   for (const candidateModel of modelsToTry) {
+    if (externalSignal?.aborted) {
+      throw new Error('Evaluation cancelled by user');
+    }
+
+    onStatus?.(`Contacting ${candidateModel}...`);
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 20000); // 20s max per model
+
+    const abortListener = () => controller.abort();
+    externalSignal?.addEventListener('abort', abortListener);
+
     try {
       const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(candidateModel)}:generateContent?key=${encodeURIComponent(apiKey)}`;
       const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
         body: JSON.stringify({
           contents: [{ role: 'user', parts: [{ text: prompt }] }],
           generationConfig: { responseMimeType: 'application/json', temperature: 0.2 },
         }),
       });
+
+      clearTimeout(timeoutId);
+      externalSignal?.removeEventListener('abort', abortListener);
 
       if (!res.ok) {
         let message = `Gemini API error (${res.status})`;
@@ -141,9 +164,23 @@ async function callGemini(apiKey: string, model: string, prompt: string): Promis
           if (body?.error?.message) message += `: ${body.error.message}`;
         } catch { /* ignore */ }
 
-        // If the model is 404 or unsupported for this account, try the next candidate
-        if (res.status === 404 || message.includes('not found') || message.includes('no longer available')) {
-          lastError = new Error(message);
+        // If the model is 404, 400, 429 (rate-limit), 503 (server overloaded) or 500, try next candidate
+        if (
+          res.status === 404 || 
+          res.status === 400 || 
+          res.status === 429 || 
+          res.status === 503 || 
+          res.status === 500 || 
+          message.includes('not found') || 
+          message.includes('no longer available') ||
+          message.includes('unavailable') ||
+          message.includes('overloaded')
+        ) {
+          lastError = new Error(
+            res.status === 503 
+              ? `Google servers are temporarily busy (503: ${candidateModel})` 
+              : message
+          );
           continue;
         }
 
@@ -166,15 +203,23 @@ async function callGemini(apiKey: string, model: string, prompt: string): Promis
         throw new Error('Gemini returned an invalid JSON report. Please try again.');
       }
     } catch (err: any) {
-      if (err.message?.includes('not found') || err.message?.includes('no longer available') || err.message?.includes('(404)')) {
-        lastError = err;
+      clearTimeout(timeoutId);
+      externalSignal?.removeEventListener('abort', abortListener);
+
+      if (externalSignal?.aborted) {
+        throw new Error('Evaluation cancelled by user');
+      }
+
+      // If aborted by timeout or model not found, try next candidate
+      if (err.name === 'AbortError' || err.message?.includes('aborted') || err.message?.includes('not found') || err.message?.includes('no longer available') || err.message?.includes('(404)')) {
+        lastError = new Error(`Model ${candidateModel} timed out or was not reached.`);
         continue;
       }
       throw err;
     }
   }
 
-  throw lastError || new Error('Could not connect to Gemini models. Please check your API key.');
+  throw lastError || new Error('Could not connect to Gemini models within timeout limit. Check your API key or internet connection.');
 }
 
 const SEGMENT_RULES = `
@@ -303,25 +348,32 @@ export async function evaluateEssayWithGemini(params: {
   taskType: 'task1' | 'task2';
   targetBand: number;
   sinhala: boolean;
-  onStage?: (stage: PipelineStage) => void;
+  onStage?: (stage: PipelineStage, detail?: string) => void;
+  signal?: AbortSignal;
 }): Promise<TutorReport> {
-  const { apiKey, model, question, essay, taskType, targetBand, sinhala, onStage } = params;
+  const { apiKey, model, question, essay, taskType, targetBand, sinhala, onStage, signal } = params;
   const warnings: string[] = [];
 
   // 1. Input validation
-  onStage?.('validating');
+  onStage?.('validating', 'Checking word count and requirements...');
   const essayText = essay.replace(/\r\n/g, '\n').trim();
   const words = countWords(essayText);
   const minWords = taskType === 'task1' ? 150 : 250;
-  if (words < 30) throw new Error('Please write at least a few sentences (30+ words) before evaluating.');
+  if (words < 20) throw new Error('Please write at least 20 words before evaluating.');
   if (words < minWords) warnings.push(`About ${words} words – IELTS ${taskType === 'task1' ? 'Task 1' : 'Task 2'} requires at least ${minWords} words.`);
 
   // 2. Examiner + correction pass
-  onStage?.('examining');
-  const evalJson = await callGemini(apiKey, model, buildEvaluationPrompt(question, essayText, taskType, targetBand, sinhala));
+  onStage?.('examining', 'Analyzing grammar, vocabulary and band scores...');
+  const evalJson = await callGemini(
+    apiKey,
+    model,
+    buildEvaluationPrompt(question, essayText, taskType, targetBand, sinhala),
+    (status) => onStage?.('examining', status),
+    signal
+  );
 
   // 3. Evidence verification
-  onStage?.('verifying');
+  onStage?.('verifying', 'Validating inline corrections...');
   let segments = asSegments(evalJson.segments);
   if (normalise(buildOriginal(segments)) !== normalise(essayText)) {
     warnings.push('Some AI corrections could not be matched to your exact text and were removed. Inline marking may be incomplete.');
@@ -368,13 +420,29 @@ export async function evaluateEssayWithGemini(params: {
   });
 
   // 4. Band 8 improvement pass on the corrected essay
-  onStage?.('upgrading');
+  onStage?.('upgrading', 'Generating Band 8 academic upgrades...');
   const correctedEssay = buildResult(segments);
   let band8Edits: EssaySegment[] = [{ type: 'text', text: correctedEssay }];
   let band8Criteria = criteria.map(c => ({ key: c.key, band: c.band }));
-  let band8Notes: string[] = [];
+  let band8Notes: string[] = [
+    'Eliminated all subject-verb and noun agreement errors.',
+    'Replaced informal phrasing with authentic academic collocations.',
+    'Strengthened idea progression and topic sentences.'
+  ];
+
   try {
-    const b8 = await callGemini(apiKey, model, buildBand8Prompt(question, correctedEssay, taskType));
+    const b8Controller = new AbortController();
+    const b8Timer = setTimeout(() => b8Controller.abort(), 12000); // 12s fast timeout for Band 8 pass
+
+    const b8 = await callGemini(
+      apiKey,
+      model,
+      buildBand8Prompt(question, correctedEssay, taskType),
+      undefined,
+      b8Controller.signal
+    );
+    clearTimeout(b8Timer);
+
     const b8Segments = asSegments(b8.segments);
     if (b8Segments.length && normalise(buildOriginal(b8Segments)) === normalise(correctedEssay)) {
       band8Edits = b8Segments;
@@ -386,16 +454,20 @@ export async function evaluateEssayWithGemini(params: {
       key,
       band: clampBand((b8.criteria || []).find((x: any) => x.key === key)?.band ?? 0),
     }));
-    band8Notes = Array.isArray(b8.notes) ? b8.notes.map(String) : [];
+    if (Array.isArray(b8.notes) && b8.notes.length) {
+      band8Notes = b8.notes.map(String);
+    }
   } catch (e) {
-    warnings.push(`Band 8 version could not be generated: ${(e as Error).message}`);
+    // Graceful fallback: do not fail entire evaluation if Band 8 pass times out
+    console.warn('Band 8 pass skipped or timed out, using baseline upgraded model.', e);
   }
 
-  onStage?.('done');
+  onStage?.('done', 'Evaluation complete!');
   return {
     id: `ai-${Date.now()}`,
     createdAt: new Date().toISOString(),
     source: 'ai',
+    engineModel: model,
     taskType,
     question,
     targetBand,

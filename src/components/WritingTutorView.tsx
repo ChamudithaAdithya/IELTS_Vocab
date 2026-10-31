@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { 
   FileText, 
   Send, 
@@ -11,7 +11,9 @@ import {
   Sliders, 
   Award,
   Layers,
-  ArrowRight
+  ArrowRight,
+  Loader2,
+  X
 } from 'lucide-react';
 import type { TutorReport, TutorLesson, LessonTopicId, TutorState } from '../types/tutor';
 import { SAMPLE_REPORT, SAMPLE_QUESTION } from '../data/tutorSampleReport';
@@ -60,7 +62,9 @@ export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ showSinhala 
   const [model, setModel] = useState<string>(loadModel);
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [evalStage, setEvalStage] = useState<PipelineStage>('validating');
+  const [evalDetail, setEvalDetail] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   // Active Lesson modal state
   const [activeLesson, setActiveLesson] = useState<TutorLesson | null>(null);
@@ -126,7 +130,16 @@ export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ showSinhala 
     setErrorMessage(null);
   };
 
-  const handleEvaluate = async () => {
+  const handleCancelEvaluation = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+    }
+    setIsEvaluating(false);
+    setEvalDetail('');
+  };
+
+  const handleEvaluate = async (forceOffline: boolean = false) => {
     if (essayWordCount < 20) {
       setErrorMessage('Please write or paste at least 20-30 words before evaluating.');
       return;
@@ -134,9 +147,13 @@ export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ showSinhala 
 
     setIsEvaluating(true);
     setErrorMessage(null);
+    setEvalDetail(forceOffline ? 'Running Cambridge linguistic examiner...' : 'Initializing examiner pipeline...');
 
-    // 1. Try Gemini AI if user has provided an API key
-    if (apiKey.trim()) {
+    // 1. Try Gemini AI if requested and API key is provided
+    if (!forceOffline && apiKey.trim()) {
+      const controller = new AbortController();
+      abortControllerRef.current = controller;
+
       try {
         const report = await evaluateEssayWithGemini({
           apiKey,
@@ -146,7 +163,11 @@ export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ showSinhala 
           taskType,
           targetBand,
           sinhala: showSinhala,
-          onStage: setEvalStage,
+          onStage: (stage, detail) => {
+            setEvalStage(stage);
+            if (detail) setEvalDetail(detail);
+          },
+          signal: controller.signal,
         });
 
         setCurrentReport(report);
@@ -161,15 +182,29 @@ export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ showSinhala 
 
         setActiveSubTab('report');
         setIsEvaluating(false);
+        abortControllerRef.current = null;
         return;
       } catch (err: any) {
-        console.warn('Gemini evaluation error, using instant built-in Cambridge examiner:', err);
+        abortControllerRef.current = null;
+        if (err.message?.includes('cancelled')) {
+          setIsEvaluating(false);
+          return;
+        }
+        console.warn('Gemini evaluation issue, falling back to built-in examiner:', err);
+        const is503 = err.message?.includes('503') || err.message?.includes('unavailable') || err.message?.includes('busy');
+        setErrorMessage(
+          is503
+            ? 'Google Gemini servers are currently experiencing peak traffic / temporary overload (HTTP 503). Your essay was automatically evaluated using the Built-in Cambridge Examiner so you do not have to wait.'
+            : `Gemini AI issue: ${err.message || 'Call failed'}. Generated report using Built-in Cambridge Examiner instead.`
+        );
+        // Fall through to built-in examiner below!
       }
     }
 
-    // 2. Instant Built-in Cambridge Examiner (100% Functional & Key-Free)
+    // 2. Instant Built-in Cambridge Examiner (100% Functional, Offline & Key-Free)
     try {
       setEvalStage('examining');
+      setEvalDetail('Analyzing grammar, plurals, agreement and criterion band scores...');
       const report = evaluateEssayLocally({
         question: questionInput,
         essay: essayInput,
@@ -193,6 +228,7 @@ export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ showSinhala 
       setErrorMessage(err.message || 'Evaluation failed.');
     } finally {
       setIsEvaluating(false);
+      setEvalDetail('');
     }
   };
 
@@ -459,6 +495,32 @@ export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ showSinhala 
               />
             </div>
 
+            {/* Live Progress Banner during evaluation */}
+            {isEvaluating && (
+              <div className="p-3.5 bg-indigo-50/90 border border-indigo-200 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-3 text-xs animate-in fade-in">
+                <div className="flex items-center gap-2 text-indigo-950 font-medium">
+                  <Loader2 className="w-4 h-4 text-indigo-600 animate-spin shrink-0" />
+                  <span>{evalDetail || `Evaluating (${evalStage})...`}</span>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => handleEvaluate(true)}
+                    className="px-2.5 py-1 bg-white hover:bg-indigo-50 border border-indigo-300 text-indigo-900 rounded-lg text-[11px] font-bold shadow-xs transition-colors"
+                  >
+                    Skip to Instant Examiner
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleCancelEvaluation}
+                    className="px-2 py-1 text-slate-500 hover:text-red-600 text-[11px] font-medium transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
+
             {/* Evaluation Actions */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
               <div className="text-xs text-slate-500">
@@ -473,29 +535,51 @@ export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ showSinhala 
                 )}
               </div>
 
-              <div className="flex items-center gap-2 w-full sm:w-auto">
+              <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
                 <button
                   type="button"
                   onClick={handleLoadSampleReport}
-                  className="flex-1 sm:flex-initial px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-semibold transition-colors"
+                  className="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-semibold transition-colors"
                 >
-                  View Sample Report
+                  Sample Report
                 </button>
-                <button
-                  type="button"
-                  disabled={isEvaluating}
-                  onClick={handleEvaluate}
-                  className="flex-1 sm:flex-initial px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition-colors flex items-center justify-center gap-1.5 shadow-sm"
-                >
-                  <Sparkles className="w-4 h-4 text-amber-300" />
-                  <span>
-                    {isEvaluating
-                      ? `Evaluating (${evalStage})...`
-                      : apiKey
-                      ? 'Evaluate with Gemini AI'
-                      : 'Evaluate with Built-in Examiner'}
-                  </span>
-                </button>
+                {apiKey ? (
+                  <>
+                    <button
+                      type="button"
+                      disabled={isEvaluating}
+                      onClick={() => handleEvaluate(true)}
+                      title="Test the 100% offline built-in examiner without calling Gemini API"
+                      className="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 disabled:opacity-50 text-slate-700 rounded-xl text-xs font-semibold transition-colors flex items-center gap-1.5"
+                    >
+                      <CheckCircle2 className="w-3.5 h-3.5 text-indigo-600" />
+                      <span>Test Offline Mode</span>
+                    </button>
+                    <button
+                      type="button"
+                      disabled={isEvaluating}
+                      onClick={() => handleEvaluate(false)}
+                      className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition-colors flex items-center justify-center gap-1.5 shadow-sm"
+                    >
+                      <Sparkles className="w-4 h-4 text-amber-300" />
+                      <span>
+                        {isEvaluating ? `Evaluating (${evalStage})...` : 'Evaluate with Gemini AI'}
+                      </span>
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    type="button"
+                    disabled={isEvaluating}
+                    onClick={() => handleEvaluate(false)}
+                    className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition-colors flex items-center justify-center gap-1.5 shadow-sm"
+                  >
+                    <CheckCircle2 className="w-4 h-4 text-emerald-300" />
+                    <span>
+                      {isEvaluating ? `Evaluating (${evalStage})...` : 'Evaluate with Built-in Examiner (Offline)'}
+                    </span>
+                  </button>
+                )}
               </div>
             </div>
           </div>

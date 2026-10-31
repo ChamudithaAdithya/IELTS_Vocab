@@ -62,11 +62,25 @@ export const TutorReportView: React.FC<TutorReportViewProps> = ({
       <section className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-7 shadow-xs space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-5 border-b border-slate-200">
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-900 text-white">
                 Academic IELTS · {report.taskType === 'task1' ? 'Task 1' : 'Task 2'}
               </span>
-              <span className="text-[11px] text-slate-500">Evaluation complete</span>
+              {report.source === 'ai' ? (
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-300">
+                  <Sparkles className="w-3 h-3 text-emerald-600" />
+                  Evaluated with Gemini AI ({report.engineModel || 'gemini-3.8-flash'})
+                </span>
+              ) : report.source === 'offline' ? (
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-900 border border-indigo-200">
+                  <CheckCircle2 className="w-3 h-3 text-indigo-600" />
+                  Evaluated with Built-in Cambridge Examiner (100% Offline Mode)
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                  Cambridge Benchmark Sample Assessment
+                </span>
+              )}
             </div>
             <h1 className="text-xl sm:text-2xl font-bold text-slate-900 mt-1">
               Writing Evaluation Report

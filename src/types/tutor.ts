@@ -87,7 +87,8 @@ export interface Improvement {
 export interface TutorReport {
   id: string;
   createdAt: string;
-  source: 'sample' | 'ai';
+  source: 'sample' | 'ai' | 'offline';
+  engineModel?: string;
   taskType: 'task1' | 'task2';
   question: string;
   targetBand: number;
