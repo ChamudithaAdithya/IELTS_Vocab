@@ -8,12 +8,13 @@ import { FlashcardsView } from './components/FlashcardsView';
 import { QuizView } from './components/QuizView';
 import { SpeakingLabView } from './components/SpeakingLabView';
 import { WordBankView } from './components/WordBankView';
+import { WritingTutorView } from './components/WritingTutorView';
 import { SearchModal } from './components/SearchModal';
 import { VoiceSettingsModal } from './components/VoiceSettingsModal';
 import { Award, BookOpen, Layers, Sparkles, Mic, Heart, CheckCircle2 } from 'lucide-react';
 
 export default function App() {
-  const [currentTab, setCurrentTab] = useState<'lessons' | 'flashcards' | 'quiz' | 'lab' | 'bank'>('lessons');
+  const [currentTab, setCurrentTab] = useState<'lessons' | 'flashcards' | 'quiz' | 'lab' | 'bank' | 'tutor'>('lessons');
   // Default to Lesson 2: Family & Relationships as specifically requested by user
   const [currentLessonId, setCurrentLessonId] = useState<string>('lesson-2');
   const [showSinhala, setShowSinhala] = useState<boolean>(true);
@@ -169,6 +170,10 @@ export default function App() {
             onNavigateToWord={handleNavigateToWord}
           />
         )}
+
+        {currentTab === 'tutor' && (
+          <WritingTutorView showSinhala={showSinhala} />
+        )}
       </main>
 
       {/* Global Search Modal */}
@@ -202,6 +207,9 @@ export default function App() {
             </button>
             <button onClick={() => setCurrentTab('quiz')} className="hover:text-slate-900">
               Quiz
+            </button>
+            <button onClick={() => setCurrentTab('tutor')} className="hover:text-slate-900 font-semibold text-indigo-700">
+              Writing Tutor AI
             </button>
             <button onClick={() => setCurrentTab('bank')} className="hover:text-slate-900">
               Word Bank

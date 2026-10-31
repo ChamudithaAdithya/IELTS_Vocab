@@ -12,8 +12,8 @@ import {
 } from 'lucide-react';
 
 interface HeaderProps {
-  currentTab: 'lessons' | 'flashcards' | 'quiz' | 'lab' | 'bank';
-  setCurrentTab: (tab: 'lessons' | 'flashcards' | 'quiz' | 'lab' | 'bank') => void;
+  currentTab: 'lessons' | 'flashcards' | 'quiz' | 'lab' | 'bank' | 'tutor';
+  setCurrentTab: (tab: 'lessons' | 'flashcards' | 'quiz' | 'lab' | 'bank' | 'tutor') => void;
   showSinhala: boolean;
   setShowSinhala: (val: boolean | ((prev: boolean) => boolean)) => void;
   masteredCount: number;
@@ -146,6 +146,22 @@ export const Header: React.FC<HeaderProps> = ({
             }`}
           >
             Speaking & Writing Lab
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setCurrentTab('tutor')}
+            className={`px-3 py-1.5 rounded transition-colors whitespace-nowrap flex items-center gap-1.5 ${
+              currentTab === 'tutor'
+                ? 'bg-indigo-600 text-white font-semibold shadow-xs'
+                : 'text-indigo-900 hover:text-indigo-950 hover:bg-indigo-50 font-semibold'
+            }`}
+          >
+            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+            <span>Writing Tutor AI</span>
+            <span className="text-[9px] uppercase tracking-wider font-extrabold bg-amber-400 text-slate-950 px-1 py-0.2 rounded font-mono">
+              Band 8
+            </span>
           </button>
 
           <button
