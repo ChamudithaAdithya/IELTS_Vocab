@@ -84,12 +84,14 @@ export interface Improvement {
   whySi?: string;
 }
 
+export type WritingTaskType = 'academic_task1' | 'gt_task1' | 'task2';
+
 export interface TutorReport {
   id: string;
   createdAt: string;
   source: 'sample' | 'ai' | 'offline';
   engineModel?: string;
-  taskType: 'task1' | 'task2';
+  taskType: 'task1' | 'task2' | 'academic_task1' | 'gt_task1';
   question: string;
   targetBand: number;
   overallBand: number;
@@ -109,6 +111,52 @@ export interface TutorReport {
   band8Criteria: { key: CriterionKey; band: number }[];
   band8Notes: string[];
   warnings?: string[];
+}
+
+export interface ReadingQuestion {
+  id: string;
+  type: 'TFNG' | 'headings' | 'summary' | 'mcq';
+  question: string;
+  options?: string[];
+  correctAnswer: string;
+  explanation: string;
+  explanationSi?: string;
+  paragraphReference: string;
+  vocabularyFocus?: { term: string; meaning: string; academicCollocation: string };
+}
+
+export interface ReadingPassage {
+  id: string;
+  cambridgeSource: string;
+  title: string;
+  paragraphs: { label: string; text: string }[];
+  questions: ReadingQuestion[];
+}
+
+export interface ListeningItem {
+  id: string;
+  section: 1 | 2 | 3 | 4;
+  cambridgeSource: string;
+  title: string;
+  audioSimText: string;
+  questions: {
+    number: number;
+    question: string;
+    answer: string;
+    distractors: string[];
+    explanation: string;
+    explanationSi?: string;
+  }[];
+}
+
+export interface SpeakingPartPrompt {
+  id: string;
+  part: 1 | 2 | 3;
+  topic: string;
+  questions: string[];
+  cueCardPoints?: string[];
+  sampleBand8Answer: string;
+  examinerTips: string[];
 }
 
 export interface LessonQuizQuestion {

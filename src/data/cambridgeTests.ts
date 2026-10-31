@@ -681,6 +681,167 @@ export const ALL_CAMBRIDGE_TESTS: CambridgeTestPrompt[] = [
         'Flawless academic reporting tone and accurate comparisons.'
       ]
     }
+  },
+  {
+    id: 'c16-gt-t1',
+    cambridgeBook: 'Cambridge IELTS 16 (General Training), Test 1 (Task 1)',
+    taskType: 'task1',
+    category: 'Housing/Urban',
+    question:
+      'You recently stayed at a hotel and left a valuable item in your room. Write a letter to the hotel manager. In your letter:\n- explain which room you stayed in and when\n- describe the item you left behind\n- explain what you would like the manager to do about it\nWrite at least 150 words.',
+    examinerInstructions: [
+      'Begin your letter as follows: Dear Sir or Madam,',
+      'Cover all three bullet points with appropriate formal tone.',
+      'Write at least 150 words in about 20 minutes.'
+    ],
+    suggestedTimeMinutes: 20,
+    minimumWords: 150,
+    weakCandidateEssay: {
+      band: 5.5,
+      title: 'Candidate Letter (Band 5.5 - Mixed Informal Tone & Agreement Errors)',
+      text:
+        'Dear Sir or Madam,\n\nI am writing this letter to tell you that I stay in your hotel last weekend and I forget my valuable watch in room. My room number was 304 and I checkout on Sunday morning.\n\nThe watch is very important for me because it is a gift from my father on my birthday. It is silver color with black leather strap. I think I leave it on the small table near the bed or inside the bathroom shelf.\n\nCould you please ask your cleaning staff to search the room? If they find it, please keep it safe and contact to me by phone. I can pay for courier cost so you can post it to my home address.\n\nI hope you can help me with this problem. I am looking forward to hear from you soon.\n\nYours faithfully,\nKamal Perera',
+      report: {
+        id: 'c16-gt-t1-report',
+        createdAt: new Date().toISOString(),
+        source: 'sample',
+        engineModel: 'Cambridge Official Standard Examiner',
+        taskType: 'task1',
+        question: 'Hotel possession retrieval letter',
+        targetBand: 8.0,
+        overallBand: 5.5,
+        confidence: 'High',
+        criteria: [
+          {
+            key: 'TR',
+            name: 'Task Achievement',
+            band: 6.0,
+            comment: 'All three bullet points are covered, but explanations are brief and lacking situational detail.',
+            commentSi: 'කරුණු තුනම ආවරණය කර ඇතත් පැහැදිලි කිරීම් කෙටිය.',
+            toReach8: 'Provide fuller contextual detail (dates of stay, booking reference, explicit model details).'
+          },
+          {
+            key: 'CC',
+            name: 'Coherence & Cohesion',
+            band: 6.0,
+            comment: 'Logical paragraph structure matching the prompt bullets, but transitional linking is basic.',
+            commentSi: 'ඡේද වෙන් කිරීම පැහැදිලිය.',
+            toReach8: 'Use formal business correspondence linkers: "With regards to the item", "Should the watch be located".'
+          },
+          {
+            key: 'LR',
+            name: 'Lexical Resource',
+            band: 5.5,
+            comment: 'Repetitive everyday vocabulary ("tell you", "valuable watch", "silver color"). Informal phrasings ("contact to me").',
+            commentSi: 'සාමාන්‍ය කතාබහේ වචන යොදා ඇත.',
+            toReach8: 'Use formal hospitality correspondence vocabulary: "retrieve a misplaced possession", "incur all shipping charges".'
+          },
+          {
+            key: 'GRA',
+            name: 'Grammar',
+            band: 5.0,
+            comment: 'Past tense inconsistency ("I stay", "I forget", "I leave" instead of stayed, forgot, left), missing articles ("in room"), and wrong preposition ("contact to me", "looking forward to hear").',
+            commentSi: 'අතීත කාල ක්‍රියාපද (stayed, left) වෙනුවට වර්තමාන කාලය යෙදීම සහ "to hear" වෙනුවට "to hearing" විය යුතුය.',
+            toReach8: 'Master past tense accuracy for past events and verb patterns like "look forward to + -ing".'
+          }
+        ],
+        mainProblems: [
+          {
+            severity: 'High',
+            title: 'Past Tense Inconsistency for Completed Stays',
+            description: 'You wrote "I stay", "I checkout", and "I leave". Since your hotel stay concluded last weekend, all verbs must be in the past simple: stayed, checked out, left.',
+            descriptionSi: 'හෝටලයේ රැඳී සිටීම අවසන් වී ඇති බැවින් අතීත කාලය (stayed, checked out, left) යොදන්න.'
+          },
+          {
+            severity: 'High',
+            title: 'Incorrect Preposition & Verb Patterns',
+            description: '"contact" does not take "to" (say "contact me", not "contact to me"). Furthermore, "look forward to" requires a gerund: "look forward to hearing from you".',
+            descriptionSi: '"contact me" විය යුතුය. "look forward to hearing" විය යුතුය.'
+          }
+        ],
+        learningOrder: ['verb-tenses', 'verb-patterns', 'prepositions', 'articles-countable', 'academic-vocabulary', 'task-response'],
+        teacherNote: 'In IELTS General Training Task 1 formal letters, maintaining consistent past tenses for past occurrences and using correct business email formulas like "look forward to hearing from you" is vital for Band 7+.',
+        teacherNoteSi: 'විධිමත් ලිපිවලදී අතීත කාලය සහ "look forward to hearing" වැනි නිවැරදි යෙදුම් භාවිතය අත්‍යවශ්‍ය වේ.',
+        markedEssay: [
+          t('Dear Sir or Madam,\n\nI am writing this letter to '), rep('tell you', 'inform you', undefined, 'Formal letter opening'),
+          t(' that I '), rep('stay', 'stayed', 'tenses', 'Past simple: stayed'),
+          t(' in your hotel last weekend and I '), rep('forget', 'left', 'tenses', 'Left behind, not forget'),
+          t(' my valuable watch in '), ins('my ', 'articles', 'Missing possessive pronoun'),
+          t('room. My room number was 304 and I '), rep('checkout', 'checked out', 'tenses', 'Past tense: checked out'),
+          t(' on Sunday morning.\n\nThe watch is very important '), rep('for', 'to', 'prep', 'Important to someone'),
+          t(' me because it '), rep('is', 'was', 'tenses', 'Past tense'),
+          t(' a gift from my father on my birthday. It is silver '), rep('color', 'in color', undefined, 'More natural phrasing'),
+          t(' with '), ins('a ', 'articles', 'Missing article'),
+          t('black leather strap. I think I '), rep('leave', 'left', 'tenses', 'Past simple: left'),
+          t(' it on the small table near the bed or inside the bathroom shelf.\n\nCould you please ask your cleaning staff to search the room? If they find it, please keep it safe and '),
+          rep('contact to me', 'contact me', 'prep', '"contact" takes no preposition'),
+          t(' by phone. I can pay for '), ins('the ', 'articles', 'Specific cost'),
+          t('courier cost so you can post it to my home address.\n\nI hope you can help me with this problem. I am looking forward to '),
+          rep('hear', 'hearing', 'verb-pattern', 'look forward to + -ing'),
+          t(' from you soon.\n\nYours faithfully,\nKamal Perera')
+        ],
+        issues: [
+          {
+            id: 'gt-tense-1',
+            title: 'Present tense used for past events',
+            category: 'Grammar',
+            severity: 'High',
+            original: 'I stay in your hotel and I forget my watch.',
+            corrected: 'I stayed in your hotel and I left my watch.',
+            why: 'Events that occurred in the past (last weekend) require the past simple tense.',
+            whySi: 'පසුගිය සති අන්තයේ සිදුවූ දෙයක් බැවින් අතීත කාලය යොදන්න.',
+            rule: 'Past simple for finished time periods.',
+            lessonTopic: 'verb-tenses',
+            occurrences: 4
+          },
+          {
+            id: 'gt-verb-pattern',
+            title: 'Look forward to + -ing',
+            category: 'Grammar',
+            severity: 'Medium',
+            original: 'I am looking forward to hear from you.',
+            corrected: 'I am looking forward to hearing from you.',
+            why: 'In "look forward to", "to" is a preposition, which must be followed by a noun or gerund (-ing).',
+            whySi: '"to" මෙහි නිපාත පදයක් බැවින් පසුව එන්නේ gerund (-ing) පදයකි.',
+            rule: 'look forward to + V-ing.',
+            lessonTopic: 'verb-patterns',
+            occurrences: 1
+          }
+        ],
+        improvements: [
+          {
+            original: 'I am writing this letter to tell you',
+            better: 'I am writing to inquire about a personal item that I inadvertently left behind',
+            why: 'Standard formal business correspondence register.',
+            whySi: 'වඩාත් විධිමත් ලිපි ආරම්භයක්.'
+          }
+        ],
+        band8Edits: [
+          t('Dear Sir or Madam,\n\nI am writing to inquire about a valuable personal possession that I inadvertently misplaced during my recent stay at your hotel. I was accommodated in Room 304 from October 24th to 27th, and checked out on the morning of Sunday, October 27th (Booking Reference: #HT-88219).\n\nThe item in question is a stainless steel Seiko automatic wristwatch featuring an engraved case back and a dark brown leather strap. It carries immense sentimental value as it was presented to me by my father. To the best of my recollection, I left it either on the bedside nightstand or inside the recessed vanity cabinet in the bathroom.\n\nI would be exceedingly grateful if you could arrange for housekeeping personnel to inspect the room thoroughly. Should the timepiece be recovered, please secure it at the reception desk and notify me via telephone at +94 77 123 4567. Naturally, I will gladly reimburse any postage and courier expenses required to dispatch it to my residential address in Colombo.\n\nThank you very much for your prompt assistance in this matter. I look forward to hearing from you at your earliest convenience.\n\nYours faithfully,\nKamal Perera')
+        ],
+        band8Overall: 8.5,
+        band8Criteria: [
+          { key: 'TR', band: 8.5 },
+          { key: 'CC', band: 8.5 },
+          { key: 'LR', band: 8.5 },
+          { key: 'GRA', band: 8.5 }
+        ],
+        band8Notes: [
+          'Exemplary formal tone with precise business letter register ("inadvertently misplaced", "sentimental value", "prompt assistance").',
+          'Supplies concrete practical details: booking reference, dates, serial description.',
+          'Flawless grammar with conditionals and gerund structures ("Should the timepiece be recovered").'
+        ]
+      }
+    },
+    band8ModelAnswer: {
+      text:
+        'Dear Sir or Madam,\n\nI am writing to inquire about a valuable personal possession that I inadvertently misplaced during my recent stay at your hotel. I was accommodated in Room 304 from October 24th to 27th, and checked out on the morning of Sunday, October 27th (Booking Reference: #HT-88219).\n\nThe item in question is a stainless steel Seiko automatic wristwatch featuring an engraved case back and a dark brown leather strap. It carries immense sentimental value as it was presented to me by my father. To the best of my recollection, I left it either on the bedside nightstand or inside the recessed vanity cabinet in the bathroom.\n\nI would be exceedingly grateful if you could arrange for housekeeping personnel to inspect the room thoroughly. Should the timepiece be recovered, please secure it at the reception desk and notify me via telephone at +94 77 123 4567. Naturally, I will gladly reimburse any postage and courier expenses required to dispatch it to my residential address in Colombo.\n\nThank you very much for your prompt assistance in this matter. I look forward to hearing from you at your earliest convenience.\n\nYours faithfully,\nKamal Perera',
+      examinerComments: [
+        'Mastery of formal register with no informal slips.',
+        'All bullet points fully fleshed out with realistic details.',
+        'Advanced conditional inversion ("Should the timepiece be recovered") demonstrating Band 9 grammar control.'
+      ]
+    }
   }
 ];
 

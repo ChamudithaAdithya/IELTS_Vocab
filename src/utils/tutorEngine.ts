@@ -69,7 +69,12 @@ export function loadTutorState(): TutorState {
   try {
     const raw = localStorage.getItem(STATE_KEY);
     if (!raw) return initialTutorState;
-    return { ...initialTutorState, ...JSON.parse(raw) };
+    const parsed = JSON.parse(raw);
+    return {
+      assessments: Array.isArray(parsed?.assessments) ? parsed.assessments : [],
+      lessonProgress: parsed?.lessonProgress && typeof parsed.lessonProgress === 'object' ? parsed.lessonProgress : {},
+      targetBand: typeof parsed?.targetBand === 'number' ? parsed.targetBand : 8,
+    };
   } catch {
     return initialTutorState;
   }
