@@ -35,7 +35,16 @@ export const CambridgeActivitiesView: React.FC<CambridgeActivitiesViewProps> = (
 
   // Selected Cambridge test in test bank
   const [selectedTest, setSelectedTest] = useState<CambridgeTestPrompt>(ALL_CAMBRIDGE_TESTS[0]);
+  const [selectedBookFilter, setSelectedBookFilter] = useState<'all' | 'c1' | 'c14-18' | 'task1' | 'task2'>('all');
   const [showModelAnswer, setShowModelAnswer] = useState(false);
+
+  const filteredWritingTests = ALL_CAMBRIDGE_TESTS.filter(t => {
+    if (selectedBookFilter === 'c1') return t.id.startsWith('c1-');
+    if (selectedBookFilter === 'c14-18') return !t.id.startsWith('c1-');
+    if (selectedBookFilter === 'task1') return t.taskType === 'task1';
+    if (selectedBookFilter === 'task2') return t.taskType === 'task2';
+    return true;
+  });
 
   // Activity 1: Error Spotting State
   const ERROR_DRILLS = [
@@ -242,9 +251,36 @@ export const CambridgeActivitiesView: React.FC<CambridgeActivitiesViewProps> = (
       {/* Mode 1: Cambridge Test Bank */}
       {activeActivity === 'tests' && (
         <div className="space-y-6">
+          {/* Writing Category Filter Pills */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+            <span className="text-slate-400 font-bold uppercase text-[10px] tracking-wider shrink-0">
+              Filter Writing Tasks:
+            </span>
+            {[
+              { id: 'all', label: `All Tasks (${ALL_CAMBRIDGE_TESTS.length})` },
+              { id: 'c1', label: `Cambridge 1 (${ALL_CAMBRIDGE_TESTS.filter(t => t.id.startsWith('c1-')).length})` },
+              { id: 'c14-18', label: `Cambridge 14–18 (${ALL_CAMBRIDGE_TESTS.filter(t => !t.id.startsWith('c1-')).length})` },
+              { id: 'task1', label: 'Task 1 (Visuals & Letters)' },
+              { id: 'task2', label: 'Task 2 (Essays)' }
+            ].map(b => (
+              <button
+                key={b.id}
+                type="button"
+                onClick={() => setSelectedBookFilter(b.id as any)}
+                className={`px-3 py-1 rounded-lg font-bold transition-all whitespace-nowrap ${
+                  selectedBookFilter === b.id
+                    ? 'bg-indigo-600 text-white shadow-xs'
+                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+                }`}
+              >
+                {b.label}
+              </button>
+            ))}
+          </div>
+
           {/* Test Selector Tabs */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {ALL_CAMBRIDGE_TESTS.map(test => (
+            {filteredWritingTests.map(test => (
               <button
                 key={test.id}
                 type="button"

@@ -22,7 +22,17 @@ interface ReadingTutorViewProps {
 
 export const ReadingTutorView: React.FC<ReadingTutorViewProps> = ({ showSinhala, onBackToHub }) => {
   const [selectedPassage, setSelectedPassage] = useState<ReadingPassage>(CAMBRIDGE_READING_TESTS[0]);
+  const [selectedBook, setSelectedBook] = useState<'all' | number | string>('all');
   const [testMode, setTestMode] = useState<'practice' | 'exam'>('practice');
+
+  const getBookNumber = (p: ReadingPassage): number => {
+    const match = p.cambridgeSource.match(/Cambridge(?:\s+IELTS)?\s+(\d+)/i);
+    return match ? parseInt(match[1], 10) : 18;
+  };
+
+  const filteredPassages = selectedBook === 'all'
+    ? CAMBRIDGE_READING_TESTS
+    : CAMBRIDGE_READING_TESTS.filter(p => getBookNumber(p) === Number(selectedBook));
   const [userAnswers, setUserAnswers] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [activeQuestionId, setActiveQuestionId] = useState<string | null>(null);
@@ -48,10 +58,26 @@ export const ReadingTutorView: React.FC<ReadingTutorViewProps> = ({ showSinhala,
     setUserAnswers(prev => ({ ...prev, [qId]: answer }));
   };
 
+  const isAnswerCorrect = (userAns?: string, official?: string): boolean => {
+    if (!userAns || !official) return false;
+    const u = userAns.trim().toLowerCase().replace(/[£$,.?!]/g, '').replace(/\s+/g, ' ');
+    const parts = official.split(/\/\/|\sor\s|\//).map(p => 
+      p.trim().toLowerCase().replace(/[()£$,.?!]/g, '').replace(/\s+/g, ' ')
+    );
+    if (parts.includes(u)) return true;
+    return parts.some(p => {
+      if (u === p) return true;
+      if (u.replace(/-/g, ' ') === p.replace(/-/g, ' ')) return true;
+      if (u + 's' === p || u === p + 's') return true;
+      if (p.startsWith(u + ':') || u.startsWith(p + ':')) return true;
+      return false;
+    });
+  };
+
   const calculateScore = () => {
     let correct = 0;
     selectedPassage.questions.forEach(q => {
-      if (userAnswers[q.id]?.trim().toUpperCase() === q.correctAnswer.toUpperCase()) {
+      if (isAnswerCorrect(userAnswers[q.id], q.correctAnswer)) {
         correct++;
       }
     });
@@ -154,23 +180,58 @@ export const ReadingTutorView: React.FC<ReadingTutorViewProps> = ({ showSinhala,
         </div>
       </div>
 
-      {/* Test Selector Tabs (All 4 Cambridge Reading Tests) */}
+      {/* Cambridge Book Filter Pills */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
-        {CAMBRIDGE_READING_TESTS.map((t, idx) => (
+        <span className="text-slate-400 font-bold uppercase text-[10px] tracking-wider shrink-0">
+          Cambridge Book:
+        </span>
+        {[
+          { id: 'all', label: `All Books (${CAMBRIDGE_READING_TESTS.length})` },
+          { id: 18, label: 'Cambridge 18' },
+          { id: 17, label: 'Cambridge 17' },
+          { id: 16, label: 'Cambridge 16' },
+          { id: 15, label: 'Cambridge 15' },
+          { id: 14, label: 'Cambridge 14' },
+          { id: 13, label: 'Cambridge 13' },
+          { id: 12, label: 'Cambridge 12' },
+          { id: 10, label: 'Cambridge 10' },
+          { id: 1, label: 'Cambridge 1 (13 Passages)' }
+        ].map(b => (
           <button
-            key={t.id}
+            key={b.id}
             type="button"
-            onClick={() => handleChangePassage(t)}
-            className={`px-3.5 py-2 rounded-xl font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${
-              selectedPassage.id === t.id
+            onClick={() => setSelectedBook(b.id as any)}
+            className={`px-3 py-1 rounded-lg font-bold transition-all whitespace-nowrap ${
+              selectedBook === b.id
                 ? 'bg-emerald-600 text-white shadow-xs'
-                : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50'
+                : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
             }`}
           >
-            <span>Test {idx + 1}:</span>
-            <span className="font-medium text-[11px] truncate max-w-[180px]">{t.title}</span>
+            {b.label}
           </button>
         ))}
+      </div>
+
+      {/* Passage Selector Tabs */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-2 text-xs scrollbar-none">
+        {filteredPassages.map((t) => {
+          const bNum = getBookNumber(t);
+          return (
+            <button
+              key={t.id}
+              type="button"
+              onClick={() => handleChangePassage(t)}
+              className={`px-3.5 py-2 rounded-xl font-bold transition-all whitespace-nowrap flex items-center gap-1.5 border ${
+                selectedPassage.id === t.id
+                  ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
+                  : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+              }`}
+            >
+              <span className="text-[10px] font-mono opacity-80">Book {bNum}:</span>
+              <span className="font-medium text-[11px] truncate max-w-[190px]">{t.title}</span>
+            </button>
+          );
+        })}
       </div>
 
       {/* Exam Mode Status Bar if active */}
@@ -240,7 +301,8 @@ export const ReadingTutorView: React.FC<ReadingTutorViewProps> = ({ showSinhala,
             <div className="space-y-5">
               {selectedPassage.questions.map((q, idx) => {
                 const userAns = userAnswers[q.id];
-                const isCorrect = userAns?.trim().toUpperCase() === q.correctAnswer.toUpperCase();
+                const isCorrect = isAnswerCorrect(userAns, q.correctAnswer);
+                const tfngOpts = q.options && q.options.length === 3 ? q.options : ['TRUE', 'FALSE', 'NOT GIVEN'];
 
                 return (
                   <div
@@ -271,7 +333,7 @@ export const ReadingTutorView: React.FC<ReadingTutorViewProps> = ({ showSinhala,
                     {/* TFNG Options */}
                     {q.type === 'TFNG' ? (
                       <div className="grid grid-cols-3 gap-2 mt-3">
-                        {['TRUE', 'FALSE', 'NOT GIVEN'].map(opt => (
+                        {tfngOpts.map(opt => (
                           <button
                             key={opt}
                             type="button"
@@ -287,10 +349,10 @@ export const ReadingTutorView: React.FC<ReadingTutorViewProps> = ({ showSinhala,
                           </button>
                         ))}
                       </div>
-                    ) : (
+                    ) : q.options && q.options.length > 0 ? (
                       /* MCQ Options */
                       <div className="space-y-1.5 mt-3">
-                        {q.options?.map(opt => (
+                        {q.options.map(opt => (
                           <button
                             key={opt}
                             type="button"
@@ -305,6 +367,18 @@ export const ReadingTutorView: React.FC<ReadingTutorViewProps> = ({ showSinhala,
                             <span>{opt}</span>
                           </button>
                         ))}
+                      </div>
+                    ) : (
+                      /* Text Input for Summary / Gap-fill / Short Answer */
+                      <div className="mt-3">
+                        <input
+                          type="text"
+                          disabled={submitted}
+                          value={userAns || ''}
+                          onChange={e => handleSelectAnswer(q.id, e.target.value)}
+                          placeholder="Type answer from passage..."
+                          className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 font-mono bg-white disabled:bg-slate-100 text-slate-900"
+                        />
                       </div>
                     )}
 

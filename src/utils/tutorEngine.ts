@@ -50,6 +50,171 @@ export const roundIeltsBand = (scores: number[]): number => {
 export const formatBand = (band: number) => band.toFixed(1);
 
 /* ------------------------------------------------------------------ */
+/* Band 8 Academic Upgrades & Diffing Engine                          */
+/* ------------------------------------------------------------------ */
+
+export const ACADEMIC_BAND8_UPGRADES: { original: string; better: string; note: string }[] = [
+  { original: 'very popular', better: 'widely debated across contemporary society', note: 'Replaces colloquial "very popular" with formal sociological register' },
+  { original: 'good experience', better: 'valuable civic and professional competence', note: 'Band 8 collocation for personal development' },
+  { original: 'a lot of money', better: 'substantial fiscal resources', note: 'Formal economic collocation replacing spoken English' },
+  { original: 'cost a lot of money', better: 'place an unsustainable fiscal burden on public budgets', note: 'Advanced collocation for task response' },
+  { original: 'make poor people suffer', better: 'imposes disproportionate economic hardship on low-income households', note: 'Precise academic terminology' },
+  { original: 'good points', better: 'valid arguments', note: 'Academic collocation replacing casual phrase' },
+  { original: 'study what they like', better: 'be free to pursue their intellectual interests', note: 'More sophisticated paraphrase of the prompt' },
+  { original: 'give jobs', better: 'generate sustainable employment opportunities', note: 'Standard academic business collocation' },
+  { original: 'in my opinion', better: 'from my perspective, it is evident that', note: 'Nuanced authorial voice for Band 8' },
+  { original: 'balance both sides', better: 'harmonise competing societal and individual priorities', note: 'Specific synthesis instead of vague "both sides"' },
+  { original: 'get good marks', better: 'achieve distinguished academic outcomes', note: 'Formal academic collocation' },
+  { original: 'big decision', better: 'pivotal milestone', note: 'Advanced lexical resource' },
+  { original: 'big', better: 'substantial', note: 'Formal academic adjective' },
+  { original: 'about jobs', better: 'carefully about future employment prospects', note: 'More precise prepositional phrase' },
+  { original: 'good', better: 'advantageous and beneficial', note: 'Higher-register synonyms replacing basic adjective' },
+  { original: 'bad', better: 'detrimental to long-term welfare', note: 'Academic adjective with prepositional phrase' },
+  { original: 'think', better: 'maintain the viewpoint that', note: 'Sophisticated reporting verb for academic essays' },
+  { original: 'help', better: 'facilitate and support', note: 'Academic verb pair' },
+  { original: 'a lot of', better: 'a substantial proportion of', note: 'Quantifier upgrade' },
+  { original: 'important', better: 'imperative and consequential', note: 'Academic evaluation phrase' }
+];
+
+export function diffWordsToSegments(original: string, modified: string, defaultNote: string = 'Band 8 academic upgrade'): EssaySegment[] {
+  if (original === modified) {
+    return [{ type: 'text', text: original }];
+  }
+
+  const origTokens = original.split(/(\s+|[.,!?;:()]+)/);
+  const modTokens = modified.split(/(\s+|[.,!?;:()]+)/);
+  const segments: EssaySegment[] = [];
+  let i = 0;
+  let j = 0;
+
+  while (i < origTokens.length && j < modTokens.length) {
+    if (origTokens[i] === modTokens[j]) {
+      let common = origTokens[i];
+      i++;
+      j++;
+      while (i < origTokens.length && j < modTokens.length && origTokens[i] === modTokens[j]) {
+        common += origTokens[i];
+        i++;
+        j++;
+      }
+      segments.push({ type: 'text', text: common });
+    } else {
+      let matchI = -1;
+      let matchJ = -1;
+      const windowSize = 10;
+
+      outer: for (let offset = 1; offset <= windowSize; offset++) {
+        for (let di = 0; di <= offset; di++) {
+          const dj = offset - di;
+          const testI = i + di;
+          const testJ = j + dj;
+          if (
+            testI < origTokens.length &&
+            testJ < modTokens.length &&
+            origTokens[testI] === modTokens[testJ] &&
+            origTokens[testI].trim().length > 1
+          ) {
+            matchI = testI;
+            matchJ = testJ;
+            break outer;
+          }
+        }
+      }
+
+      if (matchI !== -1 && matchJ !== -1) {
+        const delText = origTokens.slice(i, matchI).join('');
+        const insText = modTokens.slice(j, matchJ).join('');
+        if (delText && insText) {
+          segments.push({ type: 'replace', text: delText, to: insText, note: defaultNote });
+        } else if (delText) {
+          segments.push({ type: 'del', text: delText, note: 'Eliminated redundant phrasing' });
+        } else if (insText) {
+          segments.push({ type: 'ins', text: insText, note: 'Added detail / evidence for Band 8' });
+        }
+        i = matchI;
+        j = matchJ;
+      } else {
+        const delText = origTokens.slice(i).join('');
+        const insText = modTokens.slice(j).join('');
+        if (delText && insText) {
+          segments.push({ type: 'replace', text: delText, to: insText, note: defaultNote });
+        } else if (delText) {
+          segments.push({ type: 'del', text: delText });
+        } else if (insText) {
+          segments.push({ type: 'ins', text: insText });
+        }
+        i = origTokens.length;
+        j = modTokens.length;
+      }
+    }
+  }
+
+  while (i < origTokens.length) {
+    segments.push({ type: 'del', text: origTokens[i++] });
+  }
+  while (j < modTokens.length) {
+    segments.push({ type: 'ins', text: modTokens[j++] });
+  }
+
+  return segments;
+}
+
+export function generateAcademicUpgradeSegments(
+  text: string,
+  improvements: { original: string; better: string; why?: string }[] = []
+): EssaySegment[] {
+  const allUpgrades = [
+    ...improvements.map(i => ({ original: i.original, better: i.better, note: i.why || 'Band 8 academic upgrade' })),
+    ...ACADEMIC_BAND8_UPGRADES
+  ];
+
+  const matches: { idx: number; len: number; original: string; better: string; note: string }[] = [];
+  for (const up of allUpgrades) {
+    if (!up.original || !up.better) continue;
+    const regex = new RegExp('\\b' + up.original.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'gi');
+    let m;
+    while ((m = regex.exec(text)) !== null) {
+      matches.push({
+        idx: m.index,
+        len: m[0].length,
+        original: m[0],
+        better: up.better,
+        note: up.note
+      });
+    }
+  }
+
+  matches.sort((a, b) => a.idx - b.idx);
+  const nonOverlapping: typeof matches = [];
+  let lastEnd = 0;
+  for (const m of matches) {
+    if (m.idx >= lastEnd) {
+      nonOverlapping.push(m);
+      lastEnd = m.idx + m.len;
+    }
+  }
+
+  if (nonOverlapping.length === 0) {
+    return [{ type: 'text', text }];
+  }
+
+  const segments: EssaySegment[] = [];
+  let curr = 0;
+  for (const m of nonOverlapping) {
+    if (m.idx > curr) {
+      segments.push({ type: 'text', text: text.slice(curr, m.idx) });
+    }
+    segments.push({ type: 'replace', text: m.original, to: m.better, note: m.note });
+    curr = m.idx + m.len;
+  }
+  if (curr < text.length) {
+    segments.push({ type: 'text', text: text.slice(curr) });
+  }
+
+  return segments;
+}
+
+/* ------------------------------------------------------------------ */
 /* Local storage                                                       */
 /* ------------------------------------------------------------------ */
 
@@ -449,12 +614,22 @@ export async function evaluateEssayWithGemini(params: {
     clearTimeout(b8Timer);
 
     const b8Segments = asSegments(b8.segments);
-    if (b8Segments.length && normalise(buildOriginal(b8Segments)) === normalise(correctedEssay)) {
+    const hasUpgrades = b8Segments.some(s => s.type !== 'text');
+
+    if (hasUpgrades && normalise(buildOriginal(b8Segments)) === normalise(correctedEssay)) {
       band8Edits = b8Segments;
+    } else if (hasUpgrades) {
+      // b8Segments has upgrades but minor whitespace difference — diff against result
+      band8Edits = diffWordsToSegments(correctedEssay, buildResult(b8Segments));
     } else if (b8Segments.length) {
-      warnings.push('The Band 8 edits could not be aligned with your corrected essay, so only the final version is shown.');
-      band8Edits = [{ type: 'text', text: buildResult(b8Segments) }];
+      const rawB8Text = buildResult(b8Segments);
+      band8Edits = diffWordsToSegments(correctedEssay, rawB8Text);
     }
+
+    if (!band8Edits.some(s => s.type !== 'text')) {
+      band8Edits = generateAcademicUpgradeSegments(correctedEssay, (evalJson?.improvements || []));
+    }
+
     band8Criteria = (['TR', 'CC', 'LR', 'GRA'] as CriterionKey[]).map(key => ({
       key,
       band: clampBand((b8.criteria || []).find((x: any) => x.key === key)?.band ?? 0),
@@ -464,7 +639,12 @@ export async function evaluateEssayWithGemini(params: {
     }
   } catch (e) {
     // Graceful fallback: do not fail entire evaluation if Band 8 pass times out
-    console.warn('Band 8 pass skipped or timed out, using baseline upgraded model.', e);
+    console.warn('Band 8 pass skipped or timed out, generating academic upgrades locally.', e);
+    band8Edits = generateAcademicUpgradeSegments(correctedEssay, (evalJson?.improvements || []));
+  }
+
+  if (!band8Edits.some(s => s.type !== 'text')) {
+    band8Edits = generateAcademicUpgradeSegments(correctedEssay, (evalJson?.improvements || []));
   }
 
   onStage?.('done', 'Evaluation complete!');

@@ -129,28 +129,36 @@ export const SpeakingTutorView: React.FC<SpeakingTutorViewProps> = ({ showSinhal
           </div>
         </div>
 
-        {/* Part Selector Pills */}
-        <div className="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl">
-          {CAMBRIDGE_SPEAKING_TESTS.map(sp => (
-            <button
-              key={sp.id}
-              type="button"
-              onClick={() => {
-                setSelectedPrompt(sp);
-                setIsRecording(false);
-                setUserSpeechText('');
-                setPrepTimeRemaining(60);
-                setIsPrepRunning(false);
-              }}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${
-                selectedPrompt.id === sp.id
-                  ? 'bg-white text-slate-900 shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              Part {sp.part}
-            </button>
-          ))}
+        {/* Cambridge Test Selector Pills */}
+        <div className="flex items-center gap-1.5 bg-slate-100 p-1.5 rounded-xl overflow-x-auto max-w-full">
+          {CAMBRIDGE_SPEAKING_TESTS.map(sp => {
+            const isC1 = sp.id.startsWith('c1-');
+            const testNum = isC1 ? sp.id.replace('c1-spk-test', '') : '';
+            const label = isC1
+              ? `Cambridge 1 · Test ${testNum}`
+              : `Cambridge 18 · Part ${sp.part}`;
+            return (
+              <button
+                key={sp.id}
+                type="button"
+                onClick={() => {
+                  setSelectedPrompt(sp);
+                  setIsRecording(false);
+                  setUserSpeechText('');
+                  setPrepTimeRemaining(60);
+                  setIsPrepRunning(false);
+                }}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors whitespace-nowrap flex items-center gap-1.5 ${
+                  selectedPrompt.id === sp.id
+                    ? 'bg-slate-900 text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+                }`}
+              >
+                <span>{label}</span>
+                <span className="text-[10px] opacity-75 font-normal truncate max-w-[120px]">({sp.topic})</span>
+              </button>
+            );
+          })}
         </div>
       </div>
 

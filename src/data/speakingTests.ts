@@ -1,6 +1,8 @@
 import type { SpeakingPartPrompt } from '../types/tutor';
+import { CAMBRIDGE_1_SPEAKING_TESTS } from './cambridge1FullTests';
 
 export const CAMBRIDGE_SPEAKING_TESTS: SpeakingPartPrompt[] = [
+  ...CAMBRIDGE_1_SPEAKING_TESTS,
   {
     id: 'sp-part1-hometown',
     part: 1,

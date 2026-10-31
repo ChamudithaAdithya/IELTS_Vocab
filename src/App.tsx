@@ -1,13 +1,5 @@
 import React, { useState, useEffect, Component, ErrorInfo, ReactNode } from 'react';
-import { LESSONS, ALL_WORDS } from './data/lessons';
-import { Lesson, UserProgress } from './types';
-import { loadProgress, saveProgress } from './utils/storage';
 import { Header, AppTab } from './components/Header';
-import { LessonView } from './components/LessonView';
-import { FlashcardsView } from './components/FlashcardsView';
-import { QuizView } from './components/QuizView';
-import { SpeakingLabView } from './components/SpeakingLabView';
-import { WordBankView } from './components/WordBankView';
 import { WritingTutorView } from './components/WritingTutorView';
 import { SpeakingTutorView } from './components/tutor/SpeakingTutorView';
 import { ReadingTutorView } from './components/tutor/ReadingTutorView';
@@ -15,9 +7,8 @@ import { ListeningTutorView } from './components/tutor/ListeningTutorView';
 import { AnalyticsView } from './components/tutor/AnalyticsView';
 import { CambridgeLibraryView } from './components/tutor/CambridgeLibraryView';
 import { loadTutorState } from './utils/tutorEngine';
-import { SearchModal } from './components/SearchModal';
 import { VoiceSettingsModal } from './components/VoiceSettingsModal';
-import { Award, BookOpen, Layers, Sparkles, Mic, Heart, CheckCircle2, RotateCcw, ArrowUp } from 'lucide-react';
+import { Award, RotateCcw, ArrowUp } from 'lucide-react';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -80,13 +71,9 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 }
 
 function MainApp() {
-  const [currentTab, setCurrentTab] = useState<AppTab>('tutor');
-  // Default to Lesson 2: Family & Relationships
-  const [currentLessonId, setCurrentLessonId] = useState<string>('lesson-2');
+  // Default to Cambridge Past Papers Master Library
+  const [currentTab, setCurrentTab] = useState<AppTab>('cambridge');
   const [showSinhala, setShowSinhala] = useState<boolean>(true);
-  const [globalAccent, setGlobalAccent] = useState<'en-GB' | 'en-US' | 'en-AU'>('en-GB');
-  const [userProgress, setUserProgress] = useState<UserProgress>(loadProgress);
-  const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
   const [isVoiceSettingsOpen, setIsVoiceSettingsOpen] = useState<boolean>(false);
   const [showScrollTop, setShowScrollTop] = useState<boolean>(false);
 
@@ -102,100 +89,44 @@ function MainApp() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  useEffect(() => {
-    saveProgress(userProgress);
-  }, [userProgress]);
-
-  const currentLesson: Lesson = LESSONS.find(l => l.id === currentLessonId) || LESSONS[1];
-
-  const handleToggleMastered = (wordId: string) => {
-    setUserProgress(prev => {
-      const isAlready = prev.masteredWordIds.includes(wordId);
-      const updated = isAlready
-        ? prev.masteredWordIds.filter(id => id !== wordId)
-        : [...prev.masteredWordIds, wordId];
-      return { ...prev, masteredWordIds: updated };
-    });
-  };
-
-  const handleToggleBookmark = (wordId: string) => {
-    setUserProgress(prev => {
-      const isAlready = prev.bookmarkedWordIds.includes(wordId);
-      const updated = isAlready
-        ? prev.bookmarkedWordIds.filter(id => id !== wordId)
-        : [...prev.bookmarkedWordIds, wordId];
-      return { ...prev, bookmarkedWordIds: updated };
-    });
-  };
-
-  const handleSaveChecklistSentence = (wordId: string, sentence: string) => {
-    setUserProgress(prev => {
-      const updatedSubmissions = { ...prev.checklistSubmissions, [wordId]: sentence };
-      const updatedCompleted = prev.completedChecklistIds.includes(wordId)
-        ? prev.completedChecklistIds
-        : [...prev.completedChecklistIds, wordId];
-      return {
-        ...prev,
-        checklistSubmissions: updatedSubmissions,
-        completedChecklistIds: updatedCompleted,
-      };
-    });
-  };
-
-  const handleRecordBestScore = (lessonId: string, scorePercent: number) => {
-    setUserProgress(prev => {
-      const currentBest = prev.quizBestScores[lessonId] || 0;
-      if (scorePercent > currentBest) {
-        return {
-          ...prev,
-          quizBestScores: { ...prev.quizBestScores, [lessonId]: scorePercent },
-        };
-      }
-      return prev;
-    });
-  };
-
-  const handleNavigateToWord = (lessonId: string, wordId: string) => {
-    setCurrentLessonId(lessonId);
-    setCurrentTab('lessons');
-    setTimeout(() => {
-      const elem = document.getElementById(`word-${wordId}`);
-      if (elem) {
-        elem.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }, 150);
-  };
-
-  const handleStartQuiz = (lesson: Lesson) => {
-    setCurrentLessonId(lesson.id);
-    setCurrentTab('quiz');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleStartFlashcards = (lesson: Lesson) => {
-    setCurrentLessonId(lesson.id);
-    setCurrentTab('flashcards');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   return (
     <div className="min-h-screen bg-[#fafafa] text-slate-900 flex flex-col font-sans">
-      {/* Top Header */}
+      {/* Top Header - Pure Cambridge Real Tests */}
       <Header
         currentTab={currentTab}
         setCurrentTab={setCurrentTab}
         showSinhala={showSinhala}
         setShowSinhala={setShowSinhala}
-        masteredCount={userProgress.masteredWordIds.length}
-        totalWords={ALL_WORDS.length}
-        bookmarkedCount={userProgress.bookmarkedWordIds.length}
-        onOpenSearch={() => setIsSearchOpen(true)}
         onOpenVoiceSettings={() => setIsVoiceSettingsOpen(true)}
       />
 
       {/* Main Dedicated Content Views */}
       <main className="flex-1">
-        {/* Module 1: Writing Tutor AI (Dedicated Room & Hub) */}
+        {/* Flagship: Cambridge Past Papers Central Library (Books 1 to 18) */}
+        {currentTab === 'cambridge' && (
+          <CambridgeLibraryView
+            showSinhala={showSinhala}
+            onSelectTest={(module) => setCurrentTab(module as AppTab)}
+          />
+        )}
+
+        {/* Module 1: Listening Tests (Authentic CD Audio, Speed Controls, Instant Cambridge Diagnostic) */}
+        {currentTab === 'listening' && (
+          <ListeningTutorView 
+            showSinhala={showSinhala} 
+            onBackToHub={() => setCurrentTab('cambridge')}
+          />
+        )}
+
+        {/* Module 2: Reading Tests (Dual-Pane Reader, Paragraph Markers, Line Citations & Explanations) */}
+        {currentTab === 'reading' && (
+          <ReadingTutorView 
+            showSinhala={showSinhala} 
+            onBackToHub={() => setCurrentTab('cambridge')}
+          />
+        )}
+
+        {/* Module 3: Writing Tutor AI (Task 1 & 2 Prompts, Official Models & Weak Essay Markups) */}
         {currentTab === 'tutor' && (
           <WritingTutorView 
             showSinhala={showSinhala} 
@@ -203,108 +134,24 @@ function MainApp() {
           />
         )}
 
-        {/* Cambridge Past Papers Central Library */}
-        {currentTab === 'cambridge' && (
-          <CambridgeLibraryView
-            showSinhala={showSinhala}
-            onSelectTest={(m) => setCurrentTab(m as AppTab)}
-          />
-        )}
-
-        {/* Module 2: Speaking Tutor AI */}
+        {/* Module 4: Speaking Tutor (Interviews, 1-Min Prep Countdown, Voice Recorder & Model Speech) */}
         {currentTab === 'speaking' && (
           <SpeakingTutorView 
             showSinhala={showSinhala} 
-            onBackToHub={() => setCurrentTab('tutor')}
+            onBackToHub={() => setCurrentTab('cambridge')}
           />
         )}
 
-        {/* Module 3: Reading Tutor AI */}
-        {currentTab === 'reading' && (
-          <ReadingTutorView 
-            showSinhala={showSinhala} 
-            onBackToHub={() => setCurrentTab('tutor')}
-          />
-        )}
-
-        {/* Module 4: Listening Tutor AI */}
-        {currentTab === 'listening' && (
-          <ListeningTutorView 
-            showSinhala={showSinhala} 
-            onBackToHub={() => setCurrentTab('tutor')}
-          />
-        )}
-
-        {/* Module 5 & 6: Performance Analytics & Learning Coach */}
+        {/* Module 5: Performance Analytics & Unified Cambridge Score Tracker */}
         {currentTab === 'analytics' && (
           <AnalyticsView 
             tutorState={loadTutorState()} 
             showSinhala={showSinhala} 
-            onBackToHub={() => setCurrentTab('tutor')}
+            onBackToHub={() => setCurrentTab('cambridge')}
             onNavigateToSection={(s) => setCurrentTab(s as AppTab)}
           />
         )}
-
-        {/* Vocabulary Modules */}
-        {currentTab === 'lessons' && (
-          <LessonView
-            lesson={currentLesson}
-            allLessons={LESSONS}
-            onSelectLesson={setCurrentLessonId}
-            showSinhala={showSinhala}
-            userProgress={userProgress}
-            onToggleMastered={handleToggleMastered}
-            onToggleBookmark={handleToggleBookmark}
-            onSaveChecklistSentence={handleSaveChecklistSentence}
-            onStartQuiz={handleStartQuiz}
-            onStartFlashcards={handleStartFlashcards}
-            onOpenVoiceSettings={() => setIsVoiceSettingsOpen(true)}
-          />
-        )}
-
-        {currentTab === 'flashcards' && (
-          <FlashcardsView
-            lesson={currentLesson}
-            allLessons={LESSONS}
-            onSelectLesson={setCurrentLessonId}
-            showSinhala={showSinhala}
-            masteredWordIds={userProgress.masteredWordIds}
-            bookmarkedWordIds={userProgress.bookmarkedWordIds}
-            onToggleMastered={handleToggleMastered}
-            onToggleBookmark={handleToggleBookmark}
-            onBackToLesson={() => setCurrentTab('lessons')}
-          />
-        )}
-
-        {currentTab === 'quiz' && (
-          <QuizView
-            lesson={currentLesson}
-            allLessons={LESSONS}
-            onSelectLesson={setCurrentLessonId}
-            showSinhala={showSinhala}
-            onRecordBestScore={handleRecordBestScore}
-            onBackToLesson={() => setCurrentTab('lessons')}
-          />
-        )}
-
-        {currentTab === 'bank' && (
-          <WordBankView
-            showSinhala={showSinhala}
-            userProgress={userProgress}
-            onToggleMastered={handleToggleMastered}
-            onToggleBookmark={handleToggleBookmark}
-            onNavigateToWord={handleNavigateToWord}
-          />
-        )}
       </main>
-
-      {/* Global Search Modal */}
-      <SearchModal
-        isOpen={isSearchOpen}
-        onClose={() => setIsSearchOpen(false)}
-        showSinhala={showSinhala}
-        onSelectWord={handleNavigateToWord}
-      />
 
       {/* Voice & Pronunciation Settings Modal */}
       <VoiceSettingsModal
@@ -326,31 +173,31 @@ function MainApp() {
         </button>
       )}
 
-      {/* Clean Global Footer */}
+      {/* Clean Global Footer - Dedicated to Cambridge Real Tests */}
       <footer className="border-t border-slate-200 bg-white py-8 mt-16 text-xs text-slate-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
-            <span className="font-semibold text-slate-800">IELTS Master Band 8 AI Examiner Suite</span>
-            <p className="mt-0.5">Academic & General Training with Sinhala bilingual explanations.</p>
+            <span className="font-semibold text-slate-800">Cambridge IELTS Master Exam Platform</span>
+            <p className="mt-0.5">Authentic past papers from Books 1 to 18 with local audio streaming and bilingual Sinhala assistance.</p>
           </div>
           <div className="flex flex-wrap items-center gap-4">
-            <button onClick={() => setCurrentTab('tutor')} className="hover:text-slate-900 font-bold text-indigo-700">
-              Writing Tutor
-            </button>
-            <button onClick={() => setCurrentTab('speaking')} className="hover:text-slate-900">
-              Speaking
-            </button>
-            <button onClick={() => setCurrentTab('reading')} className="hover:text-slate-900">
-              Reading
+            <button onClick={() => setCurrentTab('cambridge')} className="hover:text-slate-900 font-bold text-indigo-700">
+              Cambridge Library
             </button>
             <button onClick={() => setCurrentTab('listening')} className="hover:text-slate-900">
               Listening
             </button>
+            <button onClick={() => setCurrentTab('reading')} className="hover:text-slate-900">
+              Reading
+            </button>
+            <button onClick={() => setCurrentTab('tutor')} className="hover:text-slate-900">
+              Writing
+            </button>
+            <button onClick={() => setCurrentTab('speaking')} className="hover:text-slate-900">
+              Speaking
+            </button>
             <button onClick={() => setCurrentTab('analytics')} className="hover:text-slate-900">
               Analytics
-            </button>
-            <button onClick={() => setCurrentTab('lessons')} className="hover:text-slate-900">
-              Vocab Lessons
             </button>
           </div>
         </div>

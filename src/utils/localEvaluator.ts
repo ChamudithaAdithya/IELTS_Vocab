@@ -7,7 +7,7 @@ import type {
   MainProblem,
   Improvement
 } from '../types/tutor';
-import { roundIeltsBand, countWords, formatBand } from './tutorEngine';
+import { roundIeltsBand, countWords, formatBand, generateAcademicUpgradeSegments } from './tutorEngine';
 
 interface PatternRule {
   id: string;
@@ -574,16 +574,7 @@ export function evaluateEssayLocally(params: {
     .map(s => (s.type === 'replace' ? s.to : s.type === 'del' ? '' : s.text))
     .join('');
 
-  const band8Edits: EssaySegment[] = [
-    {
-      type: 'text',
-      text: correctedText
-        .replace(/very popular/gi, 'widely debated')
-        .replace(/good experience/gi, 'valuable civic and professional competence')
-        .replace(/a lot of money/gi, 'substantial fiscal resources')
-        .replace(/cost of living/gi, 'overall cost of living')
-    }
-  ];
+  const band8Edits: EssaySegment[] = generateAcademicUpgradeSegments(correctedText, improvements);
 
   return {
     id: `local-eval-${Date.now()}`,

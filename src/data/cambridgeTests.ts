@@ -1,3 +1,4 @@
+import { CAMBRIDGE_1_WRITING_TESTS } from './cambridge1WritingTests';
 import type { EssaySegment, TutorReport } from '../types/tutor';
 
 export interface CambridgeTestPrompt {
@@ -598,6 +599,7 @@ const C18_T2_TASK1_REPORT: TutorReport = {
 };
 
 export const ALL_CAMBRIDGE_TESTS: CambridgeTestPrompt[] = [
+  ...CAMBRIDGE_1_WRITING_TESTS,
   {
     id: 'c18-t1',
     cambridgeBook: 'Cambridge IELTS 18, Test 1',

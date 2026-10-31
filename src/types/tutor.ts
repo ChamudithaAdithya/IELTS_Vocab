@@ -133,20 +133,54 @@ export interface ReadingPassage {
   questions: ReadingQuestion[];
 }
 
+export interface ListeningQuestion {
+  number: number;
+  question: string;
+  answer: string;
+  distractors: string[];
+  explanation: string;
+  explanationSi?: string;
+  type?: 'mcq' | 'gap_fill';
+  options?: string[];
+  instruction?: string;
+}
+
 export interface ListeningItem {
   id: string;
+  bookNumber?: number;
+  testNumber?: number;
   section: 1 | 2 | 3 | 4;
   cambridgeSource: string;
   title: string;
+  audioUrl?: string;
   audioSimText: string;
-  questions: {
-    number: number;
-    question: string;
-    answer: string;
-    distractors: string[];
-    explanation: string;
-    explanationSi?: string;
-  }[];
+  questions: ListeningQuestion[];
+}
+
+export interface ListeningQuestionFeedback {
+  number: number;
+  userAnswer: string;
+  correctAnswer: string;
+  isCorrect: boolean;
+  errorType: 'correct' | 'distractor_trap' | 'spelling_grammar' | 'omission' | 'word_limit' | 'other';
+  feedback: string;
+  feedbackSi?: string;
+}
+
+export interface ListeningAIReport {
+  score: number;
+  total: number;
+  bandScore: number;
+  accuracyPercentage: number;
+  distractorVulnerability: 'Low' | 'Medium' | 'High';
+  executiveSummary: string;
+  executiveSummarySi: string;
+  acousticAnalysis: string;
+  acousticAnalysisSi?: string;
+  questionBreakdown: ListeningQuestionFeedback[];
+  strengths: string[];
+  weaknesses: string[];
+  recommendedDrills: string[];
 }
 
 export interface SpeakingPartPrompt {
