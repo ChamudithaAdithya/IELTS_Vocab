@@ -11,7 +11,8 @@ import {
   Library
 } from 'lucide-react';
 
-export type AppTab = 'cambridge' | 'listening' | 'reading' | 'tutor' | 'speaking' | 'analytics';
+import { AppTab } from './Sidebar';
+export type { AppTab };
 
 interface HeaderProps {
   currentTab: AppTab;

@@ -5,6 +5,10 @@ import type {
   SpeakingTopic,
   FluencyMetrics,
   SpeakingUpgradeDetailItem,
+  DiagnosticQuestion,
+  DiagnosticAssessmentResult,
+  ProgressSessionPoint,
+  MicroImprovementTask,
 } from '../types/speakingTutor';
 import type { EssaySegment, MainProblem, TutorIssue } from '../types/tutor';
 import { roundIeltsBand, formatBand } from './tutorEngine';
@@ -1083,4 +1087,430 @@ Respond strictly in valid JSON format matching this schema:
     return evaluateSpokenTurnLocally(question, spokenText, topicContext, audioDurationSec);
   }
 }
+
+/* ------------------------------------------------------------------ */
+/* Phase 1 & 2: Diagnostic Baseline Questions & Storage               */
+/* ------------------------------------------------------------------ */
+
+export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestion[] = [
+  {
+    id: 'diag-q1-study-alone',
+    part: 1,
+    number: 1,
+    total: 3,
+    question: 'Do you prefer studying alone or studying with other people? Why?',
+    guidance: "Aim for a natural answer of around 20–30 seconds. Don't memorise or try to use difficult words. Answer as you normally would in the exam.",
+    guidanceSi: 'තත්පර 20-30 ක පමණ ස්වාභාවික පිළිතුරක් ලබා දෙන්න. පාඩම් කළ වචන යෙදීමට උත්සාහ නොකර සාමාන්‍ය ලෙස පිළිතුරු දෙන්න.',
+    sampleBand5Answer: 'To be honest, I prefer studying alone because it is very quiet and I can concentrate much better. When I study with friends, we usually talk too much and waste time.',
+    sampleBand8Answer: 'Without hesitation, I gravitate toward solitary study rather than collaborative sessions. Working independently allows me to tailor my cognitive pacing and completely eliminates the inevitable social distractions that emerge during group environments.'
+  },
+  {
+    id: 'diag-q2-favourite-time',
+    part: 1,
+    number: 2,
+    total: 3,
+    question: 'What is your favourite time of day to study or work, and why?',
+    guidance: 'Speak naturally for about 20–30 seconds. Focus on giving one clear reason with a simple everyday example.',
+    guidanceSi: 'තත්පර 20-30 ක් කතා කරන්න. එක් පැහැදිලි හේතුවක් සමඟ සරල උදාහරණයක් ඉදිරිපත් කරන්න.',
+    sampleBand5Answer: 'My favourite time to study is early in the morning, around 6 AM, because my mind is fresh and my house is peaceful before everyone wakes up.',
+    sampleBand8Answer: 'I am definitely an early riser; my peak productivity window occurs at the break of dawn. At that hour, ambient distractions are virtually non-existent, which enables deep immersion in challenging intellectual tasks.'
+  },
+  {
+    id: 'diag-q3-interesting-teacher',
+    part: 1,
+    number: 3,
+    total: 3,
+    question: 'Can you describe an interesting teacher or person who helped you learn something new?',
+    guidance: 'Give a 30–40 second answer. Try to use past tense verbs accurately (such as was, taught, helped).',
+    guidanceSi: 'තත්පර 30-40 ක පිළිතුරක් දෙන්න. අතීත කාල ක්‍රියාපද (was, taught, helped) නිවැරදිව භාවිත කිරීමට උත්සාහ කරන්න.',
+    sampleBand5Answer: 'In high school, my science teacher Mr. Silva was very kind. He always explained difficult lessons patiently and used everyday examples that made science easy to understand.',
+    sampleBand8Answer: 'I vividly recall my secondary school chemistry instructor, who possessed an exceptional pedagogical gift. Rather than relying on rote memorization, he structured our curriculum around hands-on empirical demonstrations, instilling in us a lifelong scientific curiosity.'
+  }
+];
+
+const ADAPTIVE_PROGRESS_STORAGE_KEY = 'ielts_speaking_adaptive_progress_v1';
+
+export const DEFAULT_INITIAL_DIAGNOSTIC_POINT: ProgressSessionPoint = {
+  id: 'sess-1',
+  sessionNumber: 1,
+  sessionLabel: 'Session 1 (Diagnostic Baseline)',
+  internalDecimalScore: 4.0,
+  officialBand: 4.0,
+  completedTasks: ['Baseline Assessment Initialized'],
+  notes: 'Working assumption: Band 4.0. Identifying smallest useful improvements.'
+};
+
+export function loadDiagnosticProgress(): ProgressSessionPoint[] {
+  if (typeof window === 'undefined') return [DEFAULT_INITIAL_DIAGNOSTIC_POINT];
+  try {
+    const raw = localStorage.getItem(ADAPTIVE_PROGRESS_STORAGE_KEY);
+    if (!raw) {
+      return [DEFAULT_INITIAL_DIAGNOSTIC_POINT];
+    }
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed) || parsed.length === 0) {
+      return [DEFAULT_INITIAL_DIAGNOSTIC_POINT];
+    }
+
+    const sanitized: ProgressSessionPoint[] = parsed
+      .filter((item): item is Record<string, any> => item && typeof item === 'object')
+      .map((item, idx) => ({
+        id: typeof item.id === 'string' && item.id ? item.id : `sess-${idx + 1}`,
+        sessionNumber: typeof item.sessionNumber === 'number' && !isNaN(item.sessionNumber) ? item.sessionNumber : idx + 1,
+        sessionLabel: typeof item.sessionLabel === 'string' && item.sessionLabel ? item.sessionLabel : `Session ${idx + 1}`,
+        internalDecimalScore: typeof item.internalDecimalScore === 'number' && !isNaN(item.internalDecimalScore)
+          ? Number(item.internalDecimalScore.toFixed(1))
+          : 4.0,
+        officialBand: typeof item.officialBand === 'number' && !isNaN(item.officialBand)
+          ? item.officialBand
+          : 4.0,
+        completedTasks: Array.isArray(item.completedTasks) ? item.completedTasks.map(String) : [],
+        notes: typeof item.notes === 'string' ? item.notes : ''
+      }));
+
+    return sanitized.length > 0 ? sanitized : [DEFAULT_INITIAL_DIAGNOSTIC_POINT];
+  } catch (err) {
+    console.warn('Could not parse adaptive progress from storage, resetting to default:', err);
+    return [DEFAULT_INITIAL_DIAGNOSTIC_POINT];
+  }
+}
+
+export function saveDiagnosticProgress(points: ProgressSessionPoint[]): void {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(ADAPTIVE_PROGRESS_STORAGE_KEY, JSON.stringify(points));
+  } catch (e) {
+    console.error('Failed to save adaptive progress:', e);
+  }
+}
+
+/**
+ * Automatically restores punctuation, commas, sentence breaks, and capitalization
+ * for raw spoken speech recognition transcripts.
+ */
+export function punctuateSpokenTranscript(rawText: string): string {
+  if (!rawText || !rawText.trim()) return '';
+
+  let text = rawText.trim().replace(/\s+/g, ' ');
+
+  // 1. Standalone pronoun 'I' and standard spoken contractions
+  text = text.replace(/\bi\b/g, 'I');
+  text = text.replace(/\bi'm\b/gi, "I'm");
+  text = text.replace(/\bim\b/gi, "I'm");
+  text = text.replace(/\bi've\b/gi, "I've");
+  text = text.replace(/\bive\b/gi, "I've");
+  text = text.replace(/\bi'll\b/gi, "I'll");
+  text = text.replace(/\bi'd\b/gi, "I'd");
+  text = text.replace(/\bdont\b/gi, "don't");
+  text = text.replace(/\bcant\b/gi, "can't");
+  text = text.replace(/\bwont\b/gi, "won't");
+  text = text.replace(/\barent\b/gi, "aren't");
+  text = text.replace(/\bisnt\b/gi, "isn't");
+  text = text.replace(/\bwasnt\b/gi, "wasn't");
+  text = text.replace(/\bwerent\b/gi, "weren't");
+  text = text.replace(/\bdidnt\b/gi, "didn't");
+  text = text.replace(/\bdoesnt\b/gi, "doesn't");
+  text = text.replace(/\bhasnt\b/gi, "hasn't");
+  text = text.replace(/\bhavent\b/gi, "haven't");
+  text = text.replace(/\bhadnt\b/gi, "hadn't");
+  text = text.replace(/\bcouldnt\b/gi, "couldn't");
+  text = text.replace(/\bshouldnt\b/gi, "shouldn't");
+  text = text.replace(/\bwouldnt\b/gi, "wouldn't");
+  text = text.replace(/\bthats\b/gi, "that's");
+  text = text.replace(/\bwhats\b/gi, "what's");
+  text = text.replace(/\btheres\b/gi, "there's");
+  text = text.replace(/\blets\b/gi, "let's");
+
+  // 2. Discourse markers at beginning of speech or after pauses
+  const introMarkers = [
+    'well to be honest',
+    'to be honest',
+    'honestly',
+    'to tell you the truth',
+    'as a matter of fact',
+    'personally speaking',
+    'personally',
+    'in my opinion',
+    'from my perspective',
+    'from my point of view',
+    'as far as I know',
+    'as far as I am concerned',
+    'actually',
+    'in fact',
+    'first of all',
+    'to begin with',
+    'for example',
+    'for instance',
+    'on the other hand',
+    'on the one hand',
+    'furthermore',
+    'moreover',
+    'in addition',
+    'consequently',
+    'therefore',
+    'however',
+    'admittedly',
+    'basically',
+    'generally speaking',
+    'broadly speaking',
+    'to sum up',
+    'in conclusion',
+    'all in all',
+    'at the end of the day',
+    'as I mentioned before',
+    'as I said earlier',
+    'well'
+  ];
+
+  for (const marker of introMarkers) {
+    const startRegex = new RegExp(`^${marker}\\s+(?![,])`, 'i');
+    text = text.replace(startRegex, (m) => {
+      const cap = m.trim().charAt(0).toUpperCase() + m.trim().slice(1);
+      return `${cap}, `;
+    });
+
+    const afterPunctRegex = new RegExp(`([.?!]\\s+)${marker}\\s+(?![,])`, 'gi');
+    text = text.replace(afterPunctRegex, (_m, p1) => {
+      const cap = marker.charAt(0).toUpperCase() + marker.slice(1);
+      return `${p1}${cap}, `;
+    });
+  }
+
+  // 3. Sentence-starting discourse markers inside run-on text -> turn into period + comma
+  const sentenceStarters = [
+    'however',
+    'furthermore',
+    'moreover',
+    'consequently',
+    'therefore',
+    'in addition',
+    'on the other hand',
+    'for example',
+    'for instance',
+    'another reason is that',
+    'another reason is',
+    'besides that',
+    'to tell you the truth',
+    'as a matter of fact',
+    'generally speaking',
+    'in conclusion',
+    'all in all'
+  ];
+
+  for (const starter of sentenceStarters) {
+    const midRegex = new RegExp(`([a-zA-Z0-9])\\s+(${starter})\\s+`, 'gi');
+    text = text.replace(midRegex, (_m, prevChar, word) => {
+      const cap = word.charAt(0).toUpperCase() + word.slice(1);
+      return `${prevChar}. ${cap}, `;
+    });
+  }
+
+  // 4. Contrasting coordinating conjunctions -> add comma before
+  const contrasting = ['but', 'although', 'whereas', 'while', 'even though'];
+  for (const c of contrasting) {
+    const conjRegex = new RegExp(`([a-zA-Z0-9])\\s+(${c})\\s+`, 'gi');
+    text = text.replace(conjRegex, (_m, prevChar, word) => `${prevChar}, ${word} `);
+  }
+
+  // 5. Connectors starting a new thought/sentence
+  // e.g. "well and when I study with my friends..." -> "well. And when I study with my friends..."
+  text = text.replace(/([a-zA-Z0-9])\s+(and\s+when|and\s+if|and\s+also|and\s+then|so\s+basically|so\s+in\s+my\s+view)\s+/gi, (_m, prevChar, phrase) => {
+    const cap = phrase.charAt(0).toUpperCase() + phrase.slice(1);
+    return `${prevChar}. ${cap} `;
+  });
+
+  // 5b. Subordinate causal clause with because before personal pronouns
+  text = text.replace(/([a-zA-Z0-9])\s+because\s+(it|I|we|they|he|she|this|there)\b/gi, '$1, because $2');
+
+  // 5c. Relative clauses
+  text = text.replace(/([a-zA-Z0-9])\s+(which\s+is\s+why|which\s+means|which\s+helps)\s+/gi, '$1, $2 ');
+
+  // 6. When / If dependent clauses -> add comma before main clause
+  text = text.replace(/\b(when|if|although|even if)\s+([^,.?!]{4,40}?)\s+(it is|it's|they are|there is|there are|we are|I usually|I always|we usually|we always|it will|we will|I can|we can)\b/gi, 
+    (_m, condWord, condition, mainClause) => {
+      return `${condWord} ${condition.trim()}, ${mainClause}`;
+    }
+  );
+
+  // 7. Detect independent clause transitions where candidate starts a new statement:
+  // e.g. "capital of Sri Lanka it is very crowded" -> "capital of Sri Lanka. It is very crowded"
+  const nonSentenceEnders = new Set([
+    'and', 'but', 'or', 'so', 'because', 'since', 'as', 'if', 'when', 'while', 'although',
+    'though', 'that', 'which', 'who', 'whom', 'whose', 'where', 'why', 'how', 'whether',
+    'than', 'to', 'for', 'with', 'about', 'in', 'on', 'at', 'by', 'from', 'of'
+  ]);
+
+  text = text.replace(/\b([a-zA-Z0-9]+)\s+(it is|it's|they are|there is|there are|this is|that is)\s+/gi, 
+    (match, prevWord, pronounVerb) => {
+      if (nonSentenceEnders.has(prevWord.toLowerCase())) {
+        return match;
+      }
+      const capPV = pronounVerb.charAt(0).toUpperCase() + pronounVerb.slice(1);
+      return `${prevWord}. ${capPV} `;
+    }
+  );
+
+  // 8. Cleanup duplicate punctuation & spaces
+  text = text.replace(/\s*,\s*,+/g, ',');
+  text = text.replace(/\s*,\s*\./g, '.');
+  text = text.replace(/\s*\.\s*,/g, '.');
+  text = text.replace(/\s*([,.?!])\s*/g, '$1 ');
+  text = text.replace(/\s+/g, ' ').trim();
+
+  // 9. Capitalize the first letter of each sentence
+  text = text.replace(/(^|[.?!]\s+)([a-z])/g, (_m, prefix, letter) => `${prefix}${letter.toUpperCase()}`);
+
+  // 10. Capitalize first letter of string
+  if (text.length > 0) {
+    text = text.charAt(0).toUpperCase() + text.slice(1);
+  }
+
+  // 11. End with a period if not present
+  if (text.length > 0 && !/[.?!]$/.test(text)) {
+    text += '.';
+  }
+
+  return text;
+}
+
+/* ------------------------------------------------------------------ */
+/* Phase 3 & 4: Diagnostic Evaluator with Micro-Improvements          */
+/* ------------------------------------------------------------------ */
+
+export function evaluateDiagnosticSpokenTurn(
+  questionObj: DiagnosticQuestion,
+  spokenText: string,
+  currentWorkingScore: number = 4.0,
+  durationSec: number = 25
+): DiagnosticAssessmentResult {
+  const clean = spokenText.trim();
+  const words = clean.split(/\s+/).filter(Boolean);
+  const wordCount = words.length;
+
+  // Run full local evaluation for Stage 2 corrections & criterion metrics
+  const fullEval = evaluateSpokenTurnLocally(questionObj.question, clean, undefined, durationSec);
+
+  // 1. What You Did Well (Positive psychological reinforcement)
+  const whatYouDidWell: string[] = [];
+  const whatYouDidWellSi: string[] = [];
+
+  if (wordCount >= 10) {
+    whatYouDidWell.push('You communicated a clear personal viewpoint without completely freezing.');
+    whatYouDidWellSi.push('පැකිලීමකින් තොරව ඔබේ පෞද්ගලික අදහස පැහැදිලිව සන්නිවේදනය කරන ලදී.');
+  }
+  if (/\b(because|so|since|and|but)\b/i.test(clean)) {
+    whatYouDidWell.push('Good attempt to connect your idea using linking words to give reasons.');
+    whatYouDidWellSi.push('හේතු දැක්වීම සඳහා සන්ධි පද භාවිත කිරීමට උත්සාහ කිරීම අගය කළ යුතුය.');
+  } else {
+    whatYouDidWell.push('Your message is comprehensible, establishing an understandable starting baseline.');
+    whatYouDidWellSi.push('මූලික අදහස තේරුම් ගත හැකි අයුරින් ප්‍රකාශ විය.');
+  }
+
+  // 2. High-Impact Issues (Select only 1 or 2 highest-impact to avoid overwhelming Band 4)
+  const prioritizedIssues = fullEval.issues.slice(0, 2);
+
+  // 3. Micro-Improvement Tasks (Actionable to-dos with clear decimal gains)
+  const microTasks: MicroImprovementTask[] = [];
+
+  const hasLinking = /\b(because|so|as|for example)\b/i.test(clean);
+  if (!hasLinking || wordCount < 20) {
+    microTasks.push({
+      id: 'task-extend-reason',
+      title: 'Extend your answer using the "because" rule',
+      criterion: 'FC',
+      targetDecimalBoost: 0.3,
+      instruction: 'Do not stop after one sentence. Add "because" and give one clear everyday reason why.',
+      instructionSi: 'එක් වාක්‍යයකින් නොනවතින්න. "because" යොදා එක් පැහැදිලි හේතුවක් දක්වන්න.',
+      exampleBefore: 'I prefer study alone.',
+      exampleAfter: 'I prefer studying alone because it is quiet and I can concentrate.'
+    });
+  }
+
+  const hasPresentSlip = /\b(I am agree|people is|he don't|I am prefer)\b/i.test(clean);
+  if (hasPresentSlip) {
+    microTasks.push({
+      id: 'task-active-verb',
+      title: 'Drop "am" before active verbs',
+      criterion: 'GRA',
+      targetDecimalBoost: 0.3,
+      instruction: 'In English, say "I prefer" or "I agree", never "I am prefer" or "I am agree".',
+      instructionSi: '"I am prefer" නොකියා "I prefer" යයි පවසන්න.',
+      exampleBefore: 'I am prefer study with people.',
+      exampleAfter: 'I prefer studying with other people.'
+    });
+  } else if (prioritizedIssues.length > 0) {
+    const firstIss = prioritizedIssues[0];
+    microTasks.push({
+      id: `task-${firstIss.id}`,
+      title: `Fix ${firstIss.title}`,
+      criterion: 'GRA',
+      targetDecimalBoost: 0.25,
+      instruction: firstIss.why,
+      instructionSi: firstIss.whySi,
+      exampleBefore: firstIss.original,
+      exampleAfter: firstIss.corrected
+    });
+  }
+
+  // Fallback micro-task if no grammar error was detected
+  if (microTasks.length === 0) {
+    microTasks.push({
+      id: 'task-natural-opener',
+      title: 'Use a conversational opener to start smoothly',
+      criterion: 'FC',
+      targetDecimalBoost: 0.25,
+      instruction: 'Start your response with "Well, to be honest..." to sound natural and buy thinking time.',
+      instructionSi: 'ස්වාභාවික ආරම්භයක් සඳහා "Well, to be honest..." යොදන්න.',
+      exampleBefore: 'I prefer studying alone.',
+      exampleAfter: 'Well, to be honest, I definitely prefer studying alone.'
+    });
+  }
+
+  // 4. Calculate New Internal Working Decimal Score
+  let boost = 0;
+  if (wordCount >= 18) boost += 0.2;
+  if (wordCount >= 30) boost += 0.1;
+  if (hasLinking) boost += 0.2;
+  if (prioritizedIssues.length === 0 && wordCount > 15) boost += 0.2;
+
+  const newWorkingScore = Number((Math.min(7.5, Math.max(3.5, currentWorkingScore + boost))).toFixed(1));
+  const officialBand = roundIeltsBand([
+    fullEval.criteria[0].band,
+    fullEval.criteria[1].band,
+    fullEval.criteria[2].band,
+    fullEval.criteria[3].band
+  ]);
+
+  // 5. Evidence Needed Before Estimating a Higher Band
+  const evidenceNeededForHigherBand: string[] = [
+    `Sentence Expansion: Deliver at least 2 complete connected sentences without pausing for more than 2 seconds.`,
+    `Grammatical Consistency: Avoid mixing 'am + verb' and maintain singular/plural subject agreement.`,
+    `Spoken Evidence: We must hear smooth speech rhythm without reciting memorised phrases.`
+  ];
+  const evidenceNeededForHigherBandSi: string[] = [
+    `වාක්‍ය වර්ධනය: තත්පර 2කට වඩා නොනැවතී සම්බන්ධිත වාක්‍ය 2ක් සම්පූර්ණ කිරීම.`,
+    `ව්‍යාකරණ නිරවද්‍යතාව: 'am + verb' වැරදි මඟහැර කර්තෘ-ක්‍රියා පද එකඟතාව පවත්වා ගැනීම.`,
+    `ස්වාභාවික කථනය: කටපාඩම් නොකළ ස්වාභාවික කථන රිද්මයක් පෙන්වීම.`
+  ];
+
+  return {
+    questionNumber: questionObj.number,
+    totalQuestions: questionObj.total,
+    question: questionObj.question,
+    candidateAnswer: clean,
+    workingDecimalScore: newWorkingScore,
+    officialBandEstimate: Math.max(4.0, officialBand),
+    criteria: fullEval.criteria,
+    whatYouDidWell,
+    whatYouDidWellSi,
+    whatNeedsCorrection: prioritizedIssues,
+    markedSpeech: fullEval.markedSpeech,
+    steppingStoneModel: questionObj.sampleBand5Answer,
+    band8StretchModel: questionObj.sampleBand8Answer,
+    microTasks,
+    evidenceNeededForHigherBand,
+    evidenceNeededForHigherBandSi
+  };
+}
+
 

@@ -208,11 +208,28 @@ export function resolveVoice(customURI?: string): SpeechSynthesisVoice | null {
     if (found) return found;
   }
 
-  // 3. Fallback to British English natural/enhanced voice
+  const isUS = customURI === 'cloud-natural-us' || stored.voiceURI === 'cloud-natural-us';
+  const isAU = customURI === 'cloud-natural-au' || stored.voiceURI === 'cloud-natural-au';
+
+  if (isUS) {
+    const usNatural = 
+      voices.find(v => (v.name.includes('Natural') || v.name.includes('Enhanced') || v.name.includes('Google') || v.name.includes('Jenny') || v.name.includes('Guy') || v.name.includes('Aria') || v.name.includes('Samantha')) && v.lang.replace('_', '-').toLowerCase().startsWith('en-us')) ||
+      voices.find(v => v.lang.replace('_', '-').toLowerCase().startsWith('en-us'));
+    if (usNatural) return usNatural;
+  }
+
+  if (isAU) {
+    const auNatural = 
+      voices.find(v => (v.name.includes('Natural') || v.name.includes('Enhanced') || v.name.includes('Natasha') || v.name.includes('William') || v.name.includes('Karen')) && v.lang.replace('_', '-').toLowerCase().startsWith('en-au')) ||
+      voices.find(v => v.lang.replace('_', '-').toLowerCase().startsWith('en-au'));
+    if (auNatural) return auNatural;
+  }
+
+  // 3. Fallback to British English natural/enhanced voice (Examiner standard)
   const ukNatural = 
-    voices.find(v => (v.name.includes('Natural') || v.name.includes('Enhanced') || v.name.includes('Google') || v.name.includes('Oliver') || v.name.includes('Serena') || v.name.includes('Daniel') || v.name.includes('George')) && v.lang.replace('_', '-').toLowerCase().startsWith('en-gb')) ||
+    voices.find(v => (v.name.includes('Natural') || v.name.includes('Enhanced') || v.name.includes('Google') || v.name.includes('Ryan') || v.name.includes('Sonia') || v.name.includes('Libby') || v.name.includes('Oliver') || v.name.includes('Serena') || v.name.includes('Daniel') || v.name.includes('George')) && v.lang.replace('_', '-').toLowerCase().startsWith('en-gb')) ||
     voices.find(v => v.lang.replace('_', '-').toLowerCase().startsWith('en-gb')) ||
-    voices.find(v => (v.name.includes('Natural') || v.name.includes('Enhanced') || v.name.includes('Google') || v.name.includes('Samantha')) && v.lang.replace('_', '-').toLowerCase().startsWith('en-us')) ||
+    voices.find(v => (v.name.includes('Natural') || v.name.includes('Enhanced') || v.name.includes('Google') || v.name.includes('Jenny') || v.name.includes('Samantha')) && v.lang.replace('_', '-').toLowerCase().startsWith('en-us')) ||
     voices.find(v => v.lang.toLowerCase().startsWith('en'));
 
   return ukNatural || null;
@@ -222,21 +239,32 @@ export function resolveVoice(customURI?: string): SpeechSynthesisVoice | null {
 /* Audio Playback Engine (Cloud Studio HD + Web Speech Synthesis)      */
 /* ------------------------------------------------------------------ */
 
+let currentSpeechSessionId = 0;
 let currentAudioElement: HTMLAudioElement | null = null;
 let isCloudAudioCancelled = false;
 
 export function stopAllSpeech(): void {
+  // Immediately invalidate any active or queued speech sessions
+  currentSpeechSessionId++;
   isCloudAudioCancelled = true;
+
   if (currentAudioElement) {
     try {
+      // Detach listeners before pausing/clearing src to prevent triggering onerror/onended
+      currentAudioElement.onplay = null;
+      currentAudioElement.onended = null;
+      currentAudioElement.onerror = null;
       currentAudioElement.pause();
       currentAudioElement.currentTime = 0;
       currentAudioElement.src = '';
     } catch {}
     currentAudioElement = null;
   }
+
   if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
     try {
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.pause();
       window.speechSynthesis.cancel();
     } catch {}
   }
@@ -246,9 +274,11 @@ export const stopSpeech = stopAllSpeech;
 
 /**
  * Split text into fluent sentence/clause chunks suitable for Google TTS API (< 160 chars)
+ * Uses standard regex without lookbehind for universal browser compatibility.
  */
 function splitIntoAudioChunks(text: string, maxLen: number = 160): string[] {
-  const rawSentences = text.split(/(?<=[.?!])\s+|\n+/).filter(Boolean);
+  // Universally compatible sentence extraction without regex lookbehind
+  const rawSentences = text.match(/[^.!?\n]+[.!?]?/g) || [text];
   const chunks: string[] = [];
 
   for (const s of rawSentences) {
@@ -258,7 +288,7 @@ function splitIntoAudioChunks(text: string, maxLen: number = 160): string[] {
     if (trimmed.length <= maxLen) {
       chunks.push(trimmed);
     } else {
-      const subClauses = trimmed.split(/(?<=[,;:\-])\s+/);
+      const subClauses = trimmed.match(/[^,;:\-]+[,;:\-]?/g) || [trimmed];
       let currentSub = '';
 
       for (const clause of subClauses) {
@@ -301,6 +331,7 @@ function playNaturalCloudSpeech(
     onError?: (err: any) => void;
   }
 ): void {
+  const sessionId = ++currentSpeechSessionId;
   isCloudAudioCancelled = false;
 
   let lang = 'en-GB';
@@ -319,17 +350,29 @@ function playNaturalCloudSpeech(
   let currentChunkIdx = 0;
 
   const playChunk = () => {
-    if (isCloudAudioCancelled || currentChunkIdx >= chunks.length) {
-      currentAudioElement = null;
-      options.onEnd?.();
+    // If user cancelled, recording started, or session superseded, bail immediately
+    if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled || currentChunkIdx >= chunks.length) {
+      if (currentAudioElement) {
+        currentAudioElement.onplay = null;
+        currentAudioElement.onended = null;
+        currentAudioElement.onerror = null;
+        currentAudioElement = null;
+      }
+      if (!isCloudAudioCancelled && sessionId === currentSpeechSessionId) {
+        options.onEnd?.();
+      }
       return;
     }
 
     const chunk = chunks[currentChunkIdx++];
-    const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${encodeURIComponent(lang)}&client=tw-ob&q=${encodeURIComponent(chunk)}`;
+    // Use local proxy /api/tts to avoid CORS and Google 404 external-origin blocking
+    let url = `/api/tts?tl=${encodeURIComponent(lang)}&q=${encodeURIComponent(chunk)}`;
+    if (typeof window !== 'undefined' && window.location.origin && window.location.origin !== 'null') {
+      url = `${window.location.origin}/api/tts?tl=${encodeURIComponent(lang)}&q=${encodeURIComponent(chunk)}`;
+    }
 
     const audio = new Audio();
-    audio.crossOrigin = 'anonymous';
+    // Do NOT set crossOrigin = 'anonymous' to avoid CORS restrictions on media playback
     audio.src = url;
     currentAudioElement = audio;
 
@@ -338,31 +381,49 @@ function playNaturalCloudSpeech(
     }
 
     audio.onplay = () => {
+      if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) {
+        audio.pause();
+        return;
+      }
       if (currentChunkIdx === 1) {
         options.onStart?.();
       }
     };
 
     audio.onended = () => {
-      if (!isCloudAudioCancelled) {
+      audio.onplay = null;
+      audio.onended = null;
+      audio.onerror = null;
+      if (sessionId === currentSpeechSessionId && !isCloudAudioCancelled) {
         playChunk();
       }
     };
 
-    audio.onerror = (e) => {
-      console.warn('Cloud natural audio stream error, falling back to local speech synthesis:', e);
+    audio.onerror = () => {
+      audio.onplay = null;
+      audio.onended = null;
+      audio.onerror = null;
+      // Do NOT fallback if speech was stopped or superseded
+      if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) {
+        return;
+      }
+      // Gracefully switch to browser neural speech with matching accent
       const remainingText = chunks.slice(currentChunkIdx - 1).join(' ');
-      playBrowserSpeech(remainingText, '', options);
+      playBrowserSpeech(remainingText, voiceURI, options);
     };
 
     const playPromise = audio.play();
     if (playPromise !== undefined) {
       playPromise.catch((err) => {
-        if (!isCloudAudioCancelled) {
-          console.warn('Audio play was prevented or interrupted, falling back to speech synthesis:', err);
-          const remainingText = chunks.slice(currentChunkIdx - 1).join(' ');
-          playBrowserSpeech(remainingText, '', options);
+        // Do NOT fallback if speech was cancelled or interrupted
+        if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) {
+          return;
         }
+        if (err && (err.name === 'AbortError' || err.message?.includes('interrupted') || err.message?.includes('pause'))) {
+          return;
+        }
+        const remainingText = chunks.slice(currentChunkIdx - 1).join(' ');
+        playBrowserSpeech(remainingText, voiceURI, options);
       });
     }
   };
@@ -386,6 +447,9 @@ function playBrowserSpeech(
     return;
   }
 
+  const sessionId = ++currentSpeechSessionId;
+  isCloudAudioCancelled = false;
+
   window.speechSynthesis.cancel();
   window.speechSynthesis.resume();
 
@@ -402,9 +466,21 @@ function playBrowserSpeech(
     utterance.lang = 'en-GB';
   }
 
-  utterance.onstart = () => options.onStart?.();
-  utterance.onend = () => options.onEnd?.();
+  utterance.onstart = () => {
+    if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) {
+      window.speechSynthesis.cancel();
+      return;
+    }
+    options.onStart?.();
+  };
+
+  utterance.onend = () => {
+    if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) return;
+    options.onEnd?.();
+  };
+
   utterance.onerror = (e) => {
+    if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) return;
     if (e.error !== 'canceled' && e.error !== 'interrupted') {
       options.onError?.(e);
     } else {

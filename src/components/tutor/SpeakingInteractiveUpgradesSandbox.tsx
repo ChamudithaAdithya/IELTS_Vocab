@@ -472,3 +472,7 @@ export const SpeakingInteractiveUpgradesSandbox: React.FC<SpeakingInteractiveUpg
   );
 };
 
+export default SpeakingInteractiveUpgradesSandbox;
+
+
+ 

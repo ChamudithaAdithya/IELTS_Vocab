@@ -81,3 +81,61 @@ export interface SpeakingUpgradeDetailItem {
   note?: string;
 }
 
+/* ------------------------------------------------------------------ */
+/* Adaptive Diagnostic & Micro-Roadmap Types                          */
+/* ------------------------------------------------------------------ */
+
+export interface MicroImprovementTask {
+  id: string;
+  title: string;
+  criterion: SpeakingCriterionKey;
+  targetDecimalBoost: number; // e.g. 0.3
+  instruction: string;
+  instructionSi?: string;
+  exampleBefore: string;
+  exampleAfter: string;
+  isCompleted?: boolean;
+}
+
+export interface DiagnosticQuestion {
+  id: string;
+  part: 1 | 2 | 3;
+  number: number;
+  total: number;
+  question: string;
+  guidance: string;
+  guidanceSi?: string;
+  sampleBand5Answer: string; // Accessible stepping-stone model
+  sampleBand8Answer: string; // Advanced reference model
+}
+
+export interface DiagnosticAssessmentResult {
+  questionNumber: number;
+  totalQuestions: number;
+  question: string;
+  candidateAnswer: string;
+  workingDecimalScore: number; // e.g. 4.0, 4.3
+  officialBandEstimate: number; // e.g. 4.0, 4.5
+  criteria: SpeakingCriterionScore[];
+  whatYouDidWell: string[];
+  whatYouDidWellSi?: string[];
+  whatNeedsCorrection: TutorIssue[];
+  markedSpeech: EssaySegment[];
+  steppingStoneModel: string; // Realistic Band 5.0–5.5 answer
+  band8StretchModel: string; // Band 8.5 model
+  microTasks: MicroImprovementTask[];
+  evidenceNeededForHigherBand: string[];
+  evidenceNeededForHigherBandSi?: string[];
+}
+
+export interface ProgressSessionPoint {
+  id: string;
+  sessionNumber: number;
+  sessionLabel: string;
+  internalDecimalScore: number;
+  officialBand: number;
+  completedTasks: string[];
+  notes: string;
+}
+
+
