@@ -69,19 +69,32 @@ export const TutorReportView: React.FC<TutorReportViewProps> = ({
 
   const stage2Gain = Math.max(0.5, stage2Band - report.overallBand);
 
-  // Compute robust Band 8 upgrade segments so "View Upgrades" and Sandbox ALWAYS work
+  // Compute robust Band 8 upgrade segments so "View Upgrades" and Sandbox ALWAYS work on candidate's essay
   const band8Segments = useMemo(() => {
     const hasEdits = report.band8Edits && report.band8Edits.some(s => s.type !== 'text');
-    if (hasEdits) return report.band8Edits;
+    if (hasEdits) {
+      const editCount = report.band8Edits.filter(s => s.type !== 'text').length;
+      if (editCount >= 2) return report.band8Edits;
+    }
+
+    const generated = generateAcademicUpgradeSegments(correctedText, report.improvements);
+    if (generated.some(s => s.type !== 'text')) {
+      return generated;
+    }
 
     if (band8Text && band8Text.trim() !== correctedText.trim()) {
       return diffWordsToSegments(correctedText, band8Text);
     }
 
-    return generateAcademicUpgradeSegments(correctedText, report.improvements);
+    return generated;
   }, [report.band8Edits, correctedText, band8Text, report.improvements]);
 
-  const cleanBand8FinalText = useMemo(() => buildResult(band8Segments), [band8Segments]);
+  const cleanBand8FinalText = useMemo(() => {
+    if (band8Text && band8Text.trim().length > 50 && band8Text.trim() !== correctedText.trim()) {
+      return band8Text;
+    }
+    return buildResult(band8Segments);
+  }, [band8Text, correctedText, band8Segments]);
 
   const handleCopyClean = () => {
     navigator.clipboard.writeText(correctedText);

@@ -54,6 +54,45 @@ export const formatBand = (band: number) => band.toFixed(1);
 /* ------------------------------------------------------------------ */
 
 export const ACADEMIC_BAND8_UPGRADES: { original: string; better: string; note: string }[] = [
+  // Task 1 Report & Data Upgrades
+  { original: 'gives information about how many people owned and rented house', better: 'illustrates the proportion of households residing in owned versus rented accommodation', note: 'Formal academic Task 1 introduction and precise tenure terminology' },
+  { original: 'give information about how many people owned and rented house', better: 'illustrates the proportion of households residing in owned versus rented accommodation', note: 'Formal academic Task 1 introduction and precise tenure terminology' },
+  { original: 'gives information about', better: 'illustrates', note: 'Formal academic reporting verb replacing prompt instruction phrasing' },
+  { original: 'give information about', better: 'illustrates', note: 'Formal academic reporting verb replacing prompt instruction phrasing' },
+  { original: 'shows information about', better: 'delineates', note: 'Advanced reporting verb' },
+  { original: 'how many people owned and rented house', better: 'the proportion of households residing in owned versus rented accommodation', note: 'Paraphrases housing data with demographic precision' },
+  { original: 'very high at the beginning', better: 'overwhelmingly predominant in 1918', note: 'Replaces conversational "very high" with scholarly temporal descriptor' },
+  { original: 'increased a lot', better: 'experienced an enduring upward trajectory', note: 'Replaces spoken "a lot" with formal academic trend phrase' },
+  { original: 'both categories were almost equal.', better: 'eventually surpassing rental accommodation in 1971 before receding slightly in the final decade.', note: 'Corrects overview to highlight genuine crossover parity and decade reversal' },
+  { original: 'both categories was almost equal.', better: 'eventually surpassing rental accommodation in 1971 before receding slightly in the final decade.', note: 'Corrects overview to highlight genuine crossover parity and decade reversal' },
+  { original: 'both category was almost equal.', better: 'eventually surpassing rental accommodation in 1971 before receding slightly in the final decade.', note: 'Corrects overview to highlight genuine crossover parity and decade reversal' },
+  { original: 'around 77 percent of households were renting their homes', better: 'approximately 77% of households rented their dwellings', note: 'Formal statistical adverb and lexical variety' },
+  { original: 'around 77 percent of households was renting their home', better: 'approximately 77% of households rented their dwellings', note: 'Formal statistical adverb and lexical variety' },
+  { original: 'while only about 23 percent owned their house', better: 'compared to a mere 23% who owned their homes', note: 'Advanced comparative structure' },
+  { original: 'while only about 23 percent owns their house', better: 'compared to a mere 23% who owned their homes', note: 'Advanced comparative structure' },
+  { original: 'Over the next few decades', better: 'Over the subsequent five decades', note: 'Calculates exact temporal interval' },
+  { original: 'Over the next few decade', better: 'Over the subsequent five decades', note: 'Calculates exact temporal interval' },
+  { original: 'the percentage of owned accommodation went up gradually', better: 'home ownership increased steadily', note: 'Concise trend verb and modifier' },
+  { original: 'went up gradually', better: 'increased steadily', note: 'Academic trend verb' },
+  { original: 'went up gradual', better: 'increased steadily', note: 'Academic trend verb' },
+  { original: 'both proportions were equal at 50 percent each', better: 'home ownership reached parity with rental housing at 50%', note: 'Academic concept of statistical parity' },
+  { original: 'both proportion was equal at 50 percent each', better: 'home ownership reached parity with rental housing at 50%', note: 'Academic concept of statistical parity' },
+  { original: 'reached the highest peak', better: 'culminated in a peak', note: 'Collocational trend phrasing without tautology' },
+  { original: 'reached a peak', better: 'culminated in a peak', note: 'Advanced trend culmination verb' },
+  { original: 'highest peak', better: 'peak', note: 'Removes redundant adjective' },
+  { original: 'rented accommodation decreased continuously until 2001', better: 'rental accommodation declined continuously over the same timeframe', note: 'Cohesive referencing and lexical variation' },
+  { original: 'rented house decreased continuous until 2001', better: 'rental accommodation declined continuously over the same timeframe', note: 'Cohesive referencing and lexical variation' },
+  { original: 'where it reached the lowest point of 31 percent', better: 'bottoming out at a low of 31% in 2001', note: 'Authentic participle phrase for data troughs' },
+  { original: 'reached the lowest point of 31 percent', better: 'bottomed out at a low of 31% in 2001', note: 'Authentic trend phrasal verb' },
+  { original: 'renting increased again to 36 percent, while owned home fell to 64 percent.', better: 'this downward trend reversed modestly, with rental tenure recovering to 36% while home ownership contracted to 64%.', note: 'Sophisticated trend reversal synthesis' },
+  { original: 'rented house', better: 'rental accommodation', note: 'Accurate category classification' },
+  { original: 'owned home', better: 'home ownership', note: 'Nominalised tenure category' },
+  { original: 'went up', better: 'rose steadily', note: 'Standard academic trend verb' },
+  { original: 'fell down', better: 'experienced a downturn', note: 'Academic trend verb' },
+  { original: 'a lot', better: 'significantly', note: 'Formal adverb' },
+  { original: 'very high', better: 'overwhelmingly dominant', note: 'High-register statistical adjective' },
+
+  // Task 2 Essay Upgrades
   { original: 'very popular', better: 'widely debated across contemporary society', note: 'Replaces colloquial "very popular" with formal sociological register' },
   { original: 'good experience', better: 'valuable civic and professional competence', note: 'Band 8 collocation for personal development' },
   { original: 'a lot of money', better: 'substantial fiscal resources', note: 'Formal economic collocation replacing spoken English' },
@@ -407,16 +446,52 @@ function buildEvaluationPrompt(question: string, essay: string, taskType: 'task1
   const si = sinhala
     ? 'Also fill every field ending in "Si" with a short, simple Sinhala translation (Sinhala script).'
     : 'Leave every field ending in "Si" as an empty string.';
-  return `You are a strict, certified IELTS Academic Writing examiner AND a patient English teacher for weak learners who may not understand grammar terminology.
+  return `You are a certified, uncompromising Cambridge IELTS Senior Examiner. You grade with 100% fidelity to the official Cambridge/IDP IELTS Writing Public Band Descriptors.
 
-TASK TYPE: Writing ${taskType === 'task1' ? 'Task 1' : 'Task 2'}
-QUESTION:
+CRITICAL INSTRUCTION ON SCORING INTEGRITY:
+You MUST NOT be generous, polite, or lenient. Real examiners do not inflate scores. An essay containing repeated elementary grammar errors is Band 5.0 to 6.0. Awarding Band 7.5 or 8.0 to an essay with basic grammar or factual errors is a severe examiner violation.
+
+TASK TYPE: Writing ${taskType === 'task1' ? 'Task 1 (Report)' : 'Task 2 (Discursive Essay)'}
+QUESTION / PROMPT:
 """${question}"""
 
-STUDENT ESSAY:
+STUDENT ESSAY TO GRADE:
 """${essay}"""
 
-STUDENT TARGET BAND: ${targetBand}. NEVER inflate scores because of the target. Score only what is written, using the official public IELTS Writing band descriptors (TR/TA, CC, LR, GRA), in 0.5 steps.
+OFFICIAL IELTS PUBLIC BAND DESCRIPTOR RULES & MANDATORY SCORE CEILINGS:
+
+1. Grammatical Range and Accuracy (GRA) - STRICT CEILINGS:
+- Band 8.0: The majority of sentences MUST be completely error-free. Only rare, non-systematic slips are permitted.
+- Band 7.0: Produces frequent error-free sentences. Has good control of grammar and punctuation with only occasional non-systematic errors.
+- Band 6.0: Mix of simple and complex sentence forms. Makes some errors in grammar and punctuation, but they rarely reduce communication.
+- Band 5.0: Makes FREQUENT grammatical errors and punctuation may be faulty. Distortions in subject-verb agreement (e.g. "chart give", "categories was", "households was", "proportion was"), missing plural -s (e.g. "few decade"), or incorrect verb tenses.
+*** HARD RULE FOR GRA: If the essay contains 3 or more basic grammatical errors or subject-verb agreement slips, GRA CANNOT EXCEED Band 5.0 or 5.5! NEVER award Band 7 or 8 for GRA when basic grammar is broken.
+
+2. Task Achievement (TA for Task 1) / Task Response (TR for Task 2) - STRICT CEILINGS:
+- Task 1:
+  - Band 7.0+: Requires a CLEAR, ACCURATE overview of main trends, differences, or stages.
+  - Band 6.0: Presents an overview, but may be inaccurate in details or misreport specific comparisons.
+  - Band 5.0: Inaccurate data, misleading overview, or key features missing/confused.
+  *** HARD RULE FOR TA (Task 1): If the overview makes a FACTUAL ERROR or false comparison (e.g., claiming two categories were equal at the end when one was 64% and the other was 36%), Task Achievement CANNOT EXCEED Band 5.5 or 6.0!
+- Task 2:
+  - Band 7.0+: Clear position throughout with developed main ideas.
+  - Band 6.0: Position may become unclear; ideas may lack depth.
+  - Band 5.0: Unclear position, overgeneralized or unsupported ideas.
+
+3. Lexical Resource (LR):
+- Band 8.0: Wide, fluent lexical range with sophisticated academic collocations.
+- Band 7.0: Sufficient range of vocabulary with some style awareness; occasional errors in word choice/collocation.
+- Band 6.0: Adequate vocabulary, but noticeable word-choice errors, awkward collocations ("rented house decreased"), or repetitive everyday vocabulary.
+- Band 5.0: Limited vocabulary with repetitive words and frequent word-formation errors.
+
+4. Coherence and Cohesion (CC):
+- Band 7.0: Logically organises information with clear progression throughout. Uses a range of cohesive devices. Clear central topic in each paragraph.
+- Band 6.0: Cohesion may be faulty or mechanical; paragraphing may lack full logic.
+- Band 5.0: Inadequate or repetitive paragraphing; inaccurate linking phrases.
+
+5. OVERALL BAND CALCULATION:
+The overall score is the strict arithmetic average of [TR/TA, CC, LR, GRA], rounded to the nearest 0.5 according to official IELTS conventions (.25 rounds up to .5, .75 rounds up to next whole band).
+DO NOT anchor to the student's target band. Grade strictly on what is written.
 
 STEP A – Correction pass (errors only):
 - Mark ONLY genuine errors: grammar, spelling, punctuation, wrong word form, wrong collocation that makes the sentence incorrect.
@@ -436,15 +511,15 @@ ${si}
 Return ONLY JSON with this exact shape:
 {
   "criteria": [
-    {"key":"TR","band":0,"comment":"one sentence","commentSi":"","toReach8":"one concrete instruction"},
+    {"key":"TR","band":0,"comment":"honest examiner assessment with specific citation of strengths and deductions","commentSi":"","toReach8":"one concrete instruction"},
     {"key":"CC","band":0,"comment":"","commentSi":"","toReach8":""},
     {"key":"LR","band":0,"comment":"","commentSi":"","toReach8":""},
     {"key":"GRA","band":0,"comment":"","commentSi":"","toReach8":""}
   ],
-  "confidence":"Low|Medium|High",
+  "confidence":"High",
   "mainProblems":[{"severity":"High|Medium|Low","title":"","description":"","descriptionSi":""}],
   "learningOrder":["lessonTopic ids"],
-  "teacherNote":"2-3 sentences of honest, encouraging, specific advice",
+  "teacherNote":"2-3 sentences of honest, objective examiner advice on what is capping the score and what must be fixed first",
   "teacherNoteSi":"",
   "segments":[...],
   "issues":[{"id":"short-id","title":"","category":"Grammar|Vocabulary|Punctuation|Spelling|Structure|Task","severity":"High|Medium|Low","original":"one full original sentence containing the error","corrected":"the same sentence corrected","why":"","whySi":"","rule":"the English rule in one line","lessonTopic":"","occurrences":1,"tag":"optional short label"}],

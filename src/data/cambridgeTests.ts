@@ -476,6 +476,35 @@ const C18_T2_TASK1_SEGMENTS: EssaySegment[] = [
   t(' fell to 64 percent.')
 ];
 
+const C18_T2_TASK1_BAND8_EDITS: EssaySegment[] = [
+  t('The bar chart '),
+  rep('gives information about how many people owned and rented house', 'illustrates the proportion of households residing in owned versus rented accommodation', undefined, 'Formal academic Task 1 introduction using precise demographic terminology.'),
+  t(' in England and Wales from 1918 to 2011.\n\nOverall, it is clear that rented accommodation was '),
+  rep('very high at the beginning', 'overwhelmingly predominant in 1918', undefined, 'Replaces colloquial "very high" with high-register statistical adjective.'),
+  t(', but home ownership '),
+  rep('increased a lot', 'experienced an enduring upward trajectory', undefined, 'Replaces conversational "a lot" with formal academic trend phrase.'),
+  t(' over the period. '),
+  rep('At the end, both categories were almost equal.', 'eventually surpassing rental accommodation in 1971 before receding slightly in the final decade.', undefined, 'Corrects fatal overview error: the crossover occurred in 1971, not at the end.'),
+  t('\n\nIn 1918, '),
+  rep('around 77 percent of households were renting their homes', 'approximately 77% of households rented their dwellings', undefined, 'Uses precise adverb "approximately" and formal noun "dwellings".'),
+  t(', '),
+  rep('while only about 23 percent owned their house', 'compared to a mere 23% who owned their homes', undefined, 'Advanced comparative structure highlighting minority status.'),
+  t('. Over the '),
+  rep('next few decades', 'subsequent five decades', undefined, 'Precise mathematical duration instead of vague "few decades".'),
+  t(', the percentage of owned accommodation '),
+  rep('went up gradually', 'increased steadily', undefined, 'Formal trend verb and adverb.'),
+  t('. In 1971, '),
+  rep('both proportions were equal at 50 percent each', 'home ownership reached parity with rental housing at 50%', undefined, 'Introduces high-level statistical concept of parity.'),
+  t('. After that, home ownership continued to rise and '),
+  rep('reached a peak in 2001 at about 69 percent', 'culminated in a peak of 69% in 2001', undefined, 'Authentic trend collocation: culminated in a peak.'),
+  t('.\n\nBy contrast, '),
+  rep('rented accommodation decreased continuously until 2001', 'rental accommodation declined continuously over the same timeframe', undefined, 'High-level cohesive reference and lexical variety.'),
+  t(', '),
+  rep('where it reached the lowest point of 31 percent', 'bottoming out at a low of 31% in 2001', undefined, 'Natural participial phrase for trough data.'),
+  t('. However, in 2011, '),
+  rep('renting increased again to 36 percent, while owned home fell to 64 percent.', 'this downward trend reversed modestly, with rental tenure recovering to 36% while home ownership contracted to 64%.', undefined, 'Synthesizes the decade reversal using sophisticated academic verbs.')
+];
+
 const C18_T2_TASK1_REPORT: TutorReport = {
   id: 'c18-t2-task1-housing',
   createdAt: '2026-10-30T10:00:00.000Z',
@@ -581,9 +610,7 @@ const C18_T2_TASK1_REPORT: TutorReport = {
       whySi: 'පළමු වාක්‍යය වඩාත් ශාස්ත්‍රීය ලෙස ප්‍රතිසංස්කරණය කිරීම.'
     }
   ],
-  band8Edits: [
-    t('The bar chart illustrates the proportion of households residing in owned versus rented accommodation in England and Wales from 1918 to 2011.\n\nOverall, the data reveals a dramatic structural inversion in housing tenure: while rented accommodation was overwhelmingly predominant in 1918, home ownership experienced an enduring upward trajectory, eventually surpassing rental accommodation in 1971 before receding slightly in the final decade.\n\nIn 1918, approximately 77% of households rented their dwellings, compared to a mere 23% who owned their homes. Over the subsequent five decades, home ownership increased steadily until reaching parity with rental housing at 50% in 1971. Following this pivotal milestone, the ownership rate continued its ascent, culminating in a peak of 69% in 2001.\n\nConversely, rental accommodation declined continuously over the same timeframe, bottoming out at 31% in 2001. However, this downward trend reversed modestly between 2001 and 2011, with rental tenure recovering to 36% while home ownership contracted to 64%.')
-  ],
+  band8Edits: C18_T2_TASK1_BAND8_EDITS,
   band8Overall: 8.5,
   band8Criteria: [
     { key: 'TR', band: 8.5 },
@@ -676,7 +703,7 @@ export const ALL_CAMBRIDGE_TESTS: CambridgeTestPrompt[] = [
       report: C18_T2_TASK1_REPORT
     },
     band8ModelAnswer: {
-      text: C18_T2_TASK1_REPORT.band8Edits[0].text,
+      text: C18_T2_TASK1_BAND8_EDITS.map(s => (s.type === 'replace' ? s.to : s.type === 'del' ? '' : s.text)).join(''),
       examinerComments: [
         'Exemplary overview capturing the fundamental crossover in 1971.',
         'Rich variety of trend verbs (receded, bottomed out at, culminated in a peak of).',

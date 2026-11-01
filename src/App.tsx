@@ -70,12 +70,65 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 }
 
+const VALID_TABS: AppTab[] = ['cambridge', 'listening', 'reading', 'tutor', 'speaking', 'analytics'];
+
+function getInitialTab(): AppTab {
+  if (typeof window !== 'undefined') {
+    const params = new URLSearchParams(window.location.search);
+    const tabParam = params.get('tab') as AppTab | null;
+    if (tabParam && VALID_TABS.includes(tabParam)) {
+      return tabParam;
+    }
+    const hash = window.location.hash.replace(/^#/, '') as AppTab;
+    if (hash && VALID_TABS.includes(hash)) {
+      return hash;
+    }
+  }
+  return 'cambridge';
+}
+
 function MainApp() {
-  // Default to Cambridge Past Papers Master Library
-  const [currentTab, setCurrentTab] = useState<AppTab>('cambridge');
+  // Default to query param or Cambridge Past Papers Master Library
+  const [currentTab, setCurrentTab] = useState<AppTab>(getInitialTab);
   const [showSinhala, setShowSinhala] = useState<boolean>(true);
   const [isVoiceSettingsOpen, setIsVoiceSettingsOpen] = useState<boolean>(false);
   const [showScrollTop, setShowScrollTop] = useState<boolean>(false);
+
+  // Sync tab with URL search parameter & browser document title
+  useEffect(() => {
+    const tabTitles: Record<AppTab, string> = {
+      cambridge: 'Cambridge Library (Books 1–18) | Cambridge IELTS Master',
+      listening: 'Listening Tests | Cambridge IELTS Master',
+      reading: 'Reading Tests | Cambridge IELTS Master',
+      tutor: 'Writing Tutor AI | Cambridge IELTS Master',
+      speaking: 'Speaking Tutor | Cambridge IELTS Master',
+      analytics: 'Analytics & Score Tracker | Cambridge IELTS Master',
+    };
+    document.title = tabTitles[currentTab] || 'Cambridge IELTS Master';
+
+    try {
+      const url = new URL(window.location.href);
+      if (url.searchParams.get('tab') !== currentTab) {
+        url.searchParams.set('tab', currentTab);
+        window.history.pushState({ tab: currentTab }, '', url.toString());
+      }
+    } catch {
+      // Ignore if running in non-standard context
+    }
+  }, [currentTab]);
+
+  // Handle browser back/forward buttons
+  useEffect(() => {
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      const tabParam = params.get('tab') as AppTab | null;
+      if (tabParam && VALID_TABS.includes(tabParam)) {
+        setCurrentTab(tabParam);
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -181,22 +234,46 @@ function MainApp() {
             <p className="mt-0.5">Authentic past papers from Books 1 to 18 with local audio streaming and bilingual Sinhala assistance.</p>
           </div>
           <div className="flex flex-wrap items-center gap-4">
-            <button onClick={() => setCurrentTab('cambridge')} className="hover:text-slate-900 font-bold text-indigo-700">
+            <button 
+              type="button"
+              onClick={() => setCurrentTab('cambridge')} 
+              className="hover:text-slate-900 font-bold text-indigo-700 cursor-pointer"
+            >
               Cambridge Library
             </button>
-            <button onClick={() => setCurrentTab('listening')} className="hover:text-slate-900">
+            <button 
+              type="button"
+              onClick={() => setCurrentTab('listening')} 
+              className="hover:text-slate-900 cursor-pointer"
+            >
               Listening
             </button>
-            <button onClick={() => setCurrentTab('reading')} className="hover:text-slate-900">
+            <button 
+              type="button"
+              onClick={() => setCurrentTab('reading')} 
+              className="hover:text-slate-900 cursor-pointer"
+            >
               Reading
             </button>
-            <button onClick={() => setCurrentTab('tutor')} className="hover:text-slate-900">
+            <button 
+              type="button"
+              onClick={() => setCurrentTab('tutor')} 
+              className="hover:text-slate-900 cursor-pointer"
+            >
               Writing
             </button>
-            <button onClick={() => setCurrentTab('speaking')} className="hover:text-slate-900">
+            <button 
+              type="button"
+              onClick={() => setCurrentTab('speaking')} 
+              className="hover:text-slate-900 cursor-pointer"
+            >
               Speaking
             </button>
-            <button onClick={() => setCurrentTab('analytics')} className="hover:text-slate-900">
+            <button 
+              type="button"
+              onClick={() => setCurrentTab('analytics')} 
+              className="hover:text-slate-900 cursor-pointer"
+            >
               Analytics
             </button>
           </div>

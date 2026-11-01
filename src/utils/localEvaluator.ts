@@ -94,6 +94,61 @@ const GRAMMAR_RULES: PatternRule[] = [
     tag: 'High Priority'
   },
   {
+    id: 'chart-singular-verb',
+    regex: /\b(the|this)\s+(bar chart|chart|pie chart|table|graph|line graph|diagram)\s+(give|show|illustrate|represent|indicate|compare|depict)\b/gi,
+    replacement: '$1 $2 $3s',
+    title: 'Subject-Verb Agreement: Chart + Verbs in -s',
+    category: 'Grammar',
+    severity: 'High',
+    why: 'The subject ("the bar chart") is singular third-person. In the introductory sentence, the reporting verb must end in -s: "The bar chart gives / shows".',
+    whySi: '"The bar chart" ඒකවචන බැවින් ක්‍රියාපදයට -s එකතු විය යුතුය (shows / gives).',
+    rule: 'The chart gives / shows / illustrates (singular noun + verb-s).',
+    lessonTopic: 'subject-verb-agreement',
+    tag: 'Task 1 Intro Error'
+  },
+  {
+    id: 'plural-was',
+    regex: /\b(both categories|households|both proportions|these categories|the proportions|the numbers|the figures|percentages|they|both)\s+was\b/gi,
+    replacement: '$1 were',
+    title: 'Subject-Verb Agreement: Plural Noun + "were"',
+    category: 'Grammar',
+    severity: 'High',
+    why: 'Plural subjects ("households", "both categories", "proportions") require the plural past verb "were", not the singular "was".',
+    whySi: 'බහුවචන කර්තෘ සඳහා "were" යෙදිය යුතුය ("was" නොවේ).',
+    rule: 'Plural subject + were (NOT was).',
+    lessonTopic: 'subject-verb-agreement',
+    tag: 'Critical Foundation'
+  },
+  {
+    id: 'few-decade',
+    regex: /\b(few|a few|next few|several)\s+(decade|year|month|category|proportion|country|problem)\b/gi,
+    replacement: '$1 $2s',
+    title: 'Quantifier Agreement: "few / several" + Plural Noun',
+    category: 'Grammar',
+    severity: 'High',
+    why: 'Quantifiers such as "few", "a few", and "several" indicate multiple items and must be followed by a plural noun (e.g. "few decades").',
+    whySi: '"few", "several" වැනි වචනවලට පසු බහුවචන නාම පද (-s) යෙදිය යුතුය.',
+    rule: 'few / several + plural noun (-s).',
+    lessonTopic: 'plural-nouns',
+    tag: 'Common Slip'
+  },
+  {
+    id: 'percent-past-tense',
+    regex: /\b(\d+\s*percent|\d+%\s*)\s+(owns|rents|wants|increases)\b/gi,
+    replacement: (m, pct, verb) => {
+      const pastMap: Record<string, string> = { owns: 'owned', rents: 'rented', wants: 'wanted', increases: 'increased' };
+      return `${pct} ${pastMap[verb.toLowerCase()] || verb}`;
+    },
+    title: 'Historical Data Past Tense: Percentage + Past Verb',
+    category: 'Grammar',
+    severity: 'High',
+    why: 'When describing historical data from past years (e.g., in 1918), use the past tense (e.g. "23 percent owned their house", not present "owns").',
+    whySi: 'පසුගිය වසරවල දත්ත විස්තර කිරීමේදී අතීත කාල ක්‍රියාපද (past tense) යොදන්න.',
+    rule: 'Past year + past tense verb (e.g., In 1918, 23% owned).',
+    lessonTopic: 'verb-tenses',
+    tag: 'Task 1 Historical Tense'
+  },
+  {
     id: 'many-singular',
     regex: /\b(many|several|different|various|both|these|numerous)\s+(country|student|reason|problem|category|side|factor|skill|building|park|game|activity|decisions?|opinion)\b/gi,
     replacement: (m, quant, noun) => {
@@ -430,13 +485,15 @@ export function evaluateEssayLocally(params: {
   const errorCount = nonOverlappingMatches.length;
   const paragraphCount = rawText.split(/\n\s*\n/).filter(p => p.trim().length > 0).length;
 
-  // Task Response / Achievement
-  let trBand = 7.0;
+  // Task Response / Achievement (Strict Official IELTS Criteria)
+  let trBand = 6.0;
   if (wordCount < minWords) {
     const penalty = Math.min(2.0, Math.ceil((minWords - wordCount) / 40) * 0.5);
-    trBand = Math.max(4.5, 7.0 - penalty);
-  } else if (wordCount >= 280) {
-    trBand = 7.5;
+    trBand = Math.max(4.5, 6.0 - penalty);
+  } else if (wordCount >= 180 && errorCount <= 2) {
+    trBand = 7.0;
+  } else {
+    trBand = 6.0;
   }
 
   // Coherence & Cohesion
@@ -448,18 +505,18 @@ export function evaluateEssayLocally(params: {
     ccBand = 7.0;
   }
 
-  // Grammatical Range & Accuracy
+  // Grammatical Range & Accuracy (Official IELTS Descriptor Thresholds)
   let graBand = 7.0;
-  if (errorCount >= 10) graBand = 5.0;
-  else if (errorCount >= 6) graBand = 5.5;
-  else if (errorCount >= 3) graBand = 6.0;
-  else if (errorCount >= 1) graBand = 6.5;
+  if (errorCount >= 5) graBand = 5.0; // Frequent systematic errors = Band 5.0
+  else if (errorCount >= 3) graBand = 5.5;
+  else if (errorCount >= 2) graBand = 6.0;
+  else if (errorCount === 1) graBand = 6.5;
   else graBand = 8.0;
 
   // Lexical Resource
   let lrBand = 6.5;
-  if (errorCount >= 8) lrBand = 5.5;
-  else if (errorCount >= 4) lrBand = 6.0;
+  if (errorCount >= 6) lrBand = 5.5;
+  else if (errorCount >= 3) lrBand = 6.0;
 
   const criteria = [
     {

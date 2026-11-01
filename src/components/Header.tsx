@@ -4,10 +4,10 @@ import {
   Mic, 
   Search, 
   Languages, 
-  Sparkles,
-  Volume2,
-  Headphones,
-  Award,
+  Sparkles, 
+  Volume2, 
+  Headphones, 
+  Award, 
   Library
 } from 'lucide-react';
 
@@ -21,6 +21,78 @@ interface HeaderProps {
   onOpenVoiceSettings: () => void;
 }
 
+interface TabDefinition {
+  id: AppTab;
+  label: string;
+  badge?: string;
+  badgeClass?: string;
+  icon: React.ComponentType<{ className?: string }>;
+  iconColor: string;
+  activeClass: string;
+  inactiveClass: string;
+}
+
+const TABS: TabDefinition[] = [
+  {
+    id: 'cambridge',
+    label: 'Cambridge Library',
+    badge: 'Books 1–18',
+    badgeClass: 'bg-indigo-500/20 text-indigo-600 font-mono font-extrabold',
+    icon: Library,
+    iconColor: 'text-indigo-400',
+    activeClass: 'bg-slate-900 text-white font-bold shadow-xs border-slate-900',
+    inactiveClass: 'text-slate-700 hover:text-slate-900 hover:bg-slate-100 border-transparent font-semibold',
+  },
+  {
+    id: 'listening',
+    label: 'Listening Tests',
+    badge: 'Real Audio',
+    badgeClass: 'bg-purple-100 text-purple-700 font-bold',
+    icon: Headphones,
+    iconColor: 'text-purple-500',
+    activeClass: 'bg-slate-900 text-white font-bold shadow-xs border-slate-900',
+    inactiveClass: 'text-slate-700 hover:text-slate-900 hover:bg-slate-100 border-transparent font-semibold',
+  },
+  {
+    id: 'reading',
+    label: 'Reading Tests',
+    badge: 'Dual-Pane',
+    badgeClass: 'bg-emerald-100 text-emerald-700 font-bold',
+    icon: BookOpen,
+    iconColor: 'text-emerald-500',
+    activeClass: 'bg-slate-900 text-white font-bold shadow-xs border-slate-900',
+    inactiveClass: 'text-slate-700 hover:text-slate-900 hover:bg-slate-100 border-transparent font-semibold',
+  },
+  {
+    id: 'tutor',
+    label: 'Writing Tutor AI',
+    badge: 'Task 1 & 2',
+    badgeClass: 'bg-amber-400 text-slate-950 font-mono font-extrabold',
+    icon: Sparkles,
+    iconColor: 'text-amber-300',
+    activeClass: 'bg-indigo-600 text-white font-bold shadow-xs border-indigo-600',
+    inactiveClass: 'text-indigo-900 hover:text-indigo-950 hover:bg-indigo-50 border-transparent font-semibold',
+  },
+  {
+    id: 'speaking',
+    label: 'Speaking Tutor',
+    badge: 'Interviews',
+    badgeClass: 'bg-red-100 text-red-700 font-bold',
+    icon: Mic,
+    iconColor: 'text-red-500',
+    activeClass: 'bg-slate-900 text-white font-bold shadow-xs border-slate-900',
+    inactiveClass: 'text-slate-700 hover:text-slate-900 hover:bg-slate-100 border-transparent font-semibold',
+  },
+  {
+    id: 'analytics',
+    label: 'Analytics & Tracker',
+    icon: Award,
+    iconColor: 'text-amber-500',
+    activeClass: 'bg-slate-900 text-white font-bold shadow-xs border-slate-900',
+    inactiveClass: 'text-slate-700 hover:text-slate-900 hover:bg-slate-100 border-transparent font-semibold',
+  },
+];
+
 export const Header: React.FC<HeaderProps> = ({
   currentTab,
   setCurrentTab,
@@ -33,18 +105,20 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Bar */}
         <div className="flex items-center justify-between h-14 gap-3">
-          {/* Logo & Brand */}
-          <div 
-            onClick={() => setCurrentTab('cambridge')} 
-            className="flex items-baseline gap-2 cursor-pointer select-none"
+          {/* Logo & Brand (Switches to Cambridge Library in the same page) */}
+          <button 
+            type="button"
+            onClick={() => setCurrentTab('cambridge')}
+            className="flex items-baseline gap-2 cursor-pointer select-none group text-left"
+            title="Cambridge Library Hub"
           >
-            <span className="font-extrabold text-slate-900 tracking-tight text-lg">
+            <span className="font-extrabold text-slate-900 tracking-tight text-lg group-hover:text-indigo-600 transition-colors">
               Cambridge IELTS Master
             </span>
             <span className="text-[10px] font-bold text-white bg-indigo-600 px-1.5 py-0.5 rounded uppercase tracking-wider">
               Books 1–18 Real Tests
             </span>
-          </div>
+          </button>
 
           {/* Top Controls */}
           <div className="flex items-center gap-2">
@@ -52,7 +126,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={() => setShowSinhala(prev => !prev)}
-              className={`px-2.5 py-1 rounded text-xs font-medium border transition-colors flex items-center gap-1.5 ${
+              className={`px-2.5 py-1 rounded text-xs font-medium border transition-colors flex items-center gap-1.5 cursor-pointer ${
                 showSinhala
                   ? 'bg-slate-100 text-slate-900 border-slate-300'
                   : 'bg-white text-slate-500 border-slate-200 hover:text-slate-700'
@@ -67,7 +141,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={onOpenVoiceSettings}
-              className="px-2 py-1 sm:px-2.5 rounded text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200 transition-colors flex items-center gap-1.5"
+              className="px-2 py-1 sm:px-2.5 rounded text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200 transition-colors flex items-center gap-1.5 cursor-pointer"
               title="Voice & Pronunciation Settings"
             >
               <Volume2 className="w-3.5 h-3.5" />
@@ -76,106 +150,31 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* Exclusive Real Cambridge Tests Navigation Bar */}
+        {/* Real Cambridge Tests Navigation Bar - Switches in the same page */}
         <nav className="flex items-center space-x-1.5 overflow-x-auto scrollbar-none py-1.5 border-t border-slate-100 text-xs sm:text-sm font-medium">
-          {/* Cambridge Past Papers Central Library (Flagship) */}
-          <button
-            type="button"
-            onClick={() => setCurrentTab('cambridge')}
-            className={`px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap flex items-center gap-1.5 ${
-              currentTab === 'cambridge'
-                ? 'bg-slate-900 text-white font-bold shadow-xs'
-                : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100 font-semibold'
-            }`}
-          >
-            <Library className="w-3.5 h-3.5 text-indigo-400" />
-            <span>Cambridge Library</span>
-            <span className="text-[9px] uppercase tracking-wider font-extrabold bg-indigo-500/20 text-indigo-600 px-1.5 py-0.2 rounded font-mono">
-              Books 1–18
-            </span>
-          </button>
-
-          {/* Listening Tests */}
-          <button
-            type="button"
-            onClick={() => setCurrentTab('listening')}
-            className={`px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap flex items-center gap-1.5 ${
-              currentTab === 'listening'
-                ? 'bg-slate-900 text-white font-bold shadow-xs'
-                : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100 font-semibold'
-            }`}
-          >
-            <Headphones className="w-3.5 h-3.5 text-purple-500" />
-            <span>Listening Tests</span>
-            <span className="text-[9px] uppercase tracking-wider font-bold bg-purple-100 text-purple-700 px-1 py-0.2 rounded">
-              Real Audio
-            </span>
-          </button>
-
-          {/* Reading Tests */}
-          <button
-            type="button"
-            onClick={() => setCurrentTab('reading')}
-            className={`px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap flex items-center gap-1.5 ${
-              currentTab === 'reading'
-                ? 'bg-slate-900 text-white font-bold shadow-xs'
-                : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100 font-semibold'
-            }`}
-          >
-            <BookOpen className="w-3.5 h-3.5 text-emerald-500" />
-            <span>Reading Tests</span>
-            <span className="text-[9px] uppercase tracking-wider font-bold bg-emerald-100 text-emerald-700 px-1 py-0.2 rounded">
-              Dual-Pane
-            </span>
-          </button>
-
-          {/* Writing Tutor AI */}
-          <button
-            type="button"
-            onClick={() => setCurrentTab('tutor')}
-            className={`px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap flex items-center gap-1.5 ${
-              currentTab === 'tutor'
-                ? 'bg-indigo-600 text-white font-bold shadow-xs'
-                : 'text-indigo-900 hover:text-indigo-950 hover:bg-indigo-50 font-semibold'
-            }`}
-          >
-            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-            <span>Writing Tutor AI</span>
-            <span className="text-[9px] uppercase tracking-wider font-extrabold bg-amber-400 text-slate-950 px-1 py-0.2 rounded font-mono">
-              Task 1 & 2
-            </span>
-          </button>
-
-          {/* Speaking Tutor */}
-          <button
-            type="button"
-            onClick={() => setCurrentTab('speaking')}
-            className={`px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap flex items-center gap-1.5 ${
-              currentTab === 'speaking'
-                ? 'bg-slate-900 text-white font-bold shadow-xs'
-                : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100 font-semibold'
-            }`}
-          >
-            <Mic className="w-3.5 h-3.5 text-red-500" />
-            <span>Speaking Tutor</span>
-            <span className="text-[9px] uppercase tracking-wider font-bold bg-red-100 text-red-700 px-1 py-0.2 rounded">
-              Interviews
-            </span>
-          </button>
-
-          {/* Analytics & Coach */}
-          <button
-            type="button"
-            onClick={() => setCurrentTab('analytics')}
-            className={`px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap flex items-center gap-1.5 ${
-              currentTab === 'analytics'
-                ? 'bg-slate-900 text-white font-bold shadow-xs'
-                : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100 font-semibold'
-            }`}
-          >
-            <Award className="w-3.5 h-3.5 text-amber-500" />
-            <span>Analytics & Tracker</span>
-          </button>
+          {TABS.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = currentTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setCurrentTab(tab.id)}
+                className={`px-3 py-1.5 rounded-lg transition-all whitespace-nowrap flex items-center gap-1.5 border cursor-pointer ${
+                  isActive ? tab.activeClass : tab.inactiveClass
+                }`}
+                title={tab.label}
+              >
+                <Icon className={`w-3.5 h-3.5 ${tab.iconColor}`} />
+                <span>{tab.label}</span>
+                {tab.badge && (
+                  <span className={`text-[9px] uppercase tracking-wider px-1.5 py-0.2 rounded ${tab.badgeClass}`}>
+                    {tab.badge}
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </nav>
       </div>
     </header>
