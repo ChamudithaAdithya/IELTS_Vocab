@@ -16,7 +16,8 @@ import {
   saveVoiceSettings, 
   playSpeech, 
   stopAllSpeech, 
-  VoiceSettings 
+  VoiceSettings,
+  AppVoiceOption
 } from '../utils/speech';
 
 interface VoiceSettingsModalProps {
@@ -31,7 +32,7 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
   showSinhala,
 }) => {
   const [settings, setSettings] = useState<VoiceSettings>(loadVoiceSettings);
-  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const [voices, setVoices] = useState<AppVoiceOption[]>([]);
   const [activeTab, setActiveTab] = useState<'settings' | 'iphone' | 'android'>('settings');
   const [isTesting, setIsTesting] = useState(false);
 
@@ -195,7 +196,7 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
               </select>
 
               <p className="text-[11px] text-slate-500">
-                {voices.length} English voice(s) detected on this browser/device.
+                {voices.length} English voice(s) available.
               </p>
             </div>
 
@@ -254,9 +255,9 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
 
             {/* Tip */}
             <div className="p-3 bg-blue-50/60 border border-blue-200 rounded text-xs text-slate-700">
-              <span className="font-semibold text-blue-900">💡 Tip for iPhone / Safari users: </span>
+              <span className="font-semibold text-blue-900">💡 Tip for natural pronunciation: </span>
               <span>
-                To hear ultra-natural voices (like Siri or Daniel Enhanced), see the iPhone tab to install them for free on your iOS device!
+                Select one of the Natural voices above to hear human-grade native articulation.
               </span>
             </div>
           </div>

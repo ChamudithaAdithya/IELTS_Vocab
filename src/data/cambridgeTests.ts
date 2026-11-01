@@ -81,12 +81,12 @@ const C18_T1_BAND8_EDITS: EssaySegment[] = [
   rep('learn many useful skills', 'acquire indispensable life skills that cannot be taught in a traditional classroom', undefined, 'Band 8 depth'),
   t('. When students work for a charity, they learn how to communicate '),
   ins('effectively ', undefined, 'Academic adverb'),
-  t('with people '), ins('from diverse socioeconomic backgrounds', undefined, 'Idea development'),
+  t('with other people'), ins(' from diverse socioeconomic backgrounds', undefined, 'Idea development'),
   t('. For example, '), rep('my younger brother did volunteer work in a hospital last year and he learned how to be patient and caring', 'high school students who assist in elderly care homes frequently develop empathy, emotional resilience, and interpersonal competence', undefined, 'Universal academic evidence'),
   t('. Furthermore, these activities '),
   rep('make students more responsible and they do not waste their time on playing computer games', 'instil a strong work ethic and steer adolescents away from sedentary and unproductive habits', undefined, 'Lexical resource upgrade'),
-  t('.\n\nSecondly, unpaid service is very beneficial for society '),
-  ins('from an economic and civic standpoint', undefined, 'Adds dimension'),
+  t('.\n\nSecondly, unpaid service is very beneficial for society'),
+  ins(' from an economic and civic standpoint', undefined, 'Adds dimension'),
   t('. Young people can clean parks, paint old buildings, and help poor families'),
   ins(', directly addressing underfunded municipal services', undefined, 'Explains significance'),
   t('. If the government '), rep('pays for all this work, it will cost a lot of money', 'were to finance these initiatives through public expenditure, the fiscal burden would be substantial', undefined, 'Second conditional grammar structure'),
@@ -295,14 +295,55 @@ const C17_T2_SEGMENTS: EssaySegment[] = [
 ];
 
 const C17_T2_BAND8_EDITS: EssaySegment[] = [
-  t('In the modern world, environmental problems are becoming '),
-  rep('more and more serious', 'increasingly severe', undefined, 'More academic tone'),
-  t('. Some people argue that increasing fuel prices is the most effective solution to this crisis. However, I '),
-  rep('disagree with this opinion', 'strongly dispute this contention', undefined, 'Higher band lexical resource'),
-  t(' because it '), rep('will make poor people suffer and there are better alternatives', 'imposes an unfair burden on low-income demographics while failing to address the systemic causes of pollution', undefined, 'Academic depth'),
-  t('.\n\nTo begin with, escalating fuel prices '),
-  rep('create many problems for ordinary citizens', 'disproportionately penalise economically vulnerable households', undefined, 'Band 8 collocations'),
-  t('. Many individuals depend on private vehicles for commuting due to deficient public transport infrastructure. If fuel costs escalate sharply, the basic cost of living rises, leaving impoverished families unable to afford essential food and utilities. Moreover, freight and logistics companies inevitably pass higher fuel surcharges onto consumer goods, thereby accelerating nationwide inflation.\n\nOn the other hand, governments should implement structural green solutions rather than relying exclusively on punitive taxation. First, public investment should be redirected towards subsidising renewable energy infrastructure, such as solar and offshore wind farms. Second, local authorities must modernise public transit networks to render public commuting faster and more cost-effective than private vehicles. When dependable rapid transit options exist, commuters voluntarily shift away from car dependency without the need for regressive fuel taxes.\n\nIn conclusion, hiking fuel prices is an inequitable and inadequate remedy for environmental degradation. Governments should instead accelerate the transition to renewable energy and expand eco-friendly public transportation.')
+  // Paragraph 1
+  rep('In the modern world', 'In contemporary globalized society', undefined, 'High-register essay opening.'),
+  t(', environmental problems are becoming '),
+  rep('more and more serious', 'increasingly acute and multifaceted', undefined, 'Replaces repetitive spoken comparative.'),
+  t('. '),
+  rep('Some people say that', 'A prevalent body of opinion maintains that', undefined, 'Objective academic attribution.'),
+  t(' '),
+  rep('increasing fuel prices is the best solution for this problem', 'escalating taxation on fossil fuels represents the optimal remedy for environmental degradation', undefined, 'Higher band lexical resource and task response.'),
+  t('. However, I '),
+  rep('disagree with this opinion', 'strongly dispute this contention', undefined, 'Formal academic counter-argument.'),
+  t(' because it '),
+  rep('will make poor people suffer', 'imposes disproportionate economic hardship on low-income demographics', undefined, 'Academic sociology terminology.'),
+  t(' and there are '),
+  rep('better alternatives', 'far more equitable and sustainable countermeasures', undefined, 'Nuanced Task Response argument.'),
+  t('.\n\n'),
+
+  // Paragraph 2
+  rep('To begin with', 'First and foremost', undefined, 'Scholarly topic sentence transition.'),
+  t(', high fuel prices create '),
+  rep('many problems', 'severe economic disruptions', undefined, 'Precise academic noun phrase.'),
+  t(' for '),
+  rep('ordinary citizens', 'the broader citizenry', undefined, 'Formal sociology register.'),
+  t('. Many people need their cars to go to work every day because '),
+  rep('public transport is not convenient', 'public transit infrastructure remains deficient', undefined, 'Academic societal critique.'),
+  t('. If petrol becomes very expensive, the '),
+  rep('cost of living will increase', 'household expenditures escalate drastically', undefined, 'Macroeconomic precision.'),
+  t(' and '),
+  rep('poor families cannot afford to buy food', 'economically vulnerable households struggle to procure basic subsistence goods', undefined, 'Formal sociology phrasing.'),
+  t('. Moreover, transport companies will increase the price of goods, which will '),
+  rep('cause inflation in the country', 'precipitate systemic inflationary pressures nationwide', undefined, 'Band 8 macroeconomic collocation.'),
+  t('.\n\n'),
+
+  // Paragraph 3
+  t('On the other hand, the government should focus on '),
+  rep('better solutions instead of just raising fuel prices', 'structural long-term strategies rather than relying exclusively on punitive fiscal levies', undefined, 'Sophisticated policy argument.'),
+  t('. First, they should invest money in '),
+  rep('green energy like solar and wind power', 'renewable energy infrastructure, such as solar and offshore wind farms', undefined, 'Precise environmental engineering terminology.'),
+  t('. Second, the government must improve the public transportation system so that people will prefer '),
+  rep('taking buses and trains', 'utilising municipal public transit', undefined, 'Academic transport register.'),
+  t('. For instance, in my city, when the metro was built, many drivers '),
+  rep('stopped using private cars', 'voluntarily abandoned private car reliance', undefined, 'Advanced behavioral description.'),
+  t('.\n\n'),
+
+  // Paragraph 4
+  t('In conclusion, '),
+  rep('increasing fuel costs is not the best way to protect the environment', 'hiking fuel levies constitutes an inherently regressive and inadequate remedy for ecological damage', undefined, 'Sophisticated concluding synthesis.'),
+  t('. Governments should develop renewable energy and '),
+  rep('provide efficient public transport', 'subsidise comprehensive and accessible public transit networks', undefined, 'Authoritative policy conclusion.'),
+  t('.')
 ];
 
 const C17_T2_REPORT: TutorReport = {
@@ -477,32 +518,34 @@ const C18_T2_TASK1_SEGMENTS: EssaySegment[] = [
 ];
 
 const C18_T2_TASK1_BAND8_EDITS: EssaySegment[] = [
-  t('The bar chart '),
-  rep('gives information about how many people owned and rented house', 'illustrates the proportion of households residing in owned versus rented accommodation', undefined, 'Formal academic Task 1 introduction using precise demographic terminology.'),
-  t(' in England and Wales from 1918 to 2011.\n\nOverall, it is clear that rented accommodation was '),
-  rep('very high at the beginning', 'overwhelmingly predominant in 1918', undefined, 'Replaces colloquial "very high" with high-register statistical adjective.'),
-  t(', but home ownership '),
-  rep('increased a lot', 'experienced an enduring upward trajectory', undefined, 'Replaces conversational "a lot" with formal academic trend phrase.'),
-  t(' over the period. '),
-  rep('At the end, both categories were almost equal.', 'eventually surpassing rental accommodation in 1971 before receding slightly in the final decade.', undefined, 'Corrects fatal overview error: the crossover occurred in 1971, not at the end.'),
-  t('\n\nIn 1918, '),
-  rep('around 77 percent of households were renting their homes', 'approximately 77% of households rented their dwellings', undefined, 'Uses precise adverb "approximately" and formal noun "dwellings".'),
-  t(', '),
-  rep('while only about 23 percent owned their house', 'compared to a mere 23% who owned their homes', undefined, 'Advanced comparative structure highlighting minority status.'),
-  t('. Over the '),
-  rep('next few decades', 'subsequent five decades', undefined, 'Precise mathematical duration instead of vague "few decades".'),
-  t(', the percentage of owned accommodation '),
-  rep('went up gradually', 'increased steadily', undefined, 'Formal trend verb and adverb.'),
-  t('. In 1971, '),
-  rep('both proportions were equal at 50 percent each', 'home ownership reached parity with rental housing at 50%', undefined, 'Introduces high-level statistical concept of parity.'),
+  // Paragraph 1: Introduction
+  t('The bar chart '), rep('gives information about', 'illustrates', undefined, 'More formal academic reporting verb for Task 1.'),
+  t(' the proportion of households in '), rep('owned and rented accommodation', 'owned versus rented accommodation', undefined, 'Precise comparative terminology.'),
+  t(' in England and Wales from 1918 to 2011.\n\n'),
+
+  // Paragraph 2: Overview (Fixes the factual error and upgrades academic tone)
+  t('Overall, '), rep('it is clear that', 'the data reveals a dramatic structural inversion:', undefined, 'Higher-register overview opening.'),
+  t(' rented accommodation was '), rep('the dominant tenure', 'overwhelmingly predominant', undefined, 'Formal academic synthesis.'),
+  t(' at the beginning, but home ownership increased '), rep('significantly', 'on an enduring upward trajectory', undefined, 'Sophisticated trend collocation.'),
+  t(' over the period. '), rep('At the end, both categories were almost equal.', 'Home ownership eventually surpassed rental accommodation in 1971, before receding slightly in the final decade.', undefined, 'Fixes the fatal factual error: highlights the pivotal 1971 crossover and the true final 2011 figures for Band 8.5 Task Achievement.'),
+  t('\n\n'),
+
+  // Paragraph 3: Body 1
+  t('In 1918, '), rep('around 77 percent', 'approximately 77%', undefined, 'Precise academic reporting.'),
+  t(' of households were renting their homes, while '), rep('only about 23 percent', 'a mere 23%', undefined, 'Formal modifier highlighting disparity.'),
+  t(' owned their houses. Over the next few decades, the percentage of owned accommodation '),
+  rep('went up gradually', 'increased steadily', undefined, 'Formal academic trend collocation.'),
+  t('. In 1971, both proportions '), rep('were equal at 50 percent each', 'reached parity at 50%', undefined, 'Band 8 mathematical and statistical terminology.'),
   t('. After that, home ownership continued to rise and '),
-  rep('reached a peak in 2001 at about 69 percent', 'culminated in a peak of 69% in 2001', undefined, 'Authentic trend collocation: culminated in a peak.'),
-  t('.\n\nBy contrast, '),
-  rep('rented accommodation decreased continuously until 2001', 'rental accommodation declined continuously over the same timeframe', undefined, 'High-level cohesive reference and lexical variety.'),
-  t(', '),
-  rep('where it reached the lowest point of 31 percent', 'bottoming out at a low of 31% in 2001', undefined, 'Natural participial phrase for trough data.'),
-  t('. However, in 2011, '),
-  rep('renting increased again to 36 percent, while owned home fell to 64 percent.', 'this downward trend reversed modestly, with rental tenure recovering to 36% while home ownership contracted to 64%.', undefined, 'Synthesizes the decade reversal using sophisticated academic verbs.')
+  rep('reached a peak in 2001 at about 69 percent', 'culminated in a peak of 69% in 2001', undefined, 'Advanced collocation "culminated in a peak of".'),
+  t('.\n\n'),
+
+  // Paragraph 4: Body 2
+  t('By contrast, rented accommodation '), rep('decreased continuously until 2001', 'declined continuously over the same timeframe', undefined, 'Varied lexical cohesion.'),
+  t(', when it '), rep('reached a low of', 'bottomed out at', undefined, 'Authentic Band 8 trend idiom.'),
+  t(' 31 percent. However, in 2011, '), rep('renting increased again to 36 percent', 'this trend reversed slightly with rentals recovering to 36%', undefined, 'Advanced trend reversal syntax.'),
+  t(', while owned homes '), rep('fell to 64 percent', 'contracted marginally to 64%', undefined, 'Precise economic reporting verb.'),
+  t('.')
 ];
 
 const C18_T2_TASK1_REPORT: TutorReport = {

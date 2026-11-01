@@ -36,10 +36,12 @@ const normalise = (text: string) => text.replace(/\s+/g, ' ').trim();
 /**
  * IELTS overall rounding: average of criteria rounded to the nearest 0.5
  * (.25 rounds up to .5, .75 rounds up to the next whole band).
+ * Accepts either an array of criterion bands [TR, CC, LR, GRA] or a pre-computed average.
  */
-export const roundIeltsBand = (scores: number[]): number => {
-  if (scores.length === 0) return 0;
-  const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
+export const roundIeltsBand = (scores: number | number[]): number => {
+  const avg = Array.isArray(scores)
+    ? (scores.length === 0 ? 0 : scores.reduce((a, b) => a + b, 0) / scores.length)
+    : scores;
   const floor = Math.floor(avg);
   const frac = avg - floor;
   if (frac < 0.25) return floor;
@@ -54,57 +56,172 @@ export const formatBand = (band: number) => band.toFixed(1);
 /* ------------------------------------------------------------------ */
 
 export const ACADEMIC_BAND8_UPGRADES: { original: string; better: string; note: string }[] = [
-  // Task 1 Report & Data Upgrades
-  { original: 'gives information about how many people owned and rented house', better: 'illustrates the proportion of households residing in owned versus rented accommodation', note: 'Formal academic Task 1 introduction and precise tenure terminology' },
-  { original: 'give information about how many people owned and rented house', better: 'illustrates the proportion of households residing in owned versus rented accommodation', note: 'Formal academic Task 1 introduction and precise tenure terminology' },
-  { original: 'gives information about', better: 'illustrates', note: 'Formal academic reporting verb replacing prompt instruction phrasing' },
-  { original: 'give information about', better: 'illustrates', note: 'Formal academic reporting verb replacing prompt instruction phrasing' },
-  { original: 'shows information about', better: 'delineates', note: 'Advanced reporting verb' },
-  { original: 'how many people owned and rented house', better: 'the proportion of households residing in owned versus rented accommodation', note: 'Paraphrases housing data with demographic precision' },
-  { original: 'very high at the beginning', better: 'overwhelmingly predominant in 1918', note: 'Replaces conversational "very high" with scholarly temporal descriptor' },
-  { original: 'increased a lot', better: 'experienced an enduring upward trajectory', note: 'Replaces spoken "a lot" with formal academic trend phrase' },
-  { original: 'both categories were almost equal.', better: 'eventually surpassing rental accommodation in 1971 before receding slightly in the final decade.', note: 'Corrects overview to highlight genuine crossover parity and decade reversal' },
-  { original: 'both categories was almost equal.', better: 'eventually surpassing rental accommodation in 1971 before receding slightly in the final decade.', note: 'Corrects overview to highlight genuine crossover parity and decade reversal' },
-  { original: 'both category was almost equal.', better: 'eventually surpassing rental accommodation in 1971 before receding slightly in the final decade.', note: 'Corrects overview to highlight genuine crossover parity and decade reversal' },
-  { original: 'around 77 percent of households were renting their homes', better: 'approximately 77% of households rented their dwellings', note: 'Formal statistical adverb and lexical variety' },
-  { original: 'around 77 percent of households was renting their home', better: 'approximately 77% of households rented their dwellings', note: 'Formal statistical adverb and lexical variety' },
-  { original: 'while only about 23 percent owned their house', better: 'compared to a mere 23% who owned their homes', note: 'Advanced comparative structure' },
-  { original: 'while only about 23 percent owns their house', better: 'compared to a mere 23% who owned their homes', note: 'Advanced comparative structure' },
-  { original: 'Over the next few decades', better: 'Over the subsequent five decades', note: 'Calculates exact temporal interval' },
-  { original: 'Over the next few decade', better: 'Over the subsequent five decades', note: 'Calculates exact temporal interval' },
-  { original: 'the percentage of owned accommodation went up gradually', better: 'home ownership increased steadily', note: 'Concise trend verb and modifier' },
-  { original: 'went up gradually', better: 'increased steadily', note: 'Academic trend verb' },
-  { original: 'went up gradual', better: 'increased steadily', note: 'Academic trend verb' },
-  { original: 'both proportions were equal at 50 percent each', better: 'home ownership reached parity with rental housing at 50%', note: 'Academic concept of statistical parity' },
-  { original: 'both proportion was equal at 50 percent each', better: 'home ownership reached parity with rental housing at 50%', note: 'Academic concept of statistical parity' },
-  { original: 'reached the highest peak', better: 'culminated in a peak', note: 'Collocational trend phrasing without tautology' },
-  { original: 'reached a peak', better: 'culminated in a peak', note: 'Advanced trend culmination verb' },
-  { original: 'highest peak', better: 'peak', note: 'Removes redundant adjective' },
-  { original: 'rented accommodation decreased continuously until 2001', better: 'rental accommodation declined continuously over the same timeframe', note: 'Cohesive referencing and lexical variation' },
-  { original: 'rented house decreased continuous until 2001', better: 'rental accommodation declined continuously over the same timeframe', note: 'Cohesive referencing and lexical variation' },
-  { original: 'where it reached the lowest point of 31 percent', better: 'bottoming out at a low of 31% in 2001', note: 'Authentic participle phrase for data troughs' },
-  { original: 'reached the lowest point of 31 percent', better: 'bottomed out at a low of 31% in 2001', note: 'Authentic trend phrasal verb' },
-  { original: 'renting increased again to 36 percent, while owned home fell to 64 percent.', better: 'this downward trend reversed modestly, with rental tenure recovering to 36% while home ownership contracted to 64%.', note: 'Sophisticated trend reversal synthesis' },
-  { original: 'rented house', better: 'rental accommodation', note: 'Accurate category classification' },
-  { original: 'owned home', better: 'home ownership', note: 'Nominalised tenure category' },
-  { original: 'went up', better: 'rose steadily', note: 'Standard academic trend verb' },
-  { original: 'fell down', better: 'experienced a downturn', note: 'Academic trend verb' },
-  { original: 'a lot', better: 'significantly', note: 'Formal adverb' },
-  { original: 'very high', better: 'overwhelmingly dominant', note: 'High-register statistical adjective' },
+  // Task 1: Chart, Data, and Trend Reporting Upgrades
+  { original: 'gives information about', better: 'illustrates', note: 'Formal academic reporting verb for charts' },
+  { original: 'give information about', better: 'illustrates', note: 'Formal academic reporting verb for charts' },
+  { original: 'shows information about', better: 'provides a comparative analysis of', note: 'Sophisticated introductory phrase' },
+  { original: 'show information about', better: 'provides a comparative analysis of', note: 'Sophisticated introductory phrase' },
+  { original: 'gives information', better: 'delineates statistical information', note: 'Academic reporting verb' },
+  { original: 'give information', better: 'delineates statistical information', note: 'Academic reporting verb' },
+  { original: 'The charts show', better: 'The charts illustrate', note: 'Formal reporting verb for charts' },
+  { original: 'the charts show', better: 'the charts illustrate', note: 'Formal reporting verb for charts' },
+  { original: 'The chart shows', better: 'The chart illustrates', note: 'Formal reporting verb for charts' },
+  { original: 'the chart shows', better: 'the chart illustrates', note: 'Formal reporting verb for charts' },
+  { original: 'why adults study', better: 'the primary motivations prompting adult learners to pursue further education', note: 'Paraphrase prompt with advanced nominalisation' },
+  { original: 'who should pay the costs', better: 'public consensus regarding the equitable distribution of course funding', note: 'Academic financial terminology' },
+  { original: 'In the first chart', better: 'Regarding educational motivations', note: 'Formal thematic transition' },
+  { original: 'in the first chart', better: 'regarding educational motivations', note: 'Formal thematic transition' },
+  { original: 'interest in subject is 40%', better: 'intellectual curiosity and subject passion emerged as the foremost driver at 40%', note: 'Academic synthesis and collocations' },
+  { original: 'to gain qualifications is 38%', better: 'the pursuit of accredited formal qualifications followed closely at 38%', note: 'Precise trend analysis' },
+  { original: 'helpful for current job', better: 'vocational relevance to current employment', note: 'Formal workplace register' },
+  { original: 'to improve prospects of promotion', better: 'securing vertical career advancement', note: 'Band 8 professional collocation' },
+  { original: 'Enjoy learning', better: 'Recreational knowledge acquisition', note: 'Formal nominalisation' },
+  { original: 'enjoy learning', better: 'recreational knowledge acquisition', note: 'Formal nominalisation' },
+  { original: 'Able to change jobs', better: 'Facilitating a professional career transition', note: 'Formal career phrasing' },
+  { original: 'able to change jobs', better: 'facilitating a professional career transition', note: 'Formal career phrasing' },
+  { original: 'meet people', better: 'social interaction and networking', note: 'Academic sociolinguistic register' },
+  { original: 'only 9%', better: 'a peripheral 9%', note: 'Advanced descriptive modifier' },
+  { original: 'For the cost', better: 'With respect to financial liabilities', note: 'Formal financial phrasing' },
+  { original: 'for the cost', better: 'with respect to financial liabilities', note: 'Formal financial phrasing' },
+  { original: 'people think', better: 'respondents advocated that', note: 'Academic survey reporting verb' },
+  { original: 'individual should pay', better: 'learners themselves should shoulder', note: 'Authentic academic collocation' },
+  { original: 'taxpayer should pay', better: 'the state should finance', note: 'Public policy terminology' },
+  { original: 'employer should pay', better: 'commercial enterprises should contribute', note: 'Corporate funding register' },
+  { original: 'career and personal interest', better: 'vocational advancement and intrinsic curiosity', note: 'Advanced analytical contrast' },
+  { original: 'main reasons', better: 'predominant catalysts', note: 'Higher band lexical resource' },
 
-  // Task 2 Essay Upgrades
+  // Task 1 Demographic, Housing, and Proportions
+  { original: 'in owned and rented accommodation', better: 'residing in owned versus rented accommodation', note: 'Precise comparative housing terminology' },
+  { original: 'owned and rented accommodation', better: 'owned versus rented accommodation', note: 'Formal comparative structure' },
+  { original: 'how many people owned and rented house', better: 'the proportion of households in owned versus rented accommodation', note: 'Academic paraphrasing of prompt' },
+  { original: 'how many people', better: 'the proportion of individuals who', note: 'Formal demographic noun phrase' },
+  { original: 'number of people', better: 'the volume of individuals', note: 'Formal quantitative descriptor' },
+  { original: 'it is clear that', better: 'the data reveals that', note: 'Objective academic observation marker' },
+  { original: 'the dominant tenure at the beginning', better: 'overwhelmingly predominant at the outset', note: 'Formal synthesis of historical starting point' },
+  { original: 'dominant tenure', better: 'predominant housing category', note: 'Precise demographic register' },
+  { original: 'very high', better: 'overwhelmingly predominant', note: 'Replaces colloquial "very high" with scholarly descriptor' },
+  { original: 'very low', better: 'negligible', note: 'Formal statistical adjective' },
+  { original: 'increased a lot', better: 'experienced an enduring upward trajectory', note: 'Advanced collocation for sustained trend' },
+  { original: 'increased significantly', better: 'witnessed a marked upward trajectory', note: 'High-level academic trend collocation' },
+  { original: 'went up gradually', better: 'increased steadily', note: 'Formal trend adverb collocation' },
+  { original: 'went up', better: 'experienced a steady rise', note: 'Academic trend description' },
+  { original: 'went down', better: 'underwent a downward progression', note: 'Academic trend description' },
+  { original: 'decreased continuously until 2001', better: 'declined steadily over the same timeframe', note: 'Varied lexical cohesion' },
+  { original: 'decreased continuously', better: 'declined steadily over the designated timeframe', note: 'Varied lexical cohesion' },
+  { original: 'decreased', better: 'receded steadily', note: 'Higher-register trend verb' },
+  { original: 'fell to 64 percent', better: 'contracted marginally to 64%', note: 'Precise economic reporting verb' },
+  { original: 'fell to', better: 'contracted to', note: 'Economic trend verb' },
+  { original: 'fell', better: 'diminished', note: 'Academic downward trend verb' },
+  { original: 'rented house', better: 'rental accommodation', note: 'Standard IELTS demographic classification' },
+  { original: 'rented accommodation', better: 'rental housing tenure', note: 'Precise sociological and demographic term' },
+  { original: 'owned accommodation', better: 'owner-occupied dwellings', note: 'Formal academic housing terminology' },
+  { original: 'owned homes', better: 'owner-occupied residences', note: 'Formal housing register' },
+  { original: 'both categories were almost equal', better: 'both tenure categories reached parity', note: 'Advanced statistical concept' },
+  { original: 'both categories was almost equal', better: 'both tenure categories reached parity', note: 'Advanced statistical concept' },
+  { original: 'were equal at 50 percent each', better: 'reached parity at 50%', note: 'Precise mathematical terminology' },
+  { original: 'both proportions were equal', better: 'both proportions converged at parity', note: 'High-band comparative analysis' },
+  { original: 'around 77 percent', better: 'approximately 77%', note: 'Academic approximation adverb' },
+  { original: 'only about 23 percent', better: 'a mere 23%', note: 'Qualitative modifier highlighting disparity' },
+  { original: 'about 23 percent', better: 'a mere 23%', note: 'Qualitative modifier highlighting disparity' },
+  { original: 'next few decades', better: 'subsequent five decades', note: 'Specific timeframe descriptor' },
+  { original: 'few decades', better: 'subsequent decades', note: 'Formal temporal marker' },
+  { original: 'reached a peak in 2001 at about 69 percent', better: 'culminated in a peak of 69% in 2001', note: 'Advanced collocation "culminated in a peak of"' },
+  { original: 'the highest peak', better: 'a peak', note: 'Removes redundancy ("peak" is already the highest point)' },
+  { original: 'highest peak', better: 'apex', note: 'Precise academic noun' },
+  { original: 'reached a low of', better: 'bottomed out at', note: 'Authentic financial/statistical idiom' },
+  { original: 'lowest point of', better: 'nadir of', note: 'Advanced statistical terminology' },
+  { original: 'lowest point', better: 'trough', note: 'Standard IELTS economic/trend descriptor' },
+  { original: 'renting increased again to 36 percent', better: 'this trend reversed slightly with rentals recovering to 36%', note: 'Advanced trend reversal syntax' },
+  { original: 'renting increased again', better: 'rentals experienced a modest resurgence', note: 'Sophisticated trend nuance' },
+  { original: 'at the beginning', better: 'at the outset of the survey period', note: 'Academic temporal prepositional phrase' },
+  { original: 'At the end', better: 'By the close of the timeframe', note: 'Formal temporal marker' },
+  { original: 'at the end', better: 'by the close of the timeframe', note: 'Formal temporal marker' },
+  { original: 'over the period', better: 'throughout the designated timeframe', note: 'Cohesive temporal phrase' },
+
+  // Task 1 GT Letters
+  { original: 'I am writing this letter to', better: 'I am writing to formally apprise you of', note: 'Formal correspondence opening' },
+  { original: 'I want to inform you', better: 'I wish to bring to your immediate attention', note: 'Formal letter register' },
+  { original: 'please help me', better: 'I would be immensely grateful if you could assist me with', note: 'Polite formal request' },
+  { original: 'call me back', better: 'contact me at your earliest convenience', note: 'Professional closing request' },
+  { original: 'as soon as possible', better: 'at your earliest feasible opportunity', note: 'Formal temporal adverbial' },
+  { original: 'thank you very much', better: 'I would like to express my sincere gratitude for your assistance', note: 'Formal letter closing' },
+
+  // Task 2: Essay, Argument, and Development Upgrades
+  { original: 'In the modern world', better: 'In contemporary globalized society', note: 'High-register essay opening' },
+  { original: 'in the modern world', better: 'in contemporary globalized society', note: 'High-register essay opening' },
+  { original: 'more and more serious', better: 'increasingly acute and multifaceted', note: 'Replaces repetitive spoken comparative' },
+  { original: 'Some people say that', better: 'A prevalent body of opinion maintains that', note: 'Objective academic attribution' },
+  { original: 'some people say that', better: 'a prevalent body of opinion maintains that', note: 'Objective academic attribution' },
+  { original: 'increasing fuel prices', better: 'escalating taxation on fossil fuels', note: 'Precise economic terminology' },
+  { original: 'increasing fuel price', better: 'raising fuel costs', note: 'Formal vocabulary' },
+  { original: 'best solution', better: 'most efficacious remedy', note: 'Advanced collocation' },
+  { original: 'disagree with this opinion', better: 'strongly dispute this contention', note: 'Formal academic counter-argument' },
+  { original: 'better alternatives', better: 'far more equitable and sustainable countermeasures', note: 'Nuanced Task Response argument' },
+  { original: 'To begin with', better: 'First and foremost, an examination of the evidence indicates that', note: 'Scholarly topic sentence transition' },
+  { original: 'to begin with', better: 'first and foremost, an examination of the evidence indicates that', note: 'Scholarly topic sentence transition' },
+  { original: 'many problems', better: 'severe economic disruptions', note: 'Precise academic noun phrase' },
+  { original: 'many problem', better: 'severe economic disruptions', note: 'Precise academic noun phrase' },
+  { original: 'ordinary citizens', better: 'the broader citizenry', note: 'Formal sociology register' },
+  { original: 'public transport is not convenient', better: 'public transit infrastructure remains deficient', note: 'Academic societal critique' },
+  { original: 'cost of living will increase', better: 'household expenditures escalate drastically', note: 'Economic precision' },
+  { original: 'poor families', better: 'economically vulnerable households', note: 'Objective demographic term' },
+  { original: 'cannot afford to buy food', better: 'struggle to procure basic subsistence goods', note: 'Formal sociology phrasing' },
+  { original: 'cause inflation', better: 'precipitate systemic inflationary pressures', note: 'Band 8 macroeconomic collocation' },
+  { original: 'On the other hand', better: 'Conversely, sustainable ecological policy demands that', note: 'Sophisticated paragraph transition' },
+  { original: 'on the other hand', better: 'conversely, sustainable ecological policy demands that', note: 'Sophisticated paragraph transition' },
+  { original: 'better solutions', better: 'structural long-term strategies', note: 'Academic noun phrase' },
+  { original: 'green energy', better: 'renewable energy infrastructure', note: 'Precise environmental engineering term' },
+  { original: 'public transportation system', better: 'mass public transit networks', note: 'Standard urban planning terminology' },
+  { original: 'taking buses and trains', better: 'utilising municipal public transit', note: 'Academic register' },
+  { original: 'For instance', better: 'By way of illustration', note: 'High-band academic exemplar transition' },
+  { original: 'for instance', better: 'by way of illustration', note: 'High-band academic exemplar transition' },
+  { original: 'stopped using private cars', better: 'voluntarily abandoned private car reliance', note: 'Advanced behavioral description' },
+  { original: 'increasing fuel costs is not the best way', better: 'hiking fuel levies constitutes an inherently regressive and inadequate remedy', note: 'Sophisticated concluding synthesis' },
+  { original: 'protect the environment', better: 'safeguard ecological integrity', note: 'Formal environmental collocation' },
+  { original: 'develop renewable energy', better: 'accelerate the deployment of clean energy infrastructure', note: 'High-level policy proposal' },
+  { original: 'provide efficient public transport', better: 'subsidise comprehensive and accessible public transit networks', note: 'Authoritative policy conclusion' },
+
+  // Cambridge 18 Test 1 Education & Community Service
+  { original: 'Nowadays', better: 'In contemporary educational discourse', note: 'Academic essay opener' },
+  { original: 'nowadays', better: 'in contemporary educational discourse', note: 'Academic essay opener' },
+  { original: 'is very popular in many countries', better: 'has emerged as a widely debated policy internationally', note: 'Formal academic register' },
   { original: 'very popular', better: 'widely debated across contemporary society', note: 'Replaces colloquial "very popular" with formal sociological register' },
+  { original: 'do unpaid community service', better: 'undertake compulsory voluntary service', note: 'Precise policy vocabulary' },
   { original: 'good experience', better: 'valuable civic and professional competence', note: 'Band 8 collocation for personal development' },
-  { original: 'a lot of money', better: 'substantial fiscal resources', note: 'Formal economic collocation replacing spoken English' },
+  { original: 'totally agree with this statement', better: 'firmly endorse this pedagogical proposal', note: 'Scholarly authorial stance' },
+  { original: 'totally agree', better: 'wholeheartedly concur', note: 'Academic stance' },
+  { original: 'First of all', better: 'Primary consideration must be given to the fact that', note: 'Academic topic sentence opener' },
+  { original: 'first of all', better: 'primary consideration must be given to the fact that', note: 'Academic topic sentence opener' },
+  { original: 'learn many useful skills', better: 'acquire indispensable life and interpersonal skills', note: 'High-band collocation' },
+  { original: 'useful skills', better: 'indispensable interpersonal competencies', note: 'Academic skill descriptor' },
+  { original: 'waste their time on playing computer games', better: 'succumb to sedentary and unproductive digital pastimes', note: 'Formal adolescent behavior analysis' },
+  { original: 'waste their time', better: 'allocate time unproductively', note: 'Formal time-use phrase' },
+  { original: 'very beneficial', better: 'profoundly advantageous from an economic and civic standpoint', note: 'Formal analytical evaluation' },
+  { original: 'clean parks, paint old buildings, and help poor families', better: 'rehabilitate municipal parks, restore public infrastructure, and assist disadvantaged households', note: 'High-band parallel verbal collocations' },
   { original: 'cost a lot of money', better: 'place an unsustainable fiscal burden on public budgets', note: 'Advanced collocation for task response' },
+  { original: 'a lot of money', better: 'substantial fiscal resources', note: 'Formal economic collocation replacing spoken English' },
+  { original: 'save money for the public', better: 'conserve vital municipal capital', note: 'Economic precision' },
+  { original: 'save money', better: 'conserve vital financial reserves', note: 'Economic collocation' },
+  { original: 'improve their neighbourhood', better: 'foster civic cohesion and communal pride', note: 'Sociological depth' },
+  { original: 'In conclusion', better: 'To conclude, a balanced appraisal demonstrates that', note: 'Formal conclusion transition' },
+  { original: 'in conclusion', better: 'to conclude, a balanced appraisal demonstrates that', note: 'Formal conclusion transition' },
+  { original: 'good character', better: 'exemplary civic consciousness and moral integrity', note: 'Ethical and developmental register' },
+  { original: 'benefits the community as a whole', better: 'generates enduring communal and economic dividends', note: 'Authoritative concluding synthesis' },
+
+  // Task 2 General Collocations
   { original: 'make poor people suffer', better: 'imposes disproportionate economic hardship on low-income households', note: 'Precise academic terminology' },
-  { original: 'good points', better: 'valid arguments', note: 'Academic collocation replacing casual phrase' },
+  { original: 'poor people', better: 'low-income demographics', note: 'Objective demographic term' },
+  { original: 'rich people', better: 'affluent socioeconomic strata', note: 'Formal sociological classification' },
+  { original: 'good points', better: 'valid arguments supported by empirical rationale', note: 'Academic collocation replacing casual phrase' },
   { original: 'study what they like', better: 'be free to pursue their intellectual interests', note: 'More sophisticated paraphrase of the prompt' },
   { original: 'give jobs', better: 'generate sustainable employment opportunities', note: 'Standard academic business collocation' },
-  { original: 'in my opinion', better: 'from my perspective, it is evident that', note: 'Nuanced authorial voice for Band 8' },
+  { original: 'give many jobs', better: 'create a large number of well-paid employment opportunities', note: 'Natural collocation: "create jobs"' },
+  { original: 'in my opinion', better: 'from my analytical perspective, it is evident that', note: 'Nuanced authorial voice for Band 8' },
   { original: 'balance both sides', better: 'harmonise competing societal and individual priorities', note: 'Specific synthesis instead of vague "both sides"' },
   { original: 'get good marks', better: 'achieve distinguished academic outcomes', note: 'Formal academic collocation' },
-  { original: 'big decision', better: 'pivotal milestone', note: 'Advanced lexical resource' },
+  { original: 'big decision', better: 'pivotal lifetime milestone', note: 'Advanced lexical resource' },
+  { original: 'big problem', better: 'formidable systemic challenge', note: 'Academic problem descriptor' },
+  { original: 'big impact', better: 'profound sociocultural repercussions', note: 'High-band analytical phrase' },
   { original: 'big', better: 'substantial', note: 'Formal academic adjective' },
   { original: 'about jobs', better: 'carefully about future employment prospects', note: 'More precise prepositional phrase' },
   { original: 'good', better: 'advantageous and beneficial', note: 'Higher-register synonyms replacing basic adjective' },
@@ -112,7 +229,82 @@ export const ACADEMIC_BAND8_UPGRADES: { original: string; better: string; note: 
   { original: 'think', better: 'maintain the viewpoint that', note: 'Sophisticated reporting verb for academic essays' },
   { original: 'help', better: 'facilitate and support', note: 'Academic verb pair' },
   { original: 'a lot of', better: 'a substantial proportion of', note: 'Quantifier upgrade' },
-  { original: 'important', better: 'imperative and consequential', note: 'Academic evaluation phrase' }
+  { original: 'important', better: 'imperative and consequential', note: 'Academic evaluation phrase' },
+  { original: 'very important', better: 'of paramount importance', note: 'Advanced intensifier collocation' },
+
+  // Cambridge 1 Complete Test Collection Upgrades
+  // C1-T1-Task 2 Music
+  { original: 'Music is very popular everywhere', better: 'Music permeates every corner of contemporary global culture', note: 'Sociological register' },
+  { original: 'it makes us relax when we are tired or sad', better: 'it provides psychological solace and emotional alleviation during periods of fatigue or distress', note: 'Advanced psychology collocations' },
+  { original: 'when they drive cars or study', better: 'whilst commuting or engaged in intensive academic study', note: 'Formal temporal syntax' },
+  { original: 'In modern world', better: 'In contemporary society', note: 'High-register essay opening' },
+  { original: 'Traditional music is also nice', better: 'Indigenous folk music undeniably possesses rich cultural heritage', note: 'Formal cultural evaluation' },
+  { original: 'young people like pop music more because it has good beat', better: 'adolescents overwhelmingly gravitate toward commercial pop music due to its dynamic rhythmic tempo', note: 'Analytical sociology register' },
+  { original: 'both music are good but international music is more famous', better: 'both genres confer distinct cultural value, western commercial music has achieved unprecedented global ubiquity', note: 'Authoritative concluding synthesis' },
+
+  // C1-T2-Task 1 Weather Diagram
+  { original: 'The diagram shows', better: 'The provided process diagram illustrates', note: 'Formal process report verb' },
+  { original: 'how weather is forecasted in Australia', better: 'the systematic phases involved in meteorological forecasting across Australia', note: 'Advanced nominalisation' },
+  { original: 'First satellite takes photos of clouds in space', better: 'Initially, geostationary satellites capture high-resolution imagery of cloud movements from space', note: 'Precise scientific description' },
+  { original: 'Also radar stations and weather balloons collect information', better: 'Simultaneously, terrestrial radar installations and high-altitude meteorological balloons record atmospheric telemetry', note: 'Advanced scientific register' },
+  { original: 'Next this data goes to computer', better: 'Subsequently, this multifaceted data is transmitted to centralized computing hubs for algorithmic synthesis', note: 'Cohesive process sequencing' },
+  { original: 'looks at the computer screen and makes synoptic charts', better: 'analyses computerized visualisations to formulate synoptic meteorological charts', note: 'Professional meteorology terminology' },
+  { original: 'Finally the forecast goes to TV, radio, and newspaper for the public', better: 'Ultimately, finalized weather reports are disseminated across television broadcasts, radio airwaves, and print journalism to apprise the public', note: 'Formal multi-channel media register' },
+
+  // C1-T2-Task 2 Wealth Sharing
+  { original: 'Rich countries have plenty of money', better: 'Affluent industrialized nations command substantial fiscal capital', note: 'Macroeconomic register' },
+  { original: 'give food and medicine to poor countries', better: 'disburse vital humanitarian sustenance and pharmaceutical aid to developing nations', note: 'Formal international aid terminology' },
+  { original: 'suffer from starvation and diseases', better: 'endure chronic malnutrition and virulent endemic pathologies', note: 'Formal medical and demographic register' },
+  { original: 'it is very unfair because they waste money on weapons', better: 'it constitutes a severe moral failure given that exorbitant budgets are squandered on military hardware', note: 'Powerful ethical argumentation' },
+  { original: 'corrupt and steal money', better: 'afflicted by institutional graft and the illicit misappropriation of public revenue', note: 'Political science register' },
+  { original: 'poor citizens are innocent so they need help', better: 'destitute civilians remain wholly blameless and urgently require international humanitarian intervention', note: 'Objective humanitarian stance' },
+  { original: 'rich nations must share wealth', better: 'prosperous economies are morally obligated to facilitate equitable global wealth redistribution', note: 'Authoritative concluding synthesis' },
+
+  // C1-T3-Task 1 Fast Food Britain
+  { original: 'The chart shows spending on fast food in Britain', better: 'The bar chart delineates weekly per capita expenditure on convenience food across the United Kingdom', note: 'Precise demographic report register' },
+  { original: 'High income people spend', better: 'High-income wage earners allocated', note: 'Precise economic terminology' },
+  { original: 'Middle income people spend', better: 'Middle-tier households disbursed', note: 'Demographic variation' },
+  { original: 'Low income people spend', better: 'Economically disadvantaged cohorts expended', note: 'Objective socioeconomic classification' },
+  { original: 'hamburgers are most popular for rich and middle people', better: 'hamburgers constituted the predominant expenditure category among both affluent and middle-income demographics', note: 'Advanced comparative synthesis' },
+
+  // C1-T3-Task 2 Sports Salaries
+  { original: 'Footballers and basketball players earn too much money', better: 'Elite professional athletes receive disproportionately exorbitant financial compensation', note: 'Advanced economic register' },
+  { original: 'It is not fair that a football star gets millions of dollars', better: 'A glaring societal disparity arises when sports icons command multimillion-dollar contracts', note: 'Analytical grievance' },
+  { original: 'doctors and teachers get small salary', better: 'physicians and educators receive comparatively modest remunerations', note: 'Formal occupational vocabulary' },
+  { original: 'Doctors save lives and teachers educate children', better: 'Healthcare practitioners preserve human life whilst educators foster essential civic and intellectual capital', note: 'Parallel scholarly argumentation' },
+  { original: 'much more useful than kicking a ball', better: 'infinitely more indispensable to communal welfare than athletic entertainment', note: 'High-band evaluative comparison' },
+  { original: 'Sports people only play games for fun', better: 'Athletic competitions primarily deliver commercial recreational entertainment', note: 'Analytical sociological register' },
+  { original: 'Therefore I think sports stars are overpaid', better: 'Consequently, it is reasonable to conclude that athletic compensations are fundamentally inflated', note: 'Measured academic voice' },
+  { original: 'the government should limit their wages', better: 'regulatory authorities ought to institute statutory salary caps on professional athletic remuneration', note: 'Public policy proposal' },
+
+  // C1-T4-Task 1 Population
+  { original: 'The table gives population in the world from 1800 to 2100', better: 'The table delineates historical and projected global demographic metrics between 1800 and 2100', note: 'Academic table introductory phrase' },
+  { original: 'In 1800, world was 1,000 million', better: 'In 1800, the global human population stood at approximately 1,000 million', note: 'Precise reporting' },
+  { original: 'In the future 2050 it will be', better: 'Long-term demographic forecasts project that by 2050 the figure will ascend to', note: 'Forecasting register' },
+  { original: 'Developing countries increase very fast', better: 'Developing territories are anticipated to undergo exponential demographic escalation', note: 'Advanced demographic vocabulary' },
+  { original: 'while developed countries stay small around', better: 'whereas industrialized nations are projected to plateau at a stable threshold of approximately', note: 'Band 8 demographic comparison' },
+
+  // C1-T4-Task 2 Purpose of University
+  { original: 'University is very expensive nowadays', better: 'Tertiary education imposes an onerous financial commitment in contemporary society', note: 'Academic opening' },
+  { original: 'students need to get a good job after graduation', better: 'undergraduates are compelled to secure lucrative professional employment upon graduating', note: 'Formal employment register' },
+  { original: 'If a degree does not help you get money, it is a waste of time', better: 'Should an academic credential fail to confer viable earning power, it risks being perceived as a redundant economic expenditure', note: 'Second conditional syntactic range' },
+  { original: 'Learning history or philosophy cannot help you buy food or pay rent', better: 'Studying theoretical humanities disciplines rarely yields immediate utilitarian skills necessary to offset living expenses', note: 'Nuanced Task Response analysis' },
+  { original: 'Therefore university should only teach business, engineering, and computer programming', better: 'Consequently, higher education institutions should restrict their vocational focus to high-demand applied disciplines', note: 'Clear policy position' },
+  { original: 'the only function of university is career training', better: 'the overarching institutional mandate of tertiary institutions should be focused on vocational professional accreditation', note: 'Band 8 thesis restatement' },
+
+  // C1-GT-Task 1 Bank Letter
+  { original: 'Dear Bank Manager,', better: 'Dear Sir or Madam,', note: 'Standard formal salutation' },
+  { original: 'I got your letter saying my account is overdrawn and I have to pay fees', better: 'I am writing in formal response to your correspondence regarding an alleged overdraft liability on my account', note: 'Formal correspondence register' },
+  { original: 'I am very angry because this is not my fault', better: 'I wish to register my profound objection, as this discrepancy stems unequivocally from administrative oversight on your part', note: 'Controlled formal complaint' },
+  { original: 'told you to stop paying the money', better: 'explicitly instructed the branch in writing to terminate all automated debit authorisations', note: 'Precise banking terminology' },
+  { original: 'Please give me my money back and don’t charge me any fee', better: 'I urgently request the immediate reimbursement of the deducted sum, alongside the prompt waiver of all unwarranted penalty fees', note: 'Formal closing demand' },
+
+  // C1-GT-Task 2 Computer Dependence
+  { original: 'Computers are used in many places today like shops and schools', better: 'Computational and digital technologies have thoroughly permeated contemporary commerce and educational institutions', note: 'High-register essay opening' },
+  { original: 'In the future computers will do everything for humans like cooking food, driving cars and cleaning houses', better: 'Technological projections suggest automated systems may eventually undertake virtually all domestic, logistical, and routine manual obligations', note: 'Advanced sociological synthesis' },
+  { original: 'I think computers are good because they are fast and do not get tired', better: 'From an analytical perspective, automated processing offers unmatched operational velocity and eliminates human cognitive fatigue', note: 'Objective academic register' },
+  { original: 'if computer breaks down, people cannot do their work', better: 'systemic technological failure can instantly paralyse societal infrastructure and productive output', note: 'Sophisticated consequence formulation' },
+  { original: 'So we should not depend on them completely', better: 'Consequently, modern society must avoid uncritical technological dependence and preserve autonomous manual proficiencies', note: 'Authoritative concluding verdict' }
 ];
 
 export function diffWordsToSegments(original: string, modified: string, defaultNote: string = 'Band 8 academic upgrade'): EssaySegment[] {
@@ -690,15 +882,18 @@ export async function evaluateEssayWithGemini(params: {
 
     const b8Segments = asSegments(b8.segments);
     const hasUpgrades = b8Segments.some(s => s.type !== 'text');
+    const hasGiantBlock = b8Segments.some(s => {
+      if (s.type === 'text') return false;
+      const origWords = (s.text || '').trim().split(/\s+/).length;
+      const toWords = (s.to || '').trim().split(/\s+/).length;
+      return origWords > 18 || toWords > 28;
+    });
 
-    if (hasUpgrades && normalise(buildOriginal(b8Segments)) === normalise(correctedEssay)) {
+    if (hasUpgrades && !hasGiantBlock && normalise(buildOriginal(b8Segments)) === normalise(correctedEssay)) {
       band8Edits = b8Segments;
-    } else if (hasUpgrades) {
-      // b8Segments has upgrades but minor whitespace difference — diff against result
-      band8Edits = diffWordsToSegments(correctedEssay, buildResult(b8Segments));
-    } else if (b8Segments.length) {
-      const rawB8Text = buildResult(b8Segments);
-      band8Edits = diffWordsToSegments(correctedEssay, rawB8Text);
+    } else {
+      // If Gemini returned monolithic blocks, mismatched baseline, or text diff — generate surgical granular upgrades directly on correctedEssay
+      band8Edits = generateAcademicUpgradeSegments(correctedEssay, (evalJson?.improvements || []));
     }
 
     if (!band8Edits.some(s => s.type !== 'text')) {
@@ -718,7 +913,13 @@ export async function evaluateEssayWithGemini(params: {
     band8Edits = generateAcademicUpgradeSegments(correctedEssay, (evalJson?.improvements || []));
   }
 
-  if (!band8Edits.some(s => s.type !== 'text')) {
+  const hasGiantBlockInEdits = band8Edits.some(s => {
+    if (s.type === 'text') return false;
+    const origWords = (s.text || '').trim().split(/\s+/).length;
+    const toWords = (s.to || '').trim().split(/\s+/).length;
+    return origWords > 18 || toWords > 28;
+  });
+  if (!band8Edits.some(s => s.type !== 'text') || hasGiantBlockInEdits) {
     band8Edits = generateAcademicUpgradeSegments(correctedEssay, (evalJson?.improvements || []));
   }
 

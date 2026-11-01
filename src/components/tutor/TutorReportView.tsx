@@ -71,23 +71,28 @@ export const TutorReportView: React.FC<TutorReportViewProps> = ({
 
   // Compute robust Band 8 upgrade segments so "View Upgrades" and Sandbox ALWAYS work on candidate's essay
   const band8Segments = useMemo(() => {
-    const hasEdits = report.band8Edits && report.band8Edits.some(s => s.type !== 'text');
-    if (hasEdits) {
-      const editCount = report.band8Edits.filter(s => s.type !== 'text').length;
-      if (editCount >= 2) return report.band8Edits;
+    // 1. Check if report.band8Edits has valid, granular edits matching correctedText
+    if (report.band8Edits && Array.isArray(report.band8Edits)) {
+      const nonText = report.band8Edits.filter(s => s.type !== 'text');
+      const hasGiantBlock = nonText.some(s => {
+        const origWords = (s.text || '').trim().split(/\s+/).length;
+        const toWords = (s.to || '').trim().split(/\s+/).length;
+        return origWords > 18 || toWords > 28;
+      });
+      const originalText = report.band8Edits
+        .map(s => (s.type === 'replace' ? s.text : s.type === 'ins' ? '' : s.text))
+        .join('');
+      const isMatchingBase = originalText.trim().replace(/\s+/g, ' ') === correctedText.trim().replace(/\s+/g, ' ');
+
+      if (nonText.length >= 3 && !hasGiantBlock && isMatchingBase) {
+        return report.band8Edits;
+      }
     }
 
+    // 2. Otherwise generate granular word-and-phrase academic upgrades directly on correctedText
     const generated = generateAcademicUpgradeSegments(correctedText, report.improvements);
-    if (generated.some(s => s.type !== 'text')) {
-      return generated;
-    }
-
-    if (band8Text && band8Text.trim() !== correctedText.trim()) {
-      return diffWordsToSegments(correctedText, band8Text);
-    }
-
     return generated;
-  }, [report.band8Edits, correctedText, band8Text, report.improvements]);
+  }, [report.band8Edits, correctedText, report.improvements]);
 
   const cleanBand8FinalText = useMemo(() => {
     if (band8Text && band8Text.trim().length > 50 && band8Text.trim() !== correctedText.trim()) {

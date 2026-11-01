@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { 
   Sparkles, 
   RotateCcw, 
@@ -46,168 +46,128 @@ const UPGRADE_EXPLANATIONS: Record<string, {
   value: string;
   valueSi?: string;
 }> = {
-  // Task 1 Demographic & Trend Upgrades
-  'gives information': {
+  // Task 1: Chart, Data, and Trend Reporting Upgrades
+  'gives information about': {
     criterion: 'LR',
-    critique: 'Repetitive prompt language. In IELTS Task 1, academic reporting verbs like "illustrates" or "delineates" are expected.',
-    critiqueSi: 'ප්‍රශ්නයේ ඇති වචන නැවත යෙදීමකි. "illustrates" වැනි විධිමත් ක්‍රියාපදයක් යෙදිය යුතුය.',
-    value: 'Upgrades to "illustrates the proportion...", fulfilling Band 8 Lexical Resource and Task Achievement.',
-    valueSi: 'ශාස්ත්‍රීය වාර්තාකරණ ක්‍රියාපදයක් යොදා LR ලකුණු ඉහළ නංවයි.'
+    critique: '"gives information about" is an elementary, repetitive introductory formula. Academic Task 1 requires precise reporting verbs like "illustrates" or "delineates".',
+    critiqueSi: '"gives information about" යනු සරල යෙදුමකි. ඒ වෙනුවට "illustrates" වැනි ශාස්ත්‍රීය වාර්තාකරණ ක්‍රියාපදයක් යොදන්න.',
+    value: 'Replaces generic introduction with formal reporting verb "illustrates", setting an immediate Band 8 tone for Lexical Resource.',
+    valueSi: 'විධිමත් වාර්තාකරණ ක්‍රියාපදයක් යොදා ආරම්භයේදීම LR ලකුණු ඉහළ නංවයි.'
   },
-  'give information': {
+  'give information about': {
     criterion: 'LR',
-    critique: 'Repetitive prompt language. In IELTS Task 1, academic reporting verbs like "illustrates" or "delineates" are expected.',
-    critiqueSi: 'ප්‍රශ්නයේ ඇති වචන නැවත යෙදීමකි. "illustrates" වැනි විධිමත් ක්‍රියාපදයක් යෙදිය යුතුය.',
-    value: 'Upgrades to "illustrates the proportion...", fulfilling Band 8 Lexical Resource and Task Achievement.',
-    valueSi: 'ශාස්ත්‍රීය වාර්තාකරණ ක්‍රියාපදයක් යොදා LR ලකුණු ඉහළ නංවයි.'
+    critique: '"give information about" is an elementary, repetitive introductory formula. Academic Task 1 requires precise reporting verbs like "illustrates" or "delineates".',
+    critiqueSi: '"give information about" යනු සරල යෙදුමකි. ඒ වෙනුවට "illustrates" වැනි ශාස්ත්‍රීය වාර්තාකරණ ක්‍රියාපදයක් යොදන්න.',
+    value: 'Replaces generic introduction with formal reporting verb "illustrates", setting an immediate Band 8 tone for Lexical Resource.',
+    valueSi: 'විධිමත් වාර්තාකරණ ක්‍රියාපදයක් යොදා ආරම්භයේදීම LR ලකුණු ඉහළ නංවයි.'
   },
-  'how many people': {
-    criterion: 'TR',
-    critique: 'Inaccurate representation of data: the chart presents percentage of households, not an absolute headcount of people.',
-    critiqueSi: 'ප්‍රස්ථාරයේ දැක්වෙන්නේ කුටුම්භ ප්‍රතිශතයයි, පුද්ගල ගණන නොවේ.',
-    value: 'Accurately defines data as "the proportion of households in owned versus rented accommodation" (+TA Band 8).',
-    valueSi: 'දත්ත නිවැරදිව ශාස්ත්‍රීය කාණ්ඩ මගින් අර්ථ දක්වා Task Achievement ඉහළ නංවයි.'
-  },
-  'very high': {
+  'owned and rented accommodation': {
     criterion: 'LR',
-    critique: 'Colloquial spoken intensifier ("very high"). Lacks analytical demographic sophistication.',
-    critiqueSi: '"very high" යනු කතාබහේදී යොදන සරල වචනයකි.',
-    value: 'Upgrades to "overwhelmingly predominant in 1918", delivering formal demographic analysis (+LR Band 8).',
-    valueSi: '"overwhelmingly predominant" ලෙස උසස් ශාස්ත්‍රීය යෙදුමක් භාවිත කරයි.'
+    critique: 'Directly repeats the prompt vocabulary without demonstrating candidate comparative paraphrasing skills.',
+    critiqueSi: 'ප්‍රශ්නයේ ඇති වචන ඒ ආකාරයෙන්ම නැවත යෙදීමකි.',
+    value: 'Upgrades to "owned versus rented accommodation", introducing sharp comparative structure for Lexical Resource Band 8.',
+    valueSi: '"versus" යොදා සංසන්දනාත්මක ඉදිරිපත් කිරීම ශක්තිමත් කරයි.'
   },
-  'increased a lot': {
+  'it is clear that': {
+    criterion: 'CC',
+    critique: '"it is clear that" is an overused cliché. Band 8+ examiners look for mature, analytical discourse markers.',
+    critiqueSi: '"it is clear that" යනු නිතර භාවිතා වන සරල යෙදුමකි.',
+    value: 'Upgrades to "the data reveals a dramatic structural inversion:", establishing scholarly coherence and authorial stance.',
+    valueSi: 'දත්තවල ප්‍රධාන හැරවුම් ලක්ෂ්‍යය විධිමත් ලෙස විස්තර කරමින් Coherence (CC) ඉහළ නංවයි.'
+  },
+  'the dominant tenure': {
     criterion: 'LR',
-    critique: '"a lot" is informal spoken English, strictly penalized in IELTS Academic Task 1.',
-    critiqueSi: '"a lot" යනු අවිධිමත් කතාබහේ වචනයක් බැවින් ලකුණු අඩු වේ.',
-    value: 'Upgrades to "experienced an enduring upward trajectory", demonstrating advanced collocation (+LR Band 8).',
-    valueSi: 'උසස් ප්‍රවණතා විස්තරාත්මක යෙදුමක් යොදා Band 8 LR තහවුරු කරයි.'
+    critique: '"the dominant tenure" can be expressed with greater lexical sophistication.',
+    critiqueSi: 'වඩාත් ගැඹුරු ශාස්ත්‍රීය වචනයක් යෙදිය හැක.',
+    value: 'Replaces with "overwhelmingly predominant in 1918", exhibiting advanced vocabulary range (LR Band 8).',
+    valueSi: '"overwhelmingly predominant" යොදා LR ලකුණු ඉහළ නංවයි.'
   },
-  'almost equal': {
-    criterion: 'TR',
-    critique: 'Fatal factual error in overview: in 2011, home ownership was 64% and renting was 36% (a 28% gap!). Parity was reached in 1971, not at the end.',
-    critiqueSi: 'සාරාංශයේ බරපතල දත්ත වැරැද්දකි: 2011 දී දෙකම සමාන නොවේ (64% සහ 36%). සමාන වූයේ 1971 දීය.',
-    value: 'Accurately captures the crossover and decade reversal: "eventually surpassing rental accommodation in 1971 before receding slightly in the final decade" (+TA Band 8.5).',
-    valueSi: 'සැබෑ දත්ත ප්‍රවණතාව නිවැරදිව වාර්තා කරමින් Task Achievement Band 8.5 මට්ටමට ඔසවා තබයි.'
+  'increased significantly': {
+    criterion: 'LR',
+    critique: 'Standard adverb-verb combination that misses the opportunity to capture an enduring 93-year historical trajectory.',
+    critiqueSi: 'සාමාන්‍ය යෙදුමකි. දීර්ඝකාලීන ප්‍රවණතාවක් විස්තර කිරීමට වඩාත් සුදුසු වචන ඇත.',
+    value: 'Upgrades to "experienced an enduring upward trajectory", demonstrating exceptional academic collocation (LR Band 8.5).',
+    valueSi: 'වසර 93 ක දිගුකාලීන වර්ධනය පෙන්වීමට "enduring upward trajectory" යොදා ගනී.'
   },
-  'was almost equal': {
+  'both categories were almost equal': {
     criterion: 'TR',
-    critique: 'Fatal factual error in overview: in 2011, home ownership was 64% and renting was 36% (a 28% gap!). Parity was reached in 1971, not at the end.',
-    critiqueSi: 'සාරාංශයේ බරපතල දත්ත වැරැද්දකි: 2011 දී දෙකම සමාන නොවේ (64% සහ 36%). සමාන වූයේ 1971 දීය.',
-    value: 'Accurately captures the crossover and decade reversal: "eventually surpassing rental accommodation in 1971 before receding slightly in the final decade" (+TA Band 8.5).',
-    valueSi: 'සැබෑ දත්ත ප්‍රවණතාව නිවැරදිව වාර්තා කරමින් Task Achievement Band 8.5 මට්ටමට ඔසවා තබයි.'
-  },
-  'were almost equal': {
-    criterion: 'TR',
-    critique: 'Fatal factual error in overview: in 2011, home ownership was 64% and renting was 36% (a 28% gap!). Parity was reached in 1971, not at the end.',
-    critiqueSi: 'සාරාංශයේ බරපතල දත්ත වැරැද්දකි: 2011 දී දෙකම සමාන නොවේ (64% සහ 36%). සමාන වූයේ 1971 දීය.',
-    value: 'Accurately captures the crossover and decade reversal: "eventually surpassing rental accommodation in 1971 before receding slightly in the final decade" (+TA Band 8.5).',
-    valueSi: 'සැබෑ දත්ත ප්‍රවණතාව නිවැරදිව වාර්තා කරමින් Task Achievement Band 8.5 මට්ටමට ඔසවා තබයි.'
+    critique: 'FATAL FACTUAL INACCURACY: In 2011, home ownership was 64% and renting was 36% (a 28% difference!). Claiming they were equal at the end caps Task Achievement at Band 6.',
+    critiqueSi: 'මාරාන්තික දත්ත වරදක්: 2011 දී නිවාස හිමිකම 64% ක් වූ අතර කුලිය 36% ක් විය. ඒවා සමාන වූයේ 1971 දීය. මෙම වරද නිසා TA ලකුණු Band 6 ට සීමා වේ.',
+    value: 'Replaces factual error with accurate synthesis: "Home ownership eventually surpassed rental accommodation in 1971, before receding slightly in the final decade", securing Band 8.5 Task Achievement.',
+    valueSi: '1971 සමාන වූ වසර සහ 2011 සත්‍ය දත්ත නිවැරදිව දක්වා Task Achievement ලකුණු Band 8.5 දක්වා ඉහළ නංවයි.'
   },
   'around 77 percent': {
     criterion: 'LR',
-    critique: '"around" is everyday conversational wording; continuous "were renting" is less concise than simple past.',
-    critiqueSi: '"around" යනු සරල වචනයකි.',
-    value: 'Upgrades to "approximately 77% of households rented their dwellings", using academic adverb and lexical variation (+LR Band 8).',
-    valueSi: 'ශාස්ත්‍රීය සංඛ්‍යානමය යෙදුම් භාවිත කර LR ඉහළ නංවයි.'
+    critique: '"around" is informal conversational English.',
+    critiqueSi: '"around" යනු කතාබහේදී යොදන සරල වචනයකි.',
+    value: 'Upgrades to formal academic approximation "approximately 77%".',
+    valueSi: 'විධිමත් ශාස්ත්‍රීය යෙදුමක් වන "approximately 77%" යෙදීම.'
   },
-  '77 percent': {
+  'only about 23 percent': {
     criterion: 'LR',
-    critique: 'Everyday conversational phrasing; lacks statistical precision.',
-    critiqueSi: 'සාමාන්‍ය කතාබහේ වචන මාලාවකි.',
-    value: 'Upgrades to "approximately 77% of households rented their dwellings" (+LR Band 8).',
-    valueSi: 'විධිමත් සංඛ්‍යානමය යෙදුමක් යෙදීම.'
+    critique: '"only about" is casual speech phrasing.',
+    critiqueSi: '"only about" යනු කතාබහේදී යොදන සරල යෙදුමකි.',
+    value: 'Upgrades to "a mere 23%", adding analytical evaluative depth to the comparison (+LR).',
+    valueSi: '"a mere 23%" යොදා සංසන්දනය වඩාත් ආකර්ෂණීය කරයි.'
   },
-  'while only about': {
-    criterion: 'CC',
-    critique: '"while only about" is repetitive and wordy.',
-    critiqueSi: 'අනවශ්‍ය ලෙස දිගු සරල සම්බන්ධකයකි.',
-    value: 'Employs sophisticated contrast structure "compared to a mere 23% who owned their homes" (+CC & LR Band 8).',
-    valueSi: 'උසස් සංසන්දනාත්මක වාක්‍ය රටාවක් යොදයි.'
-  },
-  '23 percent': {
-    criterion: 'CC',
-    critique: 'Simple coordinate clause lacking comparative impact.',
-    critiqueSi: 'සරල වාක්‍ය රටාවකි.',
-    value: 'Upgrades to "compared to a mere 23% who owned their homes", highlighting minority demographic status (+CC Band 8).',
-    valueSi: 'සුළුතර ප්‍රතිශතය කැපී පෙනෙන ලෙස සංසන්දනය කරයි.'
-  },
-  'few decade': {
+  'next few decades': {
     criterion: 'TR',
-    critique: '"few decade" is grammatically incorrect and mathematically vague.',
-    critiqueSi: '"few decade" යනු ව්‍යාකරණමය වශයෙන් මෙන්ම ගණනය කිරීම් අතින්ද අපැහැදිලිය.',
-    value: 'Quantifies exact historical period: "Over the subsequent five decades" (1918 to 1971) (+TA & LR Band 8).',
-    valueSi: 'නිශ්චිත කාල පරතරය නිවැරදිව ගණනය කර දක්වයි.'
-  },
-  'few decades': {
-    criterion: 'TR',
-    critique: '"few decades" is vague. High-scoring candidates calculate the exact interval from the axes.',
-    critiqueSi: 'ප්‍රස්ථාර අක්ෂවලින් නිශ්චිත කාලය ගණනය නොකිරීම.',
-    value: 'Quantifies exact historical period: "Over the subsequent five decades" (1918 to 1971) (+TA & LR Band 8).',
-    valueSi: 'නිශ්චිත කාල පරතරය නිවැරදිව ගණනය කර දක්වයි.'
+    critique: '"next few decades" is chronologically vague about the timeframe between 1918 and 1971.',
+    critiqueSi: '"next few decades" යනු කාලය පිළිබඳ පැහැදිලි නොවන යෙදුමකි.',
+    value: 'Specifies exact historical period: "subsequent five decades", demonstrating analytical precision (+TR).',
+    valueSi: 'වසර 50 ක කාලය "subsequent five decades" ලෙස නිශ්චිතව දක්වයි.'
   },
   'went up gradually': {
     criterion: 'LR',
-    critique: '"went up" is a basic spoken phrasal verb unsuited for IELTS Academic writing.',
-    critiqueSi: '"went up" යනු කතාබහේදී යොදන සරල යෙදුමකි.',
-    value: 'Upgrades to formal academic trend verb "increased steadily" (+LR Band 8).',
-    valueSi: 'විධිමත් ශාස්ත්‍රීය ප්‍රවණතා ක්‍රියාපදයක් යොදයි.'
+    critique: '"went up" is a basic phrasal verb discouraged in formal IELTS Academic reports.',
+    critiqueSi: '"went up" යනු සරල phrasal verb එකකි. ශාස්ත්‍රීය රචනා සඳහා එය නුසුදුසුය.',
+    value: 'Replaces phrasal verb with formal academic collocation "increased steadily" (LR Band 8).',
+    valueSi: 'විධිමත් ශාස්ත්‍රීය යෙදුමක් වන "increased steadily" භාවිත කරයි.'
   },
-  'went up gradual': {
+  'were equal at 50 percent each': {
     criterion: 'LR',
-    critique: '"went up" is basic and "gradual" is an adjective incorrectly modifying a verb.',
-    critiqueSi: 'ක්‍රියාපදයක් විස්තර කිරීමට adjective යෙදීමේ වැරැද්දකි.',
-    value: 'Upgrades to formal academic trend verb "increased steadily" (+LR Band 8).',
-    valueSi: 'විධිමත් ශාස්ත්‍රීය ප්‍රවණතා ක්‍රියාපදයක් යොදයි.'
+    critique: 'Basic arithmetic description lacking statistical register.',
+    critiqueSi: 'සරල ගණිතමය විස්තර කිරීමකි.',
+    value: 'Upgrades to "reached parity at 50%", showcasing authentic academic and statistical terminology (LR Band 8).',
+    valueSi: '"reached parity" යන උසස් සංඛ්‍යානමය යෙදුම භාවිත කරයි.'
   },
-  'both proportions were equal': {
+  'reached a peak in 2001 at about 69 percent': {
     criterion: 'LR',
-    critique: 'Mechanical repetition of "equal at 50 percent each".',
-    critiqueSi: '"equal at 50 percent" යන්න සරල පුනරාවර්තනයකි.',
-    value: 'Introduces advanced demographic concept: "home ownership reached parity with rental housing at 50%" (+LR Band 8).',
-    valueSi: '"reached parity" යන උසස් සංඛ්‍යානමය සංකල්පය යොදයි.'
+    critique: 'Basic verb-noun collocation for a milestone high point.',
+    critiqueSi: 'සාමාන්‍ය වචන සංයෝජනයකි.',
+    value: 'Upgrades to "culminated in a peak of 69% in 2001", an exemplary Band 8 collocation (+LR).',
+    valueSi: '"culminated in a peak of" යන Band 8 මට්ටමේ උසස් යෙදුම භාවිත කරයි.'
   },
-  'both proportion was equal': {
+  'decreased continuously until 2001': {
+    criterion: 'CC',
+    critique: 'Repetitive trend verbs across paragraphs weaken lexical cohesion.',
+    critiqueSi: 'එකම වචන නැවත නැවත යෙදීමෙන් වාක්‍ය විවිධත්වය අඩු වේ.',
+    value: 'Upgrades to "declined continuously over the same timeframe", establishing elegant parallel cohesion (+CC & LR).',
+    valueSi: '"declined continuously" යොදා වචන විවිධත්වය සහ Cohesion වැඩි කරයි.'
+  },
+  'reached a low of': {
     criterion: 'LR',
-    critique: 'Double error: grammar agreement slip and mechanical repetition.',
-    critiqueSi: 'ව්‍යාකරණ වැරැද්දක් සහිත සරල යෙදුමකි.',
-    value: 'Introduces advanced demographic concept: "home ownership reached parity with rental housing at 50%" (+LR Band 8).',
-    valueSi: '"reached parity" යන උසස් සංඛ්‍යානමය සංකල්පය යොදයි.'
+    critique: '"reached a low" is a basic idiom.',
+    critiqueSi: '"reached a low" යනු සරල යෙදුමකි.',
+    value: 'Upgrades to authentic economic idiom "bottomed out at 31% in 2001" (LR Band 8).',
+    valueSi: '"bottomed out at" යන නිවැරදි ආර්ථික විද්‍යාත්මක යෙදුම භාවිත කරයි.'
   },
-  'highest peak': {
-    criterion: 'LR',
-    critique: 'Tautological redundancy: a "peak" is already the highest point on a chart.',
-    critiqueSi: '"peak" යනු දැනටමත් ඉහළම ස්ථානයයි. "highest peak" යැයි කීම අනවශ්‍යයි.',
-    value: 'Uses natural academic culmination phrase: "culminating in a peak of 69% in 2001" (+LR Band 8).',
-    valueSi: '"culminating in a peak" යන ස්වභාවික ශාස්ත්‍රීය යෙදුම භාවිත කරයි.'
-  },
-  'reached a peak': {
-    criterion: 'LR',
-    critique: 'Standard trend phrase that can be upgraded with participial culmination syntax.',
-    critiqueSi: 'වඩාත් සංකීර්ණ වාක්‍ය රටාවකට ප්‍රතිසංස්කරණය කළ හැක.',
-    value: 'Upgrades to "culminated in a peak of 69% in 2001" (+GRA & LR Band 8).',
-    valueSi: 'වඩාත් උසස් වාක්‍ය රටාවක් යොදයි.'
-  },
-  'rented house decreased': {
-    criterion: 'LR',
-    critique: '"rented house" is an awkward category label; "decreased continuously until 2001" repeats the year 2001 twice.',
-    critiqueSi: 'වචන මාලාවේ දුර්වලතාවක් සහ වසර පුනරාවර්තනය වීමක් ඇත.',
-    value: 'Upgrades to "rental accommodation declined continuously over the same timeframe" (+CC & LR Band 8).',
-    valueSi: 'කාණ්ඩ නාමය සහ සම්බන්ධක නිවැරදිව යොදයි.'
-  },
-  'lowest point of': {
-    criterion: 'LR',
-    critique: '"lowest point of" is wordy and the relative clause "where it reached" incorrectly uses "where" for a year.',
-    critiqueSi: 'වසරක් සඳහා "where" යෙදීම වැරදිය.',
-    value: 'Applies authentic trend participle: "bottoming out at a low of 31% in 2001" (+GRA & LR Band 8).',
-    valueSi: '"bottoming out at" යන උසස් ප්‍රවණතා යෙදුම භාවිත කරයි.'
-  },
-  'renting increased again': {
+  'renting increased again to 36 percent': {
     criterion: 'TR',
-    critique: 'Simple listing of the final year numbers without synthesizing the historical trend reversal.',
-    critiqueSi: 'අවසාන දශකයේ ප්‍රවණතා වෙනස්වීම විශ්ලේෂණය කර නොතිබීම.',
-    value: 'Synthesizes trend reversal: "this downward trend reversed modestly, with rental tenure recovering to 36% while home ownership contracted to 64%" (+TA & LR Band 8.5).',
-    valueSi: 'ප්‍රවණතාව ආපසු හැරීම ගැඹුරින් විශ්ලේෂණය කර Band 8.5 TA තහවුරු කරයි.'
+    critique: 'Mechanical description that misses the opportunity to evaluate the final trend reversal.',
+    critiqueSi: 'අවසාන දශකයේ සිදුවූ පෙරළිය විශ්ලේෂණය කර නොතිබීම.',
+    value: 'Upgrades to "this trend reversed slightly with rentals recovering to 36%", fulfilling Band 8.5 Task Achievement.',
+    valueSi: 'ප්‍රවණතාවයේ වෙනස්වීම ගැඹුරින් විස්තර කරමින් Task Achievement ඉහළ නංවයි.'
   },
+  'fell to 64 percent': {
+    criterion: 'LR',
+    critique: '"fell" is an elementary school verb for downward movement.',
+    critiqueSi: '"fell" යනු සරල ක්‍රියාපදයකි.',
+    value: 'Upgrades to precise economic reporting verb "contracted marginally to 64%" (LR Band 8).',
+    valueSi: '"contracted marginally" යන ශාස්ත්‍රීය ආර්ථික විද්‍යාත්මක යෙදුම භාවිත කරයි.'
+  },
+
+  // Task 2 Upgrades
   'big': {
     criterion: 'LR',
     critique: 'Generic spoken adjective. In IELTS Academic Task 2, "big" lacks precision and caps Lexical Resource at Band 6.0.',
@@ -347,6 +307,173 @@ const UPGRADE_EXPLANATIONS: Record<string, {
     critiqueSi: 'කතුවරයාගේ අවසන් තීරණය හඳුන්වා දීමට විධිමත් සංක්‍රාන්ති යෙදුමක් නොතිබීම.',
     value: 'Injects formal discourse marker "In my view,", clearly demarcating the candidate\'s concluding judgment (+CC).',
     valueSi: '"In my view," යොදා අවසන් තීරණය විධිමත් ලෙස සටහන් කරයි.'
+  },
+
+  // Cambridge 1 Test 1: Adult Education & Cost Upgrades
+  'the charts show': {
+    criterion: 'LR',
+    critique: '"show" is an elementary reporting verb that misses the opportunity to display higher-register Academic vocabulary.',
+    critiqueSi: '"show" යනු මූලික ක්‍රියාපදයකි. ඒ වෙනුවට ශාස්ත්‍රීය වාර්තාකරණ ක්‍රියාපදයක් යෙදිය යුතුය.',
+    value: 'Upgrades to "illustrate", establishing an authentic Band 8 introductory tone.',
+    valueSi: 'විධිමත් වාර්තාකරණ ක්‍රියාපදයක් යොදා ආරම්භයේදීම LR ලකුණු ඉහළ නංවයි.'
+  },
+  'why adults study': {
+    criterion: 'TR',
+    critique: 'Directly copies the prompt wording without demonstrating lexical variety or academic nominalisation.',
+    critiqueSi: 'ප්‍රශ්නයේ ඇති වචන ඒ ආකාරයෙන්ම නැවත යෙදීමකි.',
+    value: 'Upgrades to "the primary motivations prompting adult learners to pursue further education" (+TR & LR).',
+    valueSi: 'ප්‍රශ්නයේ අදහස වඩාත් පරිණත ශාස්ත්‍රීය වචන වලින් ප්‍රතිසංස්කරණය කරයි.'
+  },
+  'who should pay the costs': {
+    criterion: 'LR',
+    critique: 'Spoken informal phrasing for public policy and expenditure distribution.',
+    critiqueSi: 'මුදල් ගෙවීම පිළිබඳ කතාබහේදී යොදන සරල යෙදුමකි.',
+    value: 'Upgrades to "public consensus regarding the equitable distribution of course funding" (+LR Band 8).',
+    valueSi: 'පාඨමාලා වියදම් බෙදී යාම පිළිබඳ රාජ්‍ය ප්‍රතිපත්ති යෙදුම් භාවිත කරයි.'
+  },
+  'helpful for current job': {
+    criterion: 'LR',
+    critique: '"helpful for" is basic spoken English for vocational utility.',
+    critiqueSi: '"helpful for" යනු කතාබහේදී යොදන සරල වචනයකි.',
+    value: 'Upgrades to "vocational relevance to current employment", demonstrating professional academic register.',
+    valueSi: 'වෘත්තීය උපයෝගීතාව විධිමත් ලෙස විස්තර කරයි.'
+  },
+  'to improve prospects of promotion': {
+    criterion: 'LR',
+    critique: 'Formulaic phrasing that can be made significantly more concise and impactful.',
+    critiqueSi: 'වඩාත් සංක්ෂිප්ත හා ප්‍රබල ශාස්ත්‍රීය යෙදුමක් යෙදිය හැක.',
+    value: 'Upgrades to "securing vertical career advancement", showcasing exemplary Band 8 collocation.',
+    valueSi: '"securing vertical career advancement" යන උසස් වෘත්තීය යෙදුම භාවිත කරයි.'
+  },
+  'enjoy learning': {
+    criterion: 'LR',
+    critique: 'Informal verbal phrase without academic nominalisation.',
+    critiqueSi: 'ශාස්ත්‍රීය නොවන සරල ක්‍රියාපද යෙදුමකි.',
+    value: 'Upgrades to "recreational knowledge acquisition" (+LR Band 8).',
+    valueSi: 'ශාස්ත්‍රීය නාමකරණයක් යොදා LR ලකුණු ඉහළ නංවයි.'
+  },
+  'able to change jobs': {
+    criterion: 'LR',
+    critique: 'Basic verbal clause lacking executive professional register.',
+    critiqueSi: 'රැකියා මාරුව පිළිබඳ සරල යෙදුමකි.',
+    value: 'Upgrades to "facilitating a professional career transition" (+LR Band 8.5).',
+    valueSi: 'වෘත්තීය ක්ෂේත්‍ර මාරුව පිළිබඳ විධිමත් ශාස්ත්‍රීය යෙදුම භාවිත කරයි.'
+  },
+  'people think': {
+    criterion: 'CC',
+    critique: '"people think" is elementary spoken English for survey and opinion reporting.',
+    critiqueSi: '"people think" යනු සරල කතාබහේ යෙදුමකි.',
+    value: 'Upgrades to "respondents advocated that", demonstrating academic statistical analysis register.',
+    valueSi: 'සමීක්ෂණ දත්ත වාර්තා කිරීමේ විධිමත් ක්‍රියාපදය යොදයි.'
+  },
+  'individual should pay': {
+    criterion: 'LR',
+    critique: 'Colloquial spoken phrasing for personal financial liability.',
+    critiqueSi: 'වියදම් දැරීම පිළිබඳ සරල යෙදුමකි.',
+    value: 'Upgrades to "learners themselves should shoulder", exhibiting authentic collocation.',
+    valueSi: 'ඉගෙනුම්කරුවන් විසින්ම වියදම් දැරීම පිළිබඳ උසස් යෙදුම භාවිත කරයි.'
+  },
+  'taxpayer should pay': {
+    criterion: 'TR',
+    critique: 'Informal reference to public fiscal funding.',
+    critiqueSi: 'රජයේ මූල්‍ය ප්‍රතිපාදන පිළිබඳ සරල ප්‍රකාශයකි.',
+    value: 'Upgrades to "the state should finance", reflecting formal public economics terminology.',
+    valueSi: 'රාජ්‍ය මූල්‍ය ප්‍රතිපාදන පිළිබඳ නිවැරදි වචන යොදයි.'
+  },
+  'employer should pay': {
+    criterion: 'LR',
+    critique: 'Basic conversational English.',
+    critiqueSi: 'සේවා යෝජකයා ගෙවීම පිළිබඳ සරල යෙදුමකි.',
+    value: 'Upgrades to "commercial enterprises should contribute", fulfilling Band 8 Lexical Resource.',
+    valueSi: 'ආයතනික දායකත්වය පිළිබඳ විධිමත් ආර්ථික යෙදුම භාවිත කරයි.'
+  },
+  'main reasons': {
+    criterion: 'LR',
+    critique: '"main reasons" is an overused cliché in Task 1 summaries.',
+    critiqueSi: '"main reasons" යනු නිතර භාවිතා වන සරල වචනයකි.',
+    value: 'Upgrades to "predominant catalysts", demonstrating rich and varied vocabulary.',
+    valueSi: '"predominant catalysts" යොදා වචන මාලාවේ පොහොසත්කම පෙන්වයි.'
+  },
+
+  // Cambridge 17 Test 2: Fuel Prices & Environment
+  'in the modern world': {
+    criterion: 'LR',
+    critique: '"In the modern world" is an overused IELTS memorised formula.',
+    critiqueSi: '"In the modern world" යනු කටපාඩම් කළ සරල හැඳින්වීමකි.',
+    value: 'Upgrades to "In contemporary globalized society", lifting register to Band 8.',
+    valueSi: 'විධිමත් ශාස්ත්‍රීය සමාජ විද්‍යාත්මක හැඳින්වීමක් යොදයි.'
+  },
+  'more and more serious': {
+    criterion: 'LR',
+    critique: 'Conversational repetition ("more and more") discouraged in formal academic writing.',
+    critiqueSi: '"more and more" යනු කතාබහේදී යොදන සරල පුනරාවර්තනයකි.',
+    value: 'Upgrades to "increasingly acute and multifaceted", demonstrating advanced lexical range.',
+    valueSi: '"increasingly acute" යොදා ගැටලුවේ බරපතලකම ගැඹුරින් විස්තර කරයි.'
+  },
+  'disagree with this opinion': {
+    criterion: 'TR',
+    critique: 'Basic spoken reaction that lacks analytical conviction.',
+    critiqueSi: 'සරල එකඟ නොවීමකි.',
+    value: 'Upgrades to "strongly dispute this contention", asserting a powerful and authoritative academic stance.',
+    valueSi: 'ශක්තිමත් ශාස්ත්‍රීය ස්ථාවරයක් ගොඩනගා Task Response ඉහළ නංවයි.'
+  },
+  'cost of living will increase': {
+    criterion: 'LR',
+    critique: 'Simple spoken sentence for economic inflation.',
+    critiqueSi: 'ජීවන වියදම ඉහළ යාම පිළිබඳ සරල ප්‍රකාශයකි.',
+    value: 'Upgrades to "household expenditures escalate drastically", exhibiting macroeconomic accuracy.',
+    valueSi: 'ආර්ථික විද්‍යාත්මක නිවැරදි යෙදුම් භාවිත කරයි.'
+  },
+  'protect the environment': {
+    criterion: 'LR',
+    critique: 'Elementary collocation repeated from primary school English.',
+    critiqueSi: 'නිතර භාවිත වන සරල යෙදුමකි.',
+    value: 'Upgrades to "safeguard ecological integrity", setting a distinguished Band 8 standard.',
+    valueSi: '"safeguard ecological integrity" යන උසස් පාරිසරික යෙදුම භාවිත කරයි.'
+  },
+
+  // Additional Cambridge 1 Process, Wealth, Sports, and Population Upgrades
+  'the diagram shows': {
+    criterion: 'LR',
+    critique: 'Standard prompt repetition without demonstrating report register.',
+    critiqueSi: 'ප්‍රශ්නයේ ඇති සරල යෙදුමයි.',
+    value: 'Upgrades to "The provided process diagram illustrates", demonstrating formal process reporting.',
+    valueSi: 'ක්‍රියාවලි සටහන් සඳහා විධිමත් වාර්තාකරණ යෙදුම භාවිත කරයි.'
+  },
+  'rich countries have plenty of money': {
+    criterion: 'LR',
+    critique: '"plenty of money" is colloquial spoken English.',
+    critiqueSi: '"plenty of money" යනු කතාබහේදී යොදන සරල වචනයකි.',
+    value: 'Upgrades to "Affluent industrialized nations command substantial fiscal capital" (+LR Band 8.5).',
+    valueSi: 'විධිමත් ආර්ථික හා සමාජ විද්‍යාත්මක යෙදුම් භාවිත කරයි.'
+  },
+  'footballers and basketball players earn too much money': {
+    criterion: 'LR',
+    critique: 'Spoken, casual opening statement.',
+    critiqueSi: 'කතාබහේදී අදහස් දක්වන සරල ආරම්භයකි.',
+    value: 'Upgrades to "Elite professional athletes receive disproportionately exorbitant financial compensation" (+LR Band 8.5).',
+    valueSi: 'වෘත්තීය මලල ක්‍රීඩක වැටුප් පිළිබඳ විධිමත් ශාස්ත්‍රීය විවේචනයක් ඉදිරිපත් කරයි.'
+  },
+  'doctors save lives and teachers educate children': {
+    criterion: 'TR',
+    critique: 'Superficial parallel statement that misses the opportunity to contrast essential human capital.',
+    critiqueSi: 'කරුණු මතුපිටින් සැසඳීමකි.',
+    value: 'Upgrades to "Healthcare practitioners preserve human life whilst educators foster essential civic and intellectual capital" (+TR & LR).',
+    valueSi: 'සමාජයට අත්‍යවශ්‍ය සේවාවන් ගැඹුරින් විශ්ලේෂණය කරමින් ලකුණු ඉහළ නංවයි.'
+  },
+  'university is very expensive nowadays': {
+    criterion: 'LR',
+    critique: 'Everyday spoken phrasing.',
+    critiqueSi: '"very expensive" යනු සාමාන්‍ය කතාබහේ යෙදුමකි.',
+    value: 'Upgrades to "Tertiary education imposes an onerous financial commitment in contemporary society" (+LR Band 8).',
+    valueSi: 'උසස් අධ්‍යාපන වියදම් පිළිබඳ විධිමත් සමාජ විද්‍යාත්මක යෙදුම භාවිත කරයි.'
+  },
+  'computers are used in many places today': {
+    criterion: 'LR',
+    critique: 'Elementary descriptive formula.',
+    critiqueSi: 'මූලික විස්තරාත්මක යෙදුමකි.',
+    value: 'Upgrades to "Computational and digital technologies have thoroughly permeated contemporary commerce and education" (+LR Band 8).',
+    valueSi: 'තාක්ෂණික ව්‍යාප්තිය පිළිබඳ උසස් ශාස්ත්‍රීය යෙදුම භාවිත කරයි.'
   }
 };
 
@@ -357,10 +484,18 @@ export const InteractiveUpgradesSandbox: React.FC<InteractiveUpgradesSandboxProp
   stage2Band,
   showSinhala
 }) => {
-  // Ensure effectiveSegments always has upgrade operations (fallback to generated upgrades from correctedText if segments is plain text)
+  // Ensure effectiveSegments always has valid granular upgrade operations (fallback to generated upgrades from correctedText if segments is plain text or has giant monolithic blocks)
   const effectiveSegments = useMemo(() => {
     const hasEdits = segments && segments.some(s => s.type !== 'text');
-    if (hasEdits) return segments;
+    if (hasEdits) {
+      const hasGiantBlock = segments.some(s => {
+        if (s.type === 'text') return false;
+        const origWords = (s.text || '').trim().split(/\s+/).length;
+        const toWords = (s.to || '').trim().split(/\s+/).length;
+        return origWords > 18 || toWords > 28;
+      });
+      if (!hasGiantBlock) return segments;
+    }
     return generateAcademicUpgradeSegments(correctedText);
   }, [segments, correctedText]);
 
@@ -421,12 +556,15 @@ export const InteractiveUpgradesSandbox: React.FC<InteractiveUpgradesSandboxProp
   });
 
   // Keep active upgrade IDs in sync when upgradeItems change
-  React.useEffect(() => {
+  useEffect(() => {
     setActiveUpgradeIds(new Set(upgradeItems.map(u => u.id)));
   }, [upgradeItems]);
 
   // Dedicated hover state for separate striked vs added tooltips
   const [hovered, setHovered] = useState<{ id: string; target: 'striked' | 'added' } | null>(null);
+
+  // Collapsible toggle for detailed criteria progress breakdown
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   // Toggle single upgrade on or off
   const toggleUpgrade = (id: string) => {
@@ -486,122 +624,187 @@ export const InteractiveUpgradesSandbox: React.FC<InteractiveUpgradesSandboxProp
 
   return (
     <div className="space-y-6">
-      {/* 1. DYNAMIC BAND SCORE CONTROL PANEL */}
-      <div className="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-5 sm:p-7 shadow-xl border border-indigo-900/60 space-y-5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-indigo-900/60 pb-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-mono">
-                Stage 3 · Improvement Pass
-              </span>
-              <span className="text-xs font-semibold text-emerald-400 flex items-center gap-1 font-mono">
-                <Sparkles className="w-3.5 h-3.5" /> Live Dynamic IELTS Score Simulator
-              </span>
-            </div>
-            <h3 className="text-xl sm:text-2xl font-black text-white">
-              Stage 3 · Academic Upgrades Sandbox
-            </h3>
-            <p className="text-xs text-indigo-200/80 max-w-2xl leading-relaxed">
-              This interactive view builds on your exact Stage 2 corrected essay. Hover over any striked word to see why the examiner penalizes it, or hover over newly added words to see the value added. Click the <strong>✕</strong> icon on any word to remove it, or <strong>+</strong> to restore it, and watch the Band score dynamically recalculate!
-            </p>
+      {/* STAGE 3 INTRO HEADER */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-slate-200">
+        <div>
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800 border border-indigo-200 font-mono">
+              Stage 3 · Improvement Pass
+            </span>
+            <span className="text-xs font-semibold text-emerald-700 flex items-center gap-1 font-mono">
+              <Sparkles className="w-3.5 h-3.5" /> Interactive Essay Surface & Score Simulator
+            </span>
           </div>
-
-          {/* DYNAMIC BAND SCORE BADGE */}
-          <div className="flex items-center gap-3.5 bg-white/10 backdrop-blur-md px-4 py-3 rounded-2xl border border-white/10 shrink-0">
-            <div>
-              <div className="text-[10px] font-mono text-indigo-300 uppercase tracking-wider">
-                Dynamic Band
-              </div>
-              <div className="text-3xl sm:text-4xl font-black text-white flex items-baseline gap-1 font-mono">
-                <span>Band {formatBand(dynamicOverall)}</span>
-              </div>
-            </div>
-            <div className="h-10 w-px bg-white/20" />
-            <div className="text-left text-xs font-mono">
-              <div className="text-emerald-400 font-bold">
-                +{scoreBoost.toFixed(1)} Band Boost
-              </div>
-              <div className="text-slate-300 text-[11px]">
-                {activeCount} of {totalCount} Upgrades Active
-              </div>
-            </div>
-          </div>
+          <h2 className="text-xl font-bold text-slate-900 mt-1">
+            Stage 3 · Academic Upgrades Sandbox
+          </h2>
+          <p className="text-xs text-slate-500 max-w-2xl leading-relaxed">
+            Click <strong>✕</strong> on any highlighted Band 8 upgrade to remove it and observe the dynamic score change, or click <strong>+</strong> to restore it. The simulator bar remains pinned while scrolling so you can test changes anywhere in the essay without losing your place.
+          </p>
         </div>
+      </div>
 
-        {/* 4 CRITERIA DYNAMIC PROGRESS METERS */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
-          {[
-            { key: 'TR', name: 'Task Response', score: dynamicTR, base: stage2Criteria.TR, count: activeForCrit('TR'), tot: countForCrit('TR') },
-            { key: 'CC', name: 'Coherence', score: dynamicCC, base: stage2Criteria.CC, count: activeForCrit('CC'), tot: countForCrit('CC') },
-            { key: 'LR', name: 'Lexical Resource', score: dynamicLR, base: stage2Criteria.LR, count: activeForCrit('LR'), tot: countForCrit('LR') },
-            { key: 'GRA', name: 'Grammar', score: dynamicGRA, base: stage2Criteria.GRA, count: activeForCrit('GRA'), tot: countForCrit('GRA') }
-          ].map(c => (
-            <div key={c.key} className="bg-white/5 rounded-xl p-2.5 border border-white/10 space-y-1.5">
-              <div className="flex items-center justify-between text-[11px]">
-                <span className="font-bold text-indigo-300">{c.name} ({c.key})</span>
-                <span className="font-black text-white font-mono">Band {formatBand(c.score)}</span>
-              </div>
-              <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-gradient-to-r from-indigo-500 to-emerald-400 transition-all duration-300"
-                  style={{ width: `${(c.score / 9) * 100}%` }}
-                />
-              </div>
-              <div className="text-[10px] text-slate-400 font-mono flex items-center justify-between pt-0.5">
-                <span>Baseline: {formatBand(c.base)}</span>
-                <span>{c.count}/{c.tot} Upgrades</span>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* CONTROLS */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 text-xs">
-          <div className="text-indigo-200/90 text-[11px] flex items-center gap-2">
-            <span>Score Progression:</span>
-            <span className="font-bold font-mono text-white">
-              {Math.round(ratio * 100)}% of Band 8 upgrades applied
+      {/* 1. STICKY COMPACT DYNAMIC SCORE SIMULATOR (SLIM HUD) */}
+      <div className="sticky top-2 z-30 space-y-2">
+        <div className="bg-slate-900/95 backdrop-blur-md text-white rounded-2xl px-3.5 sm:px-5 py-2.5 shadow-2xl border border-indigo-500/40 flex flex-wrap items-center justify-between gap-3 transition-all duration-200">
+          {/* Left: Overall Live Band Score Badge */}
+          <div className="flex items-center gap-2.5">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+            </span>
+            <span className="text-[10px] font-mono uppercase tracking-wider text-indigo-300 font-bold hidden sm:inline">
+              Dynamic Score:
+            </span>
+            <span className="text-lg sm:text-2xl font-black text-white font-mono tracking-tight">
+              Band {formatBand(dynamicOverall)}
+            </span>
+            <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] sm:text-[11px] font-mono font-bold">
+              +{scoreBoost.toFixed(1)} Boost
             </span>
           </div>
 
-          <div className="flex items-center gap-2">
+          {/* Center: 4 Criteria Mini Badges */}
+          <div className="flex items-center gap-1 sm:gap-1.5">
+            {[
+              { key: 'TR', name: 'Task Response', score: dynamicTR, base: stage2Criteria.TR },
+              { key: 'CC', name: 'Coherence', score: dynamicCC, base: stage2Criteria.CC },
+              { key: 'LR', name: 'Lexical Resource', score: dynamicLR, base: stage2Criteria.LR },
+              { key: 'GRA', name: 'Grammar', score: dynamicGRA, base: stage2Criteria.GRA }
+            ].map(c => {
+              const isUpgraded = c.score > c.base;
+              return (
+                <div
+                  key={c.key}
+                  className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg border text-[10px] sm:text-[11px] font-mono flex items-center gap-1 transition-all ${
+                    isUpgraded
+                      ? 'bg-indigo-950/80 border-indigo-400/50 text-indigo-200 shadow-2xs'
+                      : 'bg-slate-800/80 border-slate-700 text-slate-400'
+                  }`}
+                  title={`${c.name} (${c.key}): Band ${formatBand(c.score)} (Stage 2 baseline: ${formatBand(c.base)})`}
+                >
+                  <span className="font-bold text-[9px] sm:text-[10px] text-slate-400">{c.key}</span>
+                  <span className={`font-black ${isUpgraded ? 'text-emerald-400' : 'text-slate-300'}`}>
+                    {formatBand(c.score)}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Right: Quick Action Controls & Details Toggle */}
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <span className="text-[11px] text-indigo-200/90 font-mono hidden lg:inline">
+              {activeCount}/{totalCount} Active
+            </span>
             <button
               type="button"
               onClick={revertAll}
-              className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white font-bold transition-all flex items-center gap-1.5 cursor-pointer text-xs"
+              className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white font-bold text-xs transition-colors flex items-center gap-1 cursor-pointer"
+              title={`Revert to Stage 2 baseline (Band ${formatBand(stage2Band)})`}
             >
               <RotateCcw className="w-3 h-3" />
-              <span>Revert to Stage 2 Baseline ({formatBand(stage2Band)})</span>
+              <span className="hidden md:inline">Revert</span>
+              <span className="font-mono text-[10px]">({formatBand(stage2Band)})</span>
             </button>
             <button
               type="button"
               onClick={applyAll}
-              className="px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold transition-all flex items-center gap-1.5 shadow-md hover:shadow-indigo-500/20 cursor-pointer text-xs"
+              className="px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition-colors flex items-center gap-1 shadow-md hover:shadow-indigo-500/20 cursor-pointer"
+              title="Apply all Band 8 upgrades"
             >
               <Sparkles className="w-3 h-3 text-amber-300" />
-              <span>Apply All Upgrades (Band 8.0)</span>
+              <span className="hidden md:inline">Apply All</span>
+              <span className="font-mono text-[10px]">(8.0)</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsExpanded(prev => !prev)}
+              className="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer"
+              title={isExpanded ? 'Collapse detailed meters' : 'Expand detailed criteria meters'}
+            >
+              <span className="hidden xl:inline text-[11px]">{isExpanded ? 'Hide Details' : 'Details'}</span>
+              <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
             </button>
           </div>
         </div>
+
+        {/* Collapsible Details Drawer */}
+        {isExpanded && (
+          <div className="bg-slate-900/95 backdrop-blur-md text-white rounded-2xl p-4 sm:p-5 shadow-2xl border border-indigo-500/30 space-y-3 animate-in fade-in slide-in-from-top-2 duration-150">
+            <div className="flex items-center justify-between text-xs border-b border-indigo-900/80 pb-2">
+              <span className="font-bold text-indigo-300 flex items-center gap-1.5">
+                <Sliders className="w-3.5 h-3.5 text-indigo-400" />
+                <span>Four IELTS Assessment Criteria Breakdown</span>
+              </span>
+              <span className="font-mono text-slate-300 text-[11px]">
+                {Math.round(ratio * 100)}% of Band 8 upgrades applied
+              </span>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              {[
+                { key: 'TR', name: 'Task Response', score: dynamicTR, base: stage2Criteria.TR, count: activeForCrit('TR'), tot: countForCrit('TR') },
+                { key: 'CC', name: 'Coherence', score: dynamicCC, base: stage2Criteria.CC, count: activeForCrit('CC'), tot: countForCrit('CC') },
+                { key: 'LR', name: 'Lexical Resource', score: dynamicLR, base: stage2Criteria.LR, count: activeForCrit('LR'), tot: countForCrit('LR') },
+                { key: 'GRA', name: 'Grammar', score: dynamicGRA, base: stage2Criteria.GRA, count: activeForCrit('GRA'), tot: countForCrit('GRA') }
+              ].map(c => (
+                <div key={c.key} className="bg-white/5 rounded-xl p-2.5 border border-white/10 space-y-1.5">
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="font-bold text-indigo-300">{c.name} ({c.key})</span>
+                    <span className="font-black text-white font-mono">Band {formatBand(c.score)}</span>
+                  </div>
+                  <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-gradient-to-r from-indigo-500 to-emerald-400 transition-all duration-300"
+                      style={{ width: `${(c.score / 9) * 100}%` }}
+                    />
+                  </div>
+                  <div className="text-[10px] text-slate-400 font-mono flex items-center justify-between pt-0.5">
+                    <span>Baseline: {formatBand(c.base)}</span>
+                    <span>{c.count}/{c.tot} Upgrades</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* 2. INTERACTIVE ESSAY SURFACE */}
       <div className="bg-white border border-slate-200 rounded-3xl p-5 sm:p-8 shadow-xs space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3 text-xs">
-          <div className="font-bold text-slate-900 flex items-center gap-2">
-            <span>Stage 3 Interactive Essay Surface</span>
-            <span className="text-[10px] text-indigo-700 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded-full font-mono">
-              Base: Exact Stage 2 Corrected Text
-            </span>
+        <div className="flex flex-col gap-2 border-b border-slate-100 pb-3 text-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div className="font-bold text-slate-900 flex items-center gap-2">
+              <span className="text-base sm:text-lg">Stage 3 Interactive Essay Surface</span>
+              <span className="text-[10px] text-indigo-700 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded-full font-mono">
+                Base: Exact Stage 2 Corrected Essay
+              </span>
+            </div>
+            <div className="flex items-center gap-2 font-mono text-[11px] text-indigo-700 bg-indigo-50/80 px-2.5 py-1 rounded-lg border border-indigo-200">
+              <Sliders className="w-3.5 h-3.5 text-indigo-600" />
+              <span>{activeCount} of {totalCount} Upgrades Active</span>
+            </div>
           </div>
-          <div className="flex items-center gap-3 text-slate-500 text-[11px]">
-            <span className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-rose-500 inline-block" />
-              <span>Hover striked: See examiner limitation</span>
+
+          {/* Interactive Legend with Action Indicators */}
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 pt-1 text-[11px] text-slate-600 border-t border-slate-100">
+            <span className="flex items-center gap-1.5">
+              <span className="line-through decoration-rose-500 decoration-2 text-slate-400 font-serif">old word</span>
+              <span>= Stage 2 baseline (hover for critique)</span>
             </span>
-            <span className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-indigo-600 inline-block" />
-              <span>Hover added: See value added</span>
+            <span className="flex items-center gap-1.5">
+              <span className="inline-flex items-center gap-1 font-bold text-indigo-950 bg-indigo-50 border border-indigo-300 rounded px-1.5 py-0.2 font-serif">
+                <span>Band 8 word</span>
+                <span className="w-3.5 h-3.5 rounded-full bg-indigo-200 text-indigo-800 flex items-center justify-center text-[9px] font-bold">✕</span>
+              </span>
+              <span>= Click <strong>✕</strong> to remove upgrade & drop score</span>
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="inline-flex items-center gap-1 text-slate-800 bg-slate-100 border border-slate-300 rounded px-1.5 py-0.2 font-serif">
+                <span>old word</span>
+                <span className="px-1 py-0.2 rounded bg-indigo-600 text-white text-[9px] font-bold flex items-center gap-0.5">+LR</span>
+              </span>
+              <span>= Click <strong>+</strong> to restore upgrade & raise score</span>
             </span>
           </div>
         </div>
