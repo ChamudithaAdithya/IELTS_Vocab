@@ -18,11 +18,27 @@ import type { ReadingPassage, ReadingQuestion } from '../../types/tutor';
 interface ReadingTutorViewProps {
   showSinhala: boolean;
   onBackToHub?: () => void;
+  initialPassageId?: string;
 }
 
-export const ReadingTutorView: React.FC<ReadingTutorViewProps> = ({ showSinhala, onBackToHub }) => {
-  const [selectedPassage, setSelectedPassage] = useState<ReadingPassage>(CAMBRIDGE_READING_TESTS[0]);
-  const [selectedBook, setSelectedBook] = useState<'all' | number | string>('all');
+export const ReadingTutorView: React.FC<ReadingTutorViewProps> = ({ showSinhala, onBackToHub, initialPassageId }) => {
+  const [selectedPassage, setSelectedPassage] = useState<ReadingPassage>(() => {
+    if (initialPassageId) {
+      const found = CAMBRIDGE_READING_TESTS.find(p => p.id === initialPassageId);
+      if (found) return found;
+    }
+    return CAMBRIDGE_READING_TESTS[0];
+  });
+  const [selectedBook, setSelectedBook] = useState<'all' | number | string>(() => {
+    if (initialPassageId) {
+      const found = CAMBRIDGE_READING_TESTS.find(p => p.id === initialPassageId);
+      if (found) {
+        const match = found.cambridgeSource.match(/Cambridge(?:\s+IELTS)?\s+(\d+)/i);
+        return match ? parseInt(match[1], 10) : 1;
+      }
+    }
+    return 'all';
+  });
   const [testMode, setTestMode] = useState<'practice' | 'exam'>('practice');
 
   const getBookNumber = (p: ReadingPassage): number => {
@@ -40,6 +56,22 @@ export const ReadingTutorView: React.FC<ReadingTutorViewProps> = ({ showSinhala,
   // Exam Mode 20-minute countdown timer
   const [timeLeftSeconds, setTimeLeftSeconds] = useState<number>(20 * 60);
   const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (initialPassageId) {
+      const found = CAMBRIDGE_READING_TESTS.find(p => p.id === initialPassageId);
+      if (found) {
+        setSelectedPassage(found);
+        const match = found.cambridgeSource.match(/Cambridge(?:\s+IELTS)?\s+(\d+)/i);
+        setSelectedBook(match ? parseInt(match[1], 10) : 1);
+        setUserAnswers({});
+        setSubmitted(false);
+        setActiveQuestionId(null);
+        setTimeLeftSeconds(20 * 60);
+        setIsTimerRunning(false);
+      }
+    }
+  }, [initialPassageId]);
 
   useEffect(() => {
     let interval: any = null;
@@ -195,7 +227,7 @@ export const ReadingTutorView: React.FC<ReadingTutorViewProps> = ({ showSinhala,
           { id: 13, label: 'Cambridge 13' },
           { id: 12, label: 'Cambridge 12' },
           { id: 10, label: 'Cambridge 10' },
-          { id: 1, label: 'Cambridge 1 (13 Passages)' }
+          { id: 1, label: 'Cambridge 1 (15 Passages)' }
         ].map(b => (
           <button
             key={b.id}

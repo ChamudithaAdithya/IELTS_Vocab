@@ -4,6 +4,7 @@ import {
   Send, 
   Sparkles, 
   Key, 
+  Settings,
   BookOpen, 
   RotateCcw, 
   AlertCircle, 
@@ -20,7 +21,11 @@ import {
   Mail,
   GraduationCap,
   Clock,
-  Compass
+  Compass,
+  Image as ImageIcon,
+  Upload,
+  Trash2,
+  Maximize2
 } from 'lucide-react';
 import type { TutorReport, TutorLesson, LessonTopicId, TutorState, WritingTaskType } from '../types/tutor';
 import { SAMPLE_REPORT, SAMPLE_QUESTION } from '../data/tutorSampleReport';
@@ -31,7 +36,7 @@ import {
   loadApiKey, 
   saveApiKey, 
   loadModel, 
-  saveModel,
+  saveModel, 
   DEFAULT_GEMINI_MODEL,
   evaluateEssayWithGemini,
   countWords,
@@ -40,15 +45,21 @@ import {
 import { TutorReportView } from './tutor/TutorReportView';
 import { TutorLessonModal } from './tutor/TutorLessonModal';
 import { CambridgeActivitiesView } from './tutor/CambridgeActivitiesView';
+import { ApiSettingsModal } from './tutor/ApiSettingsModal';
 import { evaluateEssayLocally } from '../utils/localEvaluator';
 import { ALL_CAMBRIDGE_TESTS, CambridgeTestPrompt } from '../data/cambridgeTests';
 
 interface WritingTutorViewProps {
   showSinhala: boolean;
   onNavigateToModule?: (module: string) => void;
+  initialPromptId?: string;
 }
 
-export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ showSinhala, onNavigateToModule }) => {
+export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ 
+  showSinhala, 
+  onNavigateToModule,
+  initialPromptId 
+}) => {
   const [tutorState, setTutorState] = useState<TutorState>(loadTutorState);
   const [currentReport, setCurrentReport] = useState<TutorReport>(() => {
     try {
@@ -70,6 +81,12 @@ export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ showSinhala,
   );
   const [targetBand, setTargetBand] = useState<number>(8.0);
 
+  // Cambridge past paper prompt picker modal state
+  const [isPromptSelectorOpen, setIsPromptSelectorOpen] = useState<boolean>(false);
+  const [promptFilterTab, setPromptFilterTab] = useState<'all' | 'c1' | 'c14-18' | 'task1' | 'task2'>('c1');
+  const [isModelModalOpen, setIsModelModalOpen] = useState<boolean>(false);
+  const [selectedModelPrompt, setSelectedModelPrompt] = useState<CambridgeTestPrompt | null>(null);
+
   // Evaluation pipeline state
   const [apiKey, setApiKey] = useState<string>(loadApiKey);
   const [model, setModel] = useState<string>(loadModel);
@@ -77,7 +94,66 @@ export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ showSinhala,
   const [evalStage, setEvalStage] = useState<PipelineStage>('validating');
   const [evalDetail, setEvalDetail] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState<boolean>(false);
   const abortControllerRef = useRef<AbortController | null>(null);
+
+  // Attached Visual Prompt / Chart image state (for Academic Task 1 / Cambridge prompts)
+  const [promptImage, setPromptImage] = useState<string | null>(null);
+  const [isImageLightboxOpen, setIsImageLightboxOpen] = useState<boolean>(false);
+  const [isDraggingPrompt, setIsDraggingPrompt] = useState<boolean>(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleImageFile = (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      setErrorMessage('Please select a valid image file (PNG, JPG, WebP, GIF).');
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      setErrorMessage('Image size exceeds 10MB. Please use a smaller screenshot or compressed image.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      if (typeof e.target?.result === 'string') {
+        setPromptImage(e.target.result);
+        setErrorMessage(null);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handlePromptPaste = (e: React.ClipboardEvent) => {
+    const items = e.clipboardData?.items;
+    if (!items) return;
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        const file = items[i].getAsFile();
+        if (file) {
+          e.preventDefault();
+          handleImageFile(file);
+          break;
+        }
+      }
+    }
+  };
+
+  const handlePromptDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDraggingPrompt(false);
+    if (e.dataTransfer?.files && e.dataTransfer.files[0]) {
+      const file = e.dataTransfer.files[0];
+      if (file.type.startsWith('image/')) {
+        handleImageFile(file);
+      }
+    }
+  };
+
+  const handleRemovePromptImage = () => {
+    setPromptImage(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
 
   // Active Lesson modal state
   const [activeLesson, setActiveLesson] = useState<TutorLesson | null>(null);
@@ -136,6 +212,38 @@ export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ showSinhala,
     setErrorMessage(null);
   };
 
+  const handleLoadCambridgePrompt = (test: CambridgeTestPrompt, withCandidateEssay: boolean = false) => {
+    setQuestionInput(test.question);
+    if (test.taskType === 'task1') {
+      setTaskType(test.id.includes('gt') ? 'gt_task1' : 'academic_task1');
+    } else {
+      setTaskType('task2');
+    }
+    if (withCandidateEssay && test.weakCandidateEssay?.text) {
+      setEssayInput(test.weakCandidateEssay.text);
+    } else {
+      setEssayInput('');
+    }
+    setPromptImage(null);
+    setCurrentView('editor');
+    setIsPromptSelectorOpen(false);
+    setErrorMessage(null);
+  };
+
+  const handleOpenModelAnswer = (test: CambridgeTestPrompt) => {
+    setSelectedModelPrompt(test);
+    setIsModelModalOpen(true);
+  };
+
+  useEffect(() => {
+    if (initialPromptId) {
+      const found = ALL_CAMBRIDGE_TESTS.find(t => t.id === initialPromptId);
+      if (found) {
+        handleLoadCambridgePrompt(found, false);
+      }
+    }
+  }, [initialPromptId]);
+
   const handleSelectTaskType = (type: WritingTaskType) => {
     setTaskType(type);
     if (type === 'academic_task1') {
@@ -188,6 +296,7 @@ export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ showSinhala,
           taskType: taskType === 'task2' ? 'task2' : 'task1',
           targetBand,
           sinhala: showSinhala,
+          promptImage: promptImage || undefined,
           onStage: (stage, detail) => {
             setEvalStage(stage);
             if (detail) setEvalDetail(detail);
@@ -235,6 +344,7 @@ export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ showSinhala,
         taskType: taskType === 'task2' ? 'task2' : 'task1',
         targetBand,
         sinhala: showSinhala,
+        promptImage: promptImage || undefined,
       });
 
       setCurrentReport(report);
@@ -262,43 +372,51 @@ export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ showSinhala,
       {/* VIEW 1: THE WRITING PORTAL / HUB                                          */}
       {/* ========================================================================= */}
       {currentView === 'hub' && (
-        <div className="space-y-8 animate-in fade-in duration-150">
-          {/* Hero Banner */}
-          <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white rounded-3xl p-6 sm:p-8 shadow-sm">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-              <div className="space-y-2 max-w-2xl">
-                <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-indigo-500/30 text-indigo-200 border border-indigo-400/30">
-                    Band 8 IELTS Writing Suite
-                  </span>
-                  <span className="text-xs text-indigo-200 font-semibold">Academic & General Training</span>
-                </div>
-                <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-                  IELTS Personal Writing Tutor & Error Examiner
-                </h1>
-                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                  Tailored for students who struggle with foundational English, grammar and sentence building.
-                  Select a module below to write an essay, test a real Cambridge paper, or review your personalized lesson report.
-                </p>
+        <div className="space-y-6 animate-in fade-in duration-150">
+          {/* Top Bar of Writing Hub */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-600 text-white font-mono shadow-2xs">
+                  Writing Studio
+                </span>
+                <span className="text-xs text-slate-500 font-medium">Academic & General Training Tasks</span>
               </div>
+              <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">
+                Select Writing Module
+              </h1>
+            </div>
 
-              <div className="flex flex-wrap items-center gap-2 shrink-0">
-                <button
-                  type="button"
-                  onClick={handleLoadSampleReport}
-                  className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold border border-white/15 transition-colors"
-                >
-                  View Sample Report
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setCurrentView('settings')}
-                  className="px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold border border-white/15 transition-colors flex items-center gap-1.5"
-                >
-                  <Key className="w-3.5 h-3.5" />
-                  <span>API Settings</span>
-                </button>
-              </div>
+            {/* Top Right Corner Settings & Tools Component */}
+            <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
+              <button
+                type="button"
+                onClick={handleLoadSampleReport}
+                className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold border border-slate-200 transition-colors shadow-2xs cursor-pointer"
+              >
+                View Sample Report
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setIsSettingsModalOpen(true)}
+                className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shadow-2xs border cursor-pointer ${
+                  apiKey.trim()
+                    ? 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100'
+                    : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-300'
+                }`}
+                title="Configure Google Gemini API Key & Model"
+              >
+                <Settings className={`w-3.5 h-3.5 ${apiKey.trim() ? 'text-emerald-600' : 'text-slate-500'}`} />
+                <span>API Settings</span>
+                {apiKey.trim() ? (
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                ) : (
+                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-amber-100 text-amber-800 font-normal">
+                    Setup Key
+                  </span>
+                )}
+              </button>
             </div>
           </div>
 
@@ -394,6 +512,100 @@ export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ showSinhala,
             </div>
           </div>
 
+          {/* Official Cambridge Book 1 Writing Suite (All 10 Tasks) */}
+          <div className="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 rounded-2xl p-6 sm:p-7 text-white shadow-md border border-indigo-900/50 space-y-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-indigo-800/40 pb-4">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-950 font-mono">
+                    Cambridge Book 1 Complete Suite
+                  </span>
+                  <span className="text-xs text-indigo-300 font-medium">10 Authentic Past Paper Tasks</span>
+                </div>
+                <h3 className="text-lg font-bold text-white">Official Cambridge 1 Writing Practice</h3>
+                <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
+                  Real examination tasks from Cambridge IELTS 1 (Academic Tests 1–4 Task 1 & 2 + General Training). Each task features an official prompt, authentic weak candidate sample (Band 5.0–5.5) with full error diagnosis, and an examiner-verified Band 8.5 model answer.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setPromptFilterTab('c1');
+                  setIsPromptSelectorOpen(true);
+                }}
+                className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm shrink-0 self-start sm:self-auto cursor-pointer"
+              >
+                <BookOpen className="w-3.5 h-3.5" />
+                <span>Browse All 10 Tasks</span>
+              </button>
+            </div>
+
+            {/* Quick 10-Task Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {ALL_CAMBRIDGE_TESTS.filter(t => t.id.startsWith('c1-')).map(test => {
+                const isTask1 = test.taskType === 'task1';
+                return (
+                  <div
+                    key={test.id}
+                    className="p-4 rounded-xl bg-slate-900/90 border border-indigo-800/40 hover:border-indigo-400/80 transition-all flex flex-col justify-between space-y-3 group"
+                  >
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-[10px] font-mono font-bold">
+                        <span className="px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                          {test.cambridgeBook}
+                        </span>
+                        <span className={`px-2 py-0.5 rounded ${isTask1 ? 'bg-amber-400/20 text-amber-300 border border-amber-400/30' : 'bg-emerald-400/20 text-emerald-300 border border-emerald-400/30'}`}>
+                          {isTask1 ? 'Task 1 (150 words)' : 'Task 2 Essay (250 words)'}
+                        </span>
+                      </div>
+
+                      <div className="text-xs font-bold text-white group-hover:text-indigo-300 transition-colors">
+                        {test.category}: {test.question.substring(0, 65)}...
+                      </div>
+
+                      <p className="text-[11px] text-slate-400 line-clamp-2 font-serif italic">
+                        "{test.question}"
+                      </p>
+                    </div>
+
+                    <div className="pt-2 border-t border-slate-800 flex items-center justify-between gap-2 text-xs">
+                      <button
+                        type="button"
+                        onClick={() => handleLoadCambridgePrompt(test, false)}
+                        className="px-2.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold transition-all flex items-center gap-1 cursor-pointer text-[11px]"
+                        title="Open this prompt in the writing editor to write your own essay"
+                      >
+                        <PenTool className="w-3 h-3" />
+                        <span>Write Essay</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleLoadReportDirectly(test.weakCandidateEssay.report)}
+                        className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 font-semibold transition-all flex items-center gap-1 cursor-pointer text-[11px]"
+                        title="Examine real candidate errors and check grade in the offline examiner"
+                      >
+                        <Award className="w-3 h-3 text-amber-400" />
+                        <span>Candidate (Band {test.weakCandidateEssay.band})</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleOpenModelAnswer(test)}
+                        className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-300 font-semibold transition-all flex items-center gap-1 cursor-pointer text-[11px]"
+                        title="Read examiner Band 8.5 model answer"
+                      >
+                        <Sparkles className="w-3 h-3 text-emerald-400" />
+                        <span>Model</span>
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
           {/* Secondary Hub Cards: Cambridge Practical & Lessons */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* Cambridge Test Bank & Error Lab */}
@@ -403,7 +615,7 @@ export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ showSinhala,
             >
               <div className="space-y-1.5 max-w-md">
                 <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-400 text-slate-950 font-mono">
-                  Cambridge 15–18 Papers
+                  Cambridge 1 & 14–18 Papers
                 </span>
                 <h3 className="text-base font-bold text-white">Cambridge Real Practical & Error Lab</h3>
                 <p className="text-xs text-slate-300">
@@ -485,6 +697,233 @@ export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ showSinhala,
         </div>
       )}
 
+
+      {/* Cambridge Past Paper Prompt Selector Modal */}
+      {isPromptSelectorOpen && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in"
+          onClick={() => setIsPromptSelectorOpen(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl max-w-4xl max-h-[88vh] overflow-hidden shadow-2xl flex flex-col w-full animate-in zoom-in-95"
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-slate-50">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold">
+                  <BookOpen className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-slate-900">Select Official Cambridge Writing Prompt</h3>
+                  <p className="text-xs text-slate-500">Pick any real past paper prompt from Cambridge 1 or Books 14–18</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsPromptSelectorOpen(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Filter Pills */}
+            <div className="px-5 py-2.5 border-b border-slate-200 bg-white flex items-center gap-2 overflow-x-auto text-xs font-semibold">
+              <span className="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Filter:</span>
+              {[
+                { id: 'c1', label: `Cambridge 1 (${ALL_CAMBRIDGE_TESTS.filter(t => t.id.startsWith('c1-')).length} Tasks)` },
+                { id: 'c14-18', label: `Cambridge 14–18 (${ALL_CAMBRIDGE_TESTS.filter(t => !t.id.startsWith('c1-')).length} Tasks)` },
+                { id: 'task1', label: 'Academic Task 1' },
+                { id: 'task2', label: 'Task 2 Essays' },
+                { id: 'all', label: `All Prompts (${ALL_CAMBRIDGE_TESTS.length})` }
+              ].map(f => (
+                <button
+                  key={f.id}
+                  type="button"
+                  onClick={() => setPromptFilterTab(f.id as any)}
+                  className={`px-3 py-1 rounded-lg transition-all whitespace-nowrap cursor-pointer ${
+                    promptFilterTab === f.id
+                      ? 'bg-indigo-600 text-white shadow-xs'
+                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  }`}
+                >
+                  {f.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Prompts List Grid */}
+            <div className="p-5 overflow-y-auto space-y-3 max-h-[60vh] bg-slate-50/50">
+              {ALL_CAMBRIDGE_TESTS
+                .filter(t => {
+                  if (promptFilterTab === 'c1') return t.id.startsWith('c1-');
+                  if (promptFilterTab === 'c14-18') return !t.id.startsWith('c1-');
+                  if (promptFilterTab === 'task1') return t.taskType === 'task1';
+                  if (promptFilterTab === 'task2') return t.taskType === 'task2';
+                  return true;
+                })
+                .map(test => {
+                  const isTask1 = test.taskType === 'task1';
+                  return (
+                    <div
+                      key={test.id}
+                      className="p-4 bg-white rounded-xl border border-slate-200 hover:border-indigo-400 transition-all shadow-2xs space-y-3"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded bg-slate-900 text-white">
+                            {test.cambridgeBook}
+                          </span>
+                          <span className={`text-[10px] font-bold font-mono px-2 py-0.5 rounded ${
+                            isTask1 ? 'bg-amber-100 text-amber-900' : 'bg-emerald-100 text-emerald-900'
+                          }`}>
+                            {isTask1 ? 'Task 1 (150 words)' : 'Task 2 (250 words)'}
+                          </span>
+                          <span className="text-xs font-bold text-indigo-700">{test.category}</span>
+                        </div>
+                        <span className="text-[11px] font-mono text-slate-400">
+                          {test.suggestedTimeMinutes} mins · {test.minimumWords}+ words
+                        </span>
+                      </div>
+
+                      <p className="text-xs sm:text-sm text-slate-800 font-serif leading-relaxed font-medium">
+                        {test.question}
+                      </p>
+
+                      <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 text-xs">
+                        <div className="text-[11px] text-slate-500">
+                          Candidate Band {test.weakCandidateEssay?.band || 5.0} attempt & Band 8.5 Model ready
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => handleOpenModelAnswer(test)}
+                            className="px-2.5 py-1 text-slate-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg font-semibold transition-colors cursor-pointer"
+                          >
+                            Read Band 8.5 Model
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleLoadCambridgePrompt(test, true)}
+                            className="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-semibold transition-colors cursor-pointer"
+                            title="Load official prompt with the candidate attempt to grade and test"
+                          >
+                            Load Candidate Draft
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleLoadCambridgePrompt(test, false)}
+                            className="px-3.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-bold transition-colors shadow-xs cursor-pointer"
+                          >
+                            Write My Essay
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-5 py-3 border-t border-slate-200 bg-slate-50 flex items-center justify-between text-xs text-slate-500">
+              <span>Tip: You can also attach real prompt charts/diagrams from past papers using the image button in the editor.</span>
+              <button
+                type="button"
+                onClick={() => setIsPromptSelectorOpen(false)}
+                className="px-4 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-semibold rounded-lg transition-colors cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Band 8.5 Model Answer Lightbox Modal */}
+      {isModelModalOpen && selectedModelPrompt && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in"
+          onClick={() => setIsModelModalOpen(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl max-w-3xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col w-full animate-in zoom-in-95"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-slate-50">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-600 text-white font-mono">
+                  Band 8.5 Model Answer
+                </span>
+                <span className="text-xs font-bold text-slate-800">{selectedModelPrompt.cambridgeBook}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsModelModalOpen(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-5 overflow-y-auto space-y-4">
+              <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1">
+                  Examination Prompt:
+                </span>
+                <p className="text-xs sm:text-sm font-serif text-slate-900 leading-relaxed font-medium">
+                  {selectedModelPrompt.question}
+                </p>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                    High-Scoring Academic Response ({countWords(selectedModelPrompt.band8ModelAnswer.text)} Words)
+                  </span>
+                </div>
+                <div className="font-serif text-xs sm:text-sm text-slate-800 leading-relaxed whitespace-pre-wrap p-4 bg-emerald-50/30 rounded-xl border border-emerald-200/60 shadow-2xs">
+                  {selectedModelPrompt.band8ModelAnswer.text}
+                </div>
+              </div>
+
+              {selectedModelPrompt.band8ModelAnswer.examinerComments && (
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-1.5">
+                  <span className="font-bold text-slate-800 block">Examiner Scoring Notes:</span>
+                  <ul className="list-disc pl-5 space-y-1 text-slate-600">
+                    {selectedModelPrompt.band8ModelAnswer.examinerComments.map((com, i) => (
+                      <li key={i}>{com}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+
+            <div className="px-5 py-3 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
+              <button
+                type="button"
+                onClick={() => {
+                  handleLoadCambridgePrompt(selectedModelPrompt, false);
+                  setIsModelModalOpen(false);
+                }}
+                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 shadow-xs cursor-pointer"
+              >
+                <PenTool className="w-3.5 h-3.5" />
+                <span>Practice Writing This Prompt</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setIsModelModalOpen(false)}
+                className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-lg text-xs font-semibold transition-colors cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ========================================================================= */}
       {/* VIEW 2: DEDICATED WRITING ROOM / EDITOR                                    */}
       {/* ========================================================================= */}
@@ -501,13 +940,13 @@ export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ showSinhala,
               <span>Back to Writing Hub</span>
             </button>
 
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-500">Task Type:</span>
+            <div className="flex items-center gap-2.5">
+              <span className="text-xs text-slate-500 hidden sm:inline">Task Type:</span>
               <div className="flex items-center gap-1 bg-slate-100 p-0.5 rounded-lg text-xs font-medium">
                 <button
                   type="button"
                   onClick={() => handleSelectTaskType('academic_task1')}
-                  className={`px-2 py-1 rounded-md text-[11px] font-bold transition-colors ${
+                  className={`px-2 py-1 rounded-md text-[11px] font-bold transition-colors cursor-pointer ${
                     taskType === 'academic_task1' ? 'bg-white text-indigo-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
@@ -516,7 +955,7 @@ export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ showSinhala,
                 <button
                   type="button"
                   onClick={() => handleSelectTaskType('gt_task1')}
-                  className={`px-2 py-1 rounded-md text-[11px] font-bold transition-colors ${
+                  className={`px-2 py-1 rounded-md text-[11px] font-bold transition-colors cursor-pointer ${
                     taskType === 'gt_task1' ? 'bg-white text-emerald-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
@@ -525,13 +964,26 @@ export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ showSinhala,
                 <button
                   type="button"
                   onClick={() => handleSelectTaskType('task2')}
-                  className={`px-2 py-1 rounded-md text-[11px] font-bold transition-colors ${
+                  className={`px-2 py-1 rounded-md text-[11px] font-bold transition-colors cursor-pointer ${
                     taskType === 'task2' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
                   Task 2 Essay
                 </button>
               </div>
+
+              <button
+                type="button"
+                onClick={() => setIsSettingsModalOpen(true)}
+                className={`p-1.5 rounded-lg border transition-colors cursor-pointer ${
+                  apiKey.trim()
+                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
+                    : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50'
+                }`}
+                title="Configure Gemini API Settings"
+              >
+                <Settings className="w-3.5 h-3.5" />
+              </button>
             </div>
           </div>
 
@@ -545,18 +997,130 @@ export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ showSinhala,
 
           {/* Exam Workspace */}
           <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-7 shadow-xs space-y-5">
-            {/* Question Box */}
-            <div>
-              <label className="block text-xs font-bold text-slate-800 mb-1">
-                Official IELTS Prompt
-              </label>
+            {/* Question Box & Visual Task Prompt */}
+            <div
+              className={`relative rounded-xl transition-all ${
+                isDraggingPrompt ? 'ring-2 ring-indigo-500 bg-indigo-50/40 p-2 border-indigo-300' : ''
+              }`}
+              onDragOver={e => {
+                e.preventDefault();
+                setIsDraggingPrompt(true);
+              }}
+              onDragLeave={() => setIsDraggingPrompt(false)}
+              onDrop={handlePromptDrop}
+            >
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-xs font-bold text-slate-800">
+                  Official IELTS Prompt
+                </label>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPromptFilterTab('c1');
+                      setIsPromptSelectorOpen(true);
+                    }}
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100 transition-all cursor-pointer"
+                    title="Load an authentic Cambridge past paper prompt from Book 1 or Books 14–18"
+                  >
+                    <BookOpen className="w-3.5 h-3.5 text-indigo-600" />
+                    <span>Choose Cambridge Prompt</span>
+                  </button>
+
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={e => {
+                      if (e.target.files && e.target.files[0]) {
+                        handleImageFile(e.target.files[0]);
+                      }
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
+                      promptImage
+                        ? 'bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100'
+                        : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:border-slate-300'
+                    }`}
+                    title="Upload or attach task diagram, chart, map, or table (Task 1 & 2)"
+                  >
+                    <ImageIcon className="w-3.5 h-3.5 text-indigo-600" />
+                    <span>{promptImage ? 'Change Image' : 'Attach Task Image / Chart'}</span>
+                  </button>
+                </div>
+              </div>
+
               <textarea
                 value={questionInput}
                 onChange={e => setQuestionInput(e.target.value)}
+                onPaste={handlePromptPaste}
                 rows={3}
-                placeholder="Type or paste the IELTS question here..."
+                placeholder="Type or paste the IELTS question here... (Tip: You can press Ctrl+V to paste a copied chart or diagram directly here!)"
                 className="w-full text-xs sm:text-sm p-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-serif leading-relaxed"
               />
+
+              {/* Attached Image Preview Card */}
+              {promptImage ? (
+                <div className="mt-2.5 p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between gap-3 animate-in fade-in">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div
+                      className="relative w-16 h-12 bg-white rounded-lg border border-slate-300 overflow-hidden cursor-pointer group shrink-0 shadow-2xs"
+                      onClick={() => setIsImageLightboxOpen(true)}
+                      title="Click to view full size"
+                    >
+                      <img
+                        src={promptImage}
+                        alt="Task Prompt Chart"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                      />
+                      <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                        <Maximize2 className="w-3.5 h-3.5 text-white drop-shadow" />
+                      </div>
+                    </div>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-bold text-slate-800">
+                          Task Diagram / Visual Prompt Attached
+                        </span>
+                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-mono">
+                          Multimodal AI Active
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-slate-500 truncate mt-0.5">
+                        Gemini examiner will inspect visual trends, data, and charts for Task Achievement (TA)
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => setIsImageLightboxOpen(true)}
+                      className="p-1.5 text-slate-600 hover:text-indigo-600 hover:bg-slate-200/70 rounded-lg transition-colors cursor-pointer"
+                      title="Zoom diagram"
+                    >
+                      <Maximize2 className="w-4 h-4" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleRemovePromptImage}
+                      className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                      title="Remove diagram"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="mt-1.5 flex items-center justify-between text-[11px] text-slate-400 px-1">
+                  <span>💡 Academic Task 1: Paste screenshot (<kbd className="font-mono bg-slate-100 px-1 py-0.5 rounded border border-slate-200 text-slate-600 text-[10px]">Ctrl+V</kbd>), drag & drop, or click attach to load bar/line charts, maps or diagrams.</span>
+                </div>
+              )}
             </div>
 
             {/* Essay Input Textarea */}
@@ -673,11 +1237,258 @@ export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ showSinhala,
         </div>
       )}
 
+
+      {/* Cambridge Past Paper Prompt Selector Modal */}
+      {isPromptSelectorOpen && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in"
+          onClick={() => setIsPromptSelectorOpen(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl max-w-4xl max-h-[88vh] overflow-hidden shadow-2xl flex flex-col w-full animate-in zoom-in-95"
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-slate-50">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold">
+                  <BookOpen className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-slate-900">Select Official Cambridge Writing Prompt</h3>
+                  <p className="text-xs text-slate-500">Pick any real past paper prompt from Cambridge 1 or Books 14–18</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsPromptSelectorOpen(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Filter Pills */}
+            <div className="px-5 py-2.5 border-b border-slate-200 bg-white flex items-center gap-2 overflow-x-auto text-xs font-semibold">
+              <span className="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Filter:</span>
+              {[
+                { id: 'c1', label: `Cambridge 1 (${ALL_CAMBRIDGE_TESTS.filter(t => t.id.startsWith('c1-')).length} Tasks)` },
+                { id: 'c14-18', label: `Cambridge 14–18 (${ALL_CAMBRIDGE_TESTS.filter(t => !t.id.startsWith('c1-')).length} Tasks)` },
+                { id: 'task1', label: 'Academic Task 1' },
+                { id: 'task2', label: 'Task 2 Essays' },
+                { id: 'all', label: `All Prompts (${ALL_CAMBRIDGE_TESTS.length})` }
+              ].map(f => (
+                <button
+                  key={f.id}
+                  type="button"
+                  onClick={() => setPromptFilterTab(f.id as any)}
+                  className={`px-3 py-1 rounded-lg transition-all whitespace-nowrap cursor-pointer ${
+                    promptFilterTab === f.id
+                      ? 'bg-indigo-600 text-white shadow-xs'
+                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  }`}
+                >
+                  {f.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Prompts List Grid */}
+            <div className="p-5 overflow-y-auto space-y-3 max-h-[60vh] bg-slate-50/50">
+              {ALL_CAMBRIDGE_TESTS
+                .filter(t => {
+                  if (promptFilterTab === 'c1') return t.id.startsWith('c1-');
+                  if (promptFilterTab === 'c14-18') return !t.id.startsWith('c1-');
+                  if (promptFilterTab === 'task1') return t.taskType === 'task1';
+                  if (promptFilterTab === 'task2') return t.taskType === 'task2';
+                  return true;
+                })
+                .map(test => {
+                  const isTask1 = test.taskType === 'task1';
+                  return (
+                    <div
+                      key={test.id}
+                      className="p-4 bg-white rounded-xl border border-slate-200 hover:border-indigo-400 transition-all shadow-2xs space-y-3"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded bg-slate-900 text-white">
+                            {test.cambridgeBook}
+                          </span>
+                          <span className={`text-[10px] font-bold font-mono px-2 py-0.5 rounded ${
+                            isTask1 ? 'bg-amber-100 text-amber-900' : 'bg-emerald-100 text-emerald-900'
+                          }`}>
+                            {isTask1 ? 'Task 1 (150 words)' : 'Task 2 (250 words)'}
+                          </span>
+                          <span className="text-xs font-bold text-indigo-700">{test.category}</span>
+                        </div>
+                        <span className="text-[11px] font-mono text-slate-400">
+                          {test.suggestedTimeMinutes} mins · {test.minimumWords}+ words
+                        </span>
+                      </div>
+
+                      <p className="text-xs sm:text-sm text-slate-800 font-serif leading-relaxed font-medium">
+                        {test.question}
+                      </p>
+
+                      <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 text-xs">
+                        <div className="text-[11px] text-slate-500">
+                          Candidate Band {test.weakCandidateEssay?.band || 5.0} attempt & Band 8.5 Model ready
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => handleOpenModelAnswer(test)}
+                            className="px-2.5 py-1 text-slate-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg font-semibold transition-colors cursor-pointer"
+                          >
+                            Read Band 8.5 Model
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleLoadCambridgePrompt(test, true)}
+                            className="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-semibold transition-colors cursor-pointer"
+                            title="Load official prompt with the candidate attempt to grade and test"
+                          >
+                            Load Candidate Draft
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleLoadCambridgePrompt(test, false)}
+                            className="px-3.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-bold transition-colors shadow-xs cursor-pointer"
+                          >
+                            Write My Essay
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-5 py-3 border-t border-slate-200 bg-slate-50 flex items-center justify-between text-xs text-slate-500">
+              <span>Tip: You can also attach real prompt charts/diagrams from past papers using the image button in the editor.</span>
+              <button
+                type="button"
+                onClick={() => setIsPromptSelectorOpen(false)}
+                className="px-4 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-semibold rounded-lg transition-colors cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Band 8.5 Model Answer Lightbox Modal */}
+      {isModelModalOpen && selectedModelPrompt && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in"
+          onClick={() => setIsModelModalOpen(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl max-w-3xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col w-full animate-in zoom-in-95"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-slate-50">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-600 text-white font-mono">
+                  Band 8.5 Model Answer
+                </span>
+                <span className="text-xs font-bold text-slate-800">{selectedModelPrompt.cambridgeBook}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsModelModalOpen(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-5 overflow-y-auto space-y-4">
+              <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1">
+                  Examination Prompt:
+                </span>
+                <p className="text-xs sm:text-sm font-serif text-slate-900 leading-relaxed font-medium">
+                  {selectedModelPrompt.question}
+                </p>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                    High-Scoring Academic Response ({countWords(selectedModelPrompt.band8ModelAnswer.text)} Words)
+                  </span>
+                </div>
+                <div className="font-serif text-xs sm:text-sm text-slate-800 leading-relaxed whitespace-pre-wrap p-4 bg-emerald-50/30 rounded-xl border border-emerald-200/60 shadow-2xs">
+                  {selectedModelPrompt.band8ModelAnswer.text}
+                </div>
+              </div>
+
+              {selectedModelPrompt.band8ModelAnswer.examinerComments && (
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-1.5">
+                  <span className="font-bold text-slate-800 block">Examiner Scoring Notes:</span>
+                  <ul className="list-disc pl-5 space-y-1 text-slate-600">
+                    {selectedModelPrompt.band8ModelAnswer.examinerComments.map((com, i) => (
+                      <li key={i}>{com}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+
+            <div className="px-5 py-3 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
+              <button
+                type="button"
+                onClick={() => {
+                  handleLoadCambridgePrompt(selectedModelPrompt, false);
+                  setIsModelModalOpen(false);
+                }}
+                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 shadow-xs cursor-pointer"
+              >
+                <PenTool className="w-3.5 h-3.5" />
+                <span>Practice Writing This Prompt</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setIsModelModalOpen(false)}
+                className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-lg text-xs font-semibold transition-colors cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ========================================================================= */}
       {/* VIEW 3: DEDICATED FULL EVALUATION REPORT PAGE                             */}
       {/* ========================================================================= */}
       {currentView === 'report' && (
         <div className="space-y-6 animate-in fade-in duration-150">
+          {/* Fallback Notice if Gemini AI failed or key had issues */}
+          {errorMessage && (
+            <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-amber-950 animate-in fade-in shadow-2xs">
+              <div className="flex items-start gap-2.5">
+                <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                <div className="space-y-0.5">
+                  <span className="font-bold">Gemini AI Notification:</span>
+                  <p className="text-[11px] text-amber-900 leading-relaxed">{errorMessage}</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsSettingsModalOpen(true)}
+                className="px-3 py-1.5 bg-white hover:bg-amber-100 text-amber-950 border border-amber-300 rounded-xl font-bold text-xs shrink-0 transition-colors shadow-2xs cursor-pointer self-start sm:self-auto"
+              >
+                Open Settings & Test Key
+              </button>
+            </div>
+          )}
+
           <div className="flex items-center justify-between border-b border-slate-200 pb-3">
             <button
               type="button"
@@ -704,6 +1515,233 @@ export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ showSinhala,
             onOpenLesson={handleOpenLesson}
             onRetest={() => setCurrentView('editor')}
           />
+        </div>
+      )}
+
+
+      {/* Cambridge Past Paper Prompt Selector Modal */}
+      {isPromptSelectorOpen && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in"
+          onClick={() => setIsPromptSelectorOpen(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl max-w-4xl max-h-[88vh] overflow-hidden shadow-2xl flex flex-col w-full animate-in zoom-in-95"
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-slate-50">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold">
+                  <BookOpen className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-slate-900">Select Official Cambridge Writing Prompt</h3>
+                  <p className="text-xs text-slate-500">Pick any real past paper prompt from Cambridge 1 or Books 14–18</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsPromptSelectorOpen(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Filter Pills */}
+            <div className="px-5 py-2.5 border-b border-slate-200 bg-white flex items-center gap-2 overflow-x-auto text-xs font-semibold">
+              <span className="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Filter:</span>
+              {[
+                { id: 'c1', label: `Cambridge 1 (${ALL_CAMBRIDGE_TESTS.filter(t => t.id.startsWith('c1-')).length} Tasks)` },
+                { id: 'c14-18', label: `Cambridge 14–18 (${ALL_CAMBRIDGE_TESTS.filter(t => !t.id.startsWith('c1-')).length} Tasks)` },
+                { id: 'task1', label: 'Academic Task 1' },
+                { id: 'task2', label: 'Task 2 Essays' },
+                { id: 'all', label: `All Prompts (${ALL_CAMBRIDGE_TESTS.length})` }
+              ].map(f => (
+                <button
+                  key={f.id}
+                  type="button"
+                  onClick={() => setPromptFilterTab(f.id as any)}
+                  className={`px-3 py-1 rounded-lg transition-all whitespace-nowrap cursor-pointer ${
+                    promptFilterTab === f.id
+                      ? 'bg-indigo-600 text-white shadow-xs'
+                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  }`}
+                >
+                  {f.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Prompts List Grid */}
+            <div className="p-5 overflow-y-auto space-y-3 max-h-[60vh] bg-slate-50/50">
+              {ALL_CAMBRIDGE_TESTS
+                .filter(t => {
+                  if (promptFilterTab === 'c1') return t.id.startsWith('c1-');
+                  if (promptFilterTab === 'c14-18') return !t.id.startsWith('c1-');
+                  if (promptFilterTab === 'task1') return t.taskType === 'task1';
+                  if (promptFilterTab === 'task2') return t.taskType === 'task2';
+                  return true;
+                })
+                .map(test => {
+                  const isTask1 = test.taskType === 'task1';
+                  return (
+                    <div
+                      key={test.id}
+                      className="p-4 bg-white rounded-xl border border-slate-200 hover:border-indigo-400 transition-all shadow-2xs space-y-3"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded bg-slate-900 text-white">
+                            {test.cambridgeBook}
+                          </span>
+                          <span className={`text-[10px] font-bold font-mono px-2 py-0.5 rounded ${
+                            isTask1 ? 'bg-amber-100 text-amber-900' : 'bg-emerald-100 text-emerald-900'
+                          }`}>
+                            {isTask1 ? 'Task 1 (150 words)' : 'Task 2 (250 words)'}
+                          </span>
+                          <span className="text-xs font-bold text-indigo-700">{test.category}</span>
+                        </div>
+                        <span className="text-[11px] font-mono text-slate-400">
+                          {test.suggestedTimeMinutes} mins · {test.minimumWords}+ words
+                        </span>
+                      </div>
+
+                      <p className="text-xs sm:text-sm text-slate-800 font-serif leading-relaxed font-medium">
+                        {test.question}
+                      </p>
+
+                      <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 text-xs">
+                        <div className="text-[11px] text-slate-500">
+                          Candidate Band {test.weakCandidateEssay?.band || 5.0} attempt & Band 8.5 Model ready
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => handleOpenModelAnswer(test)}
+                            className="px-2.5 py-1 text-slate-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg font-semibold transition-colors cursor-pointer"
+                          >
+                            Read Band 8.5 Model
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleLoadCambridgePrompt(test, true)}
+                            className="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-semibold transition-colors cursor-pointer"
+                            title="Load official prompt with the candidate attempt to grade and test"
+                          >
+                            Load Candidate Draft
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleLoadCambridgePrompt(test, false)}
+                            className="px-3.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-bold transition-colors shadow-xs cursor-pointer"
+                          >
+                            Write My Essay
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-5 py-3 border-t border-slate-200 bg-slate-50 flex items-center justify-between text-xs text-slate-500">
+              <span>Tip: You can also attach real prompt charts/diagrams from past papers using the image button in the editor.</span>
+              <button
+                type="button"
+                onClick={() => setIsPromptSelectorOpen(false)}
+                className="px-4 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-semibold rounded-lg transition-colors cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Band 8.5 Model Answer Lightbox Modal */}
+      {isModelModalOpen && selectedModelPrompt && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in"
+          onClick={() => setIsModelModalOpen(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl max-w-3xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col w-full animate-in zoom-in-95"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-slate-50">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-600 text-white font-mono">
+                  Band 8.5 Model Answer
+                </span>
+                <span className="text-xs font-bold text-slate-800">{selectedModelPrompt.cambridgeBook}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsModelModalOpen(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-5 overflow-y-auto space-y-4">
+              <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1">
+                  Examination Prompt:
+                </span>
+                <p className="text-xs sm:text-sm font-serif text-slate-900 leading-relaxed font-medium">
+                  {selectedModelPrompt.question}
+                </p>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                    High-Scoring Academic Response ({countWords(selectedModelPrompt.band8ModelAnswer.text)} Words)
+                  </span>
+                </div>
+                <div className="font-serif text-xs sm:text-sm text-slate-800 leading-relaxed whitespace-pre-wrap p-4 bg-emerald-50/30 rounded-xl border border-emerald-200/60 shadow-2xs">
+                  {selectedModelPrompt.band8ModelAnswer.text}
+                </div>
+              </div>
+
+              {selectedModelPrompt.band8ModelAnswer.examinerComments && (
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-1.5">
+                  <span className="font-bold text-slate-800 block">Examiner Scoring Notes:</span>
+                  <ul className="list-disc pl-5 space-y-1 text-slate-600">
+                    {selectedModelPrompt.band8ModelAnswer.examinerComments.map((com, i) => (
+                      <li key={i}>{com}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+
+            <div className="px-5 py-3 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
+              <button
+                type="button"
+                onClick={() => {
+                  handleLoadCambridgePrompt(selectedModelPrompt, false);
+                  setIsModelModalOpen(false);
+                }}
+                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 shadow-xs cursor-pointer"
+              >
+                <PenTool className="w-3.5 h-3.5" />
+                <span>Practice Writing This Prompt</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setIsModelModalOpen(false)}
+                className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-lg text-xs font-semibold transition-colors cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -740,6 +1778,233 @@ export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ showSinhala,
               setCurrentView('editor');
             }}
           />
+        </div>
+      )}
+
+
+      {/* Cambridge Past Paper Prompt Selector Modal */}
+      {isPromptSelectorOpen && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in"
+          onClick={() => setIsPromptSelectorOpen(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl max-w-4xl max-h-[88vh] overflow-hidden shadow-2xl flex flex-col w-full animate-in zoom-in-95"
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-slate-50">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold">
+                  <BookOpen className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-slate-900">Select Official Cambridge Writing Prompt</h3>
+                  <p className="text-xs text-slate-500">Pick any real past paper prompt from Cambridge 1 or Books 14–18</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsPromptSelectorOpen(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Filter Pills */}
+            <div className="px-5 py-2.5 border-b border-slate-200 bg-white flex items-center gap-2 overflow-x-auto text-xs font-semibold">
+              <span className="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Filter:</span>
+              {[
+                { id: 'c1', label: `Cambridge 1 (${ALL_CAMBRIDGE_TESTS.filter(t => t.id.startsWith('c1-')).length} Tasks)` },
+                { id: 'c14-18', label: `Cambridge 14–18 (${ALL_CAMBRIDGE_TESTS.filter(t => !t.id.startsWith('c1-')).length} Tasks)` },
+                { id: 'task1', label: 'Academic Task 1' },
+                { id: 'task2', label: 'Task 2 Essays' },
+                { id: 'all', label: `All Prompts (${ALL_CAMBRIDGE_TESTS.length})` }
+              ].map(f => (
+                <button
+                  key={f.id}
+                  type="button"
+                  onClick={() => setPromptFilterTab(f.id as any)}
+                  className={`px-3 py-1 rounded-lg transition-all whitespace-nowrap cursor-pointer ${
+                    promptFilterTab === f.id
+                      ? 'bg-indigo-600 text-white shadow-xs'
+                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  }`}
+                >
+                  {f.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Prompts List Grid */}
+            <div className="p-5 overflow-y-auto space-y-3 max-h-[60vh] bg-slate-50/50">
+              {ALL_CAMBRIDGE_TESTS
+                .filter(t => {
+                  if (promptFilterTab === 'c1') return t.id.startsWith('c1-');
+                  if (promptFilterTab === 'c14-18') return !t.id.startsWith('c1-');
+                  if (promptFilterTab === 'task1') return t.taskType === 'task1';
+                  if (promptFilterTab === 'task2') return t.taskType === 'task2';
+                  return true;
+                })
+                .map(test => {
+                  const isTask1 = test.taskType === 'task1';
+                  return (
+                    <div
+                      key={test.id}
+                      className="p-4 bg-white rounded-xl border border-slate-200 hover:border-indigo-400 transition-all shadow-2xs space-y-3"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded bg-slate-900 text-white">
+                            {test.cambridgeBook}
+                          </span>
+                          <span className={`text-[10px] font-bold font-mono px-2 py-0.5 rounded ${
+                            isTask1 ? 'bg-amber-100 text-amber-900' : 'bg-emerald-100 text-emerald-900'
+                          }`}>
+                            {isTask1 ? 'Task 1 (150 words)' : 'Task 2 (250 words)'}
+                          </span>
+                          <span className="text-xs font-bold text-indigo-700">{test.category}</span>
+                        </div>
+                        <span className="text-[11px] font-mono text-slate-400">
+                          {test.suggestedTimeMinutes} mins · {test.minimumWords}+ words
+                        </span>
+                      </div>
+
+                      <p className="text-xs sm:text-sm text-slate-800 font-serif leading-relaxed font-medium">
+                        {test.question}
+                      </p>
+
+                      <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 text-xs">
+                        <div className="text-[11px] text-slate-500">
+                          Candidate Band {test.weakCandidateEssay?.band || 5.0} attempt & Band 8.5 Model ready
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => handleOpenModelAnswer(test)}
+                            className="px-2.5 py-1 text-slate-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg font-semibold transition-colors cursor-pointer"
+                          >
+                            Read Band 8.5 Model
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleLoadCambridgePrompt(test, true)}
+                            className="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-semibold transition-colors cursor-pointer"
+                            title="Load official prompt with the candidate attempt to grade and test"
+                          >
+                            Load Candidate Draft
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleLoadCambridgePrompt(test, false)}
+                            className="px-3.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-bold transition-colors shadow-xs cursor-pointer"
+                          >
+                            Write My Essay
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-5 py-3 border-t border-slate-200 bg-slate-50 flex items-center justify-between text-xs text-slate-500">
+              <span>Tip: You can also attach real prompt charts/diagrams from past papers using the image button in the editor.</span>
+              <button
+                type="button"
+                onClick={() => setIsPromptSelectorOpen(false)}
+                className="px-4 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-semibold rounded-lg transition-colors cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Band 8.5 Model Answer Lightbox Modal */}
+      {isModelModalOpen && selectedModelPrompt && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in"
+          onClick={() => setIsModelModalOpen(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl max-w-3xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col w-full animate-in zoom-in-95"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-slate-50">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-600 text-white font-mono">
+                  Band 8.5 Model Answer
+                </span>
+                <span className="text-xs font-bold text-slate-800">{selectedModelPrompt.cambridgeBook}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsModelModalOpen(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-5 overflow-y-auto space-y-4">
+              <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1">
+                  Examination Prompt:
+                </span>
+                <p className="text-xs sm:text-sm font-serif text-slate-900 leading-relaxed font-medium">
+                  {selectedModelPrompt.question}
+                </p>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                    High-Scoring Academic Response ({countWords(selectedModelPrompt.band8ModelAnswer.text)} Words)
+                  </span>
+                </div>
+                <div className="font-serif text-xs sm:text-sm text-slate-800 leading-relaxed whitespace-pre-wrap p-4 bg-emerald-50/30 rounded-xl border border-emerald-200/60 shadow-2xs">
+                  {selectedModelPrompt.band8ModelAnswer.text}
+                </div>
+              </div>
+
+              {selectedModelPrompt.band8ModelAnswer.examinerComments && (
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-1.5">
+                  <span className="font-bold text-slate-800 block">Examiner Scoring Notes:</span>
+                  <ul className="list-disc pl-5 space-y-1 text-slate-600">
+                    {selectedModelPrompt.band8ModelAnswer.examinerComments.map((com, i) => (
+                      <li key={i}>{com}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+
+            <div className="px-5 py-3 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
+              <button
+                type="button"
+                onClick={() => {
+                  handleLoadCambridgePrompt(selectedModelPrompt, false);
+                  setIsModelModalOpen(false);
+                }}
+                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 shadow-xs cursor-pointer"
+              >
+                <PenTool className="w-3.5 h-3.5" />
+                <span>Practice Writing This Prompt</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setIsModelModalOpen(false)}
+                className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-lg text-xs font-semibold transition-colors cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -823,6 +2088,233 @@ export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ showSinhala,
                   })}
                 </tbody>
               </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+
+      {/* Cambridge Past Paper Prompt Selector Modal */}
+      {isPromptSelectorOpen && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in"
+          onClick={() => setIsPromptSelectorOpen(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl max-w-4xl max-h-[88vh] overflow-hidden shadow-2xl flex flex-col w-full animate-in zoom-in-95"
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-slate-50">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold">
+                  <BookOpen className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-slate-900">Select Official Cambridge Writing Prompt</h3>
+                  <p className="text-xs text-slate-500">Pick any real past paper prompt from Cambridge 1 or Books 14–18</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsPromptSelectorOpen(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Filter Pills */}
+            <div className="px-5 py-2.5 border-b border-slate-200 bg-white flex items-center gap-2 overflow-x-auto text-xs font-semibold">
+              <span className="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Filter:</span>
+              {[
+                { id: 'c1', label: `Cambridge 1 (${ALL_CAMBRIDGE_TESTS.filter(t => t.id.startsWith('c1-')).length} Tasks)` },
+                { id: 'c14-18', label: `Cambridge 14–18 (${ALL_CAMBRIDGE_TESTS.filter(t => !t.id.startsWith('c1-')).length} Tasks)` },
+                { id: 'task1', label: 'Academic Task 1' },
+                { id: 'task2', label: 'Task 2 Essays' },
+                { id: 'all', label: `All Prompts (${ALL_CAMBRIDGE_TESTS.length})` }
+              ].map(f => (
+                <button
+                  key={f.id}
+                  type="button"
+                  onClick={() => setPromptFilterTab(f.id as any)}
+                  className={`px-3 py-1 rounded-lg transition-all whitespace-nowrap cursor-pointer ${
+                    promptFilterTab === f.id
+                      ? 'bg-indigo-600 text-white shadow-xs'
+                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  }`}
+                >
+                  {f.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Prompts List Grid */}
+            <div className="p-5 overflow-y-auto space-y-3 max-h-[60vh] bg-slate-50/50">
+              {ALL_CAMBRIDGE_TESTS
+                .filter(t => {
+                  if (promptFilterTab === 'c1') return t.id.startsWith('c1-');
+                  if (promptFilterTab === 'c14-18') return !t.id.startsWith('c1-');
+                  if (promptFilterTab === 'task1') return t.taskType === 'task1';
+                  if (promptFilterTab === 'task2') return t.taskType === 'task2';
+                  return true;
+                })
+                .map(test => {
+                  const isTask1 = test.taskType === 'task1';
+                  return (
+                    <div
+                      key={test.id}
+                      className="p-4 bg-white rounded-xl border border-slate-200 hover:border-indigo-400 transition-all shadow-2xs space-y-3"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded bg-slate-900 text-white">
+                            {test.cambridgeBook}
+                          </span>
+                          <span className={`text-[10px] font-bold font-mono px-2 py-0.5 rounded ${
+                            isTask1 ? 'bg-amber-100 text-amber-900' : 'bg-emerald-100 text-emerald-900'
+                          }`}>
+                            {isTask1 ? 'Task 1 (150 words)' : 'Task 2 (250 words)'}
+                          </span>
+                          <span className="text-xs font-bold text-indigo-700">{test.category}</span>
+                        </div>
+                        <span className="text-[11px] font-mono text-slate-400">
+                          {test.suggestedTimeMinutes} mins · {test.minimumWords}+ words
+                        </span>
+                      </div>
+
+                      <p className="text-xs sm:text-sm text-slate-800 font-serif leading-relaxed font-medium">
+                        {test.question}
+                      </p>
+
+                      <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 text-xs">
+                        <div className="text-[11px] text-slate-500">
+                          Candidate Band {test.weakCandidateEssay?.band || 5.0} attempt & Band 8.5 Model ready
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => handleOpenModelAnswer(test)}
+                            className="px-2.5 py-1 text-slate-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg font-semibold transition-colors cursor-pointer"
+                          >
+                            Read Band 8.5 Model
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleLoadCambridgePrompt(test, true)}
+                            className="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-semibold transition-colors cursor-pointer"
+                            title="Load official prompt with the candidate attempt to grade and test"
+                          >
+                            Load Candidate Draft
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleLoadCambridgePrompt(test, false)}
+                            className="px-3.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-bold transition-colors shadow-xs cursor-pointer"
+                          >
+                            Write My Essay
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-5 py-3 border-t border-slate-200 bg-slate-50 flex items-center justify-between text-xs text-slate-500">
+              <span>Tip: You can also attach real prompt charts/diagrams from past papers using the image button in the editor.</span>
+              <button
+                type="button"
+                onClick={() => setIsPromptSelectorOpen(false)}
+                className="px-4 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-semibold rounded-lg transition-colors cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Band 8.5 Model Answer Lightbox Modal */}
+      {isModelModalOpen && selectedModelPrompt && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in"
+          onClick={() => setIsModelModalOpen(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl max-w-3xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col w-full animate-in zoom-in-95"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-slate-50">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-600 text-white font-mono">
+                  Band 8.5 Model Answer
+                </span>
+                <span className="text-xs font-bold text-slate-800">{selectedModelPrompt.cambridgeBook}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsModelModalOpen(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-5 overflow-y-auto space-y-4">
+              <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1">
+                  Examination Prompt:
+                </span>
+                <p className="text-xs sm:text-sm font-serif text-slate-900 leading-relaxed font-medium">
+                  {selectedModelPrompt.question}
+                </p>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                    High-Scoring Academic Response ({countWords(selectedModelPrompt.band8ModelAnswer.text)} Words)
+                  </span>
+                </div>
+                <div className="font-serif text-xs sm:text-sm text-slate-800 leading-relaxed whitespace-pre-wrap p-4 bg-emerald-50/30 rounded-xl border border-emerald-200/60 shadow-2xs">
+                  {selectedModelPrompt.band8ModelAnswer.text}
+                </div>
+              </div>
+
+              {selectedModelPrompt.band8ModelAnswer.examinerComments && (
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-1.5">
+                  <span className="font-bold text-slate-800 block">Examiner Scoring Notes:</span>
+                  <ul className="list-disc pl-5 space-y-1 text-slate-600">
+                    {selectedModelPrompt.band8ModelAnswer.examinerComments.map((com, i) => (
+                      <li key={i}>{com}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+
+            <div className="px-5 py-3 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
+              <button
+                type="button"
+                onClick={() => {
+                  handleLoadCambridgePrompt(selectedModelPrompt, false);
+                  setIsModelModalOpen(false);
+                }}
+                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 shadow-xs cursor-pointer"
+              >
+                <PenTool className="w-3.5 h-3.5" />
+                <span>Practice Writing This Prompt</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setIsModelModalOpen(false)}
+                className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-lg text-xs font-semibold transition-colors cursor-pointer"
+              >
+                Close
+              </button>
             </div>
           </div>
         </div>
@@ -945,6 +2437,233 @@ export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ showSinhala,
         </div>
       )}
 
+
+      {/* Cambridge Past Paper Prompt Selector Modal */}
+      {isPromptSelectorOpen && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in"
+          onClick={() => setIsPromptSelectorOpen(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl max-w-4xl max-h-[88vh] overflow-hidden shadow-2xl flex flex-col w-full animate-in zoom-in-95"
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-slate-50">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold">
+                  <BookOpen className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-slate-900">Select Official Cambridge Writing Prompt</h3>
+                  <p className="text-xs text-slate-500">Pick any real past paper prompt from Cambridge 1 or Books 14–18</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsPromptSelectorOpen(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Filter Pills */}
+            <div className="px-5 py-2.5 border-b border-slate-200 bg-white flex items-center gap-2 overflow-x-auto text-xs font-semibold">
+              <span className="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Filter:</span>
+              {[
+                { id: 'c1', label: `Cambridge 1 (${ALL_CAMBRIDGE_TESTS.filter(t => t.id.startsWith('c1-')).length} Tasks)` },
+                { id: 'c14-18', label: `Cambridge 14–18 (${ALL_CAMBRIDGE_TESTS.filter(t => !t.id.startsWith('c1-')).length} Tasks)` },
+                { id: 'task1', label: 'Academic Task 1' },
+                { id: 'task2', label: 'Task 2 Essays' },
+                { id: 'all', label: `All Prompts (${ALL_CAMBRIDGE_TESTS.length})` }
+              ].map(f => (
+                <button
+                  key={f.id}
+                  type="button"
+                  onClick={() => setPromptFilterTab(f.id as any)}
+                  className={`px-3 py-1 rounded-lg transition-all whitespace-nowrap cursor-pointer ${
+                    promptFilterTab === f.id
+                      ? 'bg-indigo-600 text-white shadow-xs'
+                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  }`}
+                >
+                  {f.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Prompts List Grid */}
+            <div className="p-5 overflow-y-auto space-y-3 max-h-[60vh] bg-slate-50/50">
+              {ALL_CAMBRIDGE_TESTS
+                .filter(t => {
+                  if (promptFilterTab === 'c1') return t.id.startsWith('c1-');
+                  if (promptFilterTab === 'c14-18') return !t.id.startsWith('c1-');
+                  if (promptFilterTab === 'task1') return t.taskType === 'task1';
+                  if (promptFilterTab === 'task2') return t.taskType === 'task2';
+                  return true;
+                })
+                .map(test => {
+                  const isTask1 = test.taskType === 'task1';
+                  return (
+                    <div
+                      key={test.id}
+                      className="p-4 bg-white rounded-xl border border-slate-200 hover:border-indigo-400 transition-all shadow-2xs space-y-3"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded bg-slate-900 text-white">
+                            {test.cambridgeBook}
+                          </span>
+                          <span className={`text-[10px] font-bold font-mono px-2 py-0.5 rounded ${
+                            isTask1 ? 'bg-amber-100 text-amber-900' : 'bg-emerald-100 text-emerald-900'
+                          }`}>
+                            {isTask1 ? 'Task 1 (150 words)' : 'Task 2 (250 words)'}
+                          </span>
+                          <span className="text-xs font-bold text-indigo-700">{test.category}</span>
+                        </div>
+                        <span className="text-[11px] font-mono text-slate-400">
+                          {test.suggestedTimeMinutes} mins · {test.minimumWords}+ words
+                        </span>
+                      </div>
+
+                      <p className="text-xs sm:text-sm text-slate-800 font-serif leading-relaxed font-medium">
+                        {test.question}
+                      </p>
+
+                      <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 text-xs">
+                        <div className="text-[11px] text-slate-500">
+                          Candidate Band {test.weakCandidateEssay?.band || 5.0} attempt & Band 8.5 Model ready
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => handleOpenModelAnswer(test)}
+                            className="px-2.5 py-1 text-slate-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg font-semibold transition-colors cursor-pointer"
+                          >
+                            Read Band 8.5 Model
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleLoadCambridgePrompt(test, true)}
+                            className="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-semibold transition-colors cursor-pointer"
+                            title="Load official prompt with the candidate attempt to grade and test"
+                          >
+                            Load Candidate Draft
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleLoadCambridgePrompt(test, false)}
+                            className="px-3.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-bold transition-colors shadow-xs cursor-pointer"
+                          >
+                            Write My Essay
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-5 py-3 border-t border-slate-200 bg-slate-50 flex items-center justify-between text-xs text-slate-500">
+              <span>Tip: You can also attach real prompt charts/diagrams from past papers using the image button in the editor.</span>
+              <button
+                type="button"
+                onClick={() => setIsPromptSelectorOpen(false)}
+                className="px-4 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-semibold rounded-lg transition-colors cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Band 8.5 Model Answer Lightbox Modal */}
+      {isModelModalOpen && selectedModelPrompt && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in"
+          onClick={() => setIsModelModalOpen(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl max-w-3xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col w-full animate-in zoom-in-95"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-slate-50">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-600 text-white font-mono">
+                  Band 8.5 Model Answer
+                </span>
+                <span className="text-xs font-bold text-slate-800">{selectedModelPrompt.cambridgeBook}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsModelModalOpen(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-5 overflow-y-auto space-y-4">
+              <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1">
+                  Examination Prompt:
+                </span>
+                <p className="text-xs sm:text-sm font-serif text-slate-900 leading-relaxed font-medium">
+                  {selectedModelPrompt.question}
+                </p>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                    High-Scoring Academic Response ({countWords(selectedModelPrompt.band8ModelAnswer.text)} Words)
+                  </span>
+                </div>
+                <div className="font-serif text-xs sm:text-sm text-slate-800 leading-relaxed whitespace-pre-wrap p-4 bg-emerald-50/30 rounded-xl border border-emerald-200/60 shadow-2xs">
+                  {selectedModelPrompt.band8ModelAnswer.text}
+                </div>
+              </div>
+
+              {selectedModelPrompt.band8ModelAnswer.examinerComments && (
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-1.5">
+                  <span className="font-bold text-slate-800 block">Examiner Scoring Notes:</span>
+                  <ul className="list-disc pl-5 space-y-1 text-slate-600">
+                    {selectedModelPrompt.band8ModelAnswer.examinerComments.map((com, i) => (
+                      <li key={i}>{com}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+
+            <div className="px-5 py-3 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
+              <button
+                type="button"
+                onClick={() => {
+                  handleLoadCambridgePrompt(selectedModelPrompt, false);
+                  setIsModelModalOpen(false);
+                }}
+                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 shadow-xs cursor-pointer"
+              >
+                <PenTool className="w-3.5 h-3.5" />
+                <span>Practice Writing This Prompt</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setIsModelModalOpen(false)}
+                className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-lg text-xs font-semibold transition-colors cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Render Active Lesson Modal */}
       {activeLesson && (
         <TutorLessonModal
@@ -955,6 +2674,300 @@ export const WritingTutorView: React.FC<WritingTutorViewProps> = ({ showSinhala,
           onClose={() => setActiveLesson(null)}
           onSaveProgress={handleSaveLessonProgress}
         />
+      )}
+
+      {/* Google Gemini API Configuration Modal */}
+      <ApiSettingsModal
+        isOpen={isSettingsModalOpen || currentView === 'settings'}
+        onClose={() => {
+          setIsSettingsModalOpen(false);
+          if (currentView === 'settings') {
+            setCurrentView('hub');
+          }
+        }}
+        onKeyUpdated={(k, m) => {
+          setApiKey(k);
+          setModel(m);
+        }}
+      />
+
+      {/* Visual Prompt Lightbox Modal */}
+      {isImageLightboxOpen && promptImage && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in"
+          onClick={() => setIsImageLightboxOpen(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col w-full animate-in zoom-in-95"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-200 bg-slate-50">
+              <div className="flex items-center gap-2">
+                <ImageIcon className="w-4 h-4 text-indigo-600" />
+                <h3 className="text-sm font-bold text-slate-900">Official IELTS Task Visual Prompt / Diagram</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsImageLightboxOpen(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="p-4 overflow-auto flex items-center justify-center bg-slate-100 min-h-[300px]">
+              <img 
+                src={promptImage} 
+                alt="IELTS Task Diagram" 
+                className="max-h-[75vh] max-w-full object-contain rounded-lg shadow-sm"
+              />
+            </div>
+            <div className="px-5 py-2.5 border-t border-slate-200 bg-white flex items-center justify-between text-xs text-slate-500 font-serif">
+              <span className="truncate max-w-xl">"{questionInput}"</span>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleRemovePromptImage}
+                  className="px-3 py-1 text-rose-600 hover:bg-rose-50 font-semibold rounded-lg text-xs transition-colors cursor-pointer"
+                >
+                  Remove Diagram
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsImageLightboxOpen(false)}
+                  className="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg text-xs transition-colors cursor-pointer"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Cambridge Past Paper Prompt Selector Modal */}
+      {isPromptSelectorOpen && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in"
+          onClick={() => setIsPromptSelectorOpen(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl max-w-4xl max-h-[88vh] overflow-hidden shadow-2xl flex flex-col w-full animate-in zoom-in-95"
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-slate-50">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold">
+                  <BookOpen className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-slate-900">Select Official Cambridge Writing Prompt</h3>
+                  <p className="text-xs text-slate-500">Pick any real past paper prompt from Cambridge 1 or Books 14–18</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsPromptSelectorOpen(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Filter Pills */}
+            <div className="px-5 py-2.5 border-b border-slate-200 bg-white flex items-center gap-2 overflow-x-auto text-xs font-semibold">
+              <span className="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Filter:</span>
+              {[
+                { id: 'c1', label: `Cambridge 1 (${ALL_CAMBRIDGE_TESTS.filter(t => t.id.startsWith('c1-')).length} Tasks)` },
+                { id: 'c14-18', label: `Cambridge 14–18 (${ALL_CAMBRIDGE_TESTS.filter(t => !t.id.startsWith('c1-')).length} Tasks)` },
+                { id: 'task1', label: 'Academic Task 1' },
+                { id: 'task2', label: 'Task 2 Essays' },
+                { id: 'all', label: `All Prompts (${ALL_CAMBRIDGE_TESTS.length})` }
+              ].map(f => (
+                <button
+                  key={f.id}
+                  type="button"
+                  onClick={() => setPromptFilterTab(f.id as any)}
+                  className={`px-3 py-1 rounded-lg transition-all whitespace-nowrap cursor-pointer ${
+                    promptFilterTab === f.id
+                      ? 'bg-indigo-600 text-white shadow-xs'
+                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  }`}
+                >
+                  {f.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Prompts List Grid */}
+            <div className="p-5 overflow-y-auto space-y-3 max-h-[60vh] bg-slate-50/50">
+              {ALL_CAMBRIDGE_TESTS
+                .filter(t => {
+                  if (promptFilterTab === 'c1') return t.id.startsWith('c1-');
+                  if (promptFilterTab === 'c14-18') return !t.id.startsWith('c1-');
+                  if (promptFilterTab === 'task1') return t.taskType === 'task1';
+                  if (promptFilterTab === 'task2') return t.taskType === 'task2';
+                  return true;
+                })
+                .map(test => {
+                  const isTask1 = test.taskType === 'task1';
+                  return (
+                    <div
+                      key={test.id}
+                      className="p-4 bg-white rounded-xl border border-slate-200 hover:border-indigo-400 transition-all shadow-2xs space-y-3"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded bg-slate-900 text-white">
+                            {test.cambridgeBook}
+                          </span>
+                          <span className={`text-[10px] font-bold font-mono px-2 py-0.5 rounded ${
+                            isTask1 ? 'bg-amber-100 text-amber-900' : 'bg-emerald-100 text-emerald-900'
+                          }`}>
+                            {isTask1 ? 'Task 1 (150 words)' : 'Task 2 (250 words)'}
+                          </span>
+                          <span className="text-xs font-bold text-indigo-700">{test.category}</span>
+                        </div>
+                        <span className="text-[11px] font-mono text-slate-400">
+                          {test.suggestedTimeMinutes} mins · {test.minimumWords}+ words
+                        </span>
+                      </div>
+
+                      <p className="text-xs sm:text-sm text-slate-800 font-serif leading-relaxed font-medium">
+                        {test.question}
+                      </p>
+
+                      <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 text-xs">
+                        <div className="text-[11px] text-slate-500">
+                          Candidate Band {test.weakCandidateEssay?.band || 5.0} attempt & Band 8.5 Model ready
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => handleOpenModelAnswer(test)}
+                            className="px-2.5 py-1 text-slate-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg font-semibold transition-colors cursor-pointer"
+                          >
+                            Read Band 8.5 Model
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleLoadCambridgePrompt(test, true)}
+                            className="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-semibold transition-colors cursor-pointer"
+                            title="Load official prompt with the candidate attempt to grade and test"
+                          >
+                            Load Candidate Draft
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleLoadCambridgePrompt(test, false)}
+                            className="px-3.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-bold transition-colors shadow-xs cursor-pointer"
+                          >
+                            Write My Essay
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-5 py-3 border-t border-slate-200 bg-slate-50 flex items-center justify-between text-xs text-slate-500">
+              <span>Tip: You can also attach real prompt charts/diagrams from past papers using the image button in the editor.</span>
+              <button
+                type="button"
+                onClick={() => setIsPromptSelectorOpen(false)}
+                className="px-4 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-semibold rounded-lg transition-colors cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Band 8.5 Model Answer Lightbox Modal */}
+      {isModelModalOpen && selectedModelPrompt && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in"
+          onClick={() => setIsModelModalOpen(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl max-w-3xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col w-full animate-in zoom-in-95"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-slate-50">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-600 text-white font-mono">
+                  Band 8.5 Model Answer
+                </span>
+                <span className="text-xs font-bold text-slate-800">{selectedModelPrompt.cambridgeBook}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsModelModalOpen(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-5 overflow-y-auto space-y-4">
+              <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1">
+                  Examination Prompt:
+                </span>
+                <p className="text-xs sm:text-sm font-serif text-slate-900 leading-relaxed font-medium">
+                  {selectedModelPrompt.question}
+                </p>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                    High-Scoring Academic Response ({countWords(selectedModelPrompt.band8ModelAnswer.text)} Words)
+                  </span>
+                </div>
+                <div className="font-serif text-xs sm:text-sm text-slate-800 leading-relaxed whitespace-pre-wrap p-4 bg-emerald-50/30 rounded-xl border border-emerald-200/60 shadow-2xs">
+                  {selectedModelPrompt.band8ModelAnswer.text}
+                </div>
+              </div>
+
+              {selectedModelPrompt.band8ModelAnswer.examinerComments && (
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-1.5">
+                  <span className="font-bold text-slate-800 block">Examiner Scoring Notes:</span>
+                  <ul className="list-disc pl-5 space-y-1 text-slate-600">
+                    {selectedModelPrompt.band8ModelAnswer.examinerComments.map((com, i) => (
+                      <li key={i}>{com}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+
+            <div className="px-5 py-3 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
+              <button
+                type="button"
+                onClick={() => {
+                  handleLoadCambridgePrompt(selectedModelPrompt, false);
+                  setIsModelModalOpen(false);
+                }}
+                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 shadow-xs cursor-pointer"
+              >
+                <PenTool className="w-3.5 h-3.5" />
+                <span>Practice Writing This Prompt</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setIsModelModalOpen(false)}
+                className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-lg text-xs font-semibold transition-colors cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

@@ -127,6 +127,10 @@ function MainApp() {
   // Vocabulary & Study State
   const [userProgress, setUserProgress] = useState<UserProgress>(loadProgress);
   const [selectedLessonId, setSelectedLessonId] = useState<string>(LESSONS[0]?.id || 'lesson-1');
+  const [selectedListeningTestId, setSelectedListeningTestId] = useState<string | undefined>(undefined);
+  const [selectedReadingPassageId, setSelectedReadingPassageId] = useState<string | undefined>(undefined);
+  const [selectedWritingPromptId, setSelectedWritingPromptId] = useState<string | undefined>(undefined);
+  const [selectedSpeakingTopicId, setSelectedSpeakingTopicId] = useState<string | undefined>(undefined);
 
   // Sync tab with URL search parameter & browser document title
   useEffect(() => {
@@ -306,13 +310,22 @@ function MainApp() {
           {currentTab === 'cambridge' && (
             <CambridgeLibraryView
               showSinhala={showSinhala}
-              onSelectTest={(module) => setCurrentTab(module as AppTab)}
+              onSelectTest={(module, testId) => {
+                if (testId) {
+                  if (module === 'listening') setSelectedListeningTestId(testId);
+                  else if (module === 'reading') setSelectedReadingPassageId(testId);
+                  else if (module === 'tutor') setSelectedWritingPromptId(testId);
+                  else if (module === 'speaking') setSelectedSpeakingTopicId(testId);
+                }
+                setCurrentTab(module as AppTab);
+              }}
             />
           )}
 
           {currentTab === 'listening' && (
             <ListeningTutorView 
               showSinhala={showSinhala} 
+              initialTestId={selectedListeningTestId}
               onBackToHub={() => setCurrentTab('cambridge')}
             />
           )}
@@ -320,6 +333,7 @@ function MainApp() {
           {currentTab === 'reading' && (
             <ReadingTutorView 
               showSinhala={showSinhala} 
+              initialPassageId={selectedReadingPassageId}
               onBackToHub={() => setCurrentTab('cambridge')}
             />
           )}
@@ -327,6 +341,7 @@ function MainApp() {
           {currentTab === 'tutor' && (
             <WritingTutorView 
               showSinhala={showSinhala} 
+              initialPromptId={selectedWritingPromptId}
               onNavigateToModule={(m) => setCurrentTab(m as AppTab)}
             />
           )}
@@ -334,6 +349,7 @@ function MainApp() {
           {currentTab === 'speaking' && (
             <SpeakingTutorView 
               showSinhala={showSinhala} 
+              initialTopicId={selectedSpeakingTopicId}
               onBackToHub={() => setCurrentTab('cambridge')}
             />
           )}

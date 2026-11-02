@@ -232,6 +232,56 @@ export const ACADEMIC_BAND8_UPGRADES: { original: string; better: string; note: 
   { original: 'important', better: 'imperative and consequential', note: 'Academic evaluation phrase' },
   { original: 'very important', better: 'of paramount importance', note: 'Advanced intensifier collocation' },
 
+  // Universal IELTS Task 1 Report Collocations & Upgrades
+  { original: 'The table illustrates the information on', better: 'The table compares data regarding', note: 'Precise Task 1 report introduction (+LR)' },
+  { original: 'The table shows information on', better: 'The table compares statistical data regarding', note: 'Formal report opening (+LR)' },
+  { original: 'The chart shows information on', better: 'The chart delineates comparative figures regarding', note: 'Formal chart opening (+LR)' },
+  { original: 'illustrates the information on', better: 'compares data regarding', note: 'Academic reporting collocation (+LR)' },
+  { original: 'shows the information on', better: 'delineates data regarding', note: 'Formal reporting verb (+LR)' },
+  { original: 'consumer spending', better: 'consumer expenditure', note: 'Authentic economic register (+LR)' },
+  { original: 'consumer spendings', better: 'household expenditure patterns', note: 'Academic economic collocation (+LR)' },
+  { original: 'different items such as', better: 'selected expenditure categories, namely', note: 'Formal exemplar specification (+LR)' },
+  { original: 'different countries including', better: 'five distinct European nations, specifically', note: 'Analytical classification (+TR)' },
+  { original: 'Overall, from these categories the noticeable information is', better: 'Overall, it is immediately apparent that', note: 'Authoritative Band 8 overview formula (+CC)' },
+  { original: 'Overall, it can be seen that', better: 'Overall, a macroscopic analysis reveals that', note: 'Analytical overview discourse marker (+CC)' },
+  { original: 'from all countries', better: 'across all five examined nations', note: 'Precise demographic scope (+TR)' },
+  { original: 'the noticeable information is', better: 'the most conspicuous feature is that', note: 'Mature discourse focus (+CC)' },
+  { original: 'What is remarkable', better: 'Remarkably,', note: 'Eliminates awkward syntax for concise academic transition (+CC)' },
+  { original: 'spend lower percentage than other categories', better: 'represented the lowest proportion of overall household budgets', note: 'High-band comparative synthesis (+TR & LR)' },
+  { original: 'spend higher money for', better: 'allocated the largest proportion of expenditure to', note: 'Authentic budget allocation collocation (+LR)' },
+  { original: 'spent higher money for', better: 'allocated the largest share of spending to', note: 'Economic collocation (+LR)' },
+  { original: 'shows strikingly higher', better: 'recorded the highest figure, peaking at', note: 'Dynamic trend reporting (+TR & LR)' },
+  { original: 'shows similar spending percentage', better: 'exhibited comparable expenditure allocations of', note: 'Comparative data synthesis (+LR & TR)' },
+  { original: 'shows similar spending', better: 'allocated comparable proportions', note: 'Academic comparison (+LR)' },
+  { original: 'shows similar expenditure', better: 'converged within a comparable range of', note: 'Sophisticated statistical register (+LR)' },
+  { original: 'showed similar expenditure', better: 'converged within a narrow band of', note: 'Statistical trend collocation (+LR)' },
+  { original: 'In addition to that', better: 'Additionally,', note: 'Concise cohesive transition (+CC)' },
+  { original: 'It is noticeable that', better: 'Evidently,', note: 'Concise analytical discourse marker (+CC)' },
+  { original: 'spend lower money for', better: 'allocated the smallest share of spending to', note: 'Formal economic register (+LR)' },
+  { original: 'spent lower money for', better: 'allocated the lowest proportion to', note: 'Formal economic register (+LR)' },
+  { original: 'for all these countries', better: 'across all five countries', note: 'Clear geographical scope (+TR)' },
+  { original: 'spent the lowest proportion approximately', better: 'registered the lowest individual share at approximately', note: 'Statistical precision (+TR & LR)' },
+  { original: 'Apart from that', better: 'In sharp contrast,', note: 'Formal contrasting discourse marker (+CC)' },
+  { original: 'spent the highest proportion than other countries', better: 'exceeded all other nations with an expenditure of', note: 'Precise comparative synthesis (+TR)' },
+  { original: 'Lastly', better: 'Finally, turning to', note: 'Professional section transition (+CC)' },
+  { original: 'Lastly consumers spend their money on', better: 'Finally, regarding consumer spending on', note: 'Polished academic transition (+CC)' },
+  { original: 'spend more money than other countries', better: 'recorded the highest proportion among the surveyed nations', note: 'Comparative precision (+TR & LR)' },
+  { original: 'spend similar range', better: 'clustered within a narrow range of', note: 'Advanced statistical collocation (+LR)' },
+  { original: 'around 5.4%', better: 'a modest 5.4%', note: 'Evaluative nuance (+TR & LR)' },
+  { original: 'on food and drinks', better: 'on food, beverage and tobacco items', note: 'Comprehensive data category reporting (+TR)' },
+  { original: 'clothing and footwear', better: 'apparel and footwear', note: 'Varied lexical resource (+LR)' },
+  { original: 'increased a lot', better: 'experienced a dramatic surge', note: 'High-impact trend collocation (+LR)' },
+  { original: 'went up a lot', better: 'escalated substantially', note: 'Formal upward trajectory (+LR)' },
+  { original: 'went down', better: 'witnessed a marked decline', note: 'Formal downward trend (+LR)' },
+  { original: 'decreased steadily', better: 'exhibited a persistent downward trajectory', note: 'Long-term trend analysis (+LR)' },
+  { original: 'did not change', better: 'remained largely static', note: 'Statistical stability collocation (+LR)' },
+  { original: 'reach a peak', better: 'culminate in a peak of', note: 'Exemplary Band 8 milestone collocation (+LR)' },
+  { original: 'reached a peak', better: 'culminated in a peak of', note: 'Exemplary Band 8 milestone collocation (+LR)' },
+  { original: 'was the highest', better: 'stood as the dominant category', note: 'Analytical comparison (+TR & LR)' },
+  { original: 'was the lowest', better: 'registered the lowest overall share', note: 'Analytical comparison (+TR & LR)' },
+  { original: 'big difference', better: 'marked disparity', note: 'Academic noun phrase (+LR)' },
+  { original: 'more and more', better: 'an increasingly prominent share of', note: 'Advanced trend modifier (+LR)' },
+
   // Cambridge 1 Complete Test Collection Upgrades
   // C1-T1-Task 2 Music
   { original: 'Music is very popular everywhere', better: 'Music permeates every corner of contemporary global culture', note: 'Sociological register' },
@@ -452,7 +502,7 @@ export function generateAcademicUpgradeSegments(
 const STATE_KEY = 'ielts_tutor_state_v1';
 const API_KEY_STORAGE = 'ielts_tutor_gemini_key_v1';
 const MODEL_STORAGE = 'ielts_tutor_gemini_model_v1';
-export const DEFAULT_GEMINI_MODEL = 'gemini-3.8-flash';
+export const DEFAULT_GEMINI_MODEL = 'gemini-2.0-flash';
 
 export const initialTutorState: TutorState = {
   assessments: [],
@@ -492,7 +542,7 @@ export const saveApiKey = (key: string) => {
 export const loadModel = () => {
   if (typeof window === 'undefined') return DEFAULT_GEMINI_MODEL;
   const stored = localStorage.getItem(MODEL_STORAGE);
-  if (!stored || stored === 'gemini-2.5-flash') {
+  if (!stored || stored === 'gemini-3.8-flash' || stored === 'gemini-2.5-flash') {
     localStorage.setItem(MODEL_STORAGE, DEFAULT_GEMINI_MODEL);
     return DEFAULT_GEMINI_MODEL;
   }
@@ -501,7 +551,7 @@ export const loadModel = () => {
 export const saveModel = (model: string) => localStorage.setItem(MODEL_STORAGE, model.trim() || DEFAULT_GEMINI_MODEL);
 
 /* ------------------------------------------------------------------ */
-/* Gemini pipeline                                                     */
+/* Gemini pipeline & Model Discovery                                  */
 /* ------------------------------------------------------------------ */
 
 const CRITERION_NAMES: Record<CriterionKey, string> = {
@@ -511,46 +561,88 @@ const CRITERION_NAMES: Record<CriterionKey, string> = {
   GRA: 'Grammar',
 };
 
+/**
+ * Dynamically queries Google Generative Language API to discover which models
+ * are authorized and supported for generateContent with the user's specific API key.
+ */
+export async function listAvailableGeminiModels(apiKey: string): Promise<string[]> {
+  if (!apiKey || !apiKey.trim()) return [];
+  const versions = ['v1beta', 'v1'];
+  for (const ver of versions) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/${ver}/models?key=${encodeURIComponent(apiKey.trim())}`;
+      const res = await fetch(url);
+      if (!res.ok) continue;
+      const data = await res.json();
+      if (Array.isArray(data?.models)) {
+        const supported = data.models
+          .filter((m: any) => 
+            Array.isArray(m.supportedGenerationMethods) && 
+            m.supportedGenerationMethods.includes('generateContent')
+          )
+          .map((m: any) => (m.name || '').replace(/^models\//, ''))
+          .filter(Boolean);
+        if (supported.length > 0) return supported;
+      }
+    } catch {
+      // ignore network errors and try next endpoint
+    }
+  }
+  return [];
+}
+
 async function callGemini(
   apiKey: string,
   model: string,
   prompt: string,
   onStatus?: (status: string) => void,
-  externalSignal?: AbortSignal
+  externalSignal?: AbortSignal,
+  imageDataUrl?: string | null
 ): Promise<any> {
-  // Prioritize verified working models on Google AI Studio
-  const modelsToTry = [
+  // Candidate models prioritized for Google AI Studio
+  const candidateModels = [
     model,
-    'gemini-1.5-flash',
     'gemini-2.0-flash',
-    'gemini-1.5-flash-latest',
+    'gemini-1.5-flash',
+    'gemini-2.5-flash',
+    'gemini-2.0-flash-lite',
+    'gemini-1.5-pro-latest',
     'gemini-1.5-pro',
-    'gemini-3.8-flash',
   ].filter((m, idx, arr) => Boolean(m) && arr.indexOf(m) === idx);
 
   let lastError: any = null;
+  const versionsToTry = ['v1beta', 'v1'];
 
-  for (const candidateModel of modelsToTry) {
-    if (externalSignal?.aborted) {
-      throw new Error('Evaluation cancelled by user');
-    }
-
-    onStatus?.(`Contacting ${candidateModel}...`);
-
+  // Helper to execute a single generateContent call
+  const attemptCall = async (targetModel: string, apiVersion: string) => {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 20000); // 20s max per model
-
+    const timeoutId = setTimeout(() => controller.abort(), 20000); // 20s max
     const abortListener = () => controller.abort();
     externalSignal?.addEventListener('abort', abortListener);
 
     try {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(candidateModel)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+      const parts: any[] = [{ text: prompt }];
+
+      // Attach visual task diagram/chart if provided
+      if (imageDataUrl && typeof imageDataUrl === 'string' && imageDataUrl.startsWith('data:')) {
+        const matches = imageDataUrl.match(/^data:([^;]+);base64,(.+)$/);
+        if (matches) {
+          parts.push({
+            inlineData: {
+              mimeType: matches[1],
+              data: matches[2]
+            }
+          });
+        }
+      }
+
+      const url = `https://generativelanguage.googleapis.com/${apiVersion}/models/${encodeURIComponent(targetModel)}:generateContent?key=${encodeURIComponent(apiKey)}`;
       const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         signal: controller.signal,
         body: JSON.stringify({
-          contents: [{ role: 'user', parts: [{ text: prompt }] }],
+          contents: [{ role: 'user', parts }],
           generationConfig: { responseMimeType: 'application/json', temperature: 0.2 },
         }),
       });
@@ -565,62 +657,89 @@ async function callGemini(
           if (body?.error?.message) message += `: ${body.error.message}`;
         } catch { /* ignore */ }
 
-        // If the model is 404, 400, 429 (rate-limit), 503 (server overloaded) or 500, try next candidate
-        if (
-          res.status === 404 || 
-          res.status === 400 || 
-          res.status === 429 || 
-          res.status === 503 || 
-          res.status === 500 || 
-          message.includes('not found') || 
-          message.includes('no longer available') ||
-          message.includes('unavailable') ||
-          message.includes('overloaded')
-        ) {
-          lastError = new Error(
-            res.status === 503 
-              ? `Google servers are temporarily busy (503: ${candidateModel})` 
-              : message
-          );
-          continue;
-        }
-
-        throw new Error(message);
+        const errObj = new Error(
+          res.status === 503 
+            ? `Google servers are temporarily busy (503: ${targetModel})` 
+            : message
+        );
+        (errObj as any).status = res.status;
+        return { success: false, error: errObj, status: res.status };
       }
 
       const data = await res.json();
       const text: string | undefined = data?.candidates?.[0]?.content?.parts?.map((p: any) => p.text).join('');
-      if (!text) throw new Error('Gemini returned an empty response. Please try again.');
+      if (!text) return { success: false, error: new Error('Gemini returned an empty response. Please try again.') };
       const cleaned = text.replace(/^```(?:json)?/i, '').replace(/```$/, '').trim();
 
       // Successfully called with this model; persist if we switched models
-      if (candidateModel !== model) {
-        saveModel(candidateModel);
+      if (targetModel !== model) {
+        saveModel(targetModel);
       }
 
       try {
-        return JSON.parse(cleaned);
+        const parsed = JSON.parse(cleaned);
+        return { success: true, data: parsed };
       } catch {
-        throw new Error('Gemini returned an invalid JSON report. Please try again.');
+        return { success: false, error: new Error('Gemini returned an invalid JSON report. Please try again.') };
       }
     } catch (err: any) {
       clearTimeout(timeoutId);
       externalSignal?.removeEventListener('abort', abortListener);
+      return { success: false, error: err };
+    }
+  };
 
-      if (externalSignal?.aborted) {
+  // 1. Try known models with v1beta and v1
+  for (const candidateModel of candidateModels) {
+    if (externalSignal?.aborted) {
+      throw new Error('Evaluation cancelled by user');
+    }
+
+    onStatus?.(`Contacting ${candidateModel}...`);
+
+    for (const ver of versionsToTry) {
+      const result = await attemptCall(candidateModel, ver);
+      if (result.success) {
+        return result.data;
+      }
+
+      lastError = result.error;
+      const errMsg = lastError?.message || '';
+
+      // If it is 404 (model not found), try next version or candidate
+      if (result.status === 404 || errMsg.includes('not found') || errMsg.includes('no longer available')) {
+        continue;
+      }
+
+      // If aborted by user, exit immediately
+      if (lastError?.name === 'AbortError' && externalSignal?.aborted) {
         throw new Error('Evaluation cancelled by user');
       }
 
-      // If aborted by timeout or model not found, try next candidate
-      if (err.name === 'AbortError' || err.message?.includes('aborted') || err.message?.includes('not found') || err.message?.includes('no longer available') || err.message?.includes('(404)')) {
-        lastError = new Error(`Model ${candidateModel} timed out or was not reached.`);
-        continue;
+      // For 429, 500, 503, continue to next candidate
+      if (result.status === 429 || result.status === 500 || result.status === 503) {
+        break;
       }
-      throw err;
     }
   }
 
-  throw lastError || new Error('Could not connect to Gemini models within timeout limit. Check your API key or internet connection.');
+  // 2. If all predefined candidates returned 404 or failed, dynamically discover models available on this key
+  try {
+    onStatus?.('Querying available models on your API key...');
+    const discovered = await listAvailableGeminiModels(apiKey);
+    if (discovered.length > 0) {
+      for (const discModel of discovered) {
+        if (candidateModels.includes(discModel)) continue;
+        onStatus?.(`Connecting to authorized model ${discModel}...`);
+        const result = await attemptCall(discModel, 'v1beta');
+        if (result.success) return result.data;
+      }
+    }
+  } catch {
+    // ignore discovery errors
+  }
+
+  throw lastError || new Error('Could not connect to Gemini models. Check your API key or select Gemini 2.0 Flash in Settings.');
 }
 
 const SEGMENT_RULES = `
@@ -634,7 +753,14 @@ SEGMENT FORMAT (critical):
 - Joining every "text" of text/del/replace segments (and skipping "ins") MUST reproduce the input essay EXACTLY, including spaces, punctuation and "\\n\\n" paragraph breaks.
 - Keep each change as small as possible (a word or short phrase). Include surrounding spaces inside "text" segments, not inside changes, unless the change itself adds or removes a word.`;
 
-function buildEvaluationPrompt(question: string, essay: string, taskType: 'task1' | 'task2', targetBand: number, sinhala: boolean) {
+function buildEvaluationPrompt(
+  question: string, 
+  essay: string, 
+  taskType: 'task1' | 'task2', 
+  targetBand: number, 
+  sinhala: boolean,
+  hasImage: boolean = false
+) {
   const si = sinhala
     ? 'Also fill every field ending in "Si" with a short, simple Sinhala translation (Sinhala script).'
     : 'Leave every field ending in "Si" as an empty string.';
@@ -646,6 +772,10 @@ You MUST NOT be generous, polite, or lenient. Real examiners do not inflate scor
 TASK TYPE: Writing ${taskType === 'task1' ? 'Task 1 (Report)' : 'Task 2 (Discursive Essay)'}
 QUESTION / PROMPT:
 """${question}"""
+${hasImage ? `
+*** OFFICIAL TASK IMAGE / DIAGRAM ATTACHED:
+An official IELTS visual prompt (such as a bar chart, line graph, table, pie chart, map, process diagram, or exam task screenshot) has been provided with this request.
+Carefully examine the visual data in the image. Evaluate whether the student has accurately identified the overall trend, selected the key features, made factual comparisons, and avoided misreporting numbers or data labels shown in the diagram. Factor visual accuracy directly into the Task Achievement (TA) score and point out any factual misreadings in the feedback.` : ''}
 
 STUDENT ESSAY TO GRADE:
 """${essay}"""
@@ -781,6 +911,7 @@ export async function evaluateEssayWithGemini(params: {
   apiKey: string;
   model: string;
   question: string;
+  promptImage?: string | null;
   essay: string;
   taskType: 'task1' | 'task2';
   targetBand: number;
@@ -788,7 +919,7 @@ export async function evaluateEssayWithGemini(params: {
   onStage?: (stage: PipelineStage, detail?: string) => void;
   signal?: AbortSignal;
 }): Promise<TutorReport> {
-  const { apiKey, model, question, essay, taskType, targetBand, sinhala, onStage, signal } = params;
+  const { apiKey, model, question, promptImage, essay, taskType, targetBand, sinhala, onStage, signal } = params;
   const warnings: string[] = [];
 
   // 1. Input validation
@@ -804,9 +935,10 @@ export async function evaluateEssayWithGemini(params: {
   const evalJson = await callGemini(
     apiKey,
     model,
-    buildEvaluationPrompt(question, essayText, taskType, targetBand, sinhala),
+    buildEvaluationPrompt(question, essayText, taskType, targetBand, sinhala, Boolean(promptImage)),
     (status) => onStage?.('examining', status),
-    signal
+    signal,
+    promptImage
   );
 
   // 3. Evidence verification
@@ -931,6 +1063,7 @@ export async function evaluateEssayWithGemini(params: {
     engineModel: model,
     taskType,
     question,
+    promptImage: promptImage || undefined,
     targetBand,
     overallBand: roundIeltsBand(criteria.map(c => c.band)),
     confidence: ['Low', 'Medium', 'High'].includes(evalJson.confidence) ? evalJson.confidence : 'Medium',

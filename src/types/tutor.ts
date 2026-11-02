@@ -93,6 +93,7 @@ export interface TutorReport {
   engineModel?: string;
   taskType: 'task1' | 'task2' | 'academic_task1' | 'gt_task1';
   question: string;
+  promptImage?: string;
   targetBand: number;
   overallBand: number;
   confidence: 'Low' | 'Medium' | 'High';

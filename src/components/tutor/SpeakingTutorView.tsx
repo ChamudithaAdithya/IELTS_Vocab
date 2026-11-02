@@ -57,6 +57,7 @@ import { SpeakingInteractiveUpgradesSandbox } from './SpeakingInteractiveUpgrade
 interface SpeakingTutorViewProps {
   showSinhala: boolean;
   onBackToHub?: () => void;
+  initialTopicId?: string;
 }
 
 // Convert CAMBRIDGE_SPEAKING_TESTS to full SpeakingTopic structure
@@ -134,10 +135,13 @@ class SpeakingErrorBoundary extends React.Component<SpeakingErrorBoundaryProps, 
 
 const SpeakingTutorViewInner: React.FC<SpeakingTutorViewProps> = ({ 
   showSinhala, 
-  onBackToHub 
+  onBackToHub,
+  initialTopicId
 }) => {
   // Navigation Mode: 'roadmap' (Personalized Adaptive Diagnostic Roadmap) | 'cambridge' | 'random'
-  const [activeMode, setActiveMode] = useState<'roadmap' | 'cambridge' | 'random'>('roadmap');
+  const [activeMode, setActiveMode] = useState<'roadmap' | 'cambridge' | 'random'>(() => {
+    return initialTopicId ? 'cambridge' : 'roadmap';
+  });
 
   // Diagnostic Roadmap State
   const [diagnosticIndex, setDiagnosticIndex] = useState<number>(0);
@@ -160,7 +164,25 @@ const SpeakingTutorViewInner: React.FC<SpeakingTutorViewProps> = ({
     : 4.0;
 
   // Regular Practice Topic & Session State
-  const [selectedTopic, setSelectedTopic] = useState<SpeakingTopic>(RANDOM_SPEAKING_TOPICS[0]);
+  const [selectedTopic, setSelectedTopic] = useState<SpeakingTopic>(() => {
+    if (initialTopicId) {
+      const found = ALL_TOPICS.find(t => t.id === initialTopicId);
+      if (found) return found;
+    }
+    return RANDOM_SPEAKING_TOPICS[0];
+  });
+
+  useEffect(() => {
+    if (initialTopicId) {
+      const found = ALL_TOPICS.find(t => t.id === initialTopicId);
+      if (found) {
+        setSelectedTopic(found);
+        setActiveMode('cambridge');
+        setCurrentQuestionIndex(0);
+        setCurrentReport(null);
+      }
+    }
+  }, [initialTopicId]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [showModelAnswerPreview, setShowModelAnswerPreview] = useState<boolean>(false);
 
