@@ -68,7 +68,7 @@ export const WordBankView: React.FC<WordBankViewProps> = ({
             Vocabulary Bank
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            All 80 target vocabulary words across 8 lessons.
+            All {ALL_WORDS.length} target vocabulary words across {LESSONS.length} comprehensive lessons.
           </p>
         </div>
 

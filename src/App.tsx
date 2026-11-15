@@ -131,11 +131,19 @@ function MainApp() {
   const [selectedReadingPassageId, setSelectedReadingPassageId] = useState<string | undefined>(undefined);
   const [selectedWritingPromptId, setSelectedWritingPromptId] = useState<string | undefined>(undefined);
   const [selectedSpeakingTopicId, setSelectedSpeakingTopicId] = useState<string | undefined>(undefined);
+  const [cambridgeResetKey, setCambridgeResetKey] = useState<number>(0);
+
+  const handleSelectNavTab = (tab: AppTab) => {
+    if (tab === 'cambridge' && currentTab === 'cambridge') {
+      setCambridgeResetKey((prev) => prev + 1);
+    }
+    setCurrentTab(tab);
+  };
 
   // Sync tab with URL search parameter & browser document title
   useEffect(() => {
     const tabTitles: Record<AppTab, string> = {
-      cambridge: 'Cambridge Library (Books 1–18) | Cambridge IELTS Master',
+      cambridge: 'Cambridge IELTS 21–1 | IELTS Practice',
       listening: 'Listening Tests | Cambridge IELTS Master',
       reading: 'Reading Tests | Cambridge IELTS Master',
       tutor: 'Writing Tutor AI | Cambridge IELTS Master',
@@ -274,42 +282,51 @@ function MainApp() {
   };
 
   const selectedLesson = LESSONS.find(l => l.id === selectedLessonId) || LESSONS[0];
+  const isStandalonePracticePage =
+    currentTab === 'cambridge' || currentTab === 'reading' || currentTab === 'listening';
 
   return (
     <div className="min-h-screen bg-[#fafafa] text-slate-900 flex font-sans">
-      {/* Organized Left Side Navigation Menu */}
-      <Sidebar
-        currentTab={currentTab}
-        setCurrentTab={setCurrentTab}
-        isCollapsed={isCollapsed}
-        setIsCollapsed={setIsCollapsed}
-        isMobileOpen={isMobileOpen}
-        setIsMobileOpen={setIsMobileOpen}
-        showSinhala={showSinhala}
-        setShowSinhala={setShowSinhala}
-        onOpenVoiceSettings={() => setIsVoiceSettingsOpen(true)}
-        onOpenSearch={() => setIsSearchOpen(true)}
-        userProgress={userProgress}
-      />
-
-      {/* Main Workspace Area */}
-      <div className="flex-1 flex flex-col min-w-0 transition-all duration-300">
-        {/* Sleek Top Navigation Header */}
-        <TopBar
+      {/* Organized Left Side Navigation Menu (Hidden on Standalone IELTS Practice Pages) */}
+      {!isStandalonePracticePage && (
+        <Sidebar
           currentTab={currentTab}
-          onOpenMobileMenu={() => setIsMobileOpen(true)}
+          setCurrentTab={handleSelectNavTab}
+          isCollapsed={isCollapsed}
+          setIsCollapsed={setIsCollapsed}
+          isMobileOpen={isMobileOpen}
+          setIsMobileOpen={setIsMobileOpen}
           showSinhala={showSinhala}
           setShowSinhala={setShowSinhala}
           onOpenVoiceSettings={() => setIsVoiceSettingsOpen(true)}
           onOpenSearch={() => setIsSearchOpen(true)}
+          userProgress={userProgress}
         />
+      )}
+
+      {/* Main Workspace Area */}
+      <div className="flex-1 flex flex-col min-w-0 transition-all duration-300">
+        {/* Sleek Top Navigation Header (Hidden on Standalone IELTS Practice Pages) */}
+        {!isStandalonePracticePage && (
+          <TopBar
+            currentTab={currentTab}
+            onSelectTab={handleSelectNavTab}
+            onOpenMobileMenu={() => setIsMobileOpen(true)}
+            showSinhala={showSinhala}
+            setShowSinhala={setShowSinhala}
+            onOpenVoiceSettings={() => setIsVoiceSettingsOpen(true)}
+            onOpenSearch={() => setIsSearchOpen(true)}
+          />
+        )}
 
         {/* Dedicated Main Content Router */}
         <main className="flex-1">
-          {/* Category 1: Cambridge Real Exams */}
+          {/* Category 1: Cambridge Real Exams (Standalone Full Page without Sidebar) */}
           {currentTab === 'cambridge' && (
             <CambridgeLibraryView
+              key={cambridgeResetKey}
               showSinhala={showSinhala}
+              onExitToMainApp={() => setCurrentTab('lessons')}
               onSelectTest={(module, testId) => {
                 if (testId) {
                   if (module === 'listening') setSelectedListeningTestId(testId);
@@ -429,52 +446,31 @@ function MainApp() {
           )}
         </main>
 
-        {/* Global Footer */}
-        <footer className="border-t border-slate-200 bg-white py-6 mt-12 text-xs text-slate-500">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div>
-              <span className="font-semibold text-slate-800">Cambridge IELTS Master Platform</span>
-              <p className="mt-0.5">Authentic past papers from Books 1 to 18 with local audio streaming, AI tutors, and bilingual Sinhala assistance.</p>
+        {/* Global Footer (Hidden on Standalone IELTS Practice Pages) */}
+        {!isStandalonePracticePage && (
+          <footer className="border-t border-slate-200 bg-white py-6 mt-12 text-xs text-slate-500">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div>
+                <span className="font-semibold text-slate-800">Cambridge IELTS Master Platform</span>
+                <p className="mt-0.5">Authentic past papers from Books 1 to 18 with local audio streaming, AI tutors, and bilingual Sinhala assistance.</p>
+              </div>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-semibold">
+                <button type="button" onClick={() => setCurrentTab('cambridge')} className="hover:text-indigo-600 cursor-pointer">Cambridge Library</button>
+                <button type="button" onClick={() => setCurrentTab('listening')} className="hover:text-indigo-600 cursor-pointer">Listening Tests</button>
+                <button type="button" onClick={() => setCurrentTab('reading')} className="hover:text-indigo-600 cursor-pointer">Reading Tests</button>
+                <button type="button" onClick={() => setCurrentTab('tutor')} className="hover:text-indigo-600 cursor-pointer">Writing AI</button>
+                <button type="button" onClick={() => setCurrentTab('speaking')} className="hover:text-indigo-600 cursor-pointer">Speaking Tutor</button>
+                <span className="text-slate-300">|</span>
+                <button type="button" onClick={() => setCurrentTab('lessons')} className="hover:text-indigo-600 cursor-pointer">Topic Lessons</button>
+                <button type="button" onClick={() => setCurrentTab('wordbank')} className="hover:text-indigo-600 cursor-pointer">Word Bank</button>
+                <button type="button" onClick={() => setCurrentTab('flashcards')} className="hover:text-indigo-600 cursor-pointer">Flashcards</button>
+                <button type="button" onClick={() => setCurrentTab('quiz')} className="hover:text-indigo-600 cursor-pointer">Quizzes</button>
+                <span className="text-slate-300">|</span>
+                <button type="button" onClick={() => setCurrentTab('analytics')} className="hover:text-indigo-600 cursor-pointer">Score Analytics</button>
+              </div>
             </div>
-            <div className="flex flex-wrap items-center gap-4 text-xs font-semibold">
-              <button 
-                type="button"
-                onClick={() => setCurrentTab('cambridge')} 
-                className="hover:text-indigo-600 cursor-pointer"
-              >
-                Cambridge Library
-              </button>
-              <button 
-                type="button"
-                onClick={() => setCurrentTab('wordbank')} 
-                className="hover:text-indigo-600 cursor-pointer"
-              >
-                Word Bank
-              </button>
-              <button 
-                type="button"
-                onClick={() => setCurrentTab('speaking')} 
-                className="hover:text-indigo-600 cursor-pointer"
-              >
-                Speaking
-              </button>
-              <button 
-                type="button"
-                onClick={() => setCurrentTab('tutor')} 
-                className="hover:text-indigo-600 cursor-pointer"
-              >
-                Writing
-              </button>
-              <button 
-                type="button"
-                onClick={() => setCurrentTab('analytics')} 
-                className="hover:text-indigo-600 cursor-pointer"
-              >
-                Analytics
-              </button>
-            </div>
-          </div>
-        </footer>
+          </footer>
+        )}
       </div>
 
       {/* Global Quick Search Modal (Ctrl + K) */}

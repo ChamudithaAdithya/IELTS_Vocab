@@ -33,6 +33,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Her musical performance was very good.",
+        "ඇගේ සංගීත ප්‍රසංගය ඉතා හොඳ විය."
+      ],
+      [
+        "The teacher praised his performance in the test.",
+        "ගුරුවරයා විභාගයේ ඔහුගේ දක්ෂතාවය අගය කළේය."
+      ],
+      [
         "Regular sleep and balanced nutrition significantly improve students' academic performance.",
         "ක්‍රමවත් නින්ද සහ සමබර පෝෂණය සිසුන්ගේ අධ්‍යයන කාර්ය සාධනය සැලකිය යුතු ලෙස වැඩිදියුණු කරයි."
       ],
@@ -67,6 +75,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "I cleaned my room; meanwhile, my brother washed the dishes.",
+        "මම මගේ කාමරය පිරිසිදු කළා; මේ අතරතුර මගේ සහෝදරයා පිඟන් සේදුවා."
+      ],
+      [
+        "Mother cooked dinner; meanwhile, the children finished their homework.",
+        "අම්මා රාත්‍රී ආහාරය පිසුවාය; මේ අතර ළමයි තම ගෙදර වැඩ අවසන් කළහ."
+      ],
       [
         "Urban populations expanded rapidly; meanwhile, rural villages experienced a steady shortage of labour.",
         "නාගරික ජනගහනය ශීඝ්‍රයෙන් වර්ධනය වූ අතර, මේ අතරතුර ග්‍රාමීය ගම්මානවල අඛණ්ඩ ශ්‍රම හිඟයක් ඇති විය."
@@ -103,6 +119,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Generally, children sleep early on school nights.",
+        "සාමාන්‍යයෙන්, පාසල් රාත්‍රීන්හිදී ළමයි වේලාසනින් නිදා ගනිති."
+      ],
+      [
+        "It is generally warm during the summer months.",
+        "ගිම්හාන මාසවලදී සාමාන්‍යයෙන් උණුසුම් වේ."
+      ],
+      [
         "Generally speaking, public transport is more environmentally sustainable than private vehicles.",
         "පොදුවේ ගත් කල, පෞද්ගලික වාහනවලට වඩා පොදු ප්‍රවාහනය පරිසර හිතකාමී වේ."
       ],
@@ -137,6 +161,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Parents have a strong influence on their children.",
+        "දෙමාපියන් තම දරුවන් කෙරෙහි ප්‍රබල බලපෑමක් ඇති කරයි."
+      ],
+      [
+        "Good friends can influence you in positive ways.",
+        "හොඳ මිතුරන්ට ඔබට යහපත් ආකාරයෙන් බලපෑම් කළ හැකිය."
+      ],
       [
         "Social media algorithms heavily influence how young people perceive current events.",
         "සමාජ මාධ්‍ය ඇල්ගොරිතම තරුණ පිරිස කාලීන සිදුවීම් දකින ආකාරයට දැඩි ලෙස බලපෑම් කරයි."
@@ -173,6 +205,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to achieve her dream.",
+        "ඇය තම සිහිනය සැබෑ කර ගැනීමට මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can achieve good results with regular practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට හොඳ ප්‍රතිඵල අත්කර ගත හැක."
+      ],
+      [
         "Many professionals struggle to achieve a healthy balance between career demands and family life.",
         "බොහෝ වෘත්තිකයන් රැකියා අවශ්‍යතා සහ පවුල් ජීවිතය අතර සෞඛ්‍ය සම්පන්න සමබරතාවයක් ඇති කර ගැනීමට දැඩි උත්සාහයක් දරති."
       ],
@@ -207,6 +247,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of correlation clearly.",
+        "ගුරුවරයා සහසම්බන්ධය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your correlation.",
+        "හොඳ පුරුදු ඔබගේ සහසම්බන්ධය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Numerous studies demonstrate a strong correlation between physical exercise and mental well-being.",
         "ශාරීරික ව්‍යායාම සහ මානසික යහපැවැත්ම අතර ප්‍රබල සහසම්බන්ධයක් පවතින බව අධ්‍යයන රැසකින් පෙන්වා දෙයි."
@@ -243,6 +291,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher concluded the lesson on time.",
+        "ගුරුවරයා නියමිත වේලාවට පාඩම අවසන් කළේය."
+      ],
+      [
+        "We can conclude that practice makes reading easier.",
+        "පුහුණුවීමෙන් කියවීම පහසු වන බව අපට නිගමනය කළ හැක."
+      ],
+      [
         "Based on longitudinal data, climatologists conclude that global temperatures are rising faster than predicted.",
         "දිගුකාලීන දත්ත මත පදනම්ව, ගෝලීය උෂ්ණත්වය අනාවැකි පළ කළාට වඩා වේගයෙන් ඉහළ යන බව දේශගුණ විද්‍යාඥයෝ නිගමනය කරති."
       ],
@@ -277,6 +333,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book acquainted with learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට දැනුවත් වී සිටීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option acquainted with this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී දැනුවත් වී සිටීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "All medical staff must be fully acquainted with emergency hygiene protocols.",
         "සියලුම වෛද්‍ය කාර්ය මණ්ඩලය හදිසි සෞඛ්‍යාරක්ෂක ක්‍රියා පිළිවෙත් පිළිබඳව මුළුමනින්ම දැනුවත් වී සිටිය යුතුය."
@@ -313,6 +377,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Practically, students need enough sleep before an exam.",
+        "ප්‍රායෝගිකව, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will practically improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ ප්‍රායෝගිකව ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Digital technology has transformed practically every aspect of modern commerce.",
         "ඩිජිටල් තාක්ෂණය නූතන වාණිජ ක්ෂේත්‍රයේ සෑම අංශයක්ම වාගේ වෙනස් කර ඇත."
       ],
@@ -347,6 +419,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of incidence clearly.",
+        "ගුරුවරයා සිදුවීම් අනුපාතය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your incidence.",
+        "හොඳ පුරුදු ඔබගේ සිදුවීම් අනුපාතය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Improved sanitation has dramatically reduced the incidence of waterborne diseases.",
         "වැඩිදියුණු කළ සනීපාරක්ෂාව මගින් ජලයෙන් බෝවන රෝග පැතිරීමේ අනුපාතය විශාල ලෙස අඩු කර ඇත."
@@ -383,6 +463,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Comparatively, students need enough sleep before an exam.",
+        "සාපේක්ෂව, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will comparatively improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ සාපේක්ෂව ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Solar power was once prohibitively costly, but it has become comparatively inexpensive in recent years.",
         "සූර්ය බලශක්තිය වරෙක දැරිය නොහැකි තරම් මිල අධික වුවද, මෑත වසරවලදී එය සාපේක්ෂව මිල අඩු වී ඇත."
       ],
@@ -417,6 +505,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book attribute to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට යමකට හේතුව ලෙස සැලකීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option attribute to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී යමකට හේතුව ලෙස සැලකීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Economists attribute the rapid rise in housing prices to urban population growth.",
         "ආර්ථික විද්‍යාඥයින් නිවාස මිල ශීඝ්‍රයෙන් ඉහළ යාමට හේතුව නාගරික ජනගහන වර්ධනය බව පවසති."
@@ -453,6 +549,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The two cars look identical.",
+        "කාර් දෙක එක හා සමානව පෙනේ."
+      ],
+      [
+        "The twins wore identical blue dresses.",
+        "නිවුන් දරුවන් එක සමාන නිල් ඇඳුම් ඇඳ සිටියහ."
+      ],
+      [
         "Although the two cities have virtually identical population sizes, their transport systems differ greatly.",
         "නගර දෙකෙහි ජනගහන ප්‍රමාණයන් සම්පූර්ණයෙන්ම වාගේ එක හා සමාන වුවද, ඒවායේ ප්‍රවාහන පද්ධති බෙහෙවින් වෙනස් වේ."
       ],
@@ -487,6 +591,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Particularly, students need enough sleep before an exam.",
+        "විශේෂයෙන්ම, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will particularly improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ විශේෂයෙන්ම ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Air pollution is particularly harmful to young children and the elderly.",
         "වායු දූෂණය කුඩා දරුවන්ට සහ වැඩිහිටියන්ට විශේෂයෙන්ම අහිතකර වේ."
@@ -523,6 +635,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to consume her goal.",
+        "ඇය තම ඉලක්කය පරිභෝජනය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can consume new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා පරිභෝජනය කරන්න හැකිය."
+      ],
+      [
         "Industrialised nations consume a disproportionate share of the world's fossil fuels.",
         "කාර්මික රටවල් ලෝකයේ පොසිල ඉන්ධනවලින් අසමානුපාතිකව විශාල කොටසක් පරිභෝජනය කරයි."
       ],
@@ -557,6 +677,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book in other respect learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට වෙනත් අංශවලින් බලන කල පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option in other respect this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී වෙනත් අංශවලින් බලන කල සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "While the policy reduced short-term costs, in other respects it created administrative delays.",
         "මෙම ප්‍රතිපත්තිය කෙටිකාලීන පිරිවැය අඩු කළද, වෙනත් අංශවලින් බලන කල එය පරිපාලන ප්‍රමාදයන් ඇති කළේය."
@@ -593,6 +721,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book with regard to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට සම්බන්ධයෙන් පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option with regard to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී සම්බන්ධයෙන් සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "With regard to public healthcare, prevention is far more economical than clinical intervention.",
         "මහජන සෞඛ්‍ය සේවාව සම්බන්ධයෙන් ගත් කල, ප්‍රතිකාර කිරීමට වඩා රෝග වළක්වා ගැනීම බෙහෙවින් ලාභදායී වේ."
       ],
@@ -627,6 +763,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to contain her goal.",
+        "ඇය තම ඉලක්කය අඩංගු වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can contain new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අඩංගු වෙන්න හැකිය."
+      ],
       [
         "Fresh fruits and vegetables contain essential vitamins required for immune health.",
         "නැවුම් පලතුරු සහ එළවළුවල ප්‍රතිශක්තිකරණ සෞඛ්‍යයට අවශ්‍ය අත්‍යවශ්‍ය විටමින් අඩංගු වේ."
@@ -663,6 +807,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book integrate into learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට පද්ධතියකට හෝ සමාජයකට ඒකාබද්ධ කිරීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option integrate into this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී පද්ධතියකට හෝ සමාජයකට ඒකාබද්ධ කිරීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Language training programmes help newcomers integrate into their host communities more smoothly.",
         "භාෂා පුහුණු වැඩසටහන් නව සංක්‍රමණිකයන්ට තම සත්කාරක ප්‍රජාවන්ට වඩාත් පහසුවෙන් අනුගත වීමට උපකාරී වේ."
       ],
@@ -697,6 +849,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water is vital for our health.",
+        "පිරිසිදු ජලය අපගේ සෞඛ්‍යයට අත්‍යවශ්‍යයි."
+      ],
+      [
+        "Sleep plays a vital role in daily energy.",
+        "දෛනික ශක්තිය සඳහා නින්ද අත්‍යවශ්‍ය කාර්යභාරයක් ඉටු කරයි."
+      ],
       [
         "Small and medium-sized enterprises play a vital role in generating local employment.",
         "කුඩා හා මධ්‍ය පරිමාණ ව්‍යවසායන් දේශීය රැකියා උත්පාදනය කිරීමෙහිලා තීරණාත්මක කාර්යභාරයක් ඉටු කරයි."
@@ -733,6 +893,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book account for learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට යම් ප්‍රමාණයකට හිමිකම් කීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option account for this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී යම් ප්‍රමාණයකට හිමිකම් කීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Renewable energy sources accounted for over forty percent of national electricity generation last year.",
         "පසුගිය වසරේ ජාතික විදුලි උත්පාදනයෙන් සියයට හතළිහකට වඩා වැඩි ප්‍රමාණයකට පුනර්ජනනීය බලශක්ති ප්‍රභවයන් හිමිකම් කීවේය."
       ],
@@ -767,6 +935,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to threaten her goal.",
+        "ඇය තම ඉලක්කය තර්ජනයක් එල්ල කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can threaten new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා තර්ජනයක් එල්ල කරන්න හැකිය."
+      ],
       [
         "Rising sea levels directly threaten low-lying coastal communities around the world.",
         "ඉහළ යන මුහුදු මට්ටම ලොව පුරා පහත් බිම්වල පිහිටි වෙරළබඩ ප්‍රජාවන්ට සෘජුවම තර්ජනයක් එල්ල කරයි."
@@ -803,6 +979,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book prompt to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට යමක් කිරීමට පෙළඹවීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option prompt to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී යමක් කිරීමට පෙළඹවීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Rising fuel prices have prompted many commuters to switch to public transport.",
         "ඉහළ යන ඉන්ධන මිල බොහෝ මගීන්ව පොදු ප්‍රවාහනය වෙත යොමු වීමට පොළඹවා ඇත."
       ],
@@ -837,6 +1021,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Principally, students need enough sleep before an exam.",
+        "ප්‍රධාන වශයෙන්ම, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will principally improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ ප්‍රධාන වශයෙන්ම ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "The new scholarship programme is principally aimed at students from low-income households.",
         "නව ශිෂ්‍යත්ව වැඩසටහන මූලිකවම අඩු ආදායම්ලාභී පවුල්වල සිසුන් ඉලක්ක කර ඇත."
@@ -873,6 +1065,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to ignore her goal.",
+        "ඇය තම ඉලක්කය නොසලකා හැරීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can ignore new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා නොසලකා හැරීම හැකිය."
+      ],
+      [
         "Policymakers must not ignore the long-term ecological consequences of deforestation.",
         "ප්‍රතිපත්ති සම්පාදකයින් වන විනාශයේ දිගුකාලීන පාරිසරික ප්‍රතිවිපාක නොසලකා හැරිය යුතු නැත."
       ],
@@ -907,6 +1107,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of decline clearly.",
+        "ගුරුවරයා පහත වැටීමක් පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your decline.",
+        "හොඳ පුරුදු ඔබගේ පහත වැටීමක් කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Many developed countries are experiencing a steady decline in birth rates.",
         "බොහෝ සංවර්ධිත රටවල් උපත් අනුපාතයේ අඛණ්ඩ පහත වැටීමකට මුහුණ දෙමින් සිටී."
@@ -943,6 +1151,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are several for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර කිහිපයක් වේ."
+      ],
+      [
+        "She gave a very several answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා කිහිපයක් පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Several key factors contribute to the growing popularity of online university degrees.",
         "අන්තර්ජාල විශ්වවිද්‍යාල උපාධිවල ජනප්‍රියතාවය ඉහළ යාමට ප්‍රධාන සාධක කිහිපයක් බලපායි."
       ],
@@ -977,6 +1193,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to require her goal.",
+        "ඇය තම ඉලක්කය අවශ්‍ය වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can require new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අවශ්‍ය වෙන්න හැකිය."
+      ],
       [
         "Transitioning to renewable energy requires substantial financial investment from both the state and private sector.",
         "පුනර්ජනනීය බලශක්තිය වෙත මාරුවීම සඳහා රාජ්‍ය සහ පෞද්ගලික යන දෙඅංශයෙන්ම සැලකිය යුතු මූල්‍ය ආයෝජනයක් අවශ්‍ය වේ."
@@ -1013,6 +1237,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to witness her goal.",
+        "ඇය තම ඉලක්කය අත්දැකීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can witness new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අත්දැකීම හැකිය."
+      ],
+      [
         "The past two decades have witnessed a dramatic shift in how people access news.",
         "පසුගිය දශක දෙකක කාලය තුළ මිනිසුන් ප්‍රවෘත්ති ලබා ගන්නා ආකාරයේ කැපී පෙනෙන වෙනසක් සිදුවනු දක්නට ලැබිණි."
       ],
@@ -1047,6 +1279,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to reverse her goal.",
+        "ඇය තම ඉලක්කය ආපසු හැරවෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can reverse new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ආපසු හැරවෙන්න හැකිය."
+      ],
       [
         "Reforestation initiatives are essential to reverse the ecological damage caused by logging.",
         "දැව හෙළීම නිසා සිදු වූ පාරිසරික හානිය ආපසු හැරවීමට නැවත වන වගා කිරීමේ වැඩසටහන් අත්‍යවශ්‍ය වේ."
@@ -1083,6 +1323,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to allocate her goal.",
+        "ඇය තම ඉලක්කය වෙන් කර දීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can allocate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා වෙන් කර දීම හැකිය."
+      ],
+      [
         "Governments should allocate a greater proportion of the national budget to preventative healthcare.",
         "රජයන් ජාතික අයවැයෙන් වැඩි කොටසක් රෝග නිවාරණ සෞඛ්‍ය සේවාව සඳහා වෙන් කළ යුතුය."
       ],
@@ -1117,6 +1365,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Originally, students need enough sleep before an exam.",
+        "මුලදී, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will originally improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ මුලදී ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "The internet was originally designed for military and academic communication rather than commercial use.",
         "අන්තර්ජාලය මුලදී සැලසුම් කරන ලද්දේ වාණිජ භාවිතය සඳහා නොව හමුදාමය සහ අධ්‍යයන සන්නිවේදනය සඳහාය."
@@ -1153,6 +1409,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of consequence clearly.",
+        "ගුරුවරයා ප්‍රතිවිපාකය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your consequence.",
+        "හොඳ පුරුදු ඔබගේ ප්‍රතිවිපාකය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Unchecked carbon emissions will have far-reaching consequences for future generations.",
         "පාලනය නොකළ කාබන් විමෝචනය අනාගත පරම්පරාවන්ට දුරදිග යන ප්‍රතිවිපාක ඇති කරනු ඇත."
       ],
@@ -1187,6 +1451,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are favourable for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර හිතකර වේ."
+      ],
+      [
+        "She gave a very favourable answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා හිතකර පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Lower interest rates created favourable conditions for small business expansion.",
         "අඩු පොලී අනුපාත කුඩා ව්‍යාපාර පුළුල් කිරීම සඳහා හිතකර තත්ත්වයන් නිර්මාණය කළේය."
@@ -1223,6 +1495,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book permit to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට අවසර දීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option permit to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී අවසර දීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Many modern corporations permit employees to work from home several days a week.",
         "බොහෝ නූතන ආයතන සතියකට දින කිහිපයක් නිවසේ සිට වැඩ කිරීමට සේවකයින්ට අවසර දෙයි."
       ],
@@ -1257,6 +1537,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to accommodate her goal.",
+        "ඇය තම ඉලක්කය ඉඩකඩ හෝ නවාතැන් සැලසීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can accommodate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ඉඩකඩ හෝ නවාතැන් සැලසීම හැකිය."
+      ],
       [
         "Cities must expand their public housing stock to accommodate rapidly growing urban populations.",
         "ශීඝ්‍රයෙන් වර්ධනය වන නාගරික ජනගහනයට නවාතැන් සැලසීම සඳහා නගර තම පොදු නිවාස පද්ධතිය පුළුල් කළ යුතුය."
@@ -1293,6 +1581,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of surplus clearly.",
+        "ගුරුවරයා අතිරික්තය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your surplus.",
+        "හොඳ පුරුදු ඔබගේ අතිරික්තය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Supermarkets should donate their surplus food to local charities rather than discarding it.",
         "සුපිරි වෙළඳසැල් තම අතිරික්ත ආහාර ඉවත දැමීම වෙනුවට ප්‍රාදේශීය පුණ්‍යායතනවලට පරිත්‍යාග කළ යුතුය."
       ],
@@ -1327,6 +1623,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are substantial for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සැලකිය යුතු වේ."
+      ],
+      [
+        "She gave a very substantial answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සැලකිය යුතු පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "There is substantial scientific evidence linking air pollution to respiratory illnesses.",
         "වායු දූෂණය සහ ශ්වසන රෝග අතර සම්බන්ධය පෙන්වන ප්‍රබල විද්‍යාත්මක සාක්ෂි පවතී."
@@ -1363,6 +1667,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of basis clearly.",
+        "ගුරුවරයා පදනම පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your basis.",
+        "හොඳ පුරුදු ඔබගේ පදනම කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Mutual trust and open communication form the basis of any resilient community.",
         "අන්‍යෝන්‍ය විශ්වාසය සහ විවෘත සන්නිවේදනය ඕනෑම ශක්තිමත් ප්‍රජාවක මූලික පදනම සකසයි."
       ],
@@ -1397,6 +1709,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of majority clearly.",
+        "ගුරුවරයා බහුතරය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your majority.",
+        "හොඳ පුරුදු ඔබගේ බහුතරය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "The vast majority of climate scientists agree that human activity is warming the planet.",
         "මිනිස් ක්‍රියාකාරකම් හේතුවෙන් පෘථිවිය උණුසුම් වන බවට දේශගුණ විද්‍යාඥයින්ගෙන් අති බහුතරයක් එකඟ වෙති."
@@ -1433,6 +1753,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of minority clearly.",
+        "ගුරුවරයා සුළුතරය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your minority.",
+        "හොඳ පුරුදු ඔබගේ සුළුතරය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Only a small minority of households generated their own solar power twenty years ago.",
         "වසර විස්සකට පෙර තමන්ගේම සූර්ය බලශක්තිය උත්පාදනය කර ගත්තේ නිවාසවලින් ඉතා සුළු ප්‍රමාණයක් පමණි."
       ],
@@ -1467,6 +1795,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book with the exception of learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට හැර පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option with the exception of this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී හැර සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "With the exception of hydroelectric power, all renewable energy sources grew rapidly over the decade.",
         "ජල විදුලිය හැරුණු කොට, අනෙකුත් සියලුම පුනර්ජනනීය බලශක්ති ප්‍රභවයන් දශකය තුළ ශීඝ්‍රයෙන් වර්ධනය විය."
@@ -1503,6 +1839,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to distinguish her goal.",
+        "ඇය තම ඉලක්කය වෙන් කර හඳුනා ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can distinguish new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා වෙන් කර හඳුනා ගැනීම හැකිය."
+      ],
+      [
         "Media literacy enables students to distinguish between verified journalism and online misinformation.",
         "මාධ්‍ය සාක්ෂරතාවය මගින් තහවුරු කළ පුවත් සහ අන්තර්ජාලයේ පැතිරෙන වැරදි තොරතුරු වෙන් කර හඳුනා ගැනීමට සිසුන්ට හැකියාව ලැබේ."
       ],
@@ -1537,6 +1881,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of absent clearly.",
+        "ගුරුවරයා නොපැමිණි අය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your absent.",
+        "හොඳ පුරුදු ඔබගේ නොපැමිණි අය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Digital recordings allow the absent to catch up on university lectures they missed due to illness.",
         "අසනීප හේතුවෙන් මඟහැරුණු විශ්වවිද්‍යාල දේශන නැවත ආවරණය කර ගැනීමට ඩිජිටල් පටිගත කිරීම් මගින් නොපැමිණි සිසුන්ට අවස්ථාව ලැබේ."
@@ -1573,6 +1925,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book consist of learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට සමන්විත වීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option consist of this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී සමන්විත වීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "The IELTS Speaking test consists of three distinct parts designed to assess spoken fluency.",
         "IELTS කථන පරීක්ෂණය කථන චතුරතාව ඇගයීම සඳහා සැලසුම් කරන ලද ප්‍රධාන කොටස් තුනකින් සමන්විත වේ."
       ],
@@ -1607,6 +1967,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to confirm her goal.",
+        "ඇය තම ඉලක්කය තහවුරු කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can confirm new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා තහවුරු කරන්න හැකිය."
+      ],
       [
         "Recent archaeological discoveries confirm that trade routes existed between the two ancient civilisations.",
         "මෑතකාලීන පුරාවිද්‍යාත්මක සොයාගැනීම් මගින් පැරණි ශිෂ්ටාචාර දෙක අතර වෙළඳ මාර්ග පැවති බව තහවුරු කරයි."
@@ -1643,6 +2011,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to detect her goal.",
+        "ඇය තම ඉලක්කය අනාවරණය කර ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can detect new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අනාවරණය කර ගැනීම හැකිය."
+      ],
+      [
         "Artificial intelligence algorithms can detect early signs of cancer on medical scans with high precision.",
         "කෘත්‍රිම බුද්ධි ඇල්ගොරිතමවලට වෛද්‍ය ස්කෑන් පරීක්ෂණ මගින් පිළිකාවක මුල් ලක්ෂණ ඉතා නිවැරදිව හඳුනාගත හැකිය."
       ],
@@ -1677,6 +2053,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Undoubtedly, students need enough sleep before an exam.",
+        "නිසැකවම, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will undoubtedly improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ නිසැකවම ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Globalisation has undoubtedly created new economic opportunities for developing nations.",
         "ගෝලීයකරණය සංවර්ධනය වෙමින් පවතින රටවල් සඳහා නිසැකවම නව ආර්ථික අවස්ථා උදා කර දී ඇත."
@@ -1713,6 +2097,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are permanent for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ස්ථිර වේ."
+      ],
+      [
+        "She gave a very permanent answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ස්ථිර පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Prolonged exposure to loud industrial noise can cause permanent damage to hearing.",
         "දිගු කාලයක් තිස්සේ අධික කාර්මික ශබ්දවලට නිරාවරණය වීමෙන් ශ්‍රවණයට ස්ථිර හානි සිදුවිය හැකිය."
       ],
@@ -1747,6 +2139,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to predict her goal.",
+        "ඇය තම ඉලක්කය අනාවැකි පළ කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can predict new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අනාවැකි පළ කරන්න හැකිය."
+      ],
       [
         "Demographers predict that the global urban population will exceed two-thirds by 2050.",
         "2050 වන විට ගෝලීය නාගරික ජනගහනය තුනෙන් දෙක ඉක්මවා යනු ඇතැයි ජනවිකාස විද්‍යාඥයෝ අනාවැකි පළ කරති."
@@ -1783,6 +2183,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Eventually, students need enough sleep before an exam.",
+        "අවසානයේදී, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will eventually improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ අවසානයේදී ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Persistent soil erosion will eventually render fertile farmland completely unproductive.",
         "අඛණ්ඩ පාංශු ඛාදනය අවසානයේදී සාරවත් ගොවිබිම් සම්පූර්ණයෙන්ම නිසරු බවට පත් කරනු ඇත."
       ],
@@ -1817,6 +2225,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are plausible for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර පිළිගත හැකි වේ."
+      ],
+      [
+        "She gave a very plausible answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා පිළිගත හැකි පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Habitat loss offers the most plausible explanation for the sudden decline in migratory birds.",
         "සංක්‍රමණික පක්ෂීන්ගේ හදිසි අඩුවීම සඳහා වඩාත්ම පිළිගත හැකි පැහැදිලි කිරීම වන්නේ වාසස්ථාන අහිමි වීමයි."
@@ -1853,6 +2269,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are worthwhile for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර වටිනා වේ."
+      ],
+      [
+        "She gave a very worthwhile answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා වටිනා පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Funding space exploration is a worthwhile investment because it drives technological innovation.",
         "අභ්‍යවකාශ ගවේෂණය සඳහා අරමුදල් සැපයීම තාක්ෂණික නවෝත්පාදනයන් වේගවත් කරන බැවින් එය වටිනා ආයෝජනයකි."
       ],
@@ -1887,6 +2311,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Immensely, students need enough sleep before an exam.",
+        "අතිශයින්ම, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will immensely improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ අතිශයින්ම ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Bilingualism is immensely beneficial for cognitive flexibility and career mobility.",
         "ද්විභාෂා හැකියාව මානසික නම්‍යශීලීභාවය සහ වෘත්තීය දියුණුව සඳහා අතිශයින්ම ප්‍රයෝජනවත් වේ."
@@ -1923,6 +2355,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to occur her goal.",
+        "ඇය තම ඉලක්කය සිදුවෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can occur new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සිදුවෙන්න හැකිය."
+      ],
+      [
         "Traffic accidents frequently occur when drivers are distracted by mobile devices.",
         "රියදුරන් ජංගම දුරකථන නිසා අවධානය වෙනතකට යොමු කළ විට රිය අනතුරු නිතර සිදුවේ."
       ],
@@ -1957,6 +2397,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to observe her goal.",
+        "ඇය තම ඉලක්කය නිරීක්ෂණය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can observe new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා නිරීක්ෂණය කරන්න හැකිය."
+      ],
       [
         "Researchers observed a marked improvement in students' focus after mobile phones were banned in class.",
         "පන්ති කාමර තුළ ජංගම දුරකථන තහනම් කිරීමෙන් පසු සිසුන්ගේ අවධානයෙහි කැපී පෙනෙන දියුණුවක් පර්යේෂකයෝ නිරීක්ෂණය කළහ."
@@ -1993,6 +2441,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of objective clearly.",
+        "ගුරුවරයා අරමුණ පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your objective.",
+        "හොඳ පුරුදු ඔබගේ අරමුණ කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "The primary objective of a progressive tax system is to reduce income inequality.",
         "අනුක්‍රමික බදු ක්‍රමයක මූලික අරමුණ වන්නේ ආදායම් විෂමතාවය අඩු කිරීමයි."
       ],
@@ -2027,6 +2483,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of innovation clearly.",
+        "ගුරුවරයා නවෝත්පාදනයක් පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your innovation.",
+        "හොඳ පුරුදු ඔබගේ නවෝත්පාදනයක් කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Competitive markets stifle monopolies and foster continuous technological innovation.",
         "තරගකාරී වෙළඳපොළවල් ඒකාධිකාරයන් සීමා කරන අතර අඛණ්ඩ තාක්ෂණික නවෝත්පාදනයන් දිරිමත් කරයි."
@@ -2063,6 +2527,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are interchangeable for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර එකිනෙක වෙනුවට මාරු කර භාවිත කළ හැකි වේ."
+      ],
+      [
+        "She gave a very interchangeable answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා එකිනෙක වෙනුවට මාරු කර භාවිත කළ හැකි පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Although 'hearing' and 'listening' are often used interchangeably, the latter requires active concentration.",
         "'ඇසීම' සහ 'සවන් දීම' බොහෝ විට එකිනෙක වෙනුවට භාවිත වුවද, සවන් දීම සඳහා සක්‍රීය අවධානයක් අවශ්‍ය වේ."
       ],
@@ -2097,6 +2569,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book attach to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට සම්බන්ධ කිරීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option attach to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී සම්බන්ධ කිරීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Traditional Asian societies attach great importance to academic qualifications and filial respect.",
         "සාම්ප්‍රදායික ආසියාතික සමාජයන් අධ්‍යාපන සුදුසුකම් සහ දෙමාපියන්ට ගරු කිරීම සඳහා ඉහළ වැදගත්කමක් ලබා දෙයි."
@@ -2133,6 +2613,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are consistent for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ස්ථාවර වේ."
+      ],
+      [
+        "She gave a very consistent answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ස්ථාවර පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Mastering a foreign language requires consistent daily practice rather than occasional cramming.",
         "විදේශීය භාෂාවක් ප්‍රගුණ කිරීම සඳහා ඉඳහිට පාඩම් කිරීමට වඩා අඛණ්ඩ දෛනික පුහුණුවක් අවශ්‍ය වේ."
       ],
@@ -2167,6 +2655,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of realisation clearly.",
+        "ගුරුවරයා අවබෝධ කර ගැනීම පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your realisation.",
+        "හොඳ පුරුදු ඔබගේ අවබෝධ කර ගැනීම කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "There is a growing realisation among governments that economic growth cannot come at the expense of the environment.",
         "පරිසරය විනාශ කරමින් ආර්ථික වර්ධනයක් ලබාගත නොහැකි බවට රජයන් අතර ක්‍රමයෙන් වර්ධනය වන අවබෝධයක් පවතී."
@@ -2203,6 +2699,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are tremendous for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර දැවැන්ත වේ."
+      ],
+      [
+        "She gave a very tremendous answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා දැවැන්ත පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Modern medical science has made tremendous progress in treating previously fatal infections.",
         "මීට පෙර මාරාන්තික වූ ආසාදනවලට ප්‍රතිකාර කිරීමේදී නූතන වෛද්‍ය විද්‍යාව අතිමහත් ප්‍රගතියක් ලබා ඇත."
       ],
@@ -2237,6 +2741,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to involve her goal.",
+        "ඇය තම ඉලක්කය ඇතුළත් වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can involve new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ඇතුළත් වෙන්න හැකිය."
+      ],
       [
         "Effective urban planning involves consulting local residents before major construction begins.",
         "ඵලදායී නාගරික සැලසුම්කරණයට ප්‍රධාන ඉදිකිරීම් ආරම්භ කිරීමට පෙර ප්‍රදේශවාසීන්ගෙන් අදහස් විමසීම ඇතුළත් වේ."
@@ -2273,6 +2785,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to eliminate her goal.",
+        "ඇය තම ඉලක්කය තුරන් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can eliminate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා තුරන් කරන්න හැකිය."
+      ],
+      [
         "Universal vaccination programmes have virtually eliminated polio in most parts of the world.",
         "විශ්වීය එන්නත්කරණ වැඩසටහන් මගින් ලෝකයේ බොහෝ ප්‍රදේශවලින් පෝලියෝ රෝගය සම්පූර්ණයෙන්ම වාගේ තුරන් කර ඇත."
       ],
@@ -2307,6 +2827,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are minimal for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අවම වේ."
+      ],
+      [
+        "She gave a very minimal answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අවම පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Eco-tourism aims to allow travellers to experience nature while causing minimal environmental impact.",
         "පාරිසරික සංචාරක ව්‍යාපාරයේ අරමුණ වන්නේ අවම පාරිසරික බලපෑමක් ඇති කරමින් සංචාරකයින්ට සොබාදහම අත්විඳීමට ඉඩ සැලසීමයි."
@@ -2343,6 +2871,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to exceed her goal.",
+        "ඇය තම ඉලක්කය ඉක්මවා යාම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can exceed new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ඉක්මවා යාම හැකිය."
+      ],
+      [
         "In many megacities, the demand for affordable housing far exceeds the available supply.",
         "බොහෝ විශාල නගරවල දැරිය හැකි මිලකට ඇති නිවාස සඳහා පවතින ඉල්ලුම පවතින සැපයුම බෙහෙවින් ඉක්මවා යයි."
       ],
@@ -2377,6 +2913,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Simultaneously, students need enough sleep before an exam.",
+        "එකවර, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will simultaneously improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ එකවර ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Expanding urban tree cover cools city streets while simultaneously absorbing carbon dioxide.",
         "නාගරික රුක් ආවරණය පුළුල් කිරීම මගින් නගර වීදි සිසිල් කරන අතරම එකවර කාබන් ඩයොක්සයිඩ්ද අවශෝෂණය කර ගනී."
@@ -2413,6 +2957,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to perish her goal.",
+        "ඇය තම ඉලක්කය විනාශ වී යාම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can perish new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා විනාශ වී යාම හැකිය."
+      ],
+      [
         "Countless marine species will perish if ocean temperatures continue to rise unchecked.",
         "සාගර උෂ්ණත්වය පාලනයකින් තොරව දිගටම ඉහළ ගියහොත් ගණන් කළ නොහැකි තරම් සාගර ජීවීන් විශේෂ විනාශ වී යනු ඇත."
       ],
@@ -2447,6 +2999,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book familiar with learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට හොඳින් හුරුපුරුදු පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option familiar with this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී හොඳින් හුරුපුරුදු සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Job applicants who are familiar with data analysis software have a distinct advantage.",
         "දත්ත විශ්ලේෂණ මෘදුකාංග පිළිබඳව හුරුපුරුදු රැකියා අයදුම්කරුවන්ට සුවිශේෂී වාසියක් හිමි වේ."
@@ -2483,6 +3043,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book as opposed to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට ඊට හාත්පසින්ම වෙනස්ව පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option as opposed to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී ඊට හාත්පසින්ම වෙනස්ව සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Modern employers increasingly value practical problem-solving skills, as opposed to rote memorisation.",
         "නූතන සේවායෝජකයින් කටපාඩම් කිරීම වෙනුවට ප්‍රායෝගිකව ගැටලු විසඳීමේ කුසලතා වැඩි වශයෙන් අගය කරති."
       ],
@@ -2517,6 +3085,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book persist in learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට දිගින් දිගටම යමක නිරත වීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option persist in this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී දිගින් දිගටම යමක නිරත වීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "If industries persist in discharging untreated waste, river ecosystems will collapse.",
         "කර්මාන්තශාලා පිරිපහදු නොකළ අපද්‍රව්‍ය මුදා හැරීමේ දිගින් දිගටම නිරත වුවහොත් ගංගා පරිසර පද්ධති බිඳ වැටෙනු ඇත."
@@ -2553,6 +3129,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to return her goal.",
+        "ඇය තම ඉලක්කය ආපසු පැමිණීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can return new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ආපසු පැමිණීම හැකිය."
+      ],
+      [
         "Early childhood education yields a high economic return for society as a whole.",
         "මුල් ළමාවිය අධ්‍යාපනය සමස්ත සමාජයටම ඉහළ ආර්ථික ප්‍රතිලාභයක් ලබා දෙයි."
       ],
@@ -2587,6 +3171,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book competent at learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට නිපුණතාවයක් ඇති පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option competent at this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී නිපුණතාවයක් ඇති සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Modern graduates must be competent at digital communication and collaborative teamwork.",
         "නූතන උපාධිධාරීන් ඩිජිටල් සන්නිවේදනය සහ කණ්ඩායම් වශයෙන් වැඩ කිරීම පිළිබඳව මනා නිපුණතාවයකින් යුක්ත විය යුතුය."
@@ -2623,6 +3215,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to reserve her goal.",
+        "ඇය තම ඉලක්කය වෙන් කර තබා ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can reserve new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා වෙන් කර තබා ගැනීම හැකිය."
+      ],
+      [
         "Establishing protected nature reserves is essential for conserving endangered wildlife.",
         "වඳවී යාමේ තර්ජනයට ලක්ව ඇති වනජීවීන් සංරක්ෂණය කිරීම සඳහා ආරක්ෂිත ස්වාභාවික රක්ෂිත පිහිටුවීම අත්‍යවශ්‍ය වේ."
       ],
@@ -2657,6 +3257,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to stimulate her goal.",
+        "ඇය තම ඉලක්කය උත්තේජනය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can stimulate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා උත්තේජනය කරන්න හැකිය."
+      ],
       [
         "Governments often lower interest rates during recessions to stimulate consumer spending.",
         "ආර්ථික අවපාත කාලවලදී පාරිභෝගික වියදම් උත්තේජනය කිරීම සඳහා රජයන් බොහෝ විට පොලී අනුපාත පහත හෙළයි."
@@ -2693,6 +3301,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are innate for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සහජ වේ."
+      ],
+      [
+        "She gave a very innate answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සහජ පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "While some musicians possess innate talent, mastery still demands years of disciplined practice.",
         "සමහර සංගීතඥයින්ට සහජ දක්ෂතාවයක් තිබුණද, ප්‍රවීණත්වය ලබා ගැනීමට වසර ගණනාවක විනයගරුක පුහුණුවක් අවශ්‍ය වේ."
       ],
@@ -2727,6 +3343,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to reject her goal.",
+        "ඇය තම ඉලක්කය ප්‍රතික්ෂේප කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can reject new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ප්‍රතික්ෂේප කරන්න හැකිය."
+      ],
       [
         "Many educators reject the notion that standardised tests accurately measure a student's intelligence.",
         "සම්මත විභාග මගින් ශිෂ්‍යයෙකුගේ බුද්ධිය නිවැරදිව මනිනු ලබයි යන මතය බොහෝ අධ්‍යාපනඥයෝ ප්‍රතික්ෂේප කරති."
@@ -2763,6 +3387,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Nevertheless, students need enough sleep before an exam.",
+        "එසේ වුවද, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will nevertheless improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ එසේ වුවද ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Solar panels require a high initial outlay; nevertheless, they significantly reduce long-term electricity bills.",
         "සූර්ය පැනල සඳහා ඉහළ මූලික පිරිවැයක් අවශ්‍ය වේ; එසේ වුවද, ඒවා දිගුකාලීන විදුලි බිල්පත් සැලකිය යුතු ලෙස අඩු කරයි."
       ],
@@ -2797,6 +3429,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to adopt her goal.",
+        "ඇය තම ඉලක්කය අනුගමනය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can adopt new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අනුගමනය කරන්න හැකිය."
+      ],
       [
         "Governments must adopt proactive policies to prepare the workforce for automation.",
         "ස්වයංක්‍රීයකරණය සඳහා ශ්‍රම බලකාය සූදානම් කිරීමට රජයන් කල්තියා ක්‍රියාත්මක වන ප්‍රතිපත්ති අනුගමනය කළ යුතුය."
@@ -2833,6 +3473,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Overly, students need enough sleep before an exam.",
+        "ප්‍රමාණයට වඩා වැඩි ලෙස, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will overly improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ ප්‍රමාණයට වඩා වැඩි ලෙස ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Students who become overly reliant on artificial intelligence tools may lose their critical writing skills.",
         "කෘත්‍රිම බුද්ධි මෙවලම් මත ඕනෑවට වඩා රඳා පවතින සිසුන්ට ඔවුන්ගේ විචාරාත්මක ලිවීමේ කුසලතා අහිමි විය හැකිය."
       ],
@@ -2867,6 +3515,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to confront her goal.",
+        "ඇය තම ඉලක්කය මුහුණ දීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can confront new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා මුහුණ දීම හැකිය."
+      ],
       [
         "Modern societies must confront the ethical dilemmas posed by genetic engineering.",
         "ජාන ඉංජිනේරු විද්‍යාව මගින් මතු කරන සදාචාරාත්මක ගැටලුවලට නූතන සමාජයන් සෘජුව මුහුණ දිය යුතුය."
@@ -2903,6 +3559,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book fundamental to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට මූලික වන පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option fundamental to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී මූලික වන සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Equal access to quality education is fundamental to building a meritocratic society.",
         "ගුණාත්මක අධ්‍යාපනයක් සඳහා සමාන ප්‍රවේශයක් තිබීම කුසලතාව මත පදනම් වූ සමාජයක් ගොඩනැගීමට මූලික වේ."
       ],
@@ -2937,6 +3601,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to encounter her goal.",
+        "ඇය තම ඉලක්කය මුහුණ පෑම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can encounter new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා මුහුණ පෑම හැකිය."
+      ],
       [
         "Immigrants often encounter language and cultural barriers when settling in a new country.",
         "නව රටක පදිංචි වීමේදී සංක්‍රමණිකයින් බොහෝ විට භාෂාමය සහ සංස්කෘතික බාධකවලට මුහුණ පාති."
@@ -2973,6 +3645,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are widespread for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර පුළුල්ව පැතිරුණු වේ."
+      ],
+      [
+        "She gave a very widespread answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා පුළුල්ව පැතිරුණු පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "The widespread adoption of smartphones has transformed how citizens access banking services.",
         "ස්මාර්ට් ජංගම දුරකථන පුළුල් ලෙස භාවිතයට ගැනීම පුරවැසියන් බැංකු සේවා ලබා ගන්නා ආකාරය වෙනස් කර ඇත."
       ],
@@ -3007,6 +3687,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to reflect her goal.",
+        "ඇය තම ඉලක්කය පිළිබිඹු කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can reflect new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා පිළිබිඹු කරන්න හැකිය."
+      ],
       [
         "A nation's architecture often reflects its historical heritage and cultural priorities.",
         "රටක ගෘහ නිර්මාණ ශිල්පය බොහෝ විට එහි ඓතිහාසික උරුමය සහ සංස්කෘතික ප්‍රමුඛතාවන් පිළිබිඹු කරයි."
@@ -3043,6 +3731,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are historical for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ඓතිහාසික වේ."
+      ],
+      [
+        "She gave a very historical answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ඓතිහාසික පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Museums play an educational role by preserving historical artefacts for future generations.",
         "අනාගත පරම්පරාවන් සඳහා ඓතිහාසික පුරාවස්තු සංරක්ෂණය කරමින් කෞතුකාගාර අධ්‍යාපනික කාර්යභාරයක් ඉටු කරයි."
       ],
@@ -3077,6 +3773,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are available for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ලබාගත හැකි වේ."
+      ],
+      [
+        "She gave a very available answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ලබාගත හැකි පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Educational lectures from top universities are now freely available online to anyone with internet access.",
         "ප්‍රමුඛ පෙළේ විශ්වවිද්‍යාලවල අධ්‍යාපනික දේශන දැන් අන්තර්ජාල පහසුකම් ඇති ඕනෑම අයෙකුට නොමිලේ ලබාගත හැකිය."
@@ -3113,6 +3817,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are ephemeral for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර තාවකාලික වේ."
+      ],
+      [
+        "She gave a very ephemeral answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා තාවකාලික පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Fast fashion encourages consumers to chase ephemeral trends rather than buying durable clothing.",
         "ක්ෂණික විලාසිතා කර්මාන්තය කල් පවතින ඇඳුම් මිලදී ගැනීම වෙනුවට තාවකාලික විලාසිතා රැලි හඹා යාමට පාරිභෝගිකයින්ව පොළඹවයි."
       ],
@@ -3147,6 +3859,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of practice clearly.",
+        "ගුරුවරයා භාවිතය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your practice.",
+        "හොඳ පුරුදු ඔබගේ භාවිතය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Sustainable agricultural practices preserve soil fertility while reducing chemical runoff.",
         "තිරසාර කෘෂිකාර්මික ක්‍රියා පිළිවෙත් මගින් රසායනික අපද්‍රව්‍ය ගලා යාම අඩු කරන අතරම පසෙහි සාරවත් බව ආරක්ෂා කරයි."
@@ -3183,6 +3903,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of trend clearly.",
+        "ගුරුවරයා ප්‍රවණතාවයක් පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your trend.",
+        "හොඳ පුරුදු ඔබගේ ප්‍රවණතාවයක් කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "The chart illustrates a clear upward trend in renewable energy consumption over the twenty-year period.",
         "මෙම ප්‍රස්තාරය මගින් වසර විස්සක කාලසීමාව තුළ පුනර්ජනනීය බලශක්ති පරිභෝජනයේ පැහැදිලි ඉහළ යාමේ ප්‍රවණතාවක් පෙන්නුම් කරයි."
       ],
@@ -3217,6 +3945,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Typically, students need enough sleep before an exam.",
+        "සාමාන්‍යයෙන්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will typically improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ සාමාන්‍යයෙන් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Senior management positions typically require both academic qualifications and extensive industry experience.",
         "ජ්‍යෙෂ්ඨ කළමනාකරණ තනතුරු සඳහා සාමාන්‍යයෙන් අධ්‍යාපන සුදුසුකම් මෙන්ම පුළුල් ක්ෂේත්‍ර අත්දැකීම්ද අවශ්‍ය වේ."
@@ -3253,6 +3989,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of characteristic clearly.",
+        "ගුරුවරයා ලක්ෂණයක් පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your characteristic.",
+        "හොඳ පුරුදු ඔබගේ ලක්ෂණයක් කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Adaptability is a defining characteristic of successful entrepreneurs in the digital age.",
         "ඩිජිටල් යුගයේ සාර්ථක ව්‍යවසායකයින්ගේ කැපී පෙනෙන ප්‍රධාන ලක්ෂණයක් වන්නේ වෙනස්වීම්වලට හැඩගැසීමේ හැකියාවයි."
       ],
@@ -3287,6 +4031,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are conventional for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සාම්ප්‍රදායික වේ."
+      ],
+      [
+        "She gave a very conventional answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සාම්ප්‍රදායික පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Organic farming avoids the synthetic pesticides widely used in conventional agriculture.",
         "සාම්ප්‍රදායික කෘෂිකර්මාන්තයේ බහුලව භාවිත වන කෘත්‍රිම පළිබෝධනාශක කාබනික ගොවිතැනේදී භාවිත නොකෙරේ."
@@ -3323,6 +4075,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to retain her goal.",
+        "ඇය තම ඉලක්කය රඳවා තබා ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can retain new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා රඳවා තබා ගැනීම හැකිය."
+      ],
+      [
         "Companies that offer career development opportunities find it easier to retain talented employees.",
         "වෘත්තීය දියුණුව සඳහා අවස්ථා ලබා දෙන සමාගම්වලට දක්ෂ සේවකයින් රඳවා තබා ගැනීම වඩාත් පහසු වේ."
       ],
@@ -3357,6 +4117,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are harsh for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර කටුක වේ."
+      ],
+      [
+        "She gave a very harsh answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා කටුක පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Imposing harsh penalties on drunk drivers has significantly reduced road fatalities.",
         "බීමත් රියදුරන්ට දැඩි දඬුවම් පැනවීම මගින් මාර්ග අනතුරු මරණ සැලකිය යුතු ලෙස අඩු කර ඇත."
@@ -3393,6 +4161,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book assure that learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට සහතික කිරීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option assure that this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී සහතික කිරීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Health authorities assured the public that the municipal water supply remained completely safe.",
         "නගර සභා ජල සැපයුම මුළුමනින්ම ආරක්ෂිතව පවතින බවට සෞඛ්‍ය බලධාරීහු මහජනතාවට සහතික වූහ."
       ],
@@ -3427,6 +4203,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to mismanage her goal.",
+        "ඇය තම ඉලක්කය දුර්වල ලෙස කළමනාකරණය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can mismanage new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා දුර්වල ලෙස කළමනාකරණය කරන්න හැකිය."
+      ],
       [
         "Even resource-rich nations can suffer poverty if state revenues are chronically mismanaged.",
         "රාජ්‍ය ආදායම දිගු කාලයක් තිස්සේ අවකළමනාකරණයට ලක් වුවහොත් සම්පත්වලින් පොහොසත් රටවල් පවා දරිද්‍රතාවයෙන් පීඩා විඳිය හැකිය."
@@ -3463,6 +4247,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book overburden with learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට දැරිය නොහැකි තරම් බරක් හෝ වගකීමක් පැටවීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option overburden with this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී දැරිය නොහැකි තරම් බරක් හෝ වගකීමක් පැටවීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Primary school children should not be overburdened with excessive homework and examination pressure.",
         "ප්‍රාථමික පාසල් දරුවන් මත අධික ගෙදර වැඩ සහ විභාග පීඩනය පැටවිය යුතු නැත."
       ],
@@ -3497,6 +4289,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are unprecedented for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර පෙර නොවූ විරූ වේ."
+      ],
+      [
+        "She gave a very unprecedented answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා පෙර නොවූ විරූ පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Digital connectivity has enabled information to spread across the globe at an unprecedented rate.",
         "ඩිජිටල් සම්බන්ධතාවය මගින් ලොව පුරා තොරතුරු පෙර නොවූ විරූ වේගයකින් ව්‍යාප්ත වීමට හැකියාව ලබා දී ඇත."
@@ -3533,6 +4333,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book with a view to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට යමක් සිදු කිරීමේ අරමුණින් පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option with a view to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී යමක් සිදු කිරීමේ අරමුණින් සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "The government revised the tax code with a view to encouraging small business investment.",
         "කුඩා ව්‍යාපාර ආයෝජන දිරිගැන්වීමේ අරමුණින් රජය බදු නීති සංශෝධනය කළේය."
       ],
@@ -3567,6 +4375,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book have the effect of learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට යම් ප්‍රතිඵලයක් හෝ බලපෑමක් ඇති කිරීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option have the effect of this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී යම් ප්‍රතිඵලයක් හෝ බලපෑමක් ඇති කිරීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Raising fuel taxes can have the effect of discouraging unnecessary private car journeys.",
         "ඉන්ධන බදු ඉහළ නැංවීම අනවශ්‍ය පෞද්ගලික රථවාහන ගමන් අධෛර්යමත් කිරීමේ බලපෑමක් ඇති කළ හැකිය."
@@ -3603,6 +4419,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to minimise her goal.",
+        "ඇය තම ඉලක්කය අවම කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can minimise new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අවම කරන්න හැකිය."
+      ],
+      [
         "Strict safety regulations are enforced to minimise the risk of industrial accidents.",
         "කාර්මික අනතුරු ඇතිවීමේ අවදානම අවම කිරීම සඳහා දැඩි ආරක්ෂක රෙගුලාසි ක්‍රියාත්මක කෙරේ."
       ],
@@ -3637,6 +4461,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "It is important to lead to your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි මග පෑදීම වැදගත් වේ."
+      ],
+      [
+        "She learned how to lead to difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව මග පෑදීම ඇය ඉගෙන ගත්තාය."
+      ],
       [
         "Prolonged sleep deprivation can lead to serious physical and cognitive impairments.",
         "දිගුකාලීනව නින්ද අහිමි වීම බරපතල ශාරීරික හා බුද්ධිමය දුර්වලතාවලට මග පෑදිය හැක."
@@ -3673,6 +4505,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to create her goal.",
+        "ඇය තම ඉලක්කය නිර්මාණය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can create new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා නිර්මාණය කරන්න හැකිය."
+      ],
+      [
         "Renewable energy projects create thousands of skilled engineering jobs across the country.",
         "පුනර්ජනනීය බලශක්ති ව්‍යාපෘති රට පුරා පුහුණු ඉංජිනේරු රැකියා දහස් ගණනක් උත්පාදනය කරයි."
       ],
@@ -3707,6 +4547,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "It is important to investigate into your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි විමර්ශනය කරන්න වැදගත් වේ."
+      ],
+      [
+        "She learned how to investigate into difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව විමර්ශනය කරන්න ඇය ඉගෙන ගත්තාය."
+      ],
       [
         "An independent committee was appointed to investigate the causes of the railway failure.",
         "දුම්රිය බිඳවැටීමට බලපෑ හේතු විමර්ශනය කිරීම සඳහා ස්වාධීන කමිටුවක් පත් කරන ලදී."
@@ -3743,6 +4591,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Surprisingly, students need enough sleep before an exam.",
+        "පුදුමයට කරුණක් ලෙස, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will surprisingly improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ පුදුමයට කරුණක් ලෙස ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Surprisingly, the survey revealed that older citizens were more optimistic about automation than young adults.",
         "පුදුමයට කරුණක් ලෙස, තරුණ වැඩිහිටියන්ට වඩා වැඩිහිටි පුරවැසියන් ස්වයංක්‍රීයකරණය පිළිබඳව සුබවාදීව සිතන බව සමීක්ෂණයෙන් හෙළි විය."
       ],
@@ -3777,6 +4633,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Perhaps, students need enough sleep before an exam.",
+        "සමහරවිට, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will perhaps improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ සමහරවිට ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Perhaps the greatest challenge facing modern cities is the provision of clean water.",
         "සමහරවිට නවීන නගර මුහුණ දෙන දැවැන්තම අභියෝගය වන්නේ පිරිසිදු ජලය සැපයීමයි."
@@ -3813,6 +4677,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are involved in for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සම්බන්ධ වී සිටීම වේ."
+      ],
+      [
+        "She gave a very involved in answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සම්බන්ධ වී සිටීම පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Parents who are actively involved in their children's schooling foster stronger academic habits.",
         "තම දරුවන්ගේ පාසල් අධ්‍යාපන කටයුතුවලට සක්‍රීයව සම්බන්ධ වන දෙමාපියෝ වඩාත් ශක්තිමත් අධ්‍යයන පුරුදු වර්ධනය කරති."
       ],
@@ -3847,6 +4719,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book far from...-ing learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට එසේ වීම කෙසේ වෙතත් ඊට හාත්පසින්ම වෙනස්ව පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option far from...-ing this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී එසේ වීම කෙසේ වෙතත් ඊට හාත්පසින්ම වෙනස්ව සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Far from reducing workloads, constant digital connectivity has lengthened the average working day.",
         "වැඩ ප්‍රමාණය අඩු කිරීම කෙසේ වෙතත්, අඛණ්ඩ ඩිජිටල් සම්බන්ධතාවය සාමාන්‍ය වැඩ කරන දිනය දීර්ඝ කර තිබේ."
@@ -3883,6 +4763,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "It is important to rely on your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි මත යැපීම වැදගත් වේ."
+      ],
+      [
+        "She learned how to rely on difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව මත යැපීම ඇය ඉගෙන ගත්තාය."
+      ],
+      [
         "Rural economies often rely heavily on seasonal agricultural production.",
         "ග්‍රාමීය ආර්ථිකයන් බොහෝ විට සෘතුමය කෘෂිකාර්මික නිෂ්පාදන මත දැඩි ලෙස යැපේ."
       ],
@@ -3917,6 +4805,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Admittedly, students need enough sleep before an exam.",
+        "පිළිගත යුතු පරිදි, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will admittedly improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ පිළිගත යුතු පරිදි ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Admittedly, transitioning to solar energy requires substantial initial capital, yet the long-term savings are undeniable.",
         "පිළිගත යුතු පරිදි, සූර්ය බලශක්තියට හුවමාරු වීම සඳහා විශාල මූලික ප්‍රාග්ධනයක් අවශ්‍ය වුවද, එහි දිගුකාලීන ඉතිරිය ප්‍රතික්ෂේප කළ නොහැක."
@@ -3953,6 +4849,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to distribute her goal.",
+        "ඇය තම ඉලක්කය බෙදා හැරීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can distribute new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා බෙදා හැරීම හැකිය."
+      ],
+      [
         "Progressive taxation helps governments distribute national wealth more equitably across society.",
         "අනුක්‍රමික බදු ක්‍රමය මගින් ජාතික ධනය සමාජය පුරා වඩාත් සාධාරණ ලෙස බෙදා හැරීමට රජයන්ට උපකාරී වේ."
       ],
@@ -3987,6 +4891,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book make a contribution to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට දායකත්වයක් ලබා දීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option make a contribution to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී දායකත්වයක් ලබා දීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Immigrants make a vital contribution to the economic vitality and cultural diversity of host nations.",
         "සංක්‍රමණිකයෝ සත්කාරක රටවල ආර්ථික ශක්තියට සහ සංස්කෘතික විවිධත්වයට අත්‍යවශ්‍ය දායකත්වයක් ලබා දෙති."
@@ -4023,6 +4935,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of tradition clearly.",
+        "ගුරුවරයා සම්ප්‍රදායක් පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your tradition.",
+        "හොඳ පුරුදු ඔබගේ සම්ප්‍රදායක් කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Annual festivals play a crucial role in keeping centuries-old traditions alive for younger generations.",
         "සියවස් ගණනාවක් පැරණි සම්ප්‍රදායන් තරුණ පරම්පරාව උදෙසා ජීවමානව තබා ගැනීමට වාර්ෂික උත්සව තීරණාත්මක කාර්යභාරයක් ඉටු කරයි."
       ],
@@ -4057,6 +4977,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to point out that her goal.",
+        "ඇය තම ඉලක්කය පෙන්වා දීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can point out that new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා පෙන්වා දීම හැකිය."
+      ],
       [
         "Economists point out that raising the retirement age may limit promotion opportunities for younger workers.",
         "විශ්‍රාම යන වයස ඉහළ නැංවීම තරුණ සේවකයින්ගේ උසස්වීම් අවස්ථා සීමා කළ හැකි බව ආර්ථික විද්‍යාඥයෝ පෙන්වා දෙති."
@@ -4093,6 +5021,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Solely, students need enough sleep before an exam.",
+        "හුදෙක්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will solely improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ හුදෙක් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "University admissions should not be determined solely by a student's performance in a single examination.",
         "විශ්වවිද්‍යාල බඳවා ගැනීම් හුදෙක් තනි විභාගයකදී ශිෂ්‍යයෙකු දක්වන දක්ෂතාවය මත පමණක් තීරණය නොවිය යුතුය."
       ],
@@ -4127,6 +5063,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are complex for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සංකීර්ණ වේ."
+      ],
+      [
+        "She gave a very complex answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සංකීර්ණ පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Climate change is a complex global problem that requires coordinated international action.",
         "දේශගුණික විපර්යාස යනු සම්බන්ධීකරණය වූ ජාත්‍යන්තර ක්‍රියාමාර්ග අවශ්‍ය කරන සංකීර්ණ ගෝලීය ගැටලුවකි."
@@ -4163,6 +5107,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book in addition to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට ඊට අමතරව පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option in addition to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී ඊට අමතරව සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "In addition to reducing traffic congestion, cycling lanes promote daily physical exercise among commuters.",
         "රථවාහන තදබදය අවම කිරීමට අමතරව, පාපැදි මංතීරු මගින් මගීන් අතර දෛනික ශාරීරික ව්‍යායාම ප්‍රවර්ධනය කරයි."
       ],
@@ -4197,6 +5149,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of criterion to clearly.",
+        "ගුරුවරයා නිර්ණායකය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your criterion to.",
+        "හොඳ පුරුදු ඔබගේ නිර්ණායකය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Gross Domestic Product should not be the sole criterion to measure a nation's overall progress.",
         "රටක සමස්ත ප්‍රගතිය මැනීමේ එකම නිර්ණායකය දළ දේශීය නිෂ්පාදිතය නොවිය යුතුය."
@@ -4233,6 +5193,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to outnumber her goal.",
+        "ඇය තම ඉලක්කය සංඛ්‍යාවෙන් ඉක්මවා යාම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can outnumber new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සංඛ්‍යාවෙන් ඉක්මවා යාම හැකිය."
+      ],
+      [
         "In nursing and primary education, female graduates consistently outnumber their male counterparts.",
         "හෙද සහ ප්‍රාථමික අධ්‍යාපන ක්ෂේත්‍රවල කාන්තා උපාධිධාරිනියන් සංඛ්‍යාවෙන් පිරිමි උපාධිධාරීන් අඛණ්ඩව ඉක්මවා යයි."
       ],
@@ -4267,6 +5235,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are current for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර වර්තමාන වේ."
+      ],
+      [
+        "She gave a very current answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා වර්තමාන පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "If current consumption patterns continue, global freshwater supplies will face severe strain within decades.",
         "වර්තමාන පරිභෝජන රටාවන් අඛණ්ඩව පැවතුනහොත්, දශක කිහිපයක් ඇතුළත ගෝලීය මිරිදිය සැපයුම දැඩි පීඩනයකට ලක්වනු ඇත."
@@ -4303,6 +5279,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to conceive that her goal.",
+        "ඇය තම ඉලක්කය සිතා ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can conceive that new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සිතා ගැනීම හැකිය."
+      ],
+      [
         "Fifty years ago, few people could conceive that pocket-sized devices would connect the entire planet.",
         "වසර පනහකට පෙර, සාක්කුවේ දමාගෙන යා හැකි කුඩා උපකරණ මගින් මුළු ලෝකයම සම්බන්ධ කරනු ඇතැයි සිතා ගැනීමට හැකි වූයේ අතළොස්සකට පමණි."
       ],
@@ -4337,6 +5321,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to acknowledge her goal.",
+        "ඇය තම ඉලක්කය පිළිගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can acknowledge new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා පිළිගැනීම හැකිය."
+      ],
       [
         "Governments must acknowledge the link between inadequate housing and poor public health.",
         "ප්‍රමාණවත් නොවන නිවාස පහසුකම් සහ දුර්වල මහජන සෞඛ්‍යය අතර පවතින සම්බන්ධය රජයන් විසින් පිළිගත යුතුය."
@@ -4373,6 +5365,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are numerous for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර බොහෝ වේ."
+      ],
+      [
+        "She gave a very numerous answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා බොහෝ පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Numerous studies have confirmed that regular physical activity reduces symptoms of anxiety.",
         "ක්‍රමවත් ශාරීරික ක්‍රියාකාරකම් මගින් කාංසාවේ රෝග ලක්ෂණ අවම කරන බව අධ්‍යයන රැසකින් තහවුරු කර ඇත."
       ],
@@ -4407,6 +5407,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to develop her goal.",
+        "ඇය තම ඉලක්කය සංවර්ධනය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can develop new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සංවර්ධනය කරන්න හැකිය."
+      ],
       [
         "Group projects help students develop essential teamwork and communication skills.",
         "කණ්ඩායම් ව්‍යාපෘති මගින් සිසුන්ට අත්‍යවශ්‍ය සාමූහිකත්ව සහ සන්නිවේදන කුසලතා වර්ධනය කර ගැනීමට උපකාරී වේ."
@@ -4443,6 +5451,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to alleviate her goal.",
+        "ඇය තම ඉලක්කය සමනය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can alleviate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සමනය කරන්න හැකිය."
+      ],
+      [
         "Expanding underground metro lines is one of the most effective ways to alleviate urban traffic congestion.",
         "භූගත මෙට්‍රෝ දුම්රිය මාර්ග පුළුල් කිරීම නාගරික රථවාහන තදබදය සමනය කිරීමේ වඩාත්ම ඵලදායී ක්‍රමයකි."
       ],
@@ -4477,6 +5493,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are contemporary for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සමකාලීන වේ."
+      ],
+      [
+        "She gave a very contemporary answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සමකාලීන පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "In contemporary society, dual-income households have become the norm rather than the exception.",
         "සමකාලීන සමාජය තුළ දෙදෙනාම ආදායම් උපයන පවුල් විශේෂත්වයක් නොව සාමාන්‍ය තත්ත්වයක් බවට පත්ව ඇත."
@@ -4513,6 +5537,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to identify her goal.",
+        "ඇය තම ඉලක්කය හඳුනා ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can identify new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා හඳුනා ගැනීම හැකිය."
+      ],
+      [
         "Early screening programmes allow doctors to identify developmental delays before children start school.",
         "පූර්ව පරීක්ෂණ වැඩසටහන් මගින් දරුවන් පාසල් යාමට පෙර ඔවුන්ගේ වර්ධන ප්‍රමාදයන් හඳුනා ගැනීමට වෛද්‍යවරුන්ට ඉඩ සලසයි."
       ],
@@ -4547,6 +5579,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to reveal her goal.",
+        "ඇය තම ඉලක්කය හෙළිදරව් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can reveal new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා හෙළිදරව් කරන්න හැකිය."
+      ],
       [
         "The bar chart reveals a sharp disparity between male and female enrolment in engineering courses.",
         "ඉංජිනේරු පාඨමාලාවලට බඳවා ගැනීමේදී පිරිමි සහ කාන්තා සිසුන් අතර කැපී පෙනෙන පරතරයක් පවතින බව තීරු ප්‍රස්තාරයෙන් අනාවරණය වේ."
@@ -4583,6 +5623,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "It is important to convert to/into your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි බවට පරිවර්තනය කරන්න වැදගත් වේ."
+      ],
+      [
+        "She learned how to convert to/into difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව බවට පරිවර්තනය කරන්න ඇය ඉගෙන ගත්තාය."
+      ],
+      [
         "Solar panels convert sunlight directly into electrical energy without emitting greenhouse gases.",
         "සූර්ය පැනල මගින් හරිතාගාර වායු විමෝචනයකින් තොරව සූර්යාලෝකය සෘජුවම විද්‍යුත් ශක්තිය බවට පරිවර්තනය කරයි."
       ],
@@ -4617,6 +5665,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are insurmountable for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ජයගත නොහැකි වේ."
+      ],
+      [
+        "She gave a very insurmountable answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ජයගත නොහැකි පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Without access to credit, low-income entrepreneurs often face insurmountable barriers to starting a business.",
         "ණය පහසුකම් නොමැතිව අඩු ආදායම්ලාභී ව්‍යවසායකයින්ට ව්‍යාපාරයක් ආරම්භ කිරීමේදී බොහෝ විට ජයගත නොහැකි බාධකවලට මුහුණ දීමට සිදුවේ."
@@ -4653,6 +5709,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "It is important to elaborate on your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි වැඩිදුරටත් විස්තර කරන්න වැදගත් වේ."
+      ],
+      [
+        "She learned how to elaborate on difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව වැඩිදුරටත් විස්තර කරන්න ඇය ඉගෙන ගත්තාය."
+      ],
+      [
         "The report identifies rising inequality and proceeds to elaborate on its long-term social consequences.",
         "මෙම වාර්තාව ඉහළ යන අසමානතාවය හඳුනා ගන්නා අතර එහි දිගුකාලීන සමාජ ප්‍රතිවිපාක පිළිබඳව වැඩිදුරටත් විස්තර කරයි."
       ],
@@ -4687,6 +5751,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book play a role in learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට කාර්යභාරයක් ඉටු කිරීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option play a role in this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී කාර්යභාරයක් ඉටු කිරීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Early childhood nutrition plays a pivotal role in physical growth and cognitive development.",
         "මුල් ළමාවියේ පෝෂණය දරුවෙකුගේ ශාරීරික වර්ධනය සහ බුද්ධිමය දියුණුව කෙරෙහි තීරණාත්මක කාර්යභාරයක් ඉටු කරයි."
@@ -4723,6 +5795,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are severe for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර දරුණු වේ."
+      ],
+      [
+        "She gave a very severe answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා දරුණු පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Prolonged drought has caused a severe shortage of drinking water across the agricultural belt.",
         "දිගුකාලීන නියඟය හේතුවෙන් කෘෂිකාර්මික කලාපය පුරා පානීය ජලයේ උග්‍ර හිඟයක් ඇති වී තිබේ."
       ],
@@ -4757,6 +5837,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Indeed, students need enough sleep before an exam.",
+        "සැබැවින්ම, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will indeed improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ සැබැවින්ම ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Public libraries provide free access to books; indeed, they often serve as vital community learning hubs.",
         "පොදු පුස්තකාල නොමිලේ පොත්පත් පරිශීලනයට ඉඩ සලසයි; සැබැවින්ම ඒවා බොහෝ විට අත්‍යවශ්‍ය ප්‍රජා ඉගෙනුම් මධ්‍යස්ථාන ලෙසද ක්‍රියා කරයි."
@@ -4793,6 +5881,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are invaluable for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර මිල කළ නොහැකි වේ."
+      ],
+      [
+        "She gave a very invaluable answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා මිල කළ නොහැකි පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Internships allow university students to gain invaluable practical experience before entering the job market.",
         "රැකියා වෙළඳපොළට පිවිසීමට පෙර මිල කළ නොහැකි ප්‍රායෝගික අත්දැකීම් ලබා ගැනීමට සීමාවාසික පුහුණුව විශ්වවිද්‍යාල සිසුන්ට ඉඩ සලසයි."
       ],
@@ -4827,6 +5923,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are present at/in for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර පැමිණ සිටීම වේ."
+      ],
+      [
+        "She gave a very present at/in answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා පැමිණ සිටීම පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "High levels of lead were found to be present in the drinking water of older industrial towns.",
         "පැරණි කාර්මික නගරවල පානීය ජලයෙහි ඉහළ ඊයම් මට්ටමක් අන්තර්ගතව පවතින බව සොයා ගන්නා ලදී."
@@ -4863,6 +5967,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to flourish her goal.",
+        "ඇය තම ඉලක්කය සමෘද්ධිමත් වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can flourish new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සමෘද්ධිමත් වෙන්න හැකිය."
+      ],
+      [
         "Independent bookshops can still flourish when they offer personalised recommendations and community events.",
         "පුද්ගලික මගපෙන්වීම් සහ ප්‍රජා වැඩසටහන් පිරිනමන විට ස්වාධීන පොත්හල්වලට තවමත් සාර්ථකව වර්ධනය විය හැක."
       ],
@@ -4897,6 +6009,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are evident that for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර පැහැදිලි වේ."
+      ],
+      [
+        "She gave a very evident that answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා පැහැදිලි පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "From the upward trajectory of the graph, it is evident that solar power adoption is accelerating.",
         "ප්‍රස්තාරයේ ඉහළ යන රේඛාව අනුව සූර්ය බලශක්ති භාවිතය වේගවත් වෙමින් පවතින බව ඉතා පැහැදිලිය."
@@ -4933,6 +6053,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "It is important to expose to your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි නිරාවරණය කරන්න වැදගත් වේ."
+      ],
+      [
+        "She learned how to expose to difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව නිරාවරණය කරන්න ඇය ඉගෙන ගත්තාය."
+      ],
+      [
         "Children who are exposed to multiple languages early in life acquire pronunciation patterns effortlessly.",
         "ජීවිතයේ මුල් අවධියේදීම භාෂා කිහිපයකට නිරාවරණය වන දරුවෝ ඉතා පහසුවෙන් උච්චාරණ රටාවන් ග්‍රහණය කර ගනිති."
       ],
@@ -4967,6 +6095,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are related for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සම්බන්ධිත වේ."
+      ],
+      [
+        "She gave a very related answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සම්බන්ධිත පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Rising rates of diabetes are closely related to the widespread consumption of ultra-processed foods.",
         "දියවැඩියා රෝගීන්ගේ අනුපාතය ඉහළ යාම අධික ලෙස සැකසූ ආහාර බහුලව පරිභෝජනය කිරීම සමඟ සමීපව බැඳී පවතී."
@@ -5003,6 +6139,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of behaviour clearly.",
+        "ගුරුවරයා හැසිරීම පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your behaviour.",
+        "හොඳ පුරුදු ඔබගේ හැසිරීම කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Positive reinforcement is far more effective than physical punishment in shaping children's behaviour.",
         "දරුවන්ගේ හැසිරීම හැඩගැස්වීමෙහිලා ශාරීරික දඬුවම්වලට වඩා ධනාත්මක දිරිගැන්වීම් බෙහෙවින් ඵලදායී වේ."
       ],
@@ -5037,6 +6181,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to undertake her goal.",
+        "ඇය තම ඉලක්කය භාර ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can undertake new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා භාර ගැනීම හැකිය."
+      ],
       [
         "Before approving the dam, engineers had to undertake a comprehensive environmental impact assessment.",
         "වේල්ල අනුමත කිරීමට පෙර ඉංජිනේරුවන්ට පුළුල් පාරිසරික බලපෑම් තක්සේරුවක් සිදු කිරීමට සිදු විය."
@@ -5073,6 +6225,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book on the contrary learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට ඊට හාත්පසින්ම වෙනස්ව පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option on the contrary this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී ඊට හාත්පසින්ම වෙනස්ව සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Strict environmental regulations do not stifle innovation; on the contrary, they stimulate green technology.",
         "දැඩි පාරිසරික රෙගුලාසි නවෝත්පාදනයන් අඩාල නොකරයි; ඊට හාත්පසින්ම වෙනස්ව ඒවා හරිත තාක්ෂණය උත්තේජනය කරයි."
       ],
@@ -5107,6 +6267,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are viable for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ප්‍රායෝගිකව ක්‍රියාත්මක කළ හැකි වේ."
+      ],
+      [
+        "She gave a very viable answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ප්‍රායෝගිකව ක්‍රියාත්මක කළ හැකි පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "High-speed rail has become a viable alternative to short-haul flights across Europe and East Asia.",
         "යුරෝපය සහ නැගෙනහිර ආසියාව පුරා කෙටි දුර ගුවන් ගමන් සඳහා අධිවේගී දුම්රිය සේවාව ප්‍රායෝගික විකල්පයක් බවට පත්ව ඇත."
@@ -5143,6 +6311,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of attitude clearly.",
+        "ගුරුවරයා ආකල්පය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your attitude.",
+        "හොඳ පුරුදු ඔබගේ ආකල්පය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Education campaigns are essential to trigger a shift in public attitudes towards single-use plastics.",
         "එක් වරක් පමණක් භාවිත කර ඉවතලන ප්ලාස්ටික් කෙරෙහි පවතින මහජන ආකල්පවල වෙනසක් ඇති කිරීමට දැනුවත් කිරීමේ වැඩසටහන් අත්‍යවශ්‍ය වේ."
       ],
@@ -5177,6 +6353,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of alternative clearly.",
+        "ගුරුවරයා විකල්පය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your alternative.",
+        "හොඳ පුරුදු ඔබගේ විකල්පය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Plant-based packaging offers a biodegradable alternative to conventional polystyrene containers.",
         "ශාක පදනම් කරගත් ඇසුරුම් සාම්ප්‍රදායික පොලිස්ටයිරින් බහාලුම් සඳහා දිරාපත් වන විකල්පයක් ලබා දෙයි."
@@ -5213,6 +6397,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to acquire her goal.",
+        "ඇය තම ඉලක්කය අත්පත් කර ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can acquire new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අත්පත් කර ගැනීම හැකිය."
+      ],
+      [
         "Apprenticeships enable school leavers to acquire practical skills while earning a regular wage.",
         "ආධුනිකත්ව පුහුණු වැඩසටහන් මගින් පාසල් හැර යන්නන්ට නිතිපතා වැටුපක් උපයන අතරතුර ප්‍රායෝගික කුසලතා අත්පත් කර ගැනීමට හැකියාව ලැබේ."
       ],
@@ -5247,6 +6439,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of approach clearly.",
+        "ගුරුවරයා ප්‍රවේශය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your approach.",
+        "හොඳ පුරුදු ඔබගේ ප්‍රවේශය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Tackling juvenile delinquency requires a holistic approach that combines family support with educational reform.",
         "බාලවයස්කාර අපරාධ මැඩපැවැත්වීම සඳහා පවුල් සහයෝගීතාවය සහ අධ්‍යාපන ප්‍රතිසංස්කරණ ඒකාබද්ධ කරන සමස්ත ප්‍රවේශයක් අවශ්‍ය වේ."
@@ -5283,6 +6483,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Reportedly, students need enough sleep before an exam.",
+        "වාර්තා වන පරිදි, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will reportedly improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ වාර්තා වන පරිදි ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Illegal logging has reportedly destroyed thousands of hectares of protected rainforest over the past year.",
         "නීති විරෝධී දැව හෙළීම් හේතුවෙන් පසුගිය වසර තුළ ආරක්ෂිත වැසි වනාන්තර හෙක්ටයාර දහස් ගණනක් විනාශ වී ඇති බව වාර්තා වේ."
       ],
@@ -5317,6 +6525,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to utilise her goal.",
+        "ඇය තම ඉලක්කය ප්‍රයෝජනයට ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can utilise new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ප්‍රයෝජනයට ගැනීම හැකිය."
+      ],
       [
         "Modern waste-to-energy plants utilise household rubbish to generate electricity and district heating.",
         "නවීන අපද්‍රව්‍ය බලශක්ති බලාගාර මගින් විදුලිය සහ උණුසුම නිපදවීම සඳහා ගෘහස්ථ කැළිකසළ ඵලදායී ලෙස ප්‍රයෝජනයට ගනී."
@@ -5353,6 +6569,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to compound her goal.",
+        "ඇය තම ඉලක්කය (ගැටලුවක් හෝ අසීරුතාවයක්) තවදුරටත් උග්‍ර කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can compound new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා (ගැටලුවක් හෝ අසීරුතාවයක්) තවදුරටත් උග්‍ර කරන්න හැකිය."
+      ],
+      [
         "Rural healthcare shortages are further compounded by poor road networks that delay ambulances.",
         "ගිලන්රථ ප්‍රමාද කරවන දුර්වල මාර්ග පද්ධතිය හේතුවෙන් ග්‍රාමීය සෞඛ්‍ය සේවා හිඟය තවදුරටත් උග්‍ර වී තිබේ."
       ],
@@ -5387,6 +6611,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book have the potential learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට විභවයක් පැවතීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option have the potential this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී විභවයක් පැවතීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Gene-editing technologies have the potential to eradicate inherited diseases within a generation.",
         "ජාන සංස්කරණ තාක්ෂණයන්ට එක් පරම්පරාවක් ඇතුළත ප්‍රවේණිගත රෝග තුරන් කිරීමේ හැකියාව පවතී."
@@ -5423,6 +6655,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book have the capacity to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට ධාරිතාවය පැවතීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option have the capacity to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී ධාරිතාවය පැවතීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Wetlands have the capacity to absorb vast quantities of floodwater during monsoon seasons.",
         "මෝසම් කාලවලදී විශාල ගංවතුර ප්‍රමාණයක් උරා ගැනීමේ ධාරිතාවය තෙත්බිම් සතුව පවතී."
       ],
@@ -5457,6 +6697,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are relevant for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අදාළ වේ."
+      ],
+      [
+        "She gave a very relevant answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අදාළ පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Secondary school curricula should be updated regularly so that lessons remain relevant to modern employment.",
         "පාඩම් නවීන රැකියා වෙළඳපොළට තවදුරටත් අදාළව පවතින පරිදි ද්විතීයික පාසල් විෂයමාලා නිතිපතා යාවත්කාලීන කළ යුතුය."
@@ -5493,6 +6741,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Readily, students need enough sleep before an exam.",
+        "පහසුවෙන්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will readily improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ පහසුවෙන් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "When nutritious food is not readily available, low-income families often resort to cheap fast food.",
         "පෝෂ්‍යදායී ආහාර පහසුවෙන් ලබාගත නොහැකි විට අඩු ආදායම්ලාභී පවුල් බොහෝ විට ලාභදායී ක්ෂණික ආහාර වෙත යොමු වේ."
       ],
@@ -5527,6 +6783,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to broaden her goal.",
+        "ඇය තම ඉලක්කය පුළුල් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can broaden new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා පුළුල් කරන්න හැකිය."
+      ],
       [
         "Taking a gap year to travel or volunteer can broaden young people's horizons before university.",
         "විශ්වවිද්‍යාලයට යාමට පෙර සංචාරය කිරීමට හෝ ස්වේච්ඡා සේවයේ යෙදීමට වසරක විවේකයක් ගැනීම තරුණ පිරිසගේ දැක්ම පුළුල් කළ හැක."
@@ -5563,6 +6827,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book irrespective of learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට නොසලකා පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option irrespective of this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී නොසලකා සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Every citizen should have access to quality healthcare irrespective of their personal income.",
         "තම පුද්ගලික ආදායම කුමක් වුවත් ඒ ගැන නොසලකා සෑම පුරවැසියෙකුටම ගුණාත්මක සෞඛ්‍ය සේවාවක් ලබා ගැනීමට හැකි විය යුතුය."
       ],
@@ -5597,6 +6869,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "It is important to attempt to your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි උත්සාහ කරන්න වැදගත් වේ."
+      ],
+      [
+        "She learned how to attempt to difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව උත්සාහ කරන්න ඇය ඉගෙන ගත්තාය."
+      ],
       [
         "Central banks raised interest rates in an attempt to curb rapidly rising inflation.",
         "ශීඝ්‍රයෙන් ඉහළ යන උද්ධමනය පාලනය කිරීමේ උත්සාහයක් ලෙස මහ බැංකු විසින් පොලී අනුපාත ඉහළ නංවන ලදී."
@@ -5633,6 +6913,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to argue that her goal.",
+        "ඇය තම ඉලක්කය තර්ක කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can argue that new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා තර්ක කරන්න හැකිය."
+      ],
+      [
         "Advocates of free university tuition argue that higher education benefits society as a whole.",
         "නොමිලේ විශ්වවිද්‍යාල අධ්‍යාපනය ලබා දීමේ යෝජකයින් තර්ක කරන්නේ උසස් අධ්‍යාපනය සමස්ත සමාජයටම ප්‍රතිලාභ ගෙන දෙන බවයි."
       ],
@@ -5667,6 +6955,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to consult her goal.",
+        "ඇය තම ඉලක්කය උපදෙස් ලබා ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can consult new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා උපදෙස් ලබා ගැනීම හැකිය."
+      ],
       [
         "Patients should always consult a qualified physician before taking prescription medication.",
         "බෙහෙත් වට්ටෝරු මගින් ලබා දෙන ඖෂධ ගැනීමට පෙර රෝගීන් සැමවිටම සුදුසුකම් ලත් වෛද්‍යවරයෙකුගෙන් උපදෙස් ලබා ගත යුතුය."
@@ -5703,6 +6999,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Continuously, students need enough sleep before an exam.",
+        "අඛණ්ඩව, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will continuously improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ අඛණ්ඩව ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Automated sensors continuously monitor air quality across the metropolitan area.",
         "ස්වයංක්‍රීය සංවේදක මගින් නාගරික ප්‍රදේශය පුරා වාතයේ ගුණාත්මකභාවය අඛණ්ඩව නිරීක්ෂණය කරයි."
       ],
@@ -5737,6 +7041,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to speculate that her goal.",
+        "ඇය තම ඉලක්කය අනුමාන කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can speculate that new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අනුමාන කරන්න හැකිය."
+      ],
       [
         "Demographers speculate that global population growth will plateau before the end of the century.",
         "සියවස අවසන් වීමට පෙර ගෝලීය ජනගහන වර්ධනය ස්ථාවර මට්ටමකට පැමිණෙනු ඇතැයි ජනවිකාස විද්‍යාඥයෝ අනුමාන කරති."
@@ -5773,6 +7085,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of occasion clearly.",
+        "ගුරුවරයා විශේෂ අවස්ථාවක් පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your occasion.",
+        "හොඳ පුරුදු ඔබගේ විශේෂ අවස්ථාවක් කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Traditional garments are now worn primarily on ceremonial occasions such as weddings and national holidays.",
         "සාම්ප්‍රදායික ඇඳුම් පැළඳුම් දැන් ප්‍රධාන වශයෙන් අඳිනු ලබන්නේ මංගල උත්සව සහ ජාතික නිවාඩු දින වැනි විශේෂ උත්සව අවස්ථාවලදී පමණි."
       ],
@@ -5807,6 +7127,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to counterbalance her goal.",
+        "ඇය තම ඉලක්කය සමතුලිත කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can counterbalance new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සමතුලිත කරන්න හැකිය."
+      ],
       [
         "Skilled immigration can help counterbalance the economic effects of a shrinking domestic workforce.",
         "දේශීය ශ්‍රම බලකාය හැකිළීමේ ආර්ථික බලපෑම් සමතුලිත කිරීමට පුහුණු සංක්‍රමණිකයන්ගේ පැමිණීම උපකාරී විය හැක."
@@ -5843,6 +7171,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to constitute her goal.",
+        "ඇය තම ඉලක්කය සමන්විත වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can constitute new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සමන්විත වෙන්න හැකිය."
+      ],
+      [
         "In 2020, renewable sources constituted nearly a third of the country's total electricity generation.",
         "2020 වසරේදී රටේ සමස්ත විදුලි උත්පාදනයෙන් තුනෙන් එකකට ආසන්න ප්‍රමාණයක් පුනර්ජනනීය ප්‍රභවයන්ගෙන් සමන්විත විය."
       ],
@@ -5877,6 +7213,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to prohibit her goal.",
+        "ඇය තම ඉලක්කය නීතියෙන් හෝ රෙගුලාසියකින් තහනම් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can prohibit new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා නීතියෙන් හෝ රෙගුලාසියකින් තහනම් කරන්න හැකිය."
+      ],
       [
         "Many municipalities now prohibit restaurants from distributing single-use plastic cutlery.",
         "බොහෝ නගර සභා දැන් එක් වරක් පමණක් භාවිත කරන ප්ලාස්ටික් හැඳි ගෑරුප්පු බෙදා හැරීමෙන් ආපනශාලා තහනම් කරයි."
@@ -5913,6 +7257,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book of concern to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට කනස්සල්ලට හෝ අවධානයට කරුණක් වීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option of concern to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී කනස්සල්ලට හෝ අවධානයට කරුණක් වීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "The rapid decline of pollinator populations is a matter of grave concern to agricultural scientists.",
         "පරාගණය කරන කෘමි ගහනය ශීඝ්‍රයෙන් අඩුවීම කෘෂිකාර්මික විද්‍යාඥයින්ගේ දැඩි කනස්සල්ලට කරුණක් වී තිබේ."
       ],
@@ -5947,6 +7299,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to obtain her goal.",
+        "ඇය තම ඉලක්කය ලබා ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can obtain new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ලබා ගැනීම හැකිය."
+      ],
       [
         "In many professions, candidates must obtain a postgraduate qualification to qualify for senior management.",
         "බොහෝ වෘත්තීන්හිදී ජ්‍යෙෂ්ඨ කළමනාකරණ තනතුරු සඳහා සුදුසුකම් ලැබීමට අපේක්ෂකයින් පශ්චාත් උපාධි සුදුසුකමක් ලබා ගත යුතුය."
@@ -5983,6 +7343,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are vulnerable for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අවදානමට ලක්විය හැකි වේ."
+      ],
+      [
+        "She gave a very vulnerable answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අවදානමට ලක්විය හැකි පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Low-lying coastal nations are particularly vulnerable to rising sea levels and tropical cyclones.",
         "පහත් බිම්වල පිහිටි වෙරළබඩ රටවල් ඉහළ යන මුහුදු මට්ටමට සහ නිවර්තන සුළි කුණාටුවලට විශේෂයෙන්ම ගොදුරු වීමේ අවදානමක පවතී."
       ],
@@ -6017,6 +7385,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Extremely, students need enough sleep before an exam.",
+        "අතිශයින්ම, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will extremely improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ අතිශයින්ම ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Reversing habitat loss becomes extremely difficult once keystone species have disappeared.",
         "පරිසර පද්ධතියක ප්‍රධාන ජීවී විශේෂ වඳවී ගිය පසු වාසස්ථාන අහිමි වීම ආපසු හැරවීම අතිශයින්ම දුෂ්කර වේ."
@@ -6053,6 +7429,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of process clearly.",
+        "ගුරුවරයා ක්‍රියාවලිය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your process.",
+        "හොඳ පුරුදු ඔබගේ ක්‍රියාවලිය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "The diagram illustrates the linear process of manufacturing glass bottles from raw silica sand.",
         "අමු සිලිකා වැලිවලින් වීදුරු බෝතල් නිෂ්පාදනය කිරීමේ රේඛීය ක්‍රියාවලිය මෙම රූපසටහනින් පෙන්නුම් කෙරේ."
       ],
@@ -6087,6 +7471,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to highlight her goal.",
+        "ඇය තම ඉලක්කය ඉස්මතු කර දැක්වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can highlight new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ඉස්මතු කර දැක්වෙන්න හැකිය."
+      ],
       [
         "Recent power outages highlight the urgent need to modernise the national electricity grid.",
         "මෑතකාලීන විදුලි බිඳවැටීම් මගින් ජාතික විදුලිබල පද්ධතිය නවීකරණය කිරීමේ හදිසි අවශ්‍යතාවය ඉස්මතු කර දක්වයි."
@@ -6123,6 +7515,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "It is important to endeavour to your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි දැඩි ලෙස උත්සාහ කරන්න වැදගත් වේ."
+      ],
+      [
+        "She learned how to endeavour to difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව දැඩි ලෙස උත්සාහ කරන්න ඇය ඉගෙන ගත්තාය."
+      ],
+      [
         "Schools should endeavour to cultivate curiosity and empathy alongside academic excellence.",
         "අධ්‍යාපනික විශිෂ්ටත්වයට සමගාමීව කුතුහලය සහ සහකම්පනය වර්ධනය කිරීමටද පාසල් විසින් දැඩි උත්සාහයක් දැරිය යුතුය."
       ],
@@ -6157,6 +7557,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to ascertain her goal.",
+        "ඇය තම ඉලක්කය නිශ්චිතවම සොයා දැන ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can ascertain new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා නිශ්චිතවම සොයා දැන ගැනීම හැකිය."
+      ],
       [
         "Forensic investigators worked for weeks to ascertain the exact cause of the factory explosion.",
         "කර්මාන්තශාලා පිපිරීමට බලපෑ නිශ්චිත හේතුව තහවුරු කර ගැනීම සඳහා අධිකරණ වෛද්‍ය විමර්ශකයෝ සති ගණනාවක් කටයුතු කළහ."
@@ -6193,6 +7601,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book not necessarily learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට අනිවාර්යයෙන්ම එසේ නොවීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option not necessarily this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී අනිවාර්යයෙන්ම එසේ නොවීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Higher national wealth does not necessarily translate into greater life satisfaction for ordinary citizens.",
         "ඉහළ ජාතික ධනයක් තිබීම සාමාන්‍ය පුරවැසියන්ගේ ජීවන තෘප්තිය ඉහළ යාමක් බවට අනිවාර්යයෙන්ම පරිවර්තනය නොවේ."
       ],
@@ -6227,6 +7643,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to tolerate her goal.",
+        "ඇය තම ඉලක්කය ඉවසා සිටීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can tolerate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ඉවසා සිටීම හැකිය."
+      ],
       [
         "A healthy democracy teaches citizens to tolerate opposing viewpoints without resorting to hostility.",
         "සෞඛ්‍ය සම්පන්න ප්‍රජාතන්ත්‍රවාදයක් එදිරිවාදිකම්වලට යොමු නොවී ප්‍රතිවිරුද්ධ අදහස් ඉවසා සිටීමට පුරවැසියන්ට උගන්වයි."
@@ -6263,6 +7687,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Repeatedly, students need enough sleep before an exam.",
+        "නැවත නැවතත්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will repeatedly improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ නැවත නැවතත් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Climate scientists have repeatedly warned that delaying carbon reductions will make adaptation far costlier.",
         "කාබන් විමෝචනය අඩු කිරීම ප්‍රමාද කිරීමෙන් ඊට හැඩගැසීමේ පිරිවැය බෙහෙවින් අධික වනු ඇති බවට දේශගුණ විද්‍යාඥයෝ නැවත නැවතත් අනතුරු අඟවා ඇත."
       ],
@@ -6297,6 +7729,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to counter her goal.",
+        "ඇය තම ඉලක්කය ප්‍රතිචාර දැක්වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can counter new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ප්‍රතිචාර දැක්වෙන්න හැකිය."
+      ],
       [
         "Public health campaigns are needed to counter the spread of medical misinformation on social media.",
         "සමාජ මාධ්‍යවල වෛද්‍යමය වැරදි තොරතුරු පැතිරීම මැඩපැවැත්වීම සඳහා මහජන සෞඛ්‍ය ප්‍රවර්ධන වැඩසටහන් අවශ්‍ය වේ."
@@ -6333,6 +7773,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to comprehend her goal.",
+        "ඇය තම ඉලක්කය වටහා ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can comprehend new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා වටහා ගැනීම හැකිය."
+      ],
+      [
         "Young children cannot fully comprehend the persuasive intent behind television commercials.",
         "රූපවාහිනී වෙළඳ දැන්වීම් පිටුපස ඇති පෙලඹවීමේ අරමුණ කුඩා දරුවන්ට පූර්ණ ලෙස වටහා ගත නොහැක."
       ],
@@ -6367,6 +7815,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are inundated with for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර (විශාල ප්‍රමාණයකින්) පිරී ඉතිරී යාම වේ."
+      ],
+      [
+        "She gave a very inundated with answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා (විශාල ප්‍රමාණයකින්) පිරී ඉතිරී යාම පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Modern internet users are daily inundated with targeted advertisements and sponsored content.",
         "නවීන අන්තර්ජාල පරිශීලකයින් දිනපතාම ඉලක්කගත වෙළඳ දැන්වීම් සහ අනුග්‍රාහක අන්තර්ගතයන්ගෙන් පිරී ඉතිරී යන තත්ත්වයකට මුහුණ දෙයි."
@@ -6403,6 +7859,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of means of clearly.",
+        "ගුරුවරයා ක්‍රමය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your means of.",
+        "හොඳ පුරුදු ඔබගේ ක්‍රමය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Bicycles remain the most affordable and environmentally friendly means of urban transport.",
         "පාපැදිය තවමත් වඩාත්ම දැරිය හැකි සහ පරිසර හිතකාමී නාගරික ප්‍රවාහන මාධ්‍යය ලෙස පවතී."
       ],
@@ -6437,6 +7901,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are exceptional for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සුවිශේෂී වේ."
+      ],
+      [
+        "She gave a very exceptional answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සුවිශේෂී පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "State scholarships should support students who demonstrate exceptional talent in science or the arts.",
         "විද්‍යාව හෝ කලාව තුළ සුවිශේෂී දක්ෂතා පෙන්නුම් කරන සිසුන්ට රාජ්‍ය ශිෂ්‍යත්ව මගින් සහාය විය යුතුය."
@@ -6473,6 +7945,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to devastate her goal.",
+        "ඇය තම ඉලක්කය සහමුලින්ම විනාශ කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can devastate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සහමුලින්ම විනාශ කරන්න හැකිය."
+      ],
+      [
         "Bottom trawling nets can devastate fragile coral reefs and seabed habitats within minutes.",
         "මුහුදු පතුල සූරාගෙන යන ට්‍රෝලර් දැල් මගින් මිනිත්තු කිහිපයක් ඇතුළත සංවේදී කොරල්පර සහ මුහුදු පතුලේ වාසස්ථාන සහමුලින්ම විනාශ කළ හැක."
       ],
@@ -6507,6 +7987,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are adept at for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ඉතා දක්ෂ වේ."
+      ],
+      [
+        "She gave a very adept at answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ඉතා දක්ෂ පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Digital natives are generally adept at navigating new software interfaces without formal instruction.",
         "ඩිජිටල් යුගයේ උපන් පිරිස විධිමත් උපදෙස් නොමැතිව වුවද නව මෘදුකාංග භාවිත කිරීමෙහිලා සාමාන්‍යයෙන් මනා නිපුණතාවයක් දක්වති."
@@ -6543,6 +8031,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are disastrous for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර විනාශකාරී වේ."
+      ],
+      [
+        "She gave a very disastrous answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා විනාශකාරී පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Unchecked deforestation in the Amazon basin could have disastrous consequences for the global climate.",
         "ඇමසන් ද්‍රෝණියේ පාලනයකින් තොරව සිදුවන වන විනාශය ගෝලීය දේශගුණයට විනාශකාරී ප්‍රතිවිපාක ගෙන දිය හැක."
       ],
@@ -6577,6 +8073,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are resultant for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර එහි ප්‍රතිඵලයක් ලෙස ඇතිවන වේ."
+      ],
+      [
+        "She gave a very resultant answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා එහි ප්‍රතිඵලයක් ලෙස ඇතිවන පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Rapid industrialisation and the resultant air pollution have strained healthcare services in many megacities.",
         "ශීඝ්‍ර කාර්මීකරණය සහ එහි ප්‍රතිඵලයක් ලෙස ඇතිවන වායු දූෂණය බොහෝ විශාල නගරවල සෞඛ්‍ය සේවාවන් දැඩි පීඩනයකට ලක් කර ඇත."
@@ -6613,6 +8117,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of priority clearly.",
+        "ගුරුවරයා ප්‍රමුඛතාවය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your priority.",
+        "හොඳ පුරුදු ඔබගේ ප්‍රමුඛතාවය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Developing nations must make universal primary education and clean water their top priorities.",
         "සංවර්ධනය වෙමින් පවතින රටවල් සැමට ප්‍රාථමික අධ්‍යාපනය සහ පිරිසිදු ජලය ලබා දීම තම ඉහළම ප්‍රමුඛතාවයන් බවට පත් කර ගත යුතුය."
       ],
@@ -6647,6 +8159,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are bound to for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර නිසැකවම සිදුවීමට නියමිත වේ."
+      ],
+      [
+        "She gave a very bound to answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා නිසැකවම සිදුවීමට නියමිත පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Any conservation policy that ignores the livelihood of local villagers is bound to fail.",
         "ප්‍රදේශවාසී ගැමියන්ගේ ජීවනෝපාය නොසලකා හරින ඕනෑම සංරක්ෂණ ප්‍රතිපත්තියක් නිසැකවම අසාර්ථක වීමට නියමිතය."
@@ -6683,6 +8203,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book take measures to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට ක්‍රියාමාර්ග ගැනීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option take measures to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී ක්‍රියාමාර්ග ගැනීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Governments must take decisive measures to curb tax evasion by multinational corporations.",
         "බහුජාතික සමාගම් විසින් සිදු කරන බදු පැහැර හැරීම් පාලනය කිරීමට රජයන් විසින් තීරණාත්මක ක්‍රියාමාර්ග ගත යුතුය."
       ],
@@ -6717,6 +8245,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to assist her goal.",
+        "ඇය තම ඉලක්කය සහාය වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can assist new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සහාය වෙන්න හැකිය."
+      ],
       [
         "Wealthy industrialised countries have a moral obligation to assist poorer nations in adapting to climate change.",
         "දේශගුණික විපර්යාසවලට හැඩගැසීම සඳහා දිළිඳු රටවලට සහාය වීමට ධනවත් කාර්මික රටවලට සදාචාරාත්මක වගකීමක් ඇත."
@@ -6753,6 +8289,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are conflicting for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර පරස්පර විරෝධී වේ."
+      ],
+      [
+        "She gave a very conflicting answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා පරස්පර විරෝධී පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Consumers are often confused by conflicting nutritional advice regarding carbohydrates and fats.",
         "කාබෝහයිඩ්‍රේට් සහ මේදය සම්බන්ධයෙන් පළවන පරස්පර විරෝධී පෝෂණ උපදෙස් නිසා පාරිභෝගිකයෝ බොහෝ විට ව්‍යාකූලත්වයට පත් වෙති."
       ],
@@ -6787,6 +8331,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to comprise her goal.",
+        "ඇය තම ඉලක්කය සමන්විත වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can comprise new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සමන්විත වෙන්න හැකිය."
+      ],
       [
         "The recycling process comprises four distinct stages, beginning with the collection of household waste.",
         "ප්‍රතිචක්‍රීකරණ ක්‍රියාවලිය ගෘහස්ථ අපද්‍රව්‍ය එකතු කිරීමෙන් ආරම්භ වන පැහැදිලි අදියර හතරකින් සමන්විත වේ."
@@ -6823,6 +8375,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Then, students need enough sleep before an exam.",
+        "එවකට, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will then improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ එවකට ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "The harvested cocoa beans are fermented for several days and are then spread out to dry in the sun.",
         "නෙළාගත් කොකෝවා ඇට දින කිහිපයක් පැසවීමට තබා ඉන්පසුව අව්වේ වියළීම සඳහා තුනී කරනු ලැබේ."
       ],
@@ -6857,6 +8417,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to dispose of her goal.",
+        "ඇය තම ඉලක්කය බැහැර කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can dispose of new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා බැහැර කරන්න හැකිය."
+      ],
       [
         "Hospitals must follow strict protocols to safely dispose of contaminated medical instruments.",
         "විෂබීජ මුසු වූ වෛද්‍ය උපකරණ ආරක්ෂිතව බැහැර කිරීම සඳහා රෝහල් දැඩි ක්‍රියාපටිපාටි අනුගමනය කළ යුතුය."
@@ -6893,6 +8461,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book including learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට ඇතුළුව පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option including this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී ඇතුළුව සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Chronic stress contributes to numerous health problems, including hypertension and insomnia.",
         "නිදන්ගත මානසික ආතතිය අධි රුධිර පීඩනය සහ නින්ද නොයාම ඇතුළු සෞඛ්‍ය ගැටලු රැසකට හේතු වේ."
       ],
@@ -6927,6 +8503,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to legislate her goal.",
+        "ඇය තම ඉලක්කය නීති සම්පාදනය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can legislate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා නීති සම්පාදනය කරන්න හැකිය."
+      ],
       [
         "Parliaments must legislate against deceptive greenwashing practices used by polluting corporations.",
         "පරිසරය දූෂණය කරන සමාගම් විසින් යොදා ගන්නා රැවටිලිකාරී පාරිසරික ප්‍රචාරණ ක්‍රමවලට එරෙහිව පාර්ලිමේන්තු මගින් නීති පැනවිය යුතුය."
@@ -6963,6 +8547,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to estimate that her goal.",
+        "ඇය තම ඉලක්කය ඇස්තමේන්තු කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can estimate that new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ඇස්තමේන්තු කරන්න හැකිය."
+      ],
+      [
         "The World Health Organization estimates that air pollution causes millions of premature deaths annually.",
         "වායු දූෂණය හේතුවෙන් වාර්ෂිකව අකල් මරණ මිලියන ගණනක් සිදුවන බව ලෝක සෞඛ්‍ය සංවිධානය ඇස්තමේන්තු කරයි."
       ],
@@ -6997,6 +8589,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to debate her goal.",
+        "ඇය තම ඉලක්කය විවාද කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can debate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා විවාද කරන්න හැකිය."
+      ],
       [
         "Educators continue to debate whether standardised testing accurately reflects a student's true ability.",
         "සම්මත විභාග ක්‍රම මගින් ශිෂ්‍යයෙකුගේ සැබෑ හැකියාව නිවැරදිව පිළිබිඹු කරන්නේද යන්න පිළිබඳව අධ්‍යාපනඥයෝ අඛණ්ඩව විවාද කරති."
@@ -7033,6 +8633,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to inform her goal.",
+        "ඇය තම ඉලක්කය දැනුවත් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can inform new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා දැනුවත් කරන්න හැකිය."
+      ],
+      [
         "Public health campaigns are essential to inform citizens about the dangers of a sedentary lifestyle.",
         "අක්‍රිය ජීවන රටාවක අවදානම පිළිබඳව පුරවැසියන් දැනුවත් කිරීම සඳහා මහජන සෞඛ්‍ය ව්‍යාපාර අත්‍යවශ්‍ය වේ."
       ],
@@ -7067,6 +8675,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of philosophy clearly.",
+        "ගුරුවරයා දර්ශනයක් පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your philosophy.",
+        "හොඳ පුරුදු ඔබගේ දර්ශනයක් කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Modern schools are increasingly adopting a child-centred philosophy of education.",
         "නවීන පාසල් වැඩි වැඩියෙන් ළමා කේන්ද්‍රීය අධ්‍යාපන දර්ශනයක් අනුගමනය කරමින් සිටියි."
@@ -7103,6 +8719,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "It is important to originate from your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි ආරම්භ වෙන්න වැදගත් වේ."
+      ],
+      [
+        "She learned how to originate from difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව ආරම්භ වෙන්න ඇය ඉගෙන ගත්තාය."
+      ],
+      [
         "Many contemporary cultural festivals originate from ancient agricultural traditions.",
         "වර්තමාන සංස්කෘතික උත්සව බොහොමයක් පැරණි කෘෂිකාර්මික සම්ප්‍රදායන්ගෙන් ආරම්භ වී ඇත."
       ],
@@ -7137,6 +8761,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "It is important to evolve from your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි පරිණාමය වෙන්න වැදගත් වේ."
+      ],
+      [
+        "She learned how to evolve from difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව පරිණාමය වෙන්න ඇය ඉගෙන ගත්තාය."
+      ],
       [
         "Modern smartphones have evolved from basic communication devices into powerful pocket computers.",
         "නවීන ස්මාර්ට් ජංගම දුරකථන සරල සන්නිවේදන උපකරණවල සිට ප්‍රබල කුඩා පරිගණක දක්වා පරිණාමය වී ඇත."
@@ -7173,6 +8805,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to simplify her goal.",
+        "ඇය තම ඉලක්කය සරල කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can simplify new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සරල කරන්න හැකිය."
+      ],
+      [
         "Digital banking platforms have greatly simplified everyday financial transactions for consumers.",
         "ඩිජිටල් බැංකුකරණ පද්ධති පාරිභෝගිකයින් සඳහා එදිනෙදා මූල්‍ය ගනුදෙනු බෙහෙවින් සරල කර ඇත."
       ],
@@ -7207,6 +8847,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to stagnate her goal.",
+        "ඇය තම ඉලක්කය එකතැන පල් වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can stagnate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා එකතැන පල් වෙන්න හැකිය."
+      ],
       [
         "When household incomes stagnate while living costs rise, overall quality of life declines.",
         "ජීවන වියදම ඉහළ යන අතරතුර පවුල් ආදායම එකතැන පල් වන විට, සමස්ත ජීවන තත්ත්වය පහත වැටේ."
@@ -7243,6 +8891,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to pursue her goal.",
+        "ඇය තම ඉලක්කය හඹා යාම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can pursue new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා හඹා යාම හැකිය."
+      ],
+      [
         "Financial barriers should not prevent talented students from pursuing higher education.",
         "මූල්‍ය බාධක නිසා දක්ෂ සිසුන්ට උසස් අධ්‍යාපනය හැදෑරීමට ඇති අවස්ථාව අහිමි නොවිය යුතුය."
       ],
@@ -7277,6 +8933,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to vanish her goal.",
+        "ඇය තම ඉලක්කය අතුරුදහන් වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can vanish new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අතුරුදහන් වෙන්න හැකිය."
+      ],
       [
         "Hundreds of indigenous languages are in danger of vanishing within the next century.",
         "මීළඟ ශතවර්ෂය ඇතුළත දේශීය භාෂා සිය ගණනක් සම්පූර්ණයෙන්ම අභාවයට යාමේ අවදානමකට ලක්ව ඇත."
@@ -7313,6 +8977,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "It is important to adjust to your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි හැඩගැසීම වැදගත් වේ."
+      ],
+      [
+        "She learned how to adjust to difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව හැඩගැසීම ඇය ඉගෙන ගත්තාය."
+      ],
+      [
         "International students often need several months to adjust to a new academic culture.",
         "ජාත්‍යන්තර සිසුන්ට නව අධ්‍යයන සංස්කෘතියකට හැඩගැසීමට බොහෝ විට මාස කිහිපයක් ගත වේ."
       ],
@@ -7347,6 +9019,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to correct her goal.",
+        "ඇය තම ඉලක්කය නිවැරදි කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can correct new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා නිවැරදි කරන්න හැකිය."
+      ],
       [
         "Government intervention is sometimes necessary to correct severe economic imbalances.",
         "දැඩි ආර්ථික අසමතුලිතතා නිවැරදි කිරීම සඳහා ඇතැම් විට රජයේ මැදිහත්වීම අවශ්‍ය වේ."
@@ -7383,6 +9063,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book defined as learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට ලෙස අර්ථ දක්වා ඇති පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option defined as this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී ලෙස අර්ථ දක්වා ඇති සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Sustainable development is broadly defined as growth that meets present needs without compromising future generations.",
         "තිරසාර සංවර්ධනය යනු අනාගත පරපුරේ අවශ්‍යතාවලට හානි නොකර වර්තමාන අවශ්‍යතා සපුරාලන වර්ධනයක් ලෙස පුළුල්ව අර්ථ දැක්වේ."
       ],
@@ -7417,6 +9105,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "It is important to focus on your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි අවධානය යොමු කරන්න වැදගත් වේ."
+      ],
+      [
+        "She learned how to focus on difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව අවධානය යොමු කරන්න ඇය ඉගෙන ගත්තාය."
+      ],
       [
         "Schools should focus on developing critical thinking skills rather than rote memorisation.",
         "පාසල් විසින් කටපාඩම් කිරීම වෙනුවට විචාරාත්මක චින්තන කුසලතා වර්ධනය කිරීම කෙරෙහි අවධානය යොමු කළ යුතුය."
@@ -7453,6 +9149,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are unique for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අද්විතීය වේ."
+      ],
+      [
+        "She gave a very unique answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අද්විතීය පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Every historic city possesses a unique architectural identity that deserves preservation.",
         "සෑම ඓතිහාසික නගරයකටම ආරක්ෂා කළ යුතු අද්විතීය ගෘහ නිර්මාණ අනන්‍යතාවයක් පවතී."
       ],
@@ -7487,6 +9191,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book in practice learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට ප්‍රායෝගිකව පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option in practice this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී ප්‍රායෝගිකව සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "While a complete ban on private cars sounds appealing in theory, it is unfeasible in practice.",
         "පෞද්ගලික මෝටර් රථ සම්පූර්ණයෙන්ම තහනම් කිරීම න්‍යායාත්මකව ආකර්ෂණීය වුවද, ප්‍රායෝගිකව එය ක්‍රියාත්මක කළ නොහැක."
@@ -7523,6 +9235,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "It is important to amount to your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි එකතුවක් ලෙස යම් ප්‍රමාණයක් වෙන්න වැදගත් වේ."
+      ],
+      [
+        "She learned how to amount to difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව එකතුවක් ලෙස යම් ප්‍රමාණයක් වෙන්න ඇය ඉගෙන ගත්තාය."
+      ],
+      [
         "Total government expenditure on renewable energy amounted to nearly three billion dollars last year.",
         "පසුගිය වසරේ පුනර්ජනනීය බලශක්තිය සඳහා රජයේ මුළු වියදම ඩොලර් බිලියන තුනකට ආසන්න විය."
       ],
@@ -7557,6 +9277,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book confined as learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට යම් තත්ත්වයකට හෝ සීමාවකට කොටු කරන ලද පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option confined as this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී යම් තත්ත්වයකට හෝ සීමාවකට කොටු කරන ලද සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Environmental degradation can no longer be confined as a purely local concern.",
         "පාරිසරික හායනය තවදුරටත් හුදෙක් ප්‍රාදේශීය ගැටලුවක් ලෙස පමණක් සීමා කළ නොහැක."
@@ -7593,6 +9321,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of transition clearly.",
+        "ගුරුවරයා සංක්‍රාන්තිය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your transition.",
+        "හොඳ පුරුදු ඔබගේ සංක්‍රාන්තිය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Vocational training programmes help young adults make a smooth transition from school to employment.",
         "වෘත්තීය පුහුණු වැඩසටහන් තරුණ පිරිසට පාසල් අධ්‍යාපනයේ සිට රැකියා ලෝකය වෙත සුමටව මාරු වීමට උපකාරී වේ."
       ],
@@ -7627,6 +9363,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are unacceptable for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර පිළිගත නොහැකි වේ."
+      ],
+      [
+        "She gave a very unacceptable answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා පිළිගත නොහැකි පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "It is morally unacceptable that millions of children still lack access to clean drinking water.",
         "මිලියන ගණනක් දරුවන්ට තවමත් පිරිසිදු පානීය ජලය ලබා ගැනීමට නොහැකි වීම සදාචාරාත්මකව පිළිගත නොහැකි තත්ත්වයකි."
@@ -7663,6 +9407,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Rarely, students need enough sleep before an exam.",
+        "කලාතුරකින්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will rarely improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ කලාතුරකින් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Short-term punitive measures rarely address the root causes of juvenile delinquency.",
         "කෙටිකාලීන දඬුවම් ක්‍රියාමාර්ග මගින් බාලවයස්කාර අපරාධවල මූලික හේතු කලාතුරකින් විසඳනු ලබයි."
       ],
@@ -7697,6 +9449,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of emphasis on clearly.",
+        "ගුරුවරයා අවධාරණය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your emphasis on.",
+        "හොඳ පුරුදු ඔබගේ අවධාරණය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Modern curricula place a strong emphasis on collaborative problem-solving and digital literacy.",
         "නවීන විෂයමාලා මගින් සාමූහික ගැටලු විසඳීම සහ ඩිජිටල් සාක්ෂරතාවය කෙරෙහි දැඩි අවධාරණයක් යොමු කරයි."
@@ -7733,6 +9493,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are short-term for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර කෙටිකාලීන වේ."
+      ],
+      [
+        "She gave a very short-term answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා කෙටිකාලීන පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Sacrificing environmental protection for short-term economic gain is a deeply flawed strategy.",
         "කෙටිකාලීන ආර්ථික වාසි තකා පරිසර ආරක්ෂාව කැප කිරීම ඉතා දෝෂ සහිත උපායමාර්ගයකි."
       ],
@@ -7767,6 +9535,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Precisely, students need enough sleep before an exam.",
+        "නිශ්චිතවම, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will precisely improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ නිශ්චිතවම ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Satellite technology allows meteorologists to track severe weather systems far more precisely.",
         "චන්ද්‍රිකා තාක්ෂණය මගින් කාලගුණ විද්‍යාඥයින්ට දරුණු කාලගුණික පද්ධති ඉතා නිවැරදිව නිරීක්ෂණය කිරීමට ඉඩ සලසයි."
@@ -7803,6 +9579,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to advocate her goal.",
+        "ඇය තම ඉලක්කය හඬ නැගීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can advocate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා හඬ නැගීම හැකිය."
+      ],
+      [
         "Many economists advocate investing heavily in green infrastructure to create sustainable jobs.",
         "තිරසාර රැකියා උත්පාදනය කිරීම සඳහා හරිත යටිතල පහසුකම්වල විශාල වශයෙන් ආයෝජනය කිරීමට බොහෝ ආර්ථික විද්‍යාඥයෝ නිර්දේශ කරති."
       ],
@@ -7837,6 +9621,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book unless learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට එසේ නොවුණහොත් මිස පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option unless this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී එසේ නොවුණහොත් මිස සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Global temperatures will continue to rise unless nations significantly reduce carbon emissions.",
         "රටවල් විසින් කාබන් විමෝචනය සැලකිය යුතු ලෙස අඩු නොකළහොත් ගෝලීය උෂ්ණත්වය අඛණ්ඩව ඉහළ යනු ඇත."
@@ -7873,6 +9665,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book to... learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට සඳහා පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option to... this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී සඳහා සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "To combat urban congestion, municipal authorities must invest in efficient underground rail networks.",
         "නාගරික රථවාහන තදබදය පිටුදැකීම සඳහා, නගර සභා බලධාරීන් කාර්යක්ෂම උමං දුම්රිය ජාල සඳහා ආයෝජනය කළ යුතුය."
       ],
@@ -7907,6 +9707,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book is to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට වන්නේ ... කිරීමයි (විසඳුමක් හෝ අරමුණක් දැක්වීම) පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option is to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී වන්නේ ... කිරීමයි (විසඳුමක් හෝ අරමුණක් දැක්වීම) සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "The most effective way to reduce household waste is to introduce mandatory recycling schemes.",
         "ගෘහස්ථ අපද්‍රව්‍ය අවම කිරීමට වඩාත්ම ඵලදායී ක්‍රමය වන්නේ අනිවාර්ය ප්‍රතිචක්‍රීකරණ වැඩසටහන් හඳුන්වා දීමයි."
@@ -7943,6 +9751,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book though learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට වුවද පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option though this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී වුවද සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Though renewable energy installations require high initial capital, they significantly lower long-term costs.",
         "පුනර්ජනනීය බලශක්ති පද්ධති සඳහා මුලදී ඉහළ ප්‍රාග්ධනයක් අවශ්‍ය වුවද, ඒවා දිගුකාලීන පිරිවැය සැලකිය යුතු ලෙස අඩු කරයි."
       ],
@@ -7977,6 +9793,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book as... learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට නිසා පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option as... this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී නිසා සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "As global life expectancy increases, governments must allocate greater funding to elderly care.",
         "ගෝලීය ආයු අපේක්ෂාව ඉහළ යත්ම, රජයන් විසින් වැඩිහිටි රැකවරණය සඳහා වැඩි අරමුදල් ප්‍රමාණයක් වෙන් කළ යුතුය."
@@ -8013,6 +9837,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book so learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට එබැවින් පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option so this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී එබැවින් සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Housing prices in metropolitan centres have risen so rapidly that many young families cannot afford to buy a home.",
         "ප්‍රධාන නගරවල නිවාස මිල කොතරම් වේගයෙන් ඉහළ ගොස් ඇත්ද යත්, බොහෝ තරුණ පවුල්වලට නිවසක් මිලදී ගැනීමට හැකියාවක් නැත."
       ],
@@ -8047,6 +9879,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book nor learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට එමෙන්ම ... ද නැත (නැත යන අර්ථය සහිත සම්බන්ධක පදය) පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option nor this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී එමෙන්ම ... ද නැත (නැත යන අර්ථය සහිත සම්බන්ධක පදය) සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Banning international flights is neither economically practical nor socially acceptable in a globalized world.",
         "ගෝලීයකරණය වූ ලෝකයක ජාත්‍යන්තර ගුවන් ගමන් තහනම් කිරීම ආර්ථික වශයෙන් ප්‍රායෝගික නොවන අතර සමාජීය වශයෙන් පිළිගත හැක්කක්ද නොවේ."
@@ -8083,6 +9923,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book whether learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට ද යන්න පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option whether this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී ද යන්න සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "There is considerable debate over whether university education should be completely funded by the state.",
         "විශ්වවිද්‍යාල අධ්‍යාපනය සඳහා රජය විසින් සම්පූර්ණයෙන්ම අරමුදල් සැපයිය යුතුද යන්න පිළිබඳව සැලකිය යුතු විවාදයක් පවතී."
       ],
@@ -8117,6 +9965,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to suspect her goal.",
+        "ඇය තම ඉලක්කය සැක පහළ කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can suspect new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සැක පහළ කරන්න හැකිය."
+      ],
       [
         "Epidemiologists suspect that air pollution exacerbates the severity of respiratory infections.",
         "වායු දූෂණය මගින් ශ්වසන ආසාදනවල බරපතලකම වැඩි කරන බවට වසංගත රෝග විද්‍යාඥයෝ සැක පහළ කරති."
@@ -8153,6 +10009,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book destined to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට නියත වශයෙන්ම සිදුවීමට නියමිත පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option destined to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී නියත වශයෙන්ම සිදුවීමට නියමිත සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Any environmental treaty that lacks enforcement mechanisms is destined to fail.",
         "ක්‍රියාත්මක කිරීමේ යාන්ත්‍රණයක් නොමැති ඕනෑම පාරිසරික ගිවිසුමක් නියත වශයෙන්ම අසාර්ථක වීමට නියමිතය."
       ],
@@ -8187,6 +10051,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to dismiss as her goal.",
+        "ඇය තම ඉලක්කය වැදගත් නොවන දෙයක් ලෙස බැහැර කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can dismiss as new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා වැදගත් නොවන දෙයක් ලෙස බැහැර කරන්න හැකිය."
+      ],
       [
         "Early warnings about global warming were frequently dismissed as exaggerated alarmism.",
         "ගෝලීය උණුසුම පිළිබඳ මුල්කාලීන අනතුරු ඇඟවීම් බොහෝ විට අතිශයෝක්තියෙන් යුත් බිය ගැන්වීම් ලෙස සලකා බැහැර කරන ලදී."
@@ -8223,6 +10095,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book in retrospect learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට ආපසු හැරී බැලීමේදී පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option in retrospect this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී ආපසු හැරී බැලීමේදී සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "In retrospect, the decision to dismantle urban tram networks in the twentieth century was short-sighted.",
         "ආපසු හැරී බැලීමේදී, විසිවන සියවසේදී නාගරික ට්‍රෑම් රථ ජාල ඉවත් කිරීමට ගත් තීරණය දුරදිග නොබලා ගත් පියවරකි."
       ],
@@ -8257,6 +10137,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "It is important to instruct on your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි උපදෙස් ලබා දීම වැදගත් වේ."
+      ],
+      [
+        "She learned how to instruct on difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව උපදෙස් ලබා දීම ඇය ඉගෙන ගත්තාය."
+      ],
       [
         "Secondary schools should instruct adolescents on personal finance and responsible budgeting.",
         "ද්විතීයික පාසල් විසින් යොවුන් වියේ සිසුන්ට පුද්ගලික මූල්‍ය කළමනාකරණය සහ වගකීම් සහගත අයවැයකරණය පිළිබඳව ඉගැන්විය යුතුය."
@@ -8293,6 +10181,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to boost her goal.",
+        "ඇය තම ඉලක්කය ඉහළ නැංවෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can boost new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ඉහළ නැංවෙන්න හැකිය."
+      ],
+      [
         "Tourism plays a vital role in boosting local economies and generating employment.",
         "දේශීය ආර්ථිකයන් ඉහළ නැංවීම සහ රැකියා උත්පාදනය කිරීමෙහිලා සංචාරක ව්‍යාපාරය තීරණාත්මක කාර්යභාරයක් ඉටු කරයි."
       ],
@@ -8327,6 +10223,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to soar her goal.",
+        "ඇය තම ඉලක්කය ශීඝ්‍රයෙන් ඉහළ යාම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can soar new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ශීඝ්‍රයෙන් ඉහළ යාම හැකිය."
+      ],
       [
         "Global oil prices soared to record levels following disruptions in international supply chains.",
         "ජාත්‍යන්තර සැපයුම් ජාලවල ඇති වූ බාධාවන් හේතුවෙන් ගෝලීය බොරතෙල් මිල වාර්තාගත ලෙස ඉහළ ගියේය."
@@ -8363,6 +10267,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of phenomenon clearly.",
+        "ගුරුවරයා සංසිද්ධිය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your phenomenon.",
+        "හොඳ පුරුදු ඔබගේ සංසිද්ධිය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Brain drain is a widespread phenomenon that deprives developing nations of skilled professionals.",
         "බුද්ධි ගලනය යනු සංවර්ධනය වෙමින් පවතින රටවලට පුහුණු වෘත්තිකයන් අහිමි කරන පුළුල්ව පැතිරුණු සංසිද්ධියකි."
       ],
@@ -8397,6 +10309,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of culprit clearly.",
+        "ගුරුවරයා වරදකරු පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your culprit.",
+        "හොඳ පුරුදු ඔබගේ වරදකරු කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Excessive consumption of refined sugar is widely regarded as the main culprit behind childhood obesity.",
         "පිරිපහදු කළ සීනි අධික ලෙස පරිභෝජනය කිරීම ළමා ස්ථුලතාවය පිටුපස ඇති ප්‍රධානතම හේතුව ලෙස පුළුල්ව සැලකේ."
@@ -8433,6 +10353,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book pivotal to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට අතිශයින් තීරණාත්මක වන පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option pivotal to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී අතිශයින් තීරණාත්මක වන සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Universal access to high-speed internet is pivotal to bridging the urban-rural educational divide.",
         "නාගරික සහ ග්‍රාමීය අධ්‍යාපන පරතරය පියවීම සඳහා අධිවේගී අන්තර්ජාල පහසුකම් සැමට ලබා දීම අතිශයින් තීරණාත්මක වේ."
       ],
@@ -8467,6 +10395,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Overall, students need enough sleep before an exam.",
+        "සමස්තයක් වශයෙන්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will overall improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ සමස්තයක් වශයෙන් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Overall, renewable energy consumption increased steadily across all four countries during the period.",
         "සමස්තයක් වශයෙන් ගත් කල, අදාළ කාලසීමාව තුළ රටවල් හතරෙහිම පුනර්ජනනීය බලශක්ති පරිභෝජනය ක්‍රමයෙන් ඉහළ ගියේය."
@@ -8503,6 +10439,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book as a result of learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට හි ප්‍රතිඵලයක් වශයෙන් පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option as a result of this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී හි ප්‍රතිඵලයක් වශයෙන් සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Many coastal communities face displacement as a result of rising sea levels.",
         "මුහුදු මට්ටම ඉහළ යාමේ ප්‍රතිඵලයක් වශයෙන් බොහෝ වෙරළබඩ ප්‍රජාවන් අවතැන් වීමේ අවදානමට මුහුණ දෙති."
       ],
@@ -8537,6 +10481,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are catastrophic for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ව්‍යසනකාරී වේ."
+      ],
+      [
+        "She gave a very catastrophic answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ව්‍යසනකාරී පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Unchecked deforestation in the Amazon basin could have catastrophic consequences for global biodiversity.",
         "ඇමසන් ද්‍රෝණියේ පාලනයකින් තොරව සිදුවන වන විනාශය ගෝලීය ජෛව විවිධත්වයට ව්‍යසනකාරී ප්‍රතිවිපාක ගෙන දිය හැක."
@@ -8573,6 +10525,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are complete for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සම්පූර්ණ වේ."
+      ],
+      [
+        "She gave a very complete answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සම්පූර්ණ පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Rather than imposing a complete ban on sugary drinks, governments should levy a graduated health tax.",
         "සීනි සහිත පාන වර්ග සඳහා පූර්ණ තහනමක් පනවනවා වෙනුවට, රජයන් විසින් ක්‍රමානුකූල සෞඛ්‍ය බද්දක් අය කළ යුතුය."
       ],
@@ -8607,6 +10567,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are sophisticated for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සංකීර්ණ සහ දියුණු වේ."
+      ],
+      [
+        "She gave a very sophisticated answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සංකීර්ණ සහ දියුණු පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Cybercriminals are using increasingly sophisticated methods to bypass corporate security systems.",
         "ආයතනික ආරක්ෂක පද්ධති අභිබවා යාම සඳහා සයිබර් අපරාධකරුවන් වැඩි වැඩියෙන් සූක්ෂ්ම හා දියුණු ක්‍රමවේද භාවිත කරමින් සිටියි."
@@ -8643,6 +10611,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of cause clearly.",
+        "ගුරුවරයා හේතුව පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your cause.",
+        "හොඳ පුරුදු ඔබගේ හේතුව කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Poverty remains the root cause of child labour in many developing regions.",
         "සංවර්ධනය වෙමින් පවතින බොහෝ කලාපවල ළමා ශ්‍රමය සඳහා මූලිකම හේතුව වන්නේ තවමත් දරිද්‍රතාවයයි."
       ],
@@ -8677,6 +10653,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "It is important to interact with your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි අන්තර්ක්‍රියා කරන්න වැදගත් වේ."
+      ],
+      [
+        "She learned how to interact with difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව අන්තර්ක්‍රියා කරන්න ඇය ඉගෙන ගත්තාය."
+      ],
       [
         "Attending nursery school allows young children to interact with peers and learn sharing behaviours.",
         "පෙර පාසල් යාම මගින් කුඩා දරුවන්ට සමවයසේ මිතුරන් සමඟ අන්තර්ක්‍රියා කිරීමට සහ බෙදාහදා ගැනීමේ පුරුදු ඉගෙනීමට අවස්ථාව ලැබේ."
@@ -8713,6 +10697,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to urge her goal.",
+        "ඇය තම ඉලක්කය දැඩි ලෙස ඉල්ලා සිටීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can urge new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා දැඩි ලෙස ඉල්ලා සිටීම හැකිය."
+      ],
+      [
         "Health organizations continually urge the public to reduce their daily intake of processed salt.",
         "සැකසූ ලුණු දෛනිකව පරිභෝජනය කරන ප්‍රමාණය අඩු කරන ලෙස සෞඛ්‍ය සංවිධාන මහජනතාවගෙන් අඛණ්ඩව ඉල්ලා සිටියි."
       ],
@@ -8747,6 +10739,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to concede her goal.",
+        "ඇය තම ඉලක්කය පිළිගැනීම (විරුද්ධ මතයක සත්‍යතාවක් පවතින බව පිළිගැනීම) මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can concede new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා පිළිගැනීම (විරුද්ධ මතයක සත්‍යතාවක් පවතින බව පිළිගැනීම) හැකිය."
+      ],
       [
         "Even opponents of globalization must concede that international trade has lifted millions out of poverty.",
         "ගෝලීයකරණයට විරුද්ධ වන්නන් පවා ජාත්‍යන්තර වෙළඳාම මගින් මිලියන ගණනක් ජනතාව දරිද්‍රතාවයෙන් මුදාගෙන ඇති බව පිළිගත යුතුය."
@@ -8783,6 +10783,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book responsible for learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට වගකිව යුතු පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option responsible for this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී වගකිව යුතු සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Both parents and teachers are jointly responsible for instilling moral values in young children.",
         "කුඩා දරුවන් තුළ සදාචාරාත්මක හරයන් රෝපණය කිරීම සඳහා දෙමාපියන් සහ ගුරුවරුන් යන දෙපාර්ශවයම හවුලේ වගකිව යුතුය."
       ],
@@ -8817,6 +10825,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book opposed to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට විරුද්ධ වන පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option opposed to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී විරුද්ධ වන සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Many local residents are fiercely opposed to the construction of a new airport near their town.",
         "තම නගරය ආසන්නයේ නව ගුවන් තොටුපළක් ඉදිකිරීමට බොහෝ ප්‍රදේශවාසීහු දැඩි ලෙස විරුද්ධ වෙති."
@@ -8853,6 +10869,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book have an adverse learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට අහිතකර බලපෑමක් ඇති කිරීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option have an adverse this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී අහිතකර බලපෑමක් ඇති කිරීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Prolonged exposure to traffic noise can have an adverse effect on residents' sleep quality.",
         "රථවාහන ශබ්දයට දිගු කාලයක් නිරාවරණය වීම ප්‍රදේශවාසීන්ගේ නින්දේ ගුණාත්මකභාවය මත අහිතකර බලපෑමක් ඇති කළ හැක."
       ],
@@ -8887,6 +10911,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of breakthrough clearly.",
+        "ගුරුවරයා සුවිශේෂී ඉදිරි පිම්මක් පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your breakthrough.",
+        "හොඳ පුරුදු ඔබගේ සුවිශේෂී ඉදිරි පිම්මක් කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "The discovery of penicillin was a medical breakthrough that saved millions of human lives.",
         "පෙනිසිලින් සොයාගැනීම මිලියන ගණනක් මිනිස් ජීවිත බේරා ගත් වෛද්‍ය විද්‍යාත්මක ඉදිරි පිම්මක් විය."
@@ -8923,6 +10955,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to regard as her goal.",
+        "ඇය තම ඉලක්කය ලෙස සැලකීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can regard as new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ලෙස සැලකීම හැකිය."
+      ],
+      [
         "Access to clean water is universally regarded as a fundamental human right.",
         "පිරිසිදු ජලය ලබා ගැනීමට ඇති හැකියාව මූලික මිනිස් අයිතිවාසිකමක් ලෙස ලොව පුරා සලකනු ලැබේ."
       ],
@@ -8957,6 +10997,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "It is important to inquire into your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි විමර්ශනය කරන්න වැදගත් වේ."
+      ],
+      [
+        "She learned how to inquire into difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව විමර්ශනය කරන්න ඇය ඉගෙන ගත්තාය."
+      ],
       [
         "An independent committee was appointed to inquire into the causes of the railway accident.",
         "දුම්රිය අනතුරට බලපෑ හේතු පිළිබඳව කරුණු සොයා බැලීම සඳහා ස්වාධීන කමිටුවක් පත් කරන ලදී."
@@ -8993,6 +11041,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Seldom, students need enough sleep before an exam.",
+        "කලාතුරකින්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will seldom improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ කලාතුරකින් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Censorship of the press seldom succeeds in suppressing public dissatisfaction for long.",
         "මාධ්‍ය වාරණය මගින් මහජන අප්‍රසාදය දිගු කාලයක් යටපත් කර තැබීමට හැකි වන්නේ කලාතුරකිනි."
       ],
@@ -9027,6 +11083,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to initiate her goal.",
+        "ඇය තම ඉලක්කය ආරම්භ කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can initiate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ආරම්භ කරන්න හැකිය."
+      ],
       [
         "Local councils should initiate community recycling projects to reduce landfill waste.",
         "ගොඩගැසෙන කසළ ප්‍රමාණය අවම කිරීම සඳහා පළාත් පාලන ආයතන විසින් ප්‍රජා ප්‍රතිචක්‍රීකරණ ව්‍යාපෘති ආරම්භ කළ යුතුය."
@@ -9063,6 +11127,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to misjudge her goal.",
+        "ඇය තම ඉලක්කය වැරදි ලෙස තක්සේරු කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can misjudge new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා වැරදි ලෙස තක්සේරු කරන්න හැකිය."
+      ],
+      [
         "Policymakers often misjudge the financial strain that sudden tax hikes place on low-income families.",
         "හදිසි බදු වැඩිකිරීම් මගින් අඩු ආදායම්ලාභී පවුල් මත ඇති කරන මූල්‍ය පීඩනය ප්‍රතිපත්ති සම්පාදකයින් බොහෝ විට වැරදි ලෙස තක්සේරු කරයි."
       ],
@@ -9097,6 +11169,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "It is important to attend to your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි අවධානය යොමු කර කටයුතු කරන්න වැදගත් වේ."
+      ],
+      [
+        "She learned how to attend to difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව අවධානය යොමු කර කටයුතු කරන්න ඇය ඉගෙන ගත්තාය."
+      ],
       [
         "Overworked nurses often lack sufficient time to attend to the emotional needs of their patients.",
         "අධික ලෙස වැඩ කරන හෙදියන්ට බොහෝ විට තම රෝගීන්ගේ මානසික අවශ්‍යතා පිළිබඳව සොයා බැලීමට ප්‍රමාණවත් කාලයක් නොමැත."
@@ -9133,6 +11213,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are impending for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අත ළඟ එන වේ."
+      ],
+      [
+        "She gave a very impending answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අත ළඟ එන පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Melting glaciers serve as a stark warning of an impending global water crisis.",
         "දියවෙමින් පවතින ග්ලැසියර අත ළඟ එන ගෝලීය ජල අර්බුදයක ප්‍රබල අනතුරු ඇඟවීමක් ලෙස ක්‍රියා කරයි."
       ],
@@ -9167,6 +11255,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are deficient for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ඌනතාවයකින් පෙළෙන වේ."
+      ],
+      [
+        "She gave a very deficient answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ඌනතාවයකින් පෙළෙන පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Diets consisting primarily of fast food are severely deficient in essential vitamins and fibre.",
         "ප්‍රධාන වශයෙන් ක්ෂණික ආහාරවලින් සමන්විත ආහාර වේල් අත්‍යවශ්‍ය විටමින් සහ තන්තුවලින් දැඩි ලෙස ඌන වේ."
@@ -9203,6 +11299,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to pose her goal.",
+        "ඇය තම ඉලක්කය එල්ල කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can pose new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා එල්ල කරන්න හැකිය."
+      ],
+      [
         "Antibiotic resistance poses a grave threat to modern medicine and global public health.",
         "ප්‍රතිජීවක ප්‍රතිරෝධය නවීන වෛද්‍ය විද්‍යාවට සහ ගෝලීය මහජන සෞඛ්‍යයට බරපතල තර්ජනයක් එල්ල කරයි."
       ],
@@ -9237,6 +11341,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of shortcomings clearly.",
+        "ගුරුවරයා අඩුපාඩු පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your shortcomings.",
+        "හොඳ පුරුදු ඔබගේ අඩුපාඩු කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Despite its shortcomings, the standardized examination system remains the fairest method of university selection.",
         "අඩුපාඩු පැවතියද, සම්මත විභාග ක්‍රමය තවමත් විශ්වවිද්‍යාල ප්‍රවේශය සඳහා පවතින වඩාත්ම සාධාරණ ක්‍රමවේදය වේ."
@@ -9273,6 +11385,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are intermittent for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර කඩින් කඩ සිදුවන වේ."
+      ],
+      [
+        "She gave a very intermittent answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා කඩින් කඩ සිදුවන පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "One major limitation of wind and solar power is their intermittent nature.",
         "සුළං සහ සූර්ය බලශක්තියේ එක් ප්‍රධාන සීමාවක් වන්නේ ඒවා අඛණ්ඩව නොලැබී කඩින් කඩ ක්‍රියාත්මක වන ස්වභාවයයි."
       ],
@@ -9307,6 +11427,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of humanity clearly.",
+        "ගුරුවරයා මිනිස් සංහතිය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your humanity.",
+        "හොඳ පුරුදු ඔබගේ මිනිස් සංහතිය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Climate change represents one of the greatest existential challenges ever faced by humanity.",
         "දේශගුණික විපර්යාස යනු මිනිස් සංහතිය මෙතෙක් මුහුණ දුන් විශාලතම පැවැත්ම පිළිබඳ අභියෝගයන්ගෙන් එකකි."
@@ -9343,6 +11471,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to deliver her goal.",
+        "ඇය තම ඉලක්කය ලබා දීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can deliver new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ලබා දීම හැකිය."
+      ],
+      [
         "Digital governance enables local authorities to deliver public services more efficiently.",
         "ඩිජිටල් රාජ්‍ය පාලනය මගින් පළාත් පාලන ආයතනවලට වඩාත් කාර්යක්ෂමව මහජන සේවාවන් ලබා දීමට හැකියාව ලැබේ."
       ],
@@ -9377,6 +11513,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are random for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අහඹු වේ."
+      ],
+      [
+        "She gave a very random answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අහඹු පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Researchers surveyed a random sample of two thousand households to assess dietary habits.",
         "ආහාර පුරුදු තක්සේරු කිරීම සඳහා පර්යේෂකයන් විසින් පවුල් දෙදහසක අහඹු නියැදියක් සමීක්ෂණයට ලක් කරන ලදී."
@@ -9413,6 +11557,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are secondary for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ද්විතීයික වේ."
+      ],
+      [
+        "She gave a very secondary answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ද්විතීයික පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "In many job markets, practical experience has made formal grades a matter of secondary importance.",
         "බොහෝ රැකියා වෙළඳපොළවල් තුළ ප්‍රායෝගික පළපුරුද්ද හමුවේ විධිමත් විභාග ප්‍රතිඵල දෙවන මට්ටමේ වැදගත්කමක් දරන කරුණක් බවට පත්ව ඇත."
       ],
@@ -9447,6 +11599,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "It is important to date back to your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි අතීතයේ යම් කාලයක සිට පැවත ඒම වැදගත් වේ."
+      ],
+      [
+        "She learned how to date back to difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව අතීතයේ යම් කාලයක සිට පැවත ඒම ඇය ඉගෙන ගත්තාය."
+      ],
       [
         "Sri Lanka's intricate hydraulic irrigation systems date back to ancient kingdoms.",
         "ශ්‍රී ලංකාවේ සංකීර්ණ වාරිමාර්ග පද්ධති පුරාණ රාජධානි සමය දක්වා අතීතයට දිව යයි."
@@ -9483,6 +11643,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to discover her goal.",
+        "ඇය තම ඉලක්කය සොයා ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can discover new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සොයා ගැනීම හැකිය."
+      ],
+      [
         "Marine biologists continue to discover previously unknown species in the deep ocean.",
         "සාගර ජීව විද්‍යාඥයෝ ගැඹුරු සාගරයේ මීට පෙර හඳුනා නොගත් ජීවී විශේෂ අඛණ්ඩව සොයා ගනිති."
       ],
@@ -9517,6 +11685,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "It is important to succumb to your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි යටත් වෙන්න වැදගත් වේ."
+      ],
+      [
+        "She learned how to succumb to difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව යටත් වෙන්න ඇය ඉගෙන ගත්තාය."
+      ],
       [
         "Adolescents often succumb to peer pressure when making choices about fashion and lifestyle.",
         "විලාසිතා සහ ජීවන රටාව පිළිබඳ තීරණ ගැනීමේදී යොවුන් වියේ දරුවන් බොහෝ විට සමවයසේ මිතුරන්ගේ පීඩනයට නතු වේ."
@@ -9553,6 +11729,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to impress her goal.",
+        "ඇය තම ඉලක්කය පැහැදීමක් ඇති කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can impress new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා පැහැදීමක් ඇති කරන්න හැකිය."
+      ],
+      [
         "Job applicants who demonstrate problem-solving abilities are more likely to impress potential employers.",
         "ගැටලු විසඳීමේ හැකියාවන් පෙන්නුම් කරන රැකියා අයදුම්කරුවන් අනාගත සේවායෝජකයින් තුළ පැහැදීමක් ඇති කිරීමට වැඩි ඉඩක් ඇත."
       ],
@@ -9587,6 +11771,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are anti for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර විරෝධී වේ."
+      ],
+      [
+        "She gave a very anti answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා විරෝධී පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Community sports programmes help divert disadvantaged youth away from anti-social behaviour.",
         "ප්‍රජා ක්‍රීඩා වැඩසටහන් මගින් වරප්‍රසාද අහිමි තරුණ පිරිස සමාජ විරෝධී හැසිරීම්වලින් මුදා ගැනීමට උපකාරී වේ."
@@ -9623,6 +11815,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book some learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට ඇතැම් පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option some this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී ඇතැම් සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Some commentators argue that international tourism erodes traditional local cultures.",
         "ජාත්‍යන්තර සංචාරක ව්‍යාපාරය මගින් සාම්ප්‍රදායික දේශීය සංස්කෘතීන් විනාශ කරන බව ඇතැම් විචාරකයෝ තර්ක කරති."
       ],
@@ -9657,6 +11857,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of series clearly.",
+        "ගුරුවරයා මාලාවක් පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your series.",
+        "හොඳ පුරුදු ඔබගේ මාලාවක් කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "The government implemented a series of fiscal reforms to stabilize the national currency.",
         "ජාතික මුදල් ඒකකය ස්ථාවර කිරීම සඳහා රජය විසින් මූල්‍ය ප්‍රතිසංස්කරණ මාලාවක් ක්‍රියාත්මක කරන ලදී."
@@ -9693,6 +11901,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to calculate her goal.",
+        "ඇය තම ඉලක්කය ගණනය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can calculate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ගණනය කරන්න හැකිය."
+      ],
+      [
         "Online tools allow individuals to calculate their annual carbon footprint with remarkable accuracy.",
         "මාර්ගගත මෙවලම් මගින් පුද්ගලයන්ට තම වාර්ෂික කාබන් පියසටහන ඉතා නිවැරදිව ගණනය කිරීමට ඉඩ සලසයි."
       ],
@@ -9727,6 +11943,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are unrealistic for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ප්‍රායෝගික නොවන වේ."
+      ],
+      [
+        "She gave a very unrealistic answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ප්‍රායෝගික නොවන පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "It is unrealistic to expect developing countries to abandon fossil fuels overnight without financial aid.",
         "මූල්‍ය ආධාර නොමැතිව සංවර්ධනය වෙමින් පවතින රටවල් ක්ෂණිකව ෆොසිල ඉන්ධන අතහරිනු ඇතැයි අපේක්ෂා කිරීම ප්‍රායෝගික නොවේ."
@@ -9763,6 +11987,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Merely, students need enough sleep before an exam.",
+        "හුදෙක් ... පමණක්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will merely improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ හුදෙක් ... පමණක් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Education should not merely prepare students for employment, but also cultivate civic responsibility.",
         "අධ්‍යාපනය හුදෙක් සිසුන් රැකියා සඳහා සූදානම් කිරීම පමණක් නොව, පුරවැසි වගකීමද වර්ධනය කළ යුතුය."
       ],
@@ -9797,6 +12029,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book on the premise that learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට යන උපකල්පනය මත පදනම්ව පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option on the premise that this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී යන උපකල්පනය මත පදනම්ව සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Universal healthcare systems operate on the premise that medical treatment is a right, not a commodity.",
         "සර්වජන සෞඛ්‍ය සේවා පද්ධති ක්‍රියාත්මක වන්නේ වෛද්‍ය ප්‍රතිකාර යනු වෙළඳ භාණ්ඩයක් නොව අයිතිවාසිකමක් යන පදනම මතය."
@@ -9833,6 +12073,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Approximately, students need enough sleep before an exam.",
+        "දළ වශයෙන්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will approximately improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ දළ වශයෙන් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Approximately one-quarter of household expenditure in 2020 was devoted to housing and utilities.",
         "2020 වසරේදී පවුලක වියදමෙන් ආසන්න වශයෙන් හතරෙන් පංගුවක් නිවාස සහ උපයෝගිතා සේවා සඳහා වෙන් විය."
       ],
@@ -9867,6 +12115,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to criticise her goal.",
+        "ඇය තම ඉලක්කය විවේචනය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can criticise new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා විවේචනය කරන්න හැකිය."
+      ],
       [
         "Multinational fast-food chains are frequently criticised for marketing unhealthy products to children.",
         "සෞඛ්‍යයට අහිතකර ආහාර දරුවන් ඉලක්ක කර අලෙවි කිරීම සම්බන්ධයෙන් බහුජාතික ක්ෂණික ආහාර සමාගම් නිතරම විවේචනයට ලක් වේ."
@@ -9903,6 +12159,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to exemplify her goal.",
+        "ඇය තම ඉලක්කය නිදසුන් මගින් පැහැදිලි කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can exemplify new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා නිදසුන් මගින් පැහැදිලි කරන්න හැකිය."
+      ],
+      [
         "The success of congestion charging is clearly exemplified by Singapore's efficient road network.",
         "මාර්ග තදබද ගාස්තු අයකිරීමේ සාර්ථකත්වය සිංගප්පූරුවේ කාර්යක්ෂම මාර්ග ජාලය මගින් මැනවින් නිදසුන් කොට දක්වයි."
       ],
@@ -9937,6 +12201,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to endanger her goal.",
+        "ඇය තම ඉලක්කය අනතුරේ හෙළීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can endanger new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අනතුරේ හෙළීම හැකිය."
+      ],
       [
         "Illegal logging continues to endanger hundreds of rare plant and animal species.",
         "නීති විරෝධී දැව හෙළීම දුර්ලභ ශාක හා සත්ත්ව විශේෂ සිය ගණනක් අඛණ්ඩව අවදානමට ලක් කරයි."
@@ -9973,6 +12245,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book as well as learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට මෙන්ම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option as well as this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී මෙන්ම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Urban trees absorb carbon dioxide as well as providing shade for pedestrians.",
         "නාගරික ගස්කොළන් පදිකයින්ට සෙවණ ලබා දෙනවා මෙන්ම කාබන් ඩයොක්සයිඩ්ද අවශෝෂණය කර ගනියි."
       ],
@@ -10008,16 +12288,44 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
-        "This essay will explore the primary causes of urban sprawl and propose sustainable solutions.",
-        "මෙම රචනාව මගින් අක්‍රමවත් නාගරික ව්‍යාප්තියේ මූලික හේතු ගැඹුරින් විමසා බලා තිරසාර විසඳුම් යෝජනා කරනු ඇත."
+        "I want to explore the world.",
+        "මට ලෝකය ගවේෂණය කිරීමට අවශ්‍යයි."
       ],
       [
-        "Energy-importing nations must explore alternative sources of power to ensure national security.",
-        "බලශක්තිය ආනයනය කරන රටවල් ජාතික ආරක්ෂාව තහවුරු කිරීම සඳහා විකල්ප බලශක්ති ප්‍රභවයන් ගවේෂණය කළ යුතුය."
+        "We explored an ancient city.",
+        "අපි පැරණි නගරයක් ගවේෂණය කළා."
       ],
       [
-        "Gap-year travel allows young people to explore unfamiliar cultures before entering university.",
-        "විශ්වවිද්‍යාලයට ඇතුළත් වීමට පෙර ගන්නා විවේක වසර තුළ සංචාරය කිරීමෙන් තරුණ පිරිසට නුහුරු සංස්කෘතීන් ගවේෂණය කිරීමට අවස්ථාව ලැබේ."
+        "Children love to explore new things.",
+        "ළමයි අලුත් දේවල් සොයා බලන්න කැමතියි."
+      ],
+      [
+        "They explored the forest.",
+        "ඔවුන් වනාන්තරය ගවේෂණය කළා."
+      ],
+      [
+        "Scientists explore the mysteries of nature.",
+        "විද්‍යාඥයන් සොබාදහමේ අභිරහස් ගවේෂණය කරනවා."
+      ],
+      [
+        "I like to explore new places.",
+        "මම අලුත් ස්ථාන ගවේෂණය කිරීමට කැමතියි."
+      ],
+      [
+        "Archaeologists explore ancient ruins.",
+        "පුරාවිද්‍යාඥයන් පැරණි නටබුන් ගවේෂණය කරනවා."
+      ],
+      [
+        "Let's explore this topic.",
+        "අපි මේ මාතෘකාව ගැන සොයා බලමු."
+      ],
+      [
+        "She explored different career opportunities.",
+        "ඇය විවිධ රැකියා අවස්ථා පිළිබඳව සොයා බැලුවා."
+      ],
+      [
+        "We need to explore the reasons behind this problem.",
+        "මෙම ගැටලුවට හේතු සොයා බැලීමට අපට අවශ්‍යයි."
       ]
     ]
   },
@@ -10042,6 +12350,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book such learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට එවැනි පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option such this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී එවැනි සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Many cities have introduced cycling lanes; such initiatives significantly reduce short car journeys.",
         "බොහෝ නගර පාපැදි මංතීරු හඳුන්වා දී ඇති අතර, එවැනි වැඩසටහන් මගින් කෙටි දුර මෝටර් රථ ගමන් සැලකිය යුතු ලෙස අඩු කරයි."
@@ -10078,6 +12394,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to emerge her goal.",
+        "ඇය තම ඉලක්කය මතු වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can emerge new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා මතු වෙන්න හැකිය."
+      ],
+      [
         "Artificial intelligence has emerged as one of the most transformative technologies of the century.",
         "කෘත්‍රිම බුද්ධිය මෙම සියවසේ වඩාත්ම පරිවර්තනීය තාක්ෂණයන්ගෙන් එකක් ලෙස මතු වී ඇත."
       ],
@@ -10112,6 +12436,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "It is important to detract from your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි වටිනාකම හෝ ගුණාත්මකභාවය අඩු කරන්න වැදගත් වේ."
+      ],
+      [
+        "She learned how to detract from difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව වටිනාකම හෝ ගුණාත්මකභාවය අඩු කරන්න ඇය ඉගෙන ගත්තාය."
+      ],
       [
         "Commercial billboards along historic streets detract from the aesthetic appeal of the city.",
         "ඓතිහාසික වීදි දෙපස ඇති වෙළඳ දැන්වීම් පුවරු නගරයේ සෞන්දර්යාත්මක ආකර්ෂණය අඩු කරයි."
@@ -10148,6 +12480,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book amongst learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට අතර පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option amongst this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී අතර සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Smartphone ownership was highest amongst the 18-to-24 age group at nearly ninety-eight percent.",
         "වයස අවුරුදු 18ත් 24ත් අතර කාණ්ඩය තුළ ස්මාර්ට් දුරකථන හිමිකාරිත්වය සියයට අනූ අටකට ආසන්න ඉහළම අගයක් ගත්තේය."
       ],
@@ -10182,6 +12522,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book with..ing learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට සමඟින් පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option with..ing this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී සමඟින් සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Global car production expanded rapidly, with China accounting for over thirty percent of total output.",
         "චීනය සමස්ත නිෂ්පාදනයෙන් සියයට තිහකට වඩා වැඩි ප්‍රමාණයකට දායක වෙමින් ගෝලීය මෝටර් රථ නිෂ්පාදනය ශීඝ්‍රයෙන් පුළුල් විය."
@@ -10218,6 +12566,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of extent clearly.",
+        "ගුරුවරයා ප්‍රමාණය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your extent.",
+        "හොඳ පුරුදු ඔබගේ ප්‍රමාණය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "To a large extent, a child's future academic success is shaped by early parental involvement.",
         "දරුවෙකුගේ අනාගත අධ්‍යයන සාර්ථකත්වය බොහෝ දුරට තීරණය වන්නේ මුල් අවධියේදී දෙමාපියන් දක්වන මැදිහත්වීම මතය."
       ],
@@ -10252,6 +12608,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Radically, students need enough sleep before an exam.",
+        "මූලික වශයෙන්ම, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will radically improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ මූලික වශයෙන්ම ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "The invention of the internet has radically transformed how businesses market their products.",
         "අන්තර්ජාලය සොයාගැනීම ව්‍යාපාර තම භාණ්ඩ අලෙවි කරන ආකාරය සහමුලින්ම වෙනස් කර ඇත."
@@ -10288,6 +12652,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Further, students need enough sleep before an exam.",
+        "තවදුරටත්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will further improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ තවදුරටත් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Further research is required before genetically modified crops can be approved for universal use.",
         "ජාන විකරණය කළ භෝග පොදු භාවිතය සඳහා අනුමත කිරීමට පෙර තවදුරටත් පර්යේෂණ සිදු කිරීම අවශ්‍ය වේ."
       ],
@@ -10322,6 +12694,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to mean her goal.",
+        "ඇය තම ඉලක්කය අදහස් වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can mean new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අදහස් වෙන්න හැකිය."
+      ],
       [
         "Higher life expectancy means that governments must support a larger retired population.",
         "ඉහළ ආයු අපේක්ෂාවෙන් අදහස් වන්නේ රජයන් විසින් විශාල විශ්‍රාමික ජනගහනයකට සහාය දැක්විය යුතු බවයි."
@@ -10358,6 +12738,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are versatile for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර බහුකාර්ය වේ."
+      ],
+      [
+        "She gave a very versatile answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා බහුකාර්ය පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Plastic became ubiquitous in packaging because it is lightweight, durable, and highly versatile.",
         "සැහැල්ලු, කල්පවතින සහ ඉතා බහුකාර්ය අමුද්‍රව්‍යයක් වන බැවින් ඇසුරුම්කරණය තුළ ප්ලාස්ටික් සෑම තැනකම ව්‍යාප්ත විය."
       ],
@@ -10392,6 +12780,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of obstacle clearly.",
+        "ගුරුවරයා බාධකයක් පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your obstacle.",
+        "හොඳ පුරුදු ඔබගේ බාධකයක් කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Inadequate transport infrastructure remains a major obstacle to rural economic development.",
         "ප්‍රමාණවත් ප්‍රවාහන යටිතල පහසුකම් නොමැති වීම ග්‍රාමීය ආර්ථික සංවර්ධනයට ඇති ප්‍රධාන බාධකයක් ලෙස පවතී."
@@ -10428,6 +12824,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book equipped with learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට වලින් සමන්විත වූ පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option equipped with this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී වලින් සමන්විත වූ සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Schools must ensure that school-leavers are equipped with practical digital skills.",
         "පාසල් හැර යන සිසුන් ප්‍රායෝගික ඩිජිටල් කුසලතාවලින් සන්නද්ධ බව පාසල් විසින් තහවුරු කළ යුතුය."
       ],
@@ -10462,6 +12866,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of facade clearly.",
+        "ගුරුවරයා ගොඩනැගිල්ලක ඉදිරිපස මුහුණත පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your facade.",
+        "හොඳ පුරුදු ඔබගේ ගොඩනැගිල්ලක ඉදිරිපස මුහුණත කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Urban developers often retain the historic facade of an old building while modernizing its interior.",
         "නාගරික සංවර්ධකයින් බොහෝ විට පැරණි ගොඩනැගිල්ලක ඓතිහාසික ඉදිරිපස මුහුණත ආරක්ෂා කර ගනිමින් එහි අභ්‍යන්තරය නවීකරණය කරයි."
@@ -10498,6 +12910,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of incentive clearly.",
+        "ගුරුවරයා දිරිගැන්වීමක් පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your incentive.",
+        "හොඳ පුරුදු ඔබගේ දිරිගැන්වීමක් කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Governments should offer tax incentives to companies that reduce their carbon emissions.",
         "කාබන් විමෝචනය අඩු කරන සමාගම් සඳහා රජයන් විසින් බදු දිරිගැන්වීම් ලබා දිය යුතුය."
       ],
@@ -10532,6 +12952,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are confident for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ආත්ම විශ්වාසයෙන් යුත් වේ."
+      ],
+      [
+        "She gave a very confident answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ආත්ම විශ්වාසයෙන් යුත් පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Students who participate in extracurricular activities often become more confident speakers.",
         "විෂය බාහිර ක්‍රියාකාරකම්වලට සහභාගී වන සිසුන් බොහෝ විට වඩාත් ආත්ම විශ්වාසයෙන් යුත් කථිකයන් බවට පත් වේ."
@@ -10568,6 +12996,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are naive for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අත්දැකීම් අඩු වේ."
+      ],
+      [
+        "She gave a very naive answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අත්දැකීම් අඩු පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "It would be naive to assume that technology alone can resolve global environmental crises.",
         "තාක්ෂණයෙන් පමණක් ගෝලීය පාරිසරික අර්බුද විසඳිය හැකි යැයි උපකල්පනය කිරීම අනුවණකමකි."
       ],
@@ -10602,6 +13038,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book as is the case with learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට සම්බන්ධයෙන් ද සිදුවන්නාක් මෙන් පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option as is the case with this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී සම්බන්ධයෙන් ද සිදුවන්නාක් මෙන් සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "As is the case with many developing nations, rapid urbanisation has strained local water supplies.",
         "බොහෝ සංවර්ධනය වෙමින් පවතින රටවල සිදුවන්නාක් මෙන්, ශීඝ්‍ර නාගරීකරණය ප්‍රාදේශීය ජල සැපයුමට දැඩි පීඩනයක් එල්ල කර ඇත."
@@ -10638,6 +13082,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book mistaken for learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට වැරදි ලෙස වටහා ගැනීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option mistaken for this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී වැරදි ලෙස වටහා ගැනීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "A quiet demeanour is sometimes mistaken for a lack of confidence in professional settings.",
         "වෘත්තීය පරිසරයන්හිදී නිහඬ හැසිරීම සමහර විට ආත්ම විශ්වාසය මදිකමක් ලෙස වරදවා වටහා ගනු ලැබේ."
       ],
@@ -10672,6 +13124,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book at risk of learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට අවදානමට ලක්ව ඇති පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option at risk of this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී අවදානමට ලක්ව ඇති සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Countless plant and animal species are currently at risk of extinction due to habitat destruction.",
         "වාසස්ථාන විනාශ වීම හේතුවෙන් මේ වන විට ගණන් කළ නොහැකි තරම් ශාක හා සත්ත්ව විශේෂ වඳ වී යාමේ අවදානමට ලක්ව ඇත."
@@ -10708,6 +13168,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to vary her goal.",
+        "ඇය තම ඉලක්කය වෙනස් වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can vary new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා වෙනස් වෙන්න හැකිය."
+      ],
+      [
         "Cultural attitudes towards elder care vary considerably from one society to another.",
         "වැඩිහිටි රැකවරණය පිළිබඳ සංස්කෘතික ආකල්ප එක් සමාජයකින් තවත් සමාජයකට සැලකිය යුතු ලෙස වෙනස් වේ."
       ],
@@ -10742,6 +13210,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book unlike learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට මෙන් නොව පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option unlike this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී මෙන් නොව සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Unlike fossil fuels, solar and wind power do not emit harmful greenhouse gases during operation.",
         "ෆොසිල ඉන්ධන මෙන් නොව, සූර්ය සහ සුළං බලශක්තිය ක්‍රියාත්මක වීමේදී අහිතකර හරිතාගාර වායු පිට නොකරයි."
@@ -10778,6 +13254,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Temporarily, students need enough sleep before an exam.",
+        "තාවකාලිකව, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will temporarily improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ තාවකාලිකව ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Financial aid can temporarily alleviate poverty, but long-term education is needed for lasting change.",
         "මූල්‍ය ආධාර මගින් දරිද්‍රතාවය තාවකාලිකව සමනය කළ හැකි නමුත්, කල්පවතින වෙනසක් සඳහා දිගුකාලීන අධ්‍යාපනය අවශ්‍ය වේ."
       ],
@@ -10812,6 +13296,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to neglect her goal.",
+        "ඇය තම ඉලක්කය නොසලකා හැරීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can neglect new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා නොසලකා හැරීම හැකිය."
+      ],
       [
         "Individuals who work excessive overtime often neglect their physical and mental well-being.",
         "අධික ලෙස අතිකාල සේවයේ යෙදෙන පුද්ගලයින් බොහෝ විට තම කායික හා මානසික යහපැවැත්ම නොසලකා හරියි."
@@ -10848,6 +13340,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Automatically, students need enough sleep before an exam.",
+        "ස්වයංක්‍රීයව, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will automatically improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ ස්වයංක්‍රීයව ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Possessing a university degree does not automatically guarantee a lucrative career in today's economy.",
         "විශ්වවිද්‍යාල උපාධියක් තිබීම වර්තමාන ආර්ථිකය තුළ ඉහළ වැටුප් සහිත රැකියාවක් නිරායාසයෙන්ම තහවුරු නොකරයි."
       ],
@@ -10882,6 +13382,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are external for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර බාහිර වේ."
+      ],
+      [
+        "She gave a very external answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා බාහිර පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Small businesses are particularly vulnerable to external economic shocks such as sudden inflation.",
         "කුඩා ව්‍යාපාර හදිසි උද්ධමනය වැනි බාහිර ආර්ථික කම්පනවලට විශේෂයෙන්ම ගොදුරු වීමේ වැඩි ඉඩකඩක් පවතී."
@@ -10918,6 +13426,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are beneficial for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර හිතකර වේ."
+      ],
+      [
+        "She gave a very beneficial answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා හිතකර පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Exposure to a second language in early childhood is highly beneficial to cognitive development.",
         "මුල් ළමාවියේදී දෙවන භාෂාවකට නිරාවරණය වීම බුද්ධිමය වර්ධනයට අතිශයින්ම හිතකර වේ."
       ],
@@ -10952,6 +13468,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book exempt from learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට නිදහස් කරන ලද පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option exempt from this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී නිදහස් කරන ලද සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Essential food items and medicines should be exempt from value-added sales taxes.",
         "අත්‍යවශ්‍ය ආහාර ද්‍රව්‍ය සහ ඖෂධ එකතු කළ අගය මත බද්දෙන් නිදහස් කළ යුතුය."
@@ -10988,6 +13512,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of demand clearly.",
+        "ගුරුවරයා ඉල්ලුම පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your demand.",
+        "හොඳ පුරුදු ඔබගේ ඉල්ලුම කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Rapid population growth has created an unprecedented demand for affordable urban housing.",
         "ශීඝ්‍ර ජනගහන වර්ධනය හේතුවෙන් දැරිය හැකි මිලකට නාගරික නිවාස සඳහා පෙර නොවූ විරූ ඉල්ලුමක් නිර්මාණය වී ඇත."
       ],
@@ -11022,6 +13554,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are actual for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සැබෑ වේ."
+      ],
+      [
+        "She gave a very actual answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සැබෑ පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "The actual cost of constructing the high-speed railway was double the initial government estimate.",
         "අධිවේගී දුම්රිය මාර්ගය ඉදිකිරීමේ සැබෑ පිරිවැය රජයේ මූලික ඇස්තමේන්තුව මෙන් දෙගුණයක් විය."
@@ -11058,6 +13598,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to anticipate her goal.",
+        "ඇය තම ඉලක්කය කල්තියා අපේක්ෂා කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can anticipate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා කල්තියා අපේක්ෂා කරන්න හැකිය."
+      ],
+      [
         "Urban planners must anticipate future population growth when designing public transit networks.",
         "පොදු ප්‍රවාහන ජාල සැලසුම් කිරීමේදී නාගරික සැලසුම්කරුවන් අනාගත ජනගහන වර්ධනය කල්තියා අපේක්ෂා කළ යුතුය."
       ],
@@ -11092,6 +13640,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Simply, students need enough sleep before an exam.",
+        "හුදෙක්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will simply improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ හුදෙක් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Reducing obesity is not simply a matter of individual willpower; food affordability also plays a vital role.",
         "තරබාරුකම අඩු කිරීම හුදෙක් පුද්ගල අධිෂ්ඨානය පිළිබඳ කරුණක් පමණක් නොවන අතර, ආහාරවල මිල දැරිය හැකි බව ද එහිදී වැදගත් කාර්යභාරයක් ඉටු කරයි."
@@ -11128,6 +13684,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book more learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට වැඩි වන තරමට පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option more this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී වැඩි වන තරමට සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "The more educated a population becomes, the more productive the national economy tends to be.",
         "ජනගහනයක් වඩාත් උගත් වන තරමට, ජාතික ආර්ථිකය වඩාත් ඵලදායී වීමට නැඹුරු වේ."
       ],
@@ -11162,6 +13726,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to display her goal.",
+        "ඇය තම ඉලක්කය ප්‍රදර්ශනය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can display new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ප්‍රදර්ශනය කරන්න හැකිය."
+      ],
       [
         "Children who watch violent media frequently display more aggressive behaviour in the playground.",
         "ප්‍රචණ්ඩකාරී මාධ්‍ය නරඹන දරුවන් බොහෝ විට ක්‍රීඩා පිටියේදී වඩාත් කලහකාරී හැසිරීම් පෙන්නුම් කරයි."
@@ -11198,6 +13770,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to aggravate her goal.",
+        "ඇය තම ඉලක්කය උග්‍ර කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can aggravate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා උග්‍ර කරන්න හැකිය."
+      ],
+      [
         "Deforestation aggravates soil erosion and increases the likelihood of catastrophic landslides.",
         "වනාන්තර එළිපෙහෙළි කිරීම පාංශු ඛාදනය උග්‍ර කරන අතර දරුණු නායයෑම් ඇතිවීමේ සම්භාවිතාව ඉහළ නංවයි."
       ],
@@ -11232,6 +13812,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book whereas learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට අතර පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option whereas this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී අතර සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Over 80% of teenagers used smartphones daily, whereas only 35% of seniors did so.",
         "යෞවනයන්ගෙන් 80%කට වැඩි පිරිසක් දිනපතා ස්මාර්ට් ජංගම දුරකථන භාවිත කළ අතර, වැඩිහිටියන්ගෙන් එසේ කළේ 35%ක් පමණි."
@@ -11268,6 +13856,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book reward with learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට වෙනුවෙන් ප්‍රතිලාභ හෝ ත්‍යාග පිරිනැමීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option reward with this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී වෙනුවෙන් ප්‍රතිලාභ හෝ ත්‍යාග පිරිනැමීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Companies that reward employees with performance bonuses often experience higher productivity.",
         "සේවකයින්ට කාර්ය සාධන ප්‍රසාද දීමනා පිරිනමන සමාගම් බොහෝ විට ඉහළ ඵලදායිතාවයක් අත්විඳියි."
       ],
@@ -11302,6 +13898,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to jeopardize her goal.",
+        "ඇය තම ඉලක්කය අනතුරේ හෙළීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can jeopardize new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අනතුරේ හෙළීම හැකිය."
+      ],
       [
         "Pursuing rapid industrial growth without environmental safeguards will jeopardize the planet's future.",
         "පාරිසරික ආරක්ෂණ ක්‍රමවේදයන්ගෙන් තොරව වේගවත් කාර්මික වර්ධනයක් හඹා යාම පෘථිවියේ අනාගතය අනතුරේ හෙළනු ඇත."
@@ -11338,6 +13942,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to implement her goal.",
+        "ඇය තම ඉලක්කය ක්‍රියාත්මක කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can implement new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ක්‍රියාත්මක කරන්න හැකිය."
+      ],
+      [
         "Authorities must implement stricter laws to curb industrial water pollution.",
         "කාර්මික ජල දූෂණය පාලනය කිරීම සඳහා බලධාරීන් විසින් වඩාත් දැඩි නීති ක්‍රියාත්මක කළ යුතුය."
       ],
@@ -11372,6 +13984,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book in response to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට සඳහා ප්‍රතිචාරයක් වශයෙන් පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option in response to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී සඳහා ප්‍රතිචාරයක් වශයෙන් සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "The government introduced congestion charges in response to worsening traffic in the capital.",
         "අගනුවර උග්‍ර වන රථවාහන තදබදයට ප්‍රතිචාරයක් වශයෙන් රජය විසින් මාර්ග තදබද ගාස්තු හඳුන්වා දෙන ලදී."
@@ -11408,6 +14028,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book struggle to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට යමක් කිරීමට දැඩි වෙහෙසක් දැරීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option struggle to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී යමක් කිරීමට දැඩි වෙහෙසක් දැරීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Many low-income families struggle to afford nutritious food and adequate healthcare.",
         "බොහෝ අඩු ආදායම්ලාභී පවුල් පෝෂ්‍යදායී ආහාර සහ ප්‍රමාණවත් සෞඛ්‍ය පහසුකම් ලබා ගැනීමට දැඩි අරගලයක නිරත වෙති."
       ],
@@ -11442,6 +14070,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book in isolation learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට හුදකලාව පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option in isolation this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී හුදකලාව සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Environmental degradation cannot be solved in isolation from global poverty and trade policies.",
         "ගෝලීය දරිද්‍රතාවය සහ වෙළඳ ප්‍රතිපත්තිවලින් වෙන් කොට හුදකලාව පාරිසරික හායනය විසඳිය නොහැක."
@@ -11478,6 +14114,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to restore her goal.",
+        "ඇය තම ඉලක්කය යථා තත්ත්වයට පත් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can restore new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා යථා තත්ත්වයට පත් කරන්න හැකිය."
+      ],
+      [
         "Strict anti-corruption measures are essential to restore public trust in political institutions.",
         "දේශපාලන ආයතන කෙරෙහි මහජන විශ්වාසය යළි තහවුරු කිරීම සඳහා දැඩි දූෂණ විරෝධී ක්‍රියාමාර්ග අත්‍යවශ්‍ය වේ."
       ],
@@ -11512,6 +14156,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Barely, students need enough sleep before an exam.",
+        "ඉතා අපහසුවෙන්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will barely improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ ඉතා අපහසුවෙන් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "In many metropolitan areas, minimum wage earners can barely afford basic accommodation.",
         "බොහෝ ප්‍රධාන නාගරික ප්‍රදේශවල අවම වැටුප් ලබන සේවකයින්ට මූලික නවාතැන් පහසුකම් සපයා ගත හැක්කේ ඉතා අපහසුවෙනි."
@@ -11548,6 +14200,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are ambitious for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අභිලාෂකාමී වේ."
+      ],
+      [
+        "She gave a very ambitious answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අභිලාෂකාමී පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Several nations have set ambitious targets to achieve net-zero carbon emissions by 2050.",
         "රටවල් කිහිපයක් 2050 වසර වන විට ශුද්ධ ශූන්‍ය කාබන් විමෝචනය අත්කර ගැනීම සඳහා අභිලාෂකාමී ඉලක්ක පනවා ඇත."
       ],
@@ -11582,6 +14242,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to fulfil her goal.",
+        "ඇය තම ඉලක්කය ඉටු කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can fulfil new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ඉටු කරන්න හැකිය."
+      ],
       [
         "Quality education enables children from disadvantaged backgrounds to fulfil their full potential.",
         "ගුණාත්මක අධ්‍යාපනය මගින් අඩු පහසුකම් සහිත පසුබිම්වල දරුවන්ට තම උපරිම හැකියාවන් කරා ළඟා වීමට අවස්ථාව සලසා දෙයි."
@@ -11618,6 +14286,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to welcome her goal.",
+        "ඇය තම ඉලක්කය සතුටින් පිළිගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can welcome new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සතුටින් පිළිගැනීම හැකිය."
+      ],
+      [
         "Environmentalists have welcomed the government's decision to phase out coal-fired power stations.",
         "ගල් අඟුරු බලාගාර ක්‍රමයෙන් ඉවත් කිරීමට රජය ගත් තීරණය පරිසරවේදීන් විසින් සතුටින් පිළිගෙන ඇත."
       ],
@@ -11652,6 +14328,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of expertise clearly.",
+        "ගුරුවරයා විශේෂඥ දැනුම පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your expertise.",
+        "හොඳ පුරුදු ඔබගේ විශේෂඥ දැනුම කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Developing countries often rely on foreign engineers when they lack the technical expertise for mega-projects.",
         "මහා පරිමාණ ව්‍යාපෘති සඳහා අවශ්‍ය තාක්ෂණික විශේෂඥ දැනුම නොමැති විට සංවර්ධනය වෙමින් පවතින රටවල් බොහෝ විට විදේශීය ඉංජිනේරුවන් මත රඳා පවතී."
@@ -11688,6 +14372,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book comply with learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට අනුකූලව කටයුතු කිරීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option comply with this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී අනුකූලව කටයුතු කිරීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Factories that fail to comply with environmental standards should face heavy financial penalties.",
         "පාරිසරික ප්‍රමිතීන්ට අනුකූලව කටයුතු කිරීමට අපොහොසත් වන කර්මාන්තශාලා දැඩි මූල්‍ය දඩුවම්වලට යටත් කළ යුතුය."
       ],
@@ -11722,6 +14414,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of section clearly.",
+        "ගුරුවරයා කොටස පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your section.",
+        "හොඳ පුරුදු ඔබගේ කොටස කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "A significant section of the rural population still lacks access to high-speed internet.",
         "ග්‍රාමීය ජනගහනයෙන් සැලකිය යුතු කොටසකට තවමත් අධිවේගී අන්තර්ජාල පහසුකම් නොමැත."
@@ -11758,6 +14458,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book conscious of learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට පිළිබඳව දැනුවත් පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option conscious of this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී පිළිබඳව දැනුවත් සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Modern consumers are increasingly conscious of the environmental impact of fast fashion.",
         "නූතන පාරිභෝගිකයින් ක්ෂණික විලාසිතා මගින් සිදුවන පාරිසරික බලපෑම පිළිබඳව වඩ වඩාත් දැනුවත්ව සිටිති."
       ],
@@ -11792,6 +14500,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are sufficient for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ප්‍රමාණවත් වේ."
+      ],
+      [
+        "She gave a very sufficient answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ප්‍රමාණවත් පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Local hospitals must be allocated sufficient funding to maintain high standards of emergency care.",
         "හදිසි ප්‍රතිකාර සේවාවන්හි ඉහළ ප්‍රමිතීන් පවත්වා ගැනීම සඳහා ප්‍රාදේශීය රෝහල්වලට ප්‍රමාණවත් අරමුදල් වෙන් කළ යුතුය."
@@ -11828,6 +14544,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are curious for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර කුතුහලයෙන් යුත් වේ."
+      ],
+      [
+        "She gave a very curious answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා කුතුහලයෙන් යුත් පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Young children are naturally curious about their environment and learn rapidly through exploration.",
         "කුඩා දරුවන් තම පරිසරය පිළිබඳව ස්වභාවයෙන්ම කුතුහලයෙන් යුක්ත වන අතර ගවේෂණය තුළින් වේගයෙන් ඉගෙන ගනී."
       ],
@@ -11862,6 +14586,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to encompass her goal.",
+        "ඇය තම ඉලක්කය ඇතුළත් කර ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can encompass new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ඇතුළත් කර ගැනීම හැකිය."
+      ],
       [
         "The concept of public health encompasses not only medical treatment but also sanitation and nutrition.",
         "මහජන සෞඛ්‍යය යන සංකල්පයට වෛද්‍ය ප්‍රතිකාර පමණක් නොව සනීපාරක්ෂාව සහ පෝෂණය ද ඇතුළත් වේ."
@@ -11898,6 +14630,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book under learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට යටතේ පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option under this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී යටතේ සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Healthcare systems in many countries are operating under immense financial pressure.",
         "බොහෝ රටවල සෞඛ්‍ය සේවා පද්ධති දැඩි මූල්‍ය පීඩනයක් යටතේ ක්‍රියාත්මක වේ."
       ],
@@ -11932,6 +14672,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book inferior/superior to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට වඩා පහත් හෝ ගුණාත්මකභාවයෙන් අඩු පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option inferior/superior to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී වඩා පහත් හෝ ගුණාත්මකභාවයෙන් අඩු සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Vocational qualifications should not be regarded as inferior to traditional university degrees.",
         "වෘත්තීය සුදුසුකම් සාම්ප්‍රදායික විශ්වවිද්‍යාල උපාධිවලට වඩා පහත් මට්ටමක ලා නොසැලකිය යුතුය."
@@ -11968,6 +14716,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are sustainable for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර තිරසාර වේ."
+      ],
+      [
+        "She gave a very sustainable answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා තිරසාර පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Governments must promote sustainable agriculture to ensure food security for future generations.",
         "අනාගත පරපුර සඳහා ආහාර සුරක්ෂිතතාව තහවුරු කිරීමට රජයන් තිරසාර කෘෂිකර්මාන්තය ප්‍රවර්ධනය කළ යුතුය."
       ],
@@ -12002,6 +14758,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book fail to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට අපොහොසත් වීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option fail to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී අපොහොසත් වීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Short-term prison sentences often fail to deter repeat offenders from committing further crimes.",
         "කෙටිකාලීන සිර දඬුවම් මගින් නැවත නැවතත් වැරදි කරන පුද්ගලයින් තවදුරටත් අපරාධ කිරීමෙන් වැළැක්වීමට බොහෝ විට අපොහොසත් වේ."
@@ -12038,6 +14802,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of option clearly.",
+        "ගුරුවරයා විකල්පය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your option.",
+        "හොඳ පුරුදු ඔබගේ විකල්පය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Cycling to work is only a viable option if cities invest in safe, dedicated bike lanes.",
         "රැකියාවට පාපැදියෙන් යාම ප්‍රායෝගික විකල්පයක් වන්නේ නගර විසින් ආරක්ෂිත, වෙන් කළ පාපැදි මංතීරු සඳහා ආයෝජනය කළහොත් පමණි."
       ],
@@ -12072,6 +14844,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of domain clearly.",
+        "ගුරුවරයා ක්ෂේත්‍රය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your domain.",
+        "හොඳ පුරුදු ඔබගේ ක්ෂේත්‍රය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Space exploration is no longer the exclusive domain of government agencies, as private firms now launch satellites.",
         "පෞද්ගලික සමාගම් ද දැන් චන්ද්‍රිකා කක්ෂගත කරන බැවින් අභ්‍යවකාශ ගවේෂණය තවදුරටත් රාජ්‍ය ආයතනවලට පමණක් සීමා වූ ක්ෂේත්‍රයක් නොවේ."
@@ -12108,6 +14888,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to perfect her goal.",
+        "ඇය තම ඉලක්කය පරිපූර්ණත්වයට පත් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can perfect new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා පරිපූර්ණත්වයට පත් කරන්න හැකිය."
+      ],
+      [
         "Master craftsmen spend decades perfecting traditional woodworking techniques.",
         "ප්‍රවීණ ශිල්පීන් සාම්ප්‍රදායික ලී කැටයම් ශිල්පීය ක්‍රම පරිපූර්ණත්වයට පත් කිරීම සඳහා දශක ගණනාවක් ගත කරති."
       ],
@@ -12142,6 +14930,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book set parameters learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට සීමා මායිම් හෝ පරාමිතීන් නිර්ණය කිරීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option set parameters this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී සීමා මායිම් හෝ පරාමිතීන් නිර්ණය කිරීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Regulatory bodies must set clear parameters for how artificial intelligence is used in healthcare.",
         "සෞඛ්‍ය සේවාව තුළ කෘත්‍රිම බුද්ධිය භාවිත කරන ආකාරය පිළිබඳව නියාමන ආයතන විසින් පැහැදිලි සීමා මායිම් පැනවිය යුතුය."
@@ -12178,6 +14974,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book anxious to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට යමක් කිරීමට දැඩි උනන්දුවකින් හෝ නොඉවසිල්ලෙන් පසුවන පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option anxious to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී යමක් කිරීමට දැඩි උනන්දුවකින් හෝ නොඉවසිල්ලෙන් පසුවන සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Local businesses are anxious to attract tourists back after years of travel restrictions.",
         "වසර ගණනාවක සංචරණ සීමාවන්ගෙන් පසුව නැවතත් සංචාරකයින් ආකර්ෂණය කර ගැනීමට දේශීය ව්‍යාපාර දැඩි උනන්දුවකින් පසුවෙති."
       ],
@@ -12212,6 +15016,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of ingredients clearly.",
+        "ගුරුවරයා අමුද්‍රව්‍ය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your ingredients.",
+        "හොඳ පුරුදු ඔබගේ අමුද්‍රව්‍ය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Cooking meals at home using fresh ingredients is far healthier than consuming fast food.",
         "නැවුම් අමුද්‍රව්‍ය භාවිත කරමින් නිවසේදී ආහාර පිස ගැනීම ක්ෂණික ආහාර පරිභෝජනයට වඩා බෙහෙවින් සෞඛ්‍ය සම්පන්න වේ."
@@ -12248,6 +15060,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to ingest her goal.",
+        "ඇය තම ඉලක්කය ශරීරගත කර ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can ingest new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ශරීරගත කර ගැනීම හැකිය."
+      ],
+      [
         "Marine animals frequently ingest microplastics, which then enter the human food chain.",
         "සාගර ජීවීන් නිතරම ක්ෂුද්‍ර ප්ලාස්ටික් ශරීරගත කර ගන්නා අතර, පසුව ඒවා මිනිස් ආහාර දාමයට එක් වේ."
       ],
@@ -12282,6 +15102,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to accumulate her goal.",
+        "ඇය තම ඉලක්කය එක්රැස් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can accumulate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා එක්රැස් කරන්න හැකිය."
+      ],
       [
         "Non-biodegradable plastic waste continues to accumulate in the world's oceans at an alarming rate.",
         "දිරාපත් නොවන ප්ලාස්ටික් අපද්‍රව්‍ය ලොව සාගර තුළ භයානක වේගයකින් අඛණ්ඩව ගොඩගැසෙමින් පවතී."
@@ -12318,6 +15146,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Progressively, students need enough sleep before an exam.",
+        "ක්‍රමක්‍රමයෙන්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will progressively improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ ක්‍රමක්‍රමයෙන් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Without urgent intervention, urban air quality will become progressively worse over the coming decades.",
         "කඩිනම් මැදිහත්වීමක් සිදු නොවුණහොත්, ඉදිරි දශක කිහිපය තුළ නාගරික වාතයේ ගුණාත්මකභාවය ක්‍රමක්‍රමයෙන් වඩාත් දරුණු අතට හැරෙනු ඇත."
       ],
@@ -12352,6 +15188,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book from learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට සිට පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option from this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී සිට සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Both employers and employees benefit from flexible working arrangements.",
         "නම්‍යශීලී රාජකාරි ක්‍රමවේද මගින් සේවායෝජකයින් සහ සේවකයින් යන දෙපාර්ශ්වයම ප්‍රතිලාභ ලබයි."
@@ -12388,6 +15232,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are apparent for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර පැහැදිලිව පෙනෙන වේ."
+      ],
+      [
+        "She gave a very apparent answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා පැහැදිලිව පෙනෙන පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "From the chart, it is immediately apparent that renewable energy output doubled after 2015.",
         "2015 වසරෙන් පසු පුනර්ජනනීය බලශක්ති නිෂ්පාදනය දෙගුණ වී ඇති බව ප්‍රස්තාරයෙන් ක්ෂණිකව පැහැදිලි වේ."
       ],
@@ -12422,6 +15274,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Proportionately, students need enough sleep before an exam.",
+        "සමානුපාතිකව, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will proportionately improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ සමානුපාතිකව ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "In a fair tax system, wealthier citizens contribute proportionately more to public revenue.",
         "සාධාරණ බදු ක්‍රමයක් තුළ ධනවත් පුරවැසියන් රාජ්‍ය ආදායමට සමානුපාතිකව වැඩි දායකත්වයක් ලබා දෙයි."
@@ -12458,6 +15318,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book prepared to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට යමක් කිරීමට කැමැත්තෙන් හෝ සූදානමින් සිටින පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option prepared to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී යමක් කිරීමට කැමැත්තෙන් හෝ සූදානමින් සිටින සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Many consumers are prepared to pay higher prices for ethically sourced products.",
         "සදාචාරාත්මකව නිෂ්පාදනය කරන ලද භාණ්ඩ සඳහා ඉහළ මිලක් ගෙවීමට බොහෝ පාරිභෝගිකයින් කැමැත්තෙන් සිටිති."
       ],
@@ -12492,6 +15360,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to deem her goal.",
+        "ඇය තම ඉලක්කය සැලකීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can deem new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සැලකීම හැකිය."
+      ],
       [
         "Any vehicle deemed unsafe during the annual inspection is prohibited from using public roads.",
         "වාර්ෂික පරීක්ෂණයේදී අනාරක්ෂිත යැයි නිගමනය කරන ඕනෑම වාහනයක් පොදු මාර්ගවල ධාවනය කිරීම තහනම් වේ."
@@ -12528,6 +15404,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book prove to be learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට බව තහවුරු වීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option prove to be this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී බව තහවුරු වීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Investing in preventive healthcare often proves to be far more economical than treating chronic diseases.",
         "නිදන්ගත රෝගවලට ප්‍රතිකාර කිරීමට වඩා රෝග නිවාරණ සෞඛ්‍ය සේවා සඳහා ආයෝජනය කිරීම බෙහෙවින් පිරිමැසුම්දායක බව බොහෝ විට තහවුරු වේ."
       ],
@@ -12562,6 +15446,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to avert her goal.",
+        "ඇය තම ඉලක්කය වළක්වා ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can avert new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා වළක්වා ගැනීම හැකිය."
+      ],
       [
         "Decisive international cooperation is required to avert an irreversible climate catastrophe.",
         "ආපසු හැරවිය නොහැකි දේශගුණික ව්‍යසනයක් වළක්වා ගැනීම සඳහා තීරණාත්මක ජාත්‍යන්තර සහයෝගීතාවයක් අවශ්‍ය වේ."
@@ -12598,6 +15490,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book hazardous to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට අන්තරායකර පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option hazardous to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී අන්තරායකර සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Improper disposal of electronic waste releases toxic metals that are hazardous to human health.",
         "ඉලෙක්ට්‍රොනික අපද්‍රව්‍ය අවිධිමත් ලෙස බැහැර කිරීම මගින් මිනිස් සෞඛ්‍යයට අන්තරායකර විෂ ලෝහ පරිසරයට මුදා හරියි."
       ],
@@ -12632,6 +15532,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to fold her goal.",
+        "ඇය තම ඉලක්කය නැවෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can fold new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා නැවෙන්න හැකිය."
+      ],
       [
         "Many independent bookshops were forced to fold due to fierce competition from online retailers.",
         "මාර්ගගත වෙළඳ ආයතනවලින් එල්ල වූ දැඩි තරඟකාරීත්වය හේතුවෙන් බොහෝ ස්වාධීන පොත්හල් වසා දැමීමට සිදු විය."
@@ -12668,6 +15576,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to address her goal.",
+        "ඇය තම ඉලක්කය ගැටලුවක් කෙරෙහි අවධානය යොමු කර විසඳුම් සෙවෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can address new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ගැටලුවක් කෙරෙහි අවධානය යොමු කර විසඳුම් සෙවෙන්න හැකිය."
+      ],
+      [
         "To reduce crime effectively, policymakers must address the root causes of poverty and social exclusion.",
         "අපරාධ ඵලදායී ලෙස අඩු කිරීම සඳහා ප්‍රතිපත්ති සම්පාදකයින් දරිද්‍රතාවය සහ සමාජයෙන් කොන්වීම යන මූලික හේතු විසඳීමට කටයුතු කළ යුතුය."
       ],
@@ -12702,6 +15618,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of strategy clearly.",
+        "ගුරුවරයා උපායමාර්ගය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your strategy.",
+        "හොඳ පුරුදු ඔබගේ උපායමාර්ගය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Governments need to adopt a comprehensive strategy to transition away from fossil fuels.",
         "ෆොසිල ඉන්ධන භාවිතයෙන් ඉවත් වීම සඳහා රජයන් විසින් පුළුල් උපායමාර්ගයක් අනුගමනය කළ යුතුය."
@@ -12738,6 +15662,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are obsolete for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර භාවිතයෙන් ඉවත් වූ වේ."
+      ],
+      [
+        "She gave a very obsolete answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා භාවිතයෙන් ඉවත් වූ පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Rapid advances in artificial intelligence may render many clerical jobs obsolete within a decade.",
         "කෘත්‍රිම බුද්ධියේ ශීඝ්‍ර දියුණුව නිසා දශකයක් ඇතුළත බොහෝ ලිපිකරු රැකියා භාවිතයෙන් ඉවත් වී යා හැකිය."
       ],
@@ -12772,6 +15704,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book on the verge of learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට ආසන්නයේම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option on the verge of this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී ආසන්නයේම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Several endangered minority languages are currently on the verge of extinction.",
         "තර්ජනයට ලක්ව ඇති සුළුතර භාෂා කිහිපයක් මේ වන විට මුළුමනින්ම අභාවයට යාමේ අද්දර පවතී."
@@ -12808,6 +15748,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of shortage clearly.",
+        "ගුරුවරයා හිඟය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your shortage.",
+        "හොඳ පුරුදු ඔබගේ හිඟය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "An ageing population has led to an acute shortage of healthcare workers in many developed countries.",
         "වැඩිහිටි ජනගහනය ඉහළ යාම හේතුවෙන් බොහෝ සංවර්ධිත රටවල සෞඛ්‍ය සේවකයින්ගේ උග්‍ර හිඟයක් ඇති වී තිබේ."
       ],
@@ -12842,6 +15790,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are transformed for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සම්පූර්ණයෙන්ම වෙනස් වූ වේ."
+      ],
+      [
+        "She gave a very transformed answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සම්පූර්ණයෙන්ම වෙනස් වූ පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Over the thirty-year period, the quiet fishing village was completely transformed into a bustling tourist resort.",
         "වසර තිහක කාලසීමාව තුළ නිස්කලංක ධීවර ගම්මානය කාර්යබහුල සංචාරක නිකේතනයක් බවට සම්පූර්ණයෙන්ම පරිවර්තනය විය."
@@ -12878,6 +15834,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to secure her goal.",
+        "ඇය තම ඉලක්කය ලබා ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can secure new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ලබා ගැනීම හැකිය."
+      ],
+      [
         "Applicants with bilingual skills often find it easier to secure employment in multinational firms.",
         "ද්විභාෂා කුසලතා ඇති අයදුම්කරුවන්ට බහුජාතික සමාගම්වල රැකියා අවස්ථා හිමි කර ගැනීම බොහෝ විට වඩාත් පහසු වේ."
       ],
@@ -12912,6 +15876,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to reinforce her goal.",
+        "ඇය තම ඉලක්කය තවදුරටත් තහවුරු කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can reinforce new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා තවදුරටත් තහවුරු කරන්න හැකිය."
+      ],
       [
         "Traditional advertisements often reinforce outdated gender stereotypes regarding household roles.",
         "සාම්ප්‍රදායික වෙළඳ දැන්වීම් බොහෝ විට ගෘහස්ථ වගකීම් සම්බන්ධයෙන් පවතින යල් පැන ගිය ස්ත්‍රී පුරුෂ ඒකාකෘති තවදුරටත් තහවුරු කරයි."
@@ -12948,6 +15920,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book range from ... to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට සිට ... දක්වා පරාසයක විහිදීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option range from ... to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී සිට ... දක්වා පරාසයක විහිදීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "The consequences of sleep deprivation range from reduced concentration to chronic heart disease.",
         "නින්ද නොලැබීමේ ප්‍රතිවිපාක අවධානය අඩුවීමේ සිට නිදන්ගත හෘද රෝග දක්වා පුළුල් පරාසයක විහිදේ."
       ],
@@ -12982,6 +15962,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to devise her goal.",
+        "ඇය තම ඉලක්කය සැලසුම් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can devise new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සැලසුම් කරන්න හැකිය."
+      ],
       [
         "Municipal planners must devise innovative solutions to reduce peak-hour traffic congestion.",
         "කාර්යබහුල වේලාවන්හි රථවාහන තදබදය අඩු කිරීම සඳහා නාගරික සැලසුම්කරුවන් නව්‍ය විසඳුම් සැලසුම් කළ යුතුය."
@@ -13018,6 +16006,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to assemble her goal.",
+        "ඇය තම ඉලක්කය එකලස් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can assemble new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා එකලස් කරන්න හැකිය."
+      ],
+      [
         "In the final stage of production, the electronic components are assembled on an automated conveyor belt.",
         "නිෂ්පාදනයේ අවසාන අදියරේදී, ස්වයංක්‍රීය පටියක් මත ඉලෙක්ට්‍රොනික කොටස් එකලස් කරනු ලැබේ."
       ],
@@ -13052,6 +16048,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book on average learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට සාමාන්‍යයක් ලෙස ගත් කල පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option on average this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී සාමාන්‍යයක් ලෙස ගත් කල සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "On average, university graduates earn significantly more over their lifetimes than non-graduates.",
         "සාමාන්‍යයක් ලෙස ගත් කල, විශ්වවිද්‍යාල උපාධිධාරීන් උපාධිධාරීන් නොවන අයට වඩා තම ජීවිත කාලය තුළ සැලකිය යුතු ලෙස වැඩි ආදායමක් උපයති."
@@ -13088,6 +16092,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are inconsequential for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර වැදගත්කමක් නොමැති වේ."
+      ],
+      [
+        "She gave a very inconsequential answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා වැදගත්කමක් නොමැති පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Individual efforts to save energy may seem inconsequential, yet collectively they make a substantial difference.",
         "බලශක්තිය සුරැකීමට තනි පුද්ගලයෙකු දරන උත්සාහය නොගිණිය හැකි තරම් සුළු යැයි පෙනුණද, සාමූහිකව ගත් කල එයින් විශාල වෙනසක් සිදු වේ."
       ],
@@ -13122,6 +16134,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to divide her goal.",
+        "ඇය තම ඉලක්කය බෙදීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can divide new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා බෙදීම හැකිය."
+      ],
       [
         "Expanding rural broadband access is essential to bridge the digital divide between rich and poor.",
         "ධනවත් සහ දුප්පත් ජනතාව අතර පවතින ඩිජිටල් පරතරය පියවීම සඳහා ග්‍රාමීය අන්තර්ජාල පහසුකම් පුළුල් කිරීම අත්‍යවශ්‍ය වේ."
@@ -13158,6 +16178,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Locally, students need enough sleep before an exam.",
+        "ප්‍රාදේශීයව, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will locally improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ ප්‍රාදේශීයව ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Purchasing locally grown produce reduces the carbon emissions associated with long-distance food transport.",
         "ප්‍රාදේශීයව වගා කළ කෘෂි නිෂ්පාදන මිලදී ගැනීම මගින් දුර බැහැර ආහාර ප්‍රවාහනය හා සම්බන්ධ කාබන් විමෝචනය අඩු කරයි."
       ],
@@ -13192,6 +16220,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Preferably, students need enough sleep before an exam.",
+        "වඩාත් සුදුසු පරිදි, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will preferably improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ වඩාත් සුදුසු පරිදි ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Foreign language instruction should begin early, preferably during primary school years.",
         "විදේශ භාෂා ඉගැන්වීම කල්තියාම, හැකි නම් ප්‍රාථමික පාසල් අවධියේදීම ආරම්භ කිරීම වඩාත් සුදුසුය."
@@ -13228,6 +16264,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to arise her goal.",
+        "ඇය තම ඉලක්කය පැන නැගීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can arise new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා පැන නැගීම හැකිය."
+      ],
+      [
         "Serious ethical questions arise when private companies patent life-saving medical treatments.",
         "ජීවිතාරක්ෂක වෛද්‍ය ප්‍රතිකාර සඳහා පෞද්ගලික සමාගම් පේටන්ට් බලපත්‍ර ලබා ගන්නා විට බරපතල සදාචාරාත්මක ප්‍රශ්න පැන නගී."
       ],
@@ -13262,6 +16306,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Voluntarily, students need enough sleep before an exam.",
+        "ස්වේච්ඡාවෙන්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will voluntarily improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ ස්වේච්ඡාවෙන් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Corporations rarely reduce their carbon emissions voluntarily unless strict regulations are enforced.",
         "දැඩි රෙගුලාසි ක්‍රියාත්මක නොකළහොත් මහා පරිමාණ සමාගම් ස්වේච්ඡාවෙන් තම කාබන් විමෝචනය අඩු කරන්නේ ඉතා කලාතුරකිනි."
@@ -13298,6 +16350,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book tend to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට නැඹුරුතාවයක් දැක්වීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option tend to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී නැඹුරුතාවයක් දැක්වීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Children who read for pleasure tend to develop a wider vocabulary and stronger writing skills.",
         "විනෝදය සඳහා පොත්පත් කියවන දරුවන් පුළුල් වචන මාලාවක් සහ ප්‍රබල ලේඛන කුසලතා වර්ධනය කර ගැනීමට නැඹුරු වෙති."
       ],
@@ -13332,6 +16392,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are scarce for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර හිඟ වේ."
+      ],
+      [
+        "She gave a very scarce answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා හිඟ පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Freshwater is becoming an increasingly scarce resource in many parts of the world.",
         "ලෝකයේ බොහෝ ප්‍රදේශවල මිරිදිය ජලය වඩ වඩාත් හිඟ සම්පතක් බවට පත්වෙමින් තිබේ."
@@ -13368,6 +16436,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book adhere to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට දැඩි ලෙස අනුගමනය කිරීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option adhere to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී දැඩි ලෙස අනුගමනය කිරීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Journalists have a professional duty to adhere to strict ethical standards when reporting the news.",
         "ප්‍රවෘත්ති වාර්තා කිරීමේදී දැඩි සදාචාරාත්මක ප්‍රමිතීන් පිළිපැදීමට මාධ්‍යවේදීන්ට වෘත්තීය වගකීමක් පවතී."
       ],
@@ -13402,6 +16478,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to undermine her goal.",
+        "ඇය තම ඉලක්කය අඩපණ කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can undermine new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අඩපණ කරන්න හැකිය."
+      ],
       [
         "Spreading misinformation on social media can severely undermine public trust in scientific institutions.",
         "සමාජ මාධ්‍ය ඔස්සේ අසත්‍ය තොරතුරු ප්‍රචාරය කිරීම විද්‍යාත්මක ආයතන කෙරෙහි පවතින මහජන විශ්වාසය දැඩි ලෙස බිඳ දැමිය හැකිය."
@@ -13438,6 +16522,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book take the precaution of learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට කල්තියා ආරක්ෂිත පියවරක් ගැනීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option take the precaution of this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී කල්තියා ආරක්ෂිත පියවරක් ගැනීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Internet users should always take the precaution of using strong passwords to prevent identity theft.",
         "අනන්‍යතා සොරකම් වළක්වා ගැනීම සඳහා අන්තර්ජාල පරිශීලකයින් සැමවිටම ප්‍රබල මුරපද භාවිත කිරීමේ පූර්ව ආරක්ෂක පියවර ගත යුතුය."
       ],
@@ -13472,6 +16564,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book by contrast learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට ඊට හාත්පසින්ම වෙනස්ව පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option by contrast this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී ඊට හාත්පසින්ම වෙනස්ව සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Coal consumption declined steadily over the decade. By contrast, solar power generation tripled.",
         "දශකය පුරා ගල් අඟුරු පරිභෝජනය ක්‍රමයෙන් පහත වැටුණි. ඊට හාත්පසින්ම වෙනස්ව, සූර්ය බලශක්ති උත්පාදනය තුන් ගුණයකින් ඉහළ ගියේය."
@@ -13508,6 +16608,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book refrain from learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට වැළකී සිටීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option refrain from this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී වැළකී සිටීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Drivers must refrain from using mobile phones while operating a vehicle.",
         "රිය ධාවනය කරන අතරතුර රියදුරන් ජංගම දුරකථන භාවිත කිරීමෙන් වැළකී සිටිය යුතුය."
       ],
@@ -13542,6 +16650,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are disruptive for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර බාධාකාරී වේ."
+      ],
+      [
+        "She gave a very disruptive answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා බාධාකාරී පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Disruptive behaviour by a small minority of students can hinder learning for the entire class.",
         "සිසුන් සුළු පිරිසකගේ බාධාකාරී හැසිරීම මුළු පන්තියේම ඉගෙනුම් ක්‍රියාවලියට බාධාවක් විය හැකිය."
@@ -13578,6 +16694,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of obligation clearly.",
+        "ගුරුවරයා වගකීම පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your obligation.",
+        "හොඳ පුරුදු ඔබගේ වගකීම කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Wealthy nations have a moral obligation to assist developing countries affected by climate change.",
         "දේශගුණික විපර්යාස හේතුවෙන් පීඩාවට පත් සංවර්ධනය වෙමින් පවතින රටවලට උපකාර කිරීමට ධනවත් රටවලට සදාචාරාත්මක වගකීමක් පවතී."
       ],
@@ -13612,6 +16736,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to omit her goal.",
+        "ඇය තම ඉලක්කය අත්හැර දැමීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can omit new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අත්හැර දැමීම හැකිය."
+      ],
       [
         "Biased news reports often omit key facts that contradict their political narrative.",
         "පක්ෂග්‍රාහී ප්‍රවෘත්ති වාර්තා තම දේශපාලන මතයට පටහැනි වන ප්‍රධාන කරුණු බොහෝ විට හිතාමතාම බැහැර කරයි."
@@ -13648,6 +16780,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are remote for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර දුරස්ථ වේ."
+      ],
+      [
+        "She gave a very remote answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා දුරස්ථ පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Satellite internet technology has brought online education to children in remote mountain villages.",
         "චන්ද්‍රිකා අන්තර්ජාල තාක්ෂණය මගින් දුරස්ථ කඳුකර ගම්මානවල දරුවන් වෙත මාර්ගගත අධ්‍යාපනය ගෙන ගොස් ඇත."
       ],
@@ -13682,6 +16822,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book obsessed with learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට දැඩි ලෙස ඇබ්බැහි වී හෝ උන්මාදයකින් මෙන් බැඳී සිටින පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option obsessed with this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී දැඩි ලෙස ඇබ්බැහි වී හෝ උන්මාදයකින් මෙන් බැඳී සිටින සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Modern consumer society is often criticized for being overly obsessed with material wealth and status.",
         "භෞතික ධනය සහ සමාජ තත්ත්වය පසුපස අධික ලෙස හඹා යාම පිළිබඳව නූතන පාරිභෝගික සමාජය බොහෝ විට විවේචනයට ලක් වේ."
@@ -13718,6 +16866,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book discriminate against learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට වෙනස්කම් කිරීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option discriminate against this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී වෙනස්කම් කිරීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Strict labour laws are required to prevent employers from discriminating against older job applicants.",
         "වැඩිහිටි රැකියා අයදුම්කරුවන්ට සේවායෝජකයින් විසින් අසාධාරණ ලෙස වෙනස්කම් කිරීම වැළැක්වීම සඳහා දැඩි කම්කරු නීති අවශ්‍ය වේ."
       ],
@@ -13752,6 +16908,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book negotiate with learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට සමඟ සාකච්ඡා කර එකඟතාවයකට පැමිණීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option negotiate with this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී සමඟ සාකච්ඡා කර එකඟතාවයකට පැමිණීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Governments should negotiate with pharmaceutical companies to lower the cost of essential medicines.",
         "අත්‍යවශ්‍ය ඖෂධවල මිල අඩු කිරීම සඳහා රජයන් ඖෂධ සමාගම් සමඟ සාකච්ඡා කළ යුතුය."
@@ -13788,6 +16952,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of status clearly.",
+        "ගුරුවරයා තත්ත්වය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your status.",
+        "හොඳ පුරුදු ඔබගේ තත්ත්වය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "In many societies, luxury cars and designer clothes are purchased primarily as status symbols.",
         "බොහෝ සමාජවල සුඛෝපභෝගී මෝටර් රථ සහ මිල අධික ඇඳුම් මිලදී ගනු ලබන්නේ ප්‍රධාන වශයෙන්ම සමාජ තත්ත්වය පෙන්වන සංකේත ලෙසය."
       ],
@@ -13822,6 +16994,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of feature clearly.",
+        "ගුරුවරයා විශේෂ ලක්ෂණය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your feature.",
+        "හොඳ පුරුදු ඔබගේ විශේෂ ලක්ෂණය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "The most striking feature of the graph is the rapid surge in internet usage after 2005.",
         "ප්‍රස්තාරයේ වඩාත්ම කැපී පෙනෙන ලක්ෂණය වන්නේ 2005 වසරෙන් පසු අන්තර්ජාල භාවිතයේ සිදු වූ ශීඝ්‍ර ඉහළ යාමයි."
@@ -13858,6 +17038,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to eject her goal.",
+        "ඇය තම ඉලක්කය පිටතට විදීම හෝ මුදා හැරීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can eject new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා පිටතට විදීම හෝ මුදා හැරීම හැකිය."
+      ],
+      [
         "During major eruptions, volcanoes eject vast quantities of ash and sulphur dioxide into the atmosphere.",
         "ප්‍රබල පිපිරීම් අතරතුර, ගිනිකඳු මගින් විශාල අළු සහ සල්ෆර් ඩයොක්සයිඩ් ප්‍රමාණයක් වායුගෝලයට මුදා හරියි."
       ],
@@ -13892,6 +17080,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of era clearly.",
+        "ගුරුවරයා යුගය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your era.",
+        "හොඳ පුරුදු ඔබගේ යුගය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "In the digital era, the ability to evaluate online sources critically is an essential life skill.",
         "ඩිජිටල් යුගය තුළ මාර්ගගත තොරතුරු මූලාශ්‍ර විචාරාත්මකව ඇගයීමේ හැකියාව අත්‍යවශ්‍ය ජීවන කුසලතාවකි."
@@ -13928,6 +17124,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book eligible to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට සුදුසුකම් ලබන පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option eligible to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී සුදුසුකම් ලබන සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "In most democratic nations, citizens become eligible to vote upon reaching the age of eighteen.",
         "බොහෝ ප්‍රජාතන්ත්‍රවාදී රටවල පුරවැසියන් වයස අවුරුදු දහඅට සම්පූර්ණ වූ විට ඡන්දය ප්‍රකාශ කිරීමට සුදුසුකම් ලබයි."
       ],
@@ -13962,6 +17166,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to assert her goal.",
+        "ඇය තම ඉලක්කය දැඩිව ප්‍රකාශ කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can assert new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා දැඩිව ප්‍රකාශ කරන්න හැකිය."
+      ],
       [
         "Proponents of free university education assert that it promotes social mobility and equality.",
         "නොමිලේ විශ්වවිද්‍යාල අධ්‍යාපනය ලබා දීමට පක්ෂව කතා කරන්නන් දැඩිව ප්‍රකාශ කරන්නේ එය සමාජ ප්‍රගමනය සහ සමානාත්මතාවය ප්‍රවර්ධනය කරන බවයි."
@@ -13998,6 +17210,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book apt to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට නැඹුරුතාවයක් ඇති පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option apt to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී නැඹුරුතාවයක් ඇති සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Policymakers focused on short-term election cycles are apt to neglect long-term infrastructure needs.",
         "කෙටිකාලීන මැතිවරණ ඉලක්ක කෙරෙහි පමණක් අවධානය යොමු කරන ප්‍රතිපත්ති සම්පාදකයින් දිගුකාලීන යටිතල පහසුකම් අවශ්‍යතා නොසලකා හැරීමට වැඩි නැඹුරුතාවයක් දක්වයි."
       ],
@@ -14032,6 +17252,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to invade her goal.",
+        "ඇය තම ඉලක්කය ආක්‍රමණය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can invade new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ආක්‍රමණය කරන්න හැකිය."
+      ],
       [
         "Paparazzi and tabloid journalists frequently invade the privacy of public figures for commercial gain.",
         "වාණිජ වාසි තකා පැපරාසීන් සහ ටැබ්ලොයිඩ් මාධ්‍යවේදීන් ප්‍රසිද්ධ පුද්ගලයින්ගේ පෞද්ගලිකත්වයට නිතරම අනවසරයෙන් ඇඟිලි ගසති."
@@ -14068,6 +17296,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of balance clearly.",
+        "ගුරුවරයා සමබරතාවය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your balance.",
+        "හොඳ පුරුදු ඔබගේ සමබරතාවය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Governments must strike a delicate balance between rapid industrial growth and environmental conservation.",
         "රජයන් විසින් ශීඝ්‍ර කාර්මික වර්ධනය සහ පරිසර සංරක්ෂණය අතර සියුම් සමබරතාවයක් පවත්වා ගත යුතුය."
       ],
@@ -14102,6 +17338,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to thrive her goal.",
+        "ඇය තම ඉලක්කය සමෘද්ධිමත් වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can thrive new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සමෘද්ධිමත් වෙන්න හැකිය."
+      ],
       [
         "Small local businesses cannot thrive unless governments provide adequate tax relief and infrastructure.",
         "රජයන් විසින් ප්‍රමාණවත් බදු සහන සහ යටිතල පහසුකම් ලබා දෙන්නේ නම් මිස කුඩා දේශීය ව්‍යාපාරවලට සමෘද්ධිමත් විය නොහැක."
@@ -14138,6 +17382,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to discount her goal.",
+        "ඇය තම ඉලක්කය නොසලකා හැරීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can discount new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා නොසලකා හැරීම හැකිය."
+      ],
+      [
         "Researchers cannot entirely discount the influence of genetic factors on human intelligence.",
         "මිනිස් බුද්ධිය කෙරෙහි ජානමය සාධකවල බලපෑම පර්යේෂකයන්ට මුළුමනින්ම බැහැර කළ නොහැක."
       ],
@@ -14172,6 +17424,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of aspiration clearly.",
+        "ගුරුවරයා අභිලාෂය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your aspiration.",
+        "හොඳ පුරුදු ඔබගේ අභිලාෂය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Access to affordable higher education enables disadvantaged youths to fulfil their career aspirations.",
         "දැරිය හැකි මිලකට උසස් අධ්‍යාපනය ලබා ගැනීමට ඇති ප්‍රවේශය වරප්‍රසාද අහිමි තරුණ ප්‍රජාවට ඔවුන්ගේ වෘත්තීය අභිලාෂයන් ඉටු කර ගැනීමට හැකියාව ලබා දෙයි."
@@ -14208,6 +17468,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to intervene her goal.",
+        "ඇය තම ඉලක්කය මැදිහත් වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can intervene new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා මැදිහත් වෙන්න හැකිය."
+      ],
+      [
         "Central banks must intervene in financial markets whenever severe inflation threatens economic stability.",
         "දැඩි උද්ධමනය ආර්ථික ස්ථාවරත්වයට තර්ජනයක් වන සෑම අවස්ථාවකම මහ බැංකු මූල්‍ය වෙළඳපොළට මැදිහත් විය යුතුය."
       ],
@@ -14242,6 +17510,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to hamper her goal.",
+        "ඇය තම ඉලක්කය බාධා පැමිණවෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can hamper new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා බාධා පැමිණවෙන්න හැකිය."
+      ],
       [
         "Inadequate transport infrastructure continues to hamper economic development in remote rural provinces.",
         "ප්‍රමාණවත් ප්‍රවාහන යටිතල පහසුකම් නොමැතිකම දුෂ්කර ග්‍රාමීය පළාත්වල ආර්ථික සංවර්ධනයට අඛණ්ඩව බාධා පමුණුවයි."
@@ -14278,6 +17554,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Inadvertently, students need enough sleep before an exam.",
+        "නොදැනුවත්වම, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will inadvertently improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ නොදැනුවත්වම ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Well-intentioned welfare programmes can sometimes inadvertently discourage recipients from seeking full-time employment.",
         "යහපත් චේතනාවෙන් ක්‍රියාත්මක කරන සුබසාධන වැඩසටහන් සමහර විට නොදැනුවත්වම ප්‍රතිලාභීන් පූර්ණ කාලීන රැකියා සෙවීමෙන් අධෛර්යමත් කළ හැකිය."
       ],
@@ -14312,6 +17596,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to condone her goal.",
+        "ඇය තම ඉලක්කය වරදක් අනුමත කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can condone new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා වරදක් අනුමත කරන්න හැකිය."
+      ],
       [
         "A civilised society can never condone the use of violence as a means of resolving political disputes.",
         "ශිෂ්ට සම්පන්න සමාජයකට දේශපාලන මතභේද විසඳීමේ මාධ්‍යයක් ලෙස ප්‍රචණ්ඩත්වය භාවිතා කිරීම කිසිසේත් අනුමත කළ නොහැක."
@@ -14348,6 +17640,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book despondent about learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට පිළිබඳව දැඩි ලෙස අධෛර්යයට හෝ කලකිරීමට පත් වූ පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option despondent about this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී පිළිබඳව දැඩි ලෙස අධෛර්යයට හෝ කලකිරීමට පත් වූ සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Many recent graduates become despondent about their career prospects during periods of economic recession.",
         "ආර්ථික අවපාත පවතින කාලවලදී බොහෝ නව උපාධිධාරීන් තම වෘත්තීය අනාගතය පිළිබඳව දැඩි කලකිරීමට පත් වෙති."
       ],
@@ -14382,6 +17682,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to deplore her goal.",
+        "ඇය තම ඉලක්කය දැඩි ලෙස හෙළා දැකීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can deplore new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා දැඩි ලෙස හෙළා දැකීම හැකිය."
+      ],
       [
         "Human rights organisations strongly deplore the exploitation of child labour in developing manufacturing sectors.",
         "සංවර්ධනය වෙමින් පවතින නිෂ්පාදන ක්ෂේත්‍රවල ළමා ශ්‍රමය සූරාකෑම මානව හිමිකම් සංවිධාන විසින් දැඩි ලෙස හෙළා දකිනු ලැබේ."
@@ -14418,6 +17726,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of deterrent clearly.",
+        "ගුරුවරයා වැළැක්වීමේ සාධකයක් පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your deterrent.",
+        "හොඳ පුරුදු ඔබගේ වැළැක්වීමේ සාධකයක් කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Heavy fines and licence suspensions serve as an effective deterrent against reckless driving.",
         "විශාල දඩ මුදල් සහ රියදුරු බලපත්‍ර අත්හිටුවීම අපරික්ෂාකාරී රිය පැදවීමට එරෙහිව ඵලදායී වැළැක්වීමේ සාධකයක් ලෙස ක්‍රියා කරයි."
       ],
@@ -14452,6 +17768,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are hypocritical for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර කුහක වේ."
+      ],
+      [
+        "She gave a very hypocritical answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා කුහක පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "It is hypocritical of wealthy nations to demand carbon cuts from developing countries while maintaining high emissions themselves.",
         "තමන් ඉහළ කාබන් විමෝචනයක් පවත්වා ගනිමින් සංවර්ධනය වෙමින් පවතින රටවලින් කාබන් කප්පාදුවක් ඉල්ලා සිටීම ධනවත් ජාතීන්ගේ කුහක ක්‍රියාවකි."
@@ -14488,6 +17812,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of materialism clearly.",
+        "ගුරුවරයා භෞතිකවාදය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your materialism.",
+        "හොඳ පුරුදු ඔබගේ භෞතිකවාදය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Relentless advertising campaigns fuel a culture of materialism among impressionable teenagers.",
         "අඛණ්ඩ වෙළඳ දැන්වීම් ව්‍යාපාර මගින් පහසුවෙන් නම්මවා ගත හැකි නව යොවුන් වියේ පසුවන්නන් තුළ භෞතිකවාදී සංස්කෘතියක් පෝෂණය කරයි."
       ],
@@ -14522,6 +17854,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to proliferate her goal.",
+        "ඇය තම ඉලක්කය ශීඝ්‍රයෙන් ව්‍යාප්ත වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can proliferate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ශීඝ්‍රයෙන් ව්‍යාප්ත වෙන්න හැකිය."
+      ],
       [
         "Online streaming platforms have proliferated over the past decade, transforming global entertainment habits.",
         "පසුගිය දශකය තුළ අන්තර්ජාල ප්‍රවාහන වේදිකා ශීඝ්‍රයෙන් ව්‍යාප්ත වී ඇති අතර, එය ගෝලීය විනෝදාස්වාද පුරුදු වෙනස් කර ඇත."
@@ -14558,6 +17898,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are prudent for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර නුවණැති වේ."
+      ],
+      [
+        "She gave a very prudent answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා නුවණැති පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "It is financially prudent for households to set aside emergency savings during periods of economic growth.",
         "ආර්ථික වර්ධනයක් පවතින කාලසීමාවන් තුළ හදිසි අවශ්‍යතා සඳහා ඉතිරිකිරීම් වෙන් කර තැබීම පවුල්වලට මූල්‍යමය වශයෙන් දූරදර්ශී පියවරකි."
       ],
@@ -14592,6 +17940,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are elated for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අතිශයින් ප්‍රීතියට පත් වූ වේ."
+      ],
+      [
+        "She gave a very elated answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අතිශයින් ප්‍රීතියට පත් වූ පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "The research team was elated when their experimental vaccine demonstrated ninety percent efficacy in clinical trials.",
         "සායනික පරීක්ෂණවලදී තම පර්යේෂණාත්මක එන්නත සියයට අනූවක සාර්ථකත්වයක් පෙන්නුම් කළ විට පර්යේෂණ කණ්ඩායම අතිශයින් ප්‍රීතියට පත් විය."
@@ -14628,6 +17984,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to exhaust her goal.",
+        "ඇය තම ඉලක්කය මුළුමනින්ම අවසන් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can exhaust new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා මුළුමනින්ම අවසන් කරන්න හැකිය."
+      ],
+      [
         "If humanity continues to consume fossil fuels at the current rate, we will soon exhaust finite planetary reserves.",
         "මිනිස් ප්‍රජාව වර්තමාන වේගයෙන්ම ෆොසිල ඉන්ධන පරිභෝජනය කළහොත්, අපි නුදුරේදීම පෘථිවියේ සීමිත සංචිත මුළුමනින්ම අවසන් කර දමනු ඇත."
       ],
@@ -14662,6 +18026,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are superficial for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර මතුපිටින් පමණක් පෙනෙන වේ."
+      ],
+      [
+        "She gave a very superficial answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා මතුපිටින් පමණක් පෙනෙන පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Critics argue that social networking sites encourage superficial interactions rather than meaningful human connections.",
         "සමාජ ජාල වෙබ් අඩවි අර්ථවත් මානව සබඳතාවලට වඩා මතුපිටින් පමණක් පවතින අන්තර්ක්‍රියා දිරිමත් කරන බව විචාරකයෝ තර්ක කරති."
@@ -14698,6 +18070,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to resemble her goal.",
+        "ඇය තම ඉලක්කය සමාන වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can resemble new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සමාන වෙන්න හැකිය."
+      ],
+      [
         "Modern vocational simulation centres closely resemble real-world workplaces, preparing trainees for practical challenges.",
         "නවීන වෘත්තීය අනුකරණ මධ්‍යස්ථාන සැබෑ ලෝකයේ සේවා ස්ථානවලට බෙහෙවින් සමාන වන අතර, ආධුනිකයින් ප්‍රායෝගික අභියෝග සඳහා සූදානම් කරයි."
       ],
@@ -14732,6 +18112,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to squander her goal.",
+        "ඇය තම ඉලක්කය නිකරුණේ නාස්ති කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can squander new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා නිකරුණේ නාස්ති කරන්න හැකිය."
+      ],
       [
         "Governments must not squander taxpayer money on vanity projects while essential hospitals remain underfunded.",
         "අත්‍යවශ්‍ය රෝහල්වලට ප්‍රමාණවත් අරමුදල් නොමැතිව තිබියදී රජයන් බදු ගෙවන්නන්ගේ මුදල් ප්‍රදර්ශනාත්මක ව්‍යාපෘති සඳහා නිකරුණේ නාස්ති නොකළ යුතුය."
@@ -14768,6 +18156,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Formerly, students need enough sleep before an exam.",
+        "මීට පෙර, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will formerly improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ මීට පෙර ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "The eastern section of the island, formerly covered in dense woodland, has been converted into a resort complex.",
         "මීට පෙර ඝන වනාන්තරයකින් වැසී තිබූ දූපතේ නැගෙනහිර කොටස නිවාඩු නිකේතන සංකීර්ණයක් බවට පත් කර ඇත."
       ],
@@ -14802,6 +18198,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book in proximity to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට ආසන්නයේ පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option in proximity to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී ආසන්නයේ සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "The new residential complex was constructed in close proximity to the central railway station.",
         "නව නිවාස සංකීර්ණය මධ්‍යම දුම්රිය ස්ථානයට ඉතා ආසන්නයේ ඉදිකරන ලදී."
@@ -14838,6 +18242,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book indifferent about learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට පිළිබඳව උදාසීන පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option indifferent about this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී පිළිබඳව උදාසීන සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "A large proportion of young voters remain indifferent about municipal elections because they feel ignored by politicians.",
         "දේශපාලනඥයන් විසින් තමන්ව නොසලකා හරිනු ලබන බව හැඟෙන බැවින් තරුණ ඡන්දදායකයින්ගෙන් විශාල පිරිසක් පළාත් පාලන මැතිවරණ පිළිබඳව උදාසීනව සිටිති."
       ],
@@ -14872,6 +18284,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to surpass her goal.",
+        "ඇය තම ඉලක්කය ඉක්මවා යාම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can surpass new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ඉක්මවා යාම හැකිය."
+      ],
       [
         "By 2030, renewable energy generation is projected to surpass fossil fuel consumption across Europe.",
         "2030 වන විට යුරෝපය පුරා පුනර්ජනනීය බලශක්ති උත්පාදනය ෆොසිල ඉන්ධන පරිභෝජනය ඉක්මවා යනු ඇතැයි පුරෝකථනය කර ඇත."
@@ -14908,6 +18328,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to facilitate her goal.",
+        "ඇය තම ඉලක්කය පහසු කරවෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can facilitate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා පහසු කරවෙන්න හැකිය."
+      ],
+      [
         "High-speed internet networks facilitate seamless collaboration among researchers working on different continents.",
         "අධිවේගී අන්තර්ජාල ජාලයන් විවිධ මහාද්වීපවල සේවය කරන පර්යේෂකයන් අතර බාධාවකින් තොරව සහයෝගීතාව පවත්වා ගැනීම පහසු කරවයි."
       ],
@@ -14942,6 +18370,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are lethargic for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අලස වේ."
+      ],
+      [
+        "She gave a very lethargic answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අලස පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Diets high in refined sugar and processed fats often leave individuals feeling lethargic throughout the afternoon.",
         "පිරිපහදු කළ සීනි සහ සැකසූ මේදය අධික ආහාර රටාවන් බොහෝ විට පුද්ගලයින්ව දහවල් කාලය පුරාම අලස හා තෙහෙට්ටු ස්වභාවයකට පත් කරයි."
@@ -14978,6 +18414,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are lenient for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ලිහිල් වේ."
+      ],
+      [
+        "She gave a very lenient answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ලිහිල් පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Critics argue that courts are overly lenient towards white-collar criminals who commit massive financial fraud.",
         "දැවැන්ත මූල්‍ය වංචා සිදු කරන ඉහළ පෙළේ අපරාධකරුවන් කෙරෙහි අධිකරණ ඕනෑවට වඩා ලිහිල් ප්‍රතිපත්තියක් අනුගමනය කරන බව විචාරකයෝ තර්ක කරති."
       ],
@@ -15012,6 +18456,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to occupy her goal.",
+        "ඇය තම ඉලක්කය අත්පත් කර ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can occupy new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අත්පත් කර ගැනීම හැකිය."
+      ],
       [
         "Green spaces and recreational parks now occupy nearly a third of the redeveloped town centre.",
         "ප්‍රතිසංස්කරණය කරන ලද නගර මධ්‍යයෙන් තුනෙන් එකකට ආසන්න ප්‍රමාණයක් දැන් හරිත කලාප සහ විනෝද උද්‍යාන විසින් අත්පත් කරගෙන ඇත."
@@ -15048,6 +18500,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to perpetuate her goal.",
+        "ඇය තම ඉලක්කය දිගින් දිගටම පවත්වා ගෙන යාම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can perpetuate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා දිගින් දිගටම පවත්වා ගෙන යාම හැකිය."
+      ],
+      [
         "Unequal access to quality schooling tends to perpetuate socio-economic disparities across generations.",
         "ගුණාත්මක පාසල් අධ්‍යාපනය සඳහා ඇති අසමාන ප්‍රවේශය පරම්පරා ගණනාවක් පුරා සමාජ-ආර්ථික විෂමතා දිගින් දිගටම පවත්වා ගෙන යාමට නැඹුරු වේ."
       ],
@@ -15082,6 +18542,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book on the horizon learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට නුදුරු අනාගතයේදීම සිදුවීමට නියමිත පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option on the horizon this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී නුදුරු අනාගතයේදීම සිදුවීමට නියමිත සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "With revolutionary advances in quantum computing on the horizon, cybersecurity protocols must be urgently updated.",
         "ක්වොන්ටම් පරිගණකකරණයේ පෙරළිකාර දියුණුවක් අත ළඟ ඇති බැවින්, සයිබර් ආරක්ෂණ ක්‍රමවේද කඩිනමින් යාවත්කාලීන කළ යුතුය."
@@ -15118,6 +18586,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of threshold clearly.",
+        "ගුරුවරයා සීමාව පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your threshold.",
+        "හොඳ පුරුදු ඔබගේ සීමාව කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Raising the income tax threshold allows low-wage earners to retain a larger share of their monthly salaries.",
         "ආදායම් බදු අය කරන අවම සීමාව ඉහළ නැංවීම මගින් අඩු වැටුප් ලබන්නන්ට තම මාසික වැටුපෙන් වැඩි කොටසක් ඉතිරි කර ගැනීමට ඉඩ සැලසේ."
       ],
@@ -15152,6 +18628,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are prevalent for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර බහුලව පවතින වේ."
+      ],
+      [
+        "She gave a very prevalent answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා බහුලව පවතින පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Sedentary lifestyles have become increasingly prevalent among office workers due to widespread automation.",
         "පුළුල් ලෙස ස්වයංක්‍රීයකරණය වීම හේතුවෙන් කාර්යාල සේවකයින් අතර ව්‍යායාම රහිත ජීවන රටාවන් ක්‍රමයෙන් බහුල වී ඇත."
@@ -15188,6 +18672,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of combination clearly.",
+        "ගුරුවරයා සංයෝගය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your combination.",
+        "හොඳ පුරුදු ඔබගේ සංයෝගය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Rising global temperatures are driven by a combination of industrial emissions and widespread deforestation.",
         "ගෝලීය උෂ්ණත්වය ඉහළ යාම සඳහා කාර්මික විමෝචනය සහ පුළුල් ලෙස සිදුවන වන විනාශය යන සාධකවල එකතුවක් බලපායි."
       ],
@@ -15222,6 +18714,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of myth clearly.",
+        "ගුරුවරයා මිථ්‍යා මතයක් පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your myth.",
+        "හොඳ පුරුදු ඔබගේ මිථ්‍යා මතයක් කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Scientific research has repeatedly debunked the myth that humans utilise only ten percent of their brain capacity.",
         "මිනිසුන් තම මොළයේ ධාරිතාවයෙන් සියයට දහයක් පමණක් භාවිතා කරයි යන මිථ්‍යා මතය විද්‍යාත්මක පර්යේෂණ මගින් නැවත නැවතත් බිඳ හෙළා ඇත."
@@ -15258,6 +18758,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to resume her goal.",
+        "ඇය තම ඉලක්කය නැවත ආරම්භ කිරීම (විරාමයකින් පසුව) මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can resume new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා නැවත ආරම්භ කිරීම (විරාමයකින් පසුව) හැකිය."
+      ],
+      [
         "Subsidised childcare facilities enable mothers to resume their professional careers after maternity leave.",
         "සහනාධාර සහිත දිවා සුරැකුම් මධ්‍යස්ථාන මව්වරුන්ට ප්‍රසූත නිවාඩුවෙන් පසු තම වෘත්තීය ජීවිතය නැවත ආරම්භ කිරීමට හැකියාව ලබා දෙයි."
       ],
@@ -15292,6 +18800,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to dictate her goal.",
+        "ඇය තම ඉලක්කය තීරණය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can dictate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා තීරණය කරන්න හැකිය."
+      ],
       [
         "In a free-market economy, supply and demand largely dictate the prices of consumer goods.",
         "නිදහස් වෙළඳපොළ ආර්ථිකයකදී පාරිභෝගික භාණ්ඩවල මිල ගණන් බොහෝ දුරට තීරණය කරනු ලබන්නේ ඉල්ලුම සහ සැපයුම මගිනි."
@@ -15328,6 +18844,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to resign her goal.",
+        "ඇය තම ඉලක්කය ඉල්ලා අස්වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can resign new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ඉල්ලා අස්වෙන්න හැකිය."
+      ],
+      [
         "High levels of workplace burnout cause thousands of experienced nurses to resign from public hospitals each year.",
         "සේවා ස්ථානයේ පවතින දැඩි වෙහෙසකර බව හේතුවෙන් සෑම වසරකම පළපුරුදු හෙදියන් දහස් ගණනක් රජයේ රෝහල්වලින් ඉල්ලා අස්වෙති."
       ],
@@ -15362,6 +18886,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to rectify her goal.",
+        "ඇය තම ඉලක්කය නිවැරදි කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can rectify new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා නිවැරදි කරන්න හැකිය."
+      ],
       [
         "Targeted government subsidies are required to rectify the funding disparity between urban and rural schools.",
         "නාගරික සහ ග්‍රාමීය පාසල් අතර පවතින අරමුදල් විෂමතාවය නිවැරදි කිරීම සඳහා ඉලක්කගත රාජ්‍ය සහනාධාර අවශ්‍ය වේ."
@@ -15398,6 +18930,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are categorised for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර වර්ගීකරණය කරන ලද වේ."
+      ],
+      [
+        "She gave a very categorised answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා වර්ගීකරණය කරන ලද පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Household expenditure in the chart is categorised into five distinct sectors, including housing and transport.",
         "ප්‍රස්තාරයේ දැක්වෙන ගෘහස්ථ වියදම් නිවාස සහ ප්‍රවාහනය ඇතුළුව පැහැදිලි අංශ පහකට වර්ගීකරණය කර ඇත."
       ],
@@ -15432,6 +18972,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to preserve her goal.",
+        "ඇය තම ඉලක්කය ආරක්ෂා කර ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can preserve new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ආරක්ෂා කර ගැනීම හැකිය."
+      ],
       [
         "Governments must allocate sufficient funds to preserve historic buildings that reflect national identity.",
         "ජාතික අනන්‍යතාවය පිළිබිඹු කරන ඓතිහාසික ගොඩනැගිලි සංරක්ෂණය කිරීම සඳහා රජයන් ප්‍රමාණවත් අරමුදල් වෙන් කළ යුතුය."
@@ -15468,6 +19016,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book reluctant to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට කිරීමට මැලිකමක් දක්වන පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option reluctant to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී කිරීමට මැලිකමක් දක්වන සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Private investors are often reluctant to fund long-term infrastructure projects that yield slow financial returns.",
         "සෙමින් මූල්‍ය ප්‍රතිලාභ ලබා දෙන දිගුකාලීන යටිතල පහසුකම් ව්‍යාපෘති සඳහා අරමුදල් සැපයීමට පෞද්ගලික ආයෝජකයින් බොහෝ විට මැලිකමක් දක්වති."
       ],
@@ -15502,6 +19058,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to sever her goal.",
+        "ඇය තම ඉලක්කය සම්බන්ධතාවයක් මුළුමනින්ම බිඳ දැමීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can sever new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සම්බන්ධතාවයක් මුළුමනින්ම බිඳ දැමීම හැකිය."
+      ],
       [
         "Several nations threatened to sever diplomatic ties if the neighbouring state continued its military aggression.",
         "අසල්වැසි රාජ්‍යය සිය හමුදාමය ආක්‍රමණ දිගටම කරගෙන ගියහොත් රාජ්‍යතාන්ත්‍රික සබඳතා අත්හිටුවන බවට රටවල් කිහිපයක්ම අනතුරු ඇඟවීය."
@@ -15538,6 +19102,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book thorough in learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට ඉතා සූක්ෂ්ම හා පූර්ණ ලෙස කටයුතු කරන පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option thorough in this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී ඉතා සූක්ෂ්ම හා පූර්ණ ලෙස කටයුතු කරන සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Pharmaceutical regulators must be exceptionally thorough in testing new medications before approving them for public use.",
         "මහජන භාවිතය සඳහා අනුමත කිරීමට පෙර නව ඖෂධ පරීක්ෂා කිරීමේදී ඖෂධ නියාමකයින් අතිශයින්ම සූක්ෂ්ම හා පූර්ණ විය යුතුය."
       ],
@@ -15572,6 +19144,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to exhibit her goal.",
+        "ඇය තම ඉලක්කය ප්‍රදර්ශනය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can exhibit new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ප්‍රදර්ශනය කරන්න හැකිය."
+      ],
       [
         "Children who are exposed to violent video games may exhibit higher levels of aggression in the playground.",
         "ප්‍රචණ්ඩකාරී වීඩියෝ ක්‍රීඩාවලට නිරාවරණය වන දරුවන් ක්‍රීඩා පිටියේදී ඉහළ මට්ටමේ ප්‍රචණ්ඩකාරී හැසිරීම් පෙන්නුම් කළ හැකිය."
@@ -15608,6 +19188,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to deteriorate her goal.",
+        "ඇය තම ඉලක්කය පිරිහීමට ලක් වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can deteriorate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා පිරිහීමට ලක් වෙන්න හැකිය."
+      ],
+      [
         "Air quality in industrial megacities continues to deteriorate due to unregulated vehicle emissions.",
         "නියාමනය නොකළ වාහන දුම් විමෝචනය හේතුවෙන් කාර්මික මහා නගරවල වාතයේ ගුණාත්මකභාවය අඛණ්ඩව පිරිහීමට ලක් වේ."
       ],
@@ -15642,6 +19230,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to distort her goal.",
+        "ඇය තම ඉලක්කය විකෘති කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can distort new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා විකෘති කරන්න හැකිය."
+      ],
       [
         "Partisan news outlets frequently distort statistical evidence to support their political agendas.",
         "පක්ෂග්‍රාහී පුවත් මාධ්‍ය තම දේශපාලන න්‍යාය පත්‍රවලට සහාය දැක්වීම සඳහා සංඛ්‍යානමය සාක්ෂි නිතරම විකෘති කරයි."
@@ -15678,6 +19274,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Gradually, students need enough sleep before an exam.",
+        "ක්‍රමක්‍රමයෙන්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will gradually improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ ක්‍රමක්‍රමයෙන් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "The proportion of households owning a desktop computer declined gradually between 2012 and 2022.",
         "ඩෙස්ක්ටොප් පරිගණකයක් හිමි නිවාසවල අනුපාතය 2012 සහ 2022 අතර කාලය තුළ ක්‍රමක්‍රමයෙන් පහත වැටුණි."
       ],
@@ -15712,6 +19316,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are existing for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර දැනට පවතින වේ."
+      ],
+      [
+        "She gave a very existing answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා දැනට පවතින පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Rather than constructing new motorways, authorities should modernise the existing rail network.",
         "නව අධිවේගී මාර්ග ඉදිකිරීමට වඩා බලධාරීන් විසින් දැනට පවතින දුම්රිය ජාලය නවීකරණය කළ යුතුය."
@@ -15748,6 +19360,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to upgrade her goal.",
+        "ඇය තම ඉලක්කය වැඩිදියුණු කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can upgrade new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා වැඩිදියුණු කරන්න හැකිය."
+      ],
+      [
         "Municipalities must upgrade ageing water pipelines to prevent millions of litres from being lost through leakage.",
         "කාන්දු වීම් මගින් ජලය ලීටර් මිලියන ගණනක් අපතේ යාම වැළැක්වීම සඳහා නගර සභා විසින් පැරණි ජල නළ පද්ධති වැඩිදියුණු කළ යුතුය."
       ],
@@ -15782,6 +19402,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to select her goal.",
+        "ඇය තම ඉලක්කය තෝරා ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can select new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා තෝරා ගැනීම හැකිය."
+      ],
       [
         "Universities should select applicants based on academic merit rather than socioeconomic background.",
         "විශ්වවිද්‍යාල විසින් සමාජ-ආර්ථික පසුබිම මත නොව අධ්‍යාපනික කුසලතා මත පදනම්ව අයදුම්කරුවන් තෝරා ගත යුතුය."
@@ -15818,6 +19446,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are irrational for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර තර්කානුකූල නොවන වේ."
+      ],
+      [
+        "She gave a very irrational answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා තර්කානුකූල නොවන පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Clever marketing strategies often persuade consumers to make irrational purchasing decisions.",
         "සූක්ෂ්ම අලෙවිකරණ උපායමාර්ග බොහෝ විට පාරිභෝගිකයින්ව තර්කානුකූල නොවන මිලදී ගැනීමේ තීරණ ගැනීමට පොළඹවයි."
       ],
@@ -15852,6 +19488,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to halt her goal.",
+        "ඇය තම ඉලක්කය නතර කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can halt new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා නතර කරන්න හැකිය."
+      ],
       [
         "Coordinated international action is required to halt the destruction of tropical rainforests.",
         "නිවර්තන වැසි වනාන්තර විනාශ වීම නතර කිරීම සඳහා සම්බන්ධීකරණය වූ ජාත්‍යන්තර ක්‍රියාමාර්ග අවශ්‍ය වේ."
@@ -15888,6 +19532,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to contemplate her goal.",
+        "ඇය තම ඉලක්කය ගැඹුරින් කල්පනා කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can contemplate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ගැඹුරින් කල්පනා කරන්න හැකිය."
+      ],
+      [
         "Rising living costs in major cities have forced many young families to contemplate relocating to smaller towns.",
         "ප්‍රධාන නගරවල ජීවන වියදම ඉහළ යාම නිසා බොහෝ තරුණ පවුල්වලට කුඩා නගරවල පදිංචියට යාම පිළිබඳව සලකා බැලීමට බල කෙරී ඇත."
       ],
@@ -15922,6 +19574,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are brief for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර කෙටි වේ."
+      ],
+      [
+        "She gave a very brief answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා කෙටි පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Following a brief decline in 2015, global tourist arrivals rose steadily throughout the remainder of the decade.",
         "2015 වසරේදී සිදු වූ කෙටි පහත වැටීමකින් පසුව, දශකයේ ඉතිරි කාලය පුරාම ගෝලීය සංචාරක පැමිණීම් අඛණ්ඩව ඉහළ ගියේය."
@@ -15958,6 +19618,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of advance clearly.",
+        "ගුරුවරයා ප්‍රගතිය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your advance.",
+        "හොඳ පුරුදු ඔබගේ ප්‍රගතිය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Remarkable advances in medical science have doubled average human life expectancy over the past century.",
         "වෛද්‍ය විද්‍යාවේ සිදු වූ විශිෂ්ට දියුණුව පසුගිය ශතවර්ෂය තුළ මිනිසාගේ සාමාන්‍ය ආයු අපේක්ෂාව දෙගුණ කර ඇත."
       ],
@@ -15992,6 +19660,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Namely, students need enough sleep before an exam.",
+        "එනම්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will namely improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ එනම් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Urban traffic congestion stems from two primary causes, namely inadequate public transit and excessive car ownership.",
         "නාගරික රථවාහන තදබදය ප්‍රධාන හේතු දෙකක් නිසා හටගනී, එනම් ප්‍රමාණවත් පොදු ප්‍රවාහනයක් නොමැතිකම සහ අධික ලෙස පෞද්ගලික වාහන තිබීමයි."
@@ -16028,6 +19704,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to seek her goal.",
+        "ඇය තම ඉලක්කය සෙවෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can seek new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සෙවෙන්න හැකිය."
+      ],
+      [
         "Thousands of rural inhabitants migrate to metropolitan centres each year to seek better employment opportunities.",
         "වඩා හොඳ රැකියා අවස්ථා සෙවීම සඳහා සෑම වසරකම ග්‍රාමීය වැසියන් දහස් ගණනක් ප්‍රධාන නගර වෙත සංක්‍රමණය වෙති."
       ],
@@ -16062,6 +19746,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book resort to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට වෙනත් විකල්පයක් නොමැති විට (අයහපත් හෝ අවසාන ක්‍රියාමාර්ගයකට) යොමු වීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option resort to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී වෙනත් විකල්පයක් නොමැති විට (අයහපත් හෝ අවසාන ක්‍රියාමාර්ගයකට) යොමු වීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Without adequate social welfare systems, impoverished citizens may resort to petty crime simply to survive.",
         "ප්‍රමාණවත් සමාජ සුබසාධන පද්ධති නොමැති වුවහොත්, දිළිඳු පුරවැසියන් හුදෙක් ජීවත් වීම සඳහා සුළු අපරාධවලට පෙළඹිය හැකිය."
@@ -16098,6 +19790,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book compensate for learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට වන්දි ලබා දීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option compensate for this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී වන්දි ලබා දීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "High salaries alone cannot compensate for a toxic workplace environment and excessive working hours.",
         "විෂ සහිත සේවා ස්ථාන පරිසරයක් සහ අධික වැඩ කරන පැය ගණන නිසා සිදුවන හානිය ඉහළ වැටුපකින් පමණක් පිරිමැසිය නොහැක."
       ],
@@ -16132,6 +19832,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of remedy clearly.",
+        "ගුරුවරයා පිළියමක් පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your remedy.",
+        "හොඳ පුරුදු ඔබගේ පිළියමක් කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Investing in vocational training is widely regarded as an effective remedy for youth unemployment.",
         "වෘත්තීය පුහුණුව සඳහා ආයෝජනය කිරීම තරුණ විරැකියාව සඳහා ඵලදායී පිළියමක් ලෙස පුළුල්ව සලකනු ලැබේ."
@@ -16168,6 +19876,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are astonishing for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර මවිතකර වේ."
+      ],
+      [
+        "She gave a very astonishing answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා මවිතකර පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Artificial intelligence has evolved at an astonishing pace over the past five years.",
         "පසුගිය වසර පහ තුළ කෘත්‍රිම බුද්ධිය මවිතකර වේගයකින් විකාශනය වී ඇත."
       ],
@@ -16202,6 +19918,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book for the sake of learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට උදෙසා පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option for the sake of this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී උදෙසා සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Nations must reduce carbon emissions immediately for the sake of future generations.",
         "අනාගත පරපුරේ යහපත උදෙසා ජාතීන් විසින් වහාම කාබන් විමෝචනය අඩු කළ යුතුය."
@@ -16238,6 +19962,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of upheaval clearly.",
+        "ගුරුවරයා දැඩි පෙරළියක් පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your upheaval.",
+        "හොඳ පුරුදු ඔබගේ දැඩි පෙරළියක් කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "The Industrial Revolution brought about unprecedented social and economic upheaval across nineteenth-century Europe.",
         "කාර්මික විප්ලවය දහනව වන සියවසේ යුරෝපය පුරා පෙර නොවූ විරූ සමාජීය හා ආර්ථික පෙරළියක් ඇති කළේය."
       ],
@@ -16272,6 +20004,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to liberate her goal.",
+        "ඇය තම ඉලක්කය නිදහස් කර ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can liberate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා නිදහස් කර ගැනීම හැකිය."
+      ],
       [
         "Modern household appliances have liberated millions of people from hours of exhausting domestic labour.",
         "නවීන ගෘහ විදුලි උපකරණ මගින් මිලියන ගණනක ජනතාවක් පැය ගණනාවක වෙහෙසකර ගෘහස්ථ ශ්‍රමයෙන් නිදහස් කර ඇත."
@@ -16308,6 +20048,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to harness her goal.",
+        "ඇය තම ඉලක්කය ඵලදායී ලෙස ප්‍රයෝජනයට ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can harness new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ඵලදායී ලෙස ප්‍රයෝජනයට ගැනීම හැකිය."
+      ],
+      [
         "Coastal nations are increasingly investing in offshore turbines to harness wind energy.",
         "වෙරළබඩ රටවල් සුළං බලශක්තිය ප්‍රයෝජනයට ගැනීම සඳහා මුහුදේ ඉදිකරන ටර්බයින සඳහා වැඩි වැඩියෙන් ආයෝජනය කරමින් සිටියි."
       ],
@@ -16342,6 +20090,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are tangible for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර පැහැදිලිව දැකගත හැකි වේ."
+      ],
+      [
+        "She gave a very tangible answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා පැහැදිලිව දැකගත හැකි පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Taxpayers are more willing to support environmental policies when they see tangible improvements in local air quality.",
         "තම ප්‍රදේශයේ වාතයේ ගුණාත්මකභාවයෙහි පැහැදිලිව දැකගත හැකි දියුණුවක් දකින විට බදු ගෙවන්නන් පාරිසරික ප්‍රතිපත්තිවලට සහාය දීමට වඩාත් කැමැත්තක් දක්වති."
@@ -16378,6 +20134,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are subsequent for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ඉන් පසුව එළඹෙන වේ."
+      ],
+      [
+        "She gave a very subsequent answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ඉන් පසුව එළඹෙන පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Enrolment numbers dipped sharply in 2010 but recovered steadily over the subsequent five years.",
         "2010 වසරේදී බඳවා ගැනීමේ සංඛ්‍යාව සීඝ්‍රයෙන් පහත වැටුණු නමුත් ඉන් පසුව එළඹුණු වසර පහ තුළ ක්‍රමයෙන් යථා තත්ත්වයට පත් විය."
       ],
@@ -16412,6 +20176,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are incredible for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අදහාගත නොහැකි වේ."
+      ],
+      [
+        "She gave a very incredible answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අදහාගත නොහැකි පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Ancient monuments such as the pyramids represent an incredible feat of architectural engineering.",
         "පිරමීඩ වැනි පැරණි ස්මාරක ගෘහ නිර්මාණ ඉංජිනේරු විද්‍යාවේ අදහාගත නොහැකි හපන්කමක් නියෝජනය කරයි."
@@ -16448,6 +20220,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are unthinkable for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සිතා ගැනීමටවත් නොහැකි වේ."
+      ],
+      [
+        "She gave a very unthinkable answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සිතා ගැනීමටවත් නොහැකි පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Working remotely from home full-time was once considered unthinkable in traditional corporate sectors.",
         "සාම්ප්‍රදායික ආයතනික ක්ෂේත්‍රවල පූර්ණ කාලීනව නිවසේ සිට රාජකාරි කිරීම එක් කලෙක සිතා ගැනීමටවත් නොහැකි දෙයක් ලෙස සැලකිණි."
       ],
@@ -16482,6 +20262,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to halve /double/treble/quadruple her goal.",
+        "ඇය තම ඉලක්කය අඩකින් අඩු වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can halve /double/treble/quadruple new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අඩකින් අඩු වෙන්න හැකිය."
+      ],
       [
         "While coal consumption halved between 2005 and 2020, solar power output more than quadrupled.",
         "2005 සහ 2020 අතර කාලය තුළ ගල් අඟුරු පරිභෝජනය අඩකින් අඩු වූ අතර, සූර්ය බලශක්ති නිෂ්පාදනය සිව්ගුණයකටත් වඩා වැඩි විය."
@@ -16518,6 +20306,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to fortify her goal.",
+        "ඇය තම ඉලක්කය ශක්තිමත් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can fortify new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ශක්තිමත් කරන්න හැකිය."
+      ],
+      [
         "Public health authorities often require manufacturers to fortify flour and cereals with essential vitamins.",
         "මහජන සෞඛ්‍ය බලධාරීන් බොහෝ විට පිටි සහ ධාන්‍ය වර්ගවලට අත්‍යවශ්‍ය විටමින් එක් කර පෝෂණ ගුණය වැඩි කරන ලෙස නිෂ්පාදකයින්ට නියම කරයි."
       ],
@@ -16552,6 +20348,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are precious for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ඉතා වටිනා වේ."
+      ],
+      [
+        "She gave a very precious answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ඉතා වටිනා පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Fresh water is becoming an increasingly precious commodity in regions affected by prolonged drought.",
         "දිගුකාලීන නියඟයෙන් පීඩා විඳින කලාපවල පිරිසිදු ජලය ක්‍රමයෙන් ඉතා වටිනා සම්පතක් බවට පත්වෙමින් තිබේ."
@@ -16588,6 +20392,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are trivial for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ඉතා සුළු වේ."
+      ],
+      [
+        "She gave a very trivial answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ඉතා සුළු පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Tabloid media outlets often distract the public with trivial celebrity gossip rather than reporting serious policy debates.",
         "බරපතල ප්‍රතිපත්තිමය විවාද වාර්තා කරනවා වෙනුවට ටැබ්ලොයිඩ් මාධ්‍ය බොහෝ විට ප්‍රසිද්ධ පුද්ගලයින්ගේ නොවැදගත් ඕපාදූප මගින් මහජන අවධානය වෙනතකට යොමු කරයි."
       ],
@@ -16622,6 +20434,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are discernible for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර පැහැදිලිව හඳුනාගත හැකි වේ."
+      ],
+      [
+        "She gave a very discernible answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා පැහැදිලිව හඳුනාගත හැකි පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "The introduction of the sugar tax had no discernible impact on soft drink sales during the first six months.",
         "සීනි බද්ද හඳුන්වා දීම පළමු මාස හය තුළ සිසිල් බීම අලෙවිය කෙරෙහි පැහැදිලිව හඳුනාගත හැකි බලපෑමක් ඇති කළේ නැත."
@@ -16658,6 +20478,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Afterwards, students need enough sleep before an exam.",
+        "ඉන් පසුව, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will afterwards improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ ඉන් පසුව ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "The raw cocoa beans are fermented for several days; afterwards, they are spread out to dry in the sun.",
         "අමු කොකෝවා ඇට දින කිහිපයක් පැසවීමට තබන අතර, ඉන් පසුව ඒවා හිරු එළියේ වියළීම සඳහා අතුරනු ලැබේ."
       ],
@@ -16692,6 +20520,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to resent her goal.",
+        "ඇය තම ඉලක්කය අමනාපයක් හෝ නොසතුටක් ඇති කර ගැනීම (අසාධාරණයක් නිසා) මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can resent new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අමනාපයක් හෝ නොසතුටක් ඇති කර ගැනීම (අසාධාරණයක් නිසා) හැකිය."
+      ],
       [
         "Local residents often resent the influx of wealthy tourists who drive up property prices in historic towns.",
         "ඓතිහාසික නගරවල දේපළ මිල ඉහළ යාමට හේතු වන ධනවත් සංචාරකයින්ගේ පැමිණීම පිළිබඳව ප්‍රදේශවාසීහු බොහෝ විට නොසතුටට පත් වෙති."
@@ -16728,6 +20564,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are urgent for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර හදිසි වේ."
+      ],
+      [
+        "She gave a very urgent answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා හදිසි පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Addressing antimicrobial resistance has become an urgent priority for global health organisations.",
         "ප්‍රතිජීවක ඖෂධවලට ඔරොත්තු දීමේ තත්ත්වය පාලනය කිරීම ගෝලීය සෞඛ්‍ය සංවිධානවල ප්‍රමුඛ හදිසි අවශ්‍යතාවයක් බවට පත්ව ඇත."
       ],
@@ -16762,6 +20606,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to foresee her goal.",
+        "ඇය තම ඉලක්කය කල්තියා දැකීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can foresee new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා කල්තියා දැකීම හැකිය."
+      ],
       [
         "Early pioneers of the internet could scarcely foresee how profoundly social media would alter human communication.",
         "සමාජ මාධ්‍ය මගින් මානව සන්නිවේදනය කොතරම් ගැඹුරින් වෙනස් කරනු ඇත්දැයි කල්තියා දැකීමට අන්තර්ජාලයේ මුල් කාලීන පුරෝගාමීන්ට පවා අපහසු විය."
@@ -16798,6 +20650,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to overwhelm her goal.",
+        "ඇය තම ඉලක්කය දරාගත නොහැකි තත්ත්වයට පත් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can overwhelm new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා දරාගත නොහැකි තත්ත්වයට පත් කරන්න හැකිය."
+      ],
+      [
         "Sudden seasonal epidemics can quickly overwhelm underfunded public hospitals.",
         "හදිසියේ ඇතිවන සෘතුමය වසංගත රෝග මගින් ප්‍රමාණවත් අරමුදල් නොමැති රජයේ රෝහල් ඉතා ඉක්මනින් දරාගත නොහැකි තත්ත්වයට පත් කළ හැකිය."
       ],
@@ -16832,6 +20692,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book in the wake of learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට (විශේෂ සිදුවීමකින්) ඉක්බිතිව පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option in the wake of this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී (විශේෂ සිදුවීමකින්) ඉක්බිතිව සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Flexible remote working arrangements became standard practice in the wake of the global health crisis.",
         "ගෝලීය සෞඛ්‍ය අර්බුදයෙන් ඉක්බිතිව නම්‍යශීලී ලෙස නිවසේ සිට රාජකාරි කිරීමේ ක්‍රමවේද සාමාන්‍ය පිළිවෙතක් බවට පත් විය."
@@ -16868,6 +20736,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are state-of-the-art for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අති නවීන වේ."
+      ],
+      [
+        "She gave a very state-of-the-art answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අති නවීන පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Teaching hospitals equipped with state-of-the-art diagnostic machinery attract top medical specialists.",
         "අති නවීන රෝග විනිශ්චය යන්ත්‍රෝපකරණවලින් සමන්විත ශික්ෂණ රෝහල් ඉහළම වෛද්‍ය විශේෂඥයින් ආකර්ෂණය කර ගනී."
       ],
@@ -16902,6 +20778,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of chaos clearly.",
+        "ගුරුවරයා වියවුල් සහගත බව පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your chaos.",
+        "හොඳ පුරුදු ඔබගේ වියවුල් සහගත බව කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "A sudden cyberattack on the national power grid could plunge major cities into complete chaos.",
         "ජාතික විදුලිබල පද්ධතියට එල්ල වන හදිසි සයිබර් ප්‍රහාරයකින් ප්‍රධාන නගර මුළුමනින්ම වියවුල් සහගත තත්ත්වයකට ඇද දැමිය හැකිය."
@@ -16938,6 +20822,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of dilemma clearly.",
+        "ගුරුවරයා උභතෝකෝටික ගැටලුවක් පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your dilemma.",
+        "හොඳ පුරුදු ඔබගේ උභතෝකෝටික ගැටලුවක් කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Developing nations face a difficult dilemma between expanding industrial output and protecting fragile ecosystems.",
         "සංවර්ධනය වෙමින් පවතින රටවල් කාර්මික නිෂ්පාදනය පුළුල් කිරීම සහ සංවේදී පරිසර පද්ධති ආරක්ෂා කිරීම අතර දුෂ්කර උභතෝකෝටික ගැටලුවකට මුහුණ දෙයි."
       ],
@@ -16972,6 +20864,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Absolutely, students need enough sleep before an exam.",
+        "මුළුමනින්ම, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will absolutely improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ මුළුමනින්ම ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Clean drinking water and basic sanitation are absolutely essential for preventing infectious diseases.",
         "බෝවන රෝග වැළැක්වීම සඳහා පිරිසිදු පානීය ජලය සහ මූලික සනීපාරක්ෂාව අතිශයින්ම අත්‍යවශ්‍ය වේ."
@@ -17008,6 +20908,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are extraordinary for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අසාමාන්‍ය වේ."
+      ],
+      [
+        "She gave a very extraordinary answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අසාමාන්‍ය පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "During severe public health emergencies, governments are sometimes forced to adopt extraordinary measures.",
         "දැඩි මහජන සෞඛ්‍ය හදිසි අවස්ථාවලදී සුවිශේෂී ක්‍රියාමාර්ග අනුගමනය කිරීමට රජයන්ට සමහර විට බල කෙරේ."
       ],
@@ -17042,6 +20950,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of delight clearly.",
+        "ගුරුවරයා මහත් සතුට පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your delight.",
+        "හොඳ පුරුදු ඔබගේ මහත් සතුට කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "The restoration of the historic theatre was completed ahead of schedule, much to the delight of local residents.",
         "ඓතිහාසික රංග ශාලාව ප්‍රතිසංස්කරණය කිරීම නියමිත කාලයට පෙර අවසන් කරන ලද අතර, එය ප්‍රදේශවාසීන්ගේ බලවත් සතුටට හේතු විය."
@@ -17078,6 +20994,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are exclusive for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සුවිශේෂී වේ."
+      ],
+      [
+        "She gave a very exclusive answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සුවිශේෂී පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Economic prosperity and environmental protection are not mutually exclusive goals if green technologies are adopted.",
         "හරිත තාක්ෂණයන් අනුගමනය කරන්නේ නම් ආර්ථික සමෘද්ධිය සහ පරිසර ආරක්ෂාව යනු එකවර පැවතිය නොහැකි පරස්පර අරමුණු නොවේ."
       ],
@@ -17112,6 +21036,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Thus, students need enough sleep before an exam.",
+        "එබැවින්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will thus improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ එබැවින් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Public libraries provide free internet access, thus bridging the digital divide for low-income families.",
         "මහජන පුස්තකාල නොමිලේ අන්තර්ජාල පහසුකම් සපයන අතර, එමගින් අඩු ආදායම්ලාභී පවුල් සඳහා පවතින ඩිජිටල් පරතරය පියවයි."
@@ -17148,6 +21080,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to mention her goal.",
+        "ඇය තම ඉලක්කය සඳහන් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can mention new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සඳහන් කරන්න හැකිය."
+      ],
+      [
         "It is worth mentioning that renewable energy costs have fallen by over seventy percent in the last decade.",
         "පසුගිය දශකය තුළ පුනර්ජනනීය බලශක්ති පිරිවැය සියයට හැත්තෑවකට වඩා පහත වැටී ඇති බව සඳහන් කිරීම වටී."
       ],
@@ -17182,6 +21122,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Unexpectedly, students need enough sleep before an exam.",
+        "අනපේක්ෂිත ලෙස, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will unexpectedly improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ අනපේක්ෂිත ලෙස ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Birth rates in several industrialised nations fell unexpectedly sharply during the late twentieth century.",
         "විසිවන සියවසේ අගභාගයේදී කාර්මිකකරණය වූ රටවල් කිහිපයක උපත් අනුපාතය අනපේක්ෂිත ලෙස සීඝ්‍රයෙන් පහත වැටුණි."
@@ -17218,6 +21166,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Furthermore, students need enough sleep before an exam.",
+        "ඊට අමතරව, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will furthermore improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ ඊට අමතරව ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Bicycles produce zero pollution; furthermore, regular cycling significantly improves cardiovascular health.",
         "පාපැදි මගින් කිසිදු පරිසර දූෂණයක් සිදු නොවන අතර, තවද ක්‍රමවත්ව පාපැදි පැදීම හෘද සෞඛ්‍යය සැලකිය යුතු ලෙස වැඩිදියුණු කරයි."
       ],
@@ -17252,6 +21208,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are remarkable for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සුවිශේෂී වේ."
+      ],
+      [
+        "She gave a very remarkable answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සුවිශේෂී පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Several East Asian economies achieved remarkable reductions in extreme poverty during the late twentieth century.",
         "නැගෙනහිර ආසියානු ආර්ථිකයන් කිහිපයක් විසිවන සියවසේ අගභාගයේදී උග්‍ර දරිද්‍රතාවය අවම කිරීමෙහිලා කැපී පෙනෙන ප්‍රගතියක් අත්කර ගත්තේය."
@@ -17288,6 +21252,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to evaporate her goal.",
+        "ඇය තම ඉලක්කය වාෂ්ප වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can evaporate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා වාෂ්ප වෙන්න හැකිය."
+      ],
+      [
         "As solar radiation heats the ocean surface, vast quantities of water evaporate into the atmosphere.",
         "සූර්ය විකිරණ මගින් සාගර මතුපිට රත් කරන විට අතිවිශාල ජල ප්‍රමාණයක් වායුගෝලයට වාෂ්ප වී යයි."
       ],
@@ -17322,6 +21294,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are irreparable for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර යළි පිළිසකර කළ නොහැකි වේ."
+      ],
+      [
+        "She gave a very irreparable answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා යළි පිළිසකර කළ නොහැකි පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Unchecked industrial pollution is inflicting irreparable damage on marine ecosystems worldwide.",
         "පාලනයකින් තොරව සිදුවන කාර්මික දූෂණය ලොව පුරා සමුද්‍ර පරිසර පද්ධතිවලට යළි පිළිසකර කළ නොහැකි හානියක් සිදු කරමින් පවතී."
@@ -17358,6 +21338,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Somewhat, students need enough sleep before an exam.",
+        "යම් තරමකට, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will somewhat improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ යම් තරමකට ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Sales of printed books recovered somewhat in the final quarter, despite the dominance of digital readers.",
         "ඩිජිටල් කියවීමේ උපකරණවල ආධිපත්‍යය තිබියදීත්, අවසාන කාර්තුවේදී මුද්‍රිත පොත් අලෙවිය යම් තරමකට යථා තත්ත්වයට පත් විය."
       ],
@@ -17392,6 +21380,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book vie for learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට (යමක් ලබා ගැනීම උදෙසා) කරට කර තරඟ වැදීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option vie for this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී (යමක් ලබා ගැනීම උදෙසා) කරට කර තරඟ වැදීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Thousands of university graduates vie for a limited number of entry-level positions in multinational firms.",
         "බහුජාතික සමාගම්වල පවතින සීමිත ආරම්භක මට්ටමේ රැකියා සංඛ්‍යාවක් සඳහා විශ්වවිද්‍යාල උපාධිධාරීන් දහස් ගණනක් කරට කර තරඟ වදිති."
@@ -17428,6 +21424,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book capable of learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට හැකියාවක් ඇති පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option capable of this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී හැකියාවක් ඇති සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Modern solar arrays are capable of generating enough electricity to power entire residential districts.",
         "නවීන සූර්ය පැනල පද්ධති සමස්ත නේවාසික දිස්ත්‍රික්කවලටම බලය සැපයීමට ප්‍රමාණවත් විදුලියක් උත්පාදනය කිරීමට සමත් වේ."
       ],
@@ -17462,6 +21466,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Altogether, students need enough sleep before an exam.",
+        "මුළුමනින්ම, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will altogether improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ මුළුමනින්ම ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Rather than taxing junk food heavily, some health advocates argue that advertising it to children should be banned altogether.",
         "ක්ෂණික ආහාර සඳහා අධික බදු පැනවීමට වඩා, දරුවන් ඉලක්ක කර ගනිමින් ඒවා ප්‍රචාරණය කිරීම මුළුමනින්ම තහනම් කළ යුතු බව ඇතැම් සෞඛ්‍ය ක්‍රියාකාරීහු තර්ක කරති."
@@ -17498,6 +21510,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of alarm clearly.",
+        "ගුරුවරයා දැඩි කලබලය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your alarm.",
+        "හොඳ පුරුදු ඔබගේ දැඩි කලබලය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Climatologists have repeatedly sounded the alarm over the accelerating melt of polar ice caps.",
         "ධ්‍රැවීය අයිස් තට්ටු දියවීම වේගවත් වීම පිළිබඳව දේශගුණ විද්‍යාඥයින් නැවත නැවතත් අනතුරු අඟවා ඇත."
       ],
@@ -17532,6 +21552,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to modify her goal.",
+        "ඇය තම ඉලක්කය වෙනස් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can modify new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා වෙනස් කරන්න හැකිය."
+      ],
       [
         "Schools should modify their curricula to include practical financial literacy skills.",
         "ප්‍රායෝගික මූල්‍ය සාක්ෂරතා කුසලතා ඇතුළත් වන පරිදි පාසල් තම විෂයමාලා සංශෝධනය කළ යුතුය."
@@ -17568,6 +21596,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book on the condition learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට කොන්දේසිය මත පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option on the condition this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී කොන්දේසිය මත සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Financial aid should be granted to developing nations on the condition that funds are invested in education.",
         "අරමුදල් අධ්‍යාපනය සඳහා ආයෝජනය කරන කොන්දේසිය මත සංවර්ධනය වෙමින් පවතින රටවලට මූල්‍ය ආධාර ලබා දිය යුතුය."
       ],
@@ -17602,6 +21638,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are visible for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර දෘශ්‍යමාන වේ."
+      ],
+      [
+        "She gave a very visible answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා දෘශ්‍යමාන පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "The effects of global warming are becoming increasingly visible in polar regions.",
         "ගෝලීය උණුසුම ඉහළ යාමේ බලපෑම් ධ්‍රැවීය කලාපවල වඩ වඩාත් පැහැදිලිව දක්නට ලැබේ."
@@ -17638,6 +21682,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are oblivious to for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර නොදැනුවත්ව සිටින වේ."
+      ],
+      [
+        "She gave a very oblivious to answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා නොදැනුවත්ව සිටින පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Many consumers remain completely oblivious to the environmental cost of fast fashion.",
         "බොහෝ පාරිභෝගිකයින් ක්ෂණික විලාසිතා නිසා සිදුවන පාරිසරික හානිය පිළිබඳව සම්පූර්ණයෙන්ම නොදැනුවත්ව සිටිති."
       ],
@@ -17672,6 +21724,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to resist her goal.",
+        "ඇය තම ඉලක්කය ප්‍රතිරෝධය දැක්වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can resist new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ප්‍රතිරෝධය දැක්වෙන්න හැකිය."
+      ],
       [
         "Traditional industries often resist technological change because they fear job losses.",
         "රැකියා අහිමි වේ යැයි පවතින බිය නිසා සාම්ප්‍රදායික කර්මාන්ත බොහෝවිට තාක්ෂණික වෙනස්කම්වලට විරුද්ධ වෙයි."
@@ -17708,6 +21768,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "It is important to succeed in/at your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි සාර්ථක වෙන්න වැදගත් වේ."
+      ],
+      [
+        "She learned how to succeed in/at difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව සාර්ථක වෙන්න ඇය ඉගෙන ගත්තාය."
+      ],
+      [
         "Only companies that adapt quickly to consumer trends succeed in today's competitive market.",
         "පාරිභෝගික ප්‍රවණතාවලට ඉක්මනින් හැඩගැසෙන සමාගම් පමණක් වර්තමාන තරගකාරී වෙළඳපොළ තුළ සාර්ථක වේ."
       ],
@@ -17742,6 +21810,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to receive her goal.",
+        "ඇය තම ඉලක්කය ලබා ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can receive new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ලබා ගැනීම හැකිය."
+      ],
       [
         "Every child has a fundamental right to receive a high-quality primary education.",
         "ගුණාත්මක ප්‍රාථමික අධ්‍යාපනයක් ලබා ගැනීමට සෑම දරුවෙකුටම මූලික අයිතිවාසිකමක් ඇත."
@@ -17778,6 +21854,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to surrender her goal.",
+        "ඇය තම ඉලක්කය යටත් වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can surrender new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා යටත් වෙන්න හැකිය."
+      ],
+      [
         "Internet users often unknowingly surrender their personal privacy in exchange for free digital services.",
         "අන්තර්ජාල පරිශීලකයින් බොහෝවිට නොමිලේ ලැබෙන ඩිජිටල් සේවාවන් වෙනුවෙන් නොදැනුවත්වම තම පෞද්ගලිකත්වය අත්හැර දමති."
       ],
@@ -17812,6 +21896,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to sympathise her goal.",
+        "ඇය තම ඉලක්කය අනුකම්පා කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can sympathise new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අනුකම්පා කරන්න හැකිය."
+      ],
       [
         "While it is easy to sympathise with struggling farmers, agricultural subsidies can distort global trade.",
         "දුෂ්කරතාවලට මුහුණ දෙන ගොවීන් කෙරෙහි අනුකම්පා කිරීම පහසු වුවද, කෘෂිකාර්මික සහනාධාර මගින් ගෝලීය වෙළඳාම විකෘති විය හැක."
@@ -17848,6 +21940,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are abundant for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර බහුල වේ."
+      ],
+      [
+        "She gave a very abundant answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා බහුල පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Countries blessed with abundant sunshine should invest heavily in solar power generation.",
         "හිරු එළිය බහුලව ලැබෙන රටවල් සූර්ය බලශක්ති උත්පාදනය සඳහා විශාල වශයෙන් ආයෝජනය කළ යුතුය."
       ],
@@ -17882,6 +21982,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of epidemic clearly.",
+        "ගුරුවරයා වසංගතය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your epidemic.",
+        "හොඳ පුරුදු ඔබගේ වසංගතය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Sedentary lifestyles and processed foods have contributed to a global obesity epidemic.",
         "අක්‍රිය ජීවන රටාව සහ සැකසූ ආහාර ගෝලීය ස්ථුලතා වසංගතයකට දායක වී ඇත."
@@ -17918,6 +22026,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are inquisitive for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර කුතුහලයෙන් යුත් වේ."
+      ],
+      [
+        "She gave a very inquisitive answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා කුතුහලයෙන් යුත් පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Young children are naturally inquisitive and learn best through hands-on exploration.",
         "කුඩා දරුවන් සහජයෙන්ම කුතුහලයෙන් යුක්ත වන අතර ප්‍රායෝගික ගවේෂණය තුළින් හොඳින්ම ඉගෙන ගනිති."
       ],
@@ -17952,6 +22068,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Accordingly, students need enough sleep before an exam.",
+        "ඒ අනුව, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will accordingly improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ ඒ අනුව ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "The cost of living has risen sharply; accordingly, minimum wage rates must be reviewed.",
         "ජීවන වියදම ශීඝ්‍රයෙන් ඉහළ ගොස් ඇති අතර, ඒ අනුව අවම වැටුප් අනුපාත සමාලෝචනය කළ යුතුය."
@@ -17988,6 +22112,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to authorise her goal.",
+        "ඇය තම ඉලක්කය නිල අවසරය ලබා දීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can authorise new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා නිල අවසරය ලබා දීම හැකිය."
+      ],
+      [
         "Health authorities refused to authorise the new medication until clinical trials were completed.",
         "සායනික පරීක්ෂණ අවසන් වන තෙක් නව ඖෂධය සඳහා නිල අවසරය ලබා දීම සෞඛ්‍ය බලධාරීන් විසින් ප්‍රතික්ෂේප කරන ලදී."
       ],
@@ -18022,6 +22154,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of routine clearly.",
+        "ගුරුවරයා දින චර්යාව පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your routine.",
+        "හොඳ පුරුදු ඔබගේ දින චර්යාව කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Incorporating thirty minutes of brisk walking into one's daily routine significantly improves cardiovascular health.",
         "තම දෛනික චර්යාවට මිනිත්තු තිහක වේගවත් ඇවිදීමක් එක් කර ගැනීම හෘද සෞඛ්‍යය සැලකිය යුතු ලෙස වැඩිදියුණු කරයි."
@@ -18058,6 +22198,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to envisage that her goal.",
+        "ඇය තම ඉලක්කය අපේක්ෂා කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can envisage that new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අපේක්ෂා කරන්න හැකිය."
+      ],
+      [
         "Urban planners envisage that autonomous electric buses will replace private cars within three decades.",
         "ඉදිරි දශක තුන ඇතුළත ස්වයංක්‍රීය විදුලි බස් රථ මගින් පෞද්ගලික මෝටර් රථ විස්ථාපනය වනු ඇතැයි නගර සැලසුම්කරුවෝ අපේක්ෂා කරති."
       ],
@@ -18092,6 +22240,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are mindful of for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සැලකිලිමත් වන වේ."
+      ],
+      [
+        "She gave a very mindful of answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සැලකිලිමත් වන පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Tourists visiting historic religious sites must remain mindful of local customs and dress codes.",
         "ඓතිහාසික ආගමික සිද්ධස්ථාන නැරඹීමට පැමිණෙන සංචාරකයින් දේශීය සිරිත් විරිත් සහ ඇඳුම් පැළඳුම් පිළිවෙත් පිළිබඳව සැලකිලිමත් විය යුතුය."
@@ -18128,6 +22284,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are dire for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ඉතා බරපතල වේ."
+      ],
+      [
+        "She gave a very dire answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ඉතා බරපතල පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Ignoring biodiversity loss will have dire consequences for global food security.",
         "ජෛව විවිධත්වය අහිමි වීම නොසලකා හැරීම ගෝලීය ආහාර සුරක්ෂිතතාවයට දරුණු ප්‍රතිවිපාක ගෙන දෙනු ඇත."
       ],
@@ -18162,6 +22326,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "It is important to intend to your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි අදහස් කරන්න වැදගත් වේ."
+      ],
+      [
+        "She learned how to intend to difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව අදහස් කරන්න ඇය ඉගෙන ගත්තාය."
+      ],
       [
         "Congestion charges are intended to discourage motorists from driving into busy city centres.",
         "මාර්ග තදබද ගාස්තු පැනවීමෙන් අදහස් කරන්නේ කාර්යබහුල නගර මධ්‍යයට රථවාහන ධාවනය කිරීමෙන් රියදුරන් අධෛර්යමත් කිරීමයි."
@@ -18198,6 +22370,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are genuine for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සැබෑ වේ."
+      ],
+      [
+        "She gave a very genuine answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සැබෑ පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Consumers are increasingly sceptical of corporations that claim to have a genuine commitment to sustainability.",
         "තිරසාරභාවය වෙනුවෙන් සැබෑ කැපවීමක් ඇතැයි පවසන සමාගම් පිළිබඳව පාරිභෝගිකයින් තුළ වඩ වඩාත් සැකයක් පවතී."
       ],
@@ -18232,6 +22412,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "It is important to interfere with/in your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි බාධා කරන්න වැදගත් වේ."
+      ],
+      [
+        "She learned how to interfere with/in difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව බාධා කරන්න ඇය ඉගෙන ගත්තාය."
+      ],
       [
         "Blue light emitted by electronic screens can severely interfere with natural sleep patterns.",
         "ඉලෙක්ට්‍රොනික තිර මගින් නිකුත් කරන නිල් ආලෝකය ස්වභාවික නින්දේ රටාවන්ට දැඩි ලෙස බාධා කළ හැකිය."
@@ -18268,6 +22456,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of substitute for clearly.",
+        "ගුරුවරයා ආදේශකය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your substitute for.",
+        "හොඳ පුරුදු ඔබගේ ආදේශකය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Although online courses are convenient, they are no substitute for face-to-face classroom interaction.",
         "මාර්ගගත පාඨමාලා පහසු වුවද, ඒවා මුහුණට මුහුණ සිදුවන පන්ති කාමර අන්තර්ක්‍රියා සඳහා ආදේශකයක් නොවේ."
       ],
@@ -18302,6 +22498,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of issue clearly.",
+        "ගුරුවරයා ගැටලුවක් පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your issue.",
+        "හොඳ පුරුදු ඔබගේ ගැටලුවක් කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Housing affordability has become a pressing issue for young professionals in major metropolitan areas.",
         "ප්‍රධාන නාගරික ප්‍රදේශවල තරුණ වෘත්තිකයන් සඳහා දැරිය හැකි මිලකට නිවාස සපයා ගැනීම දැවෙන ගැටලුවක් බවට පත්ව ඇත."
@@ -18338,6 +22542,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are compulsory for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අනිවාර්ය වේ."
+      ],
+      [
+        "She gave a very compulsory answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අනිවාර්ය පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Many educators argue that learning a foreign language should be compulsory in primary schools.",
         "ප්‍රාථමික පාසල්වල විදේශීය භාෂාවක් ඉගෙනීම අනිවාර්ය කළ යුතු බවට බොහෝ අධ්‍යාපනඥයෝ තර්ක කරති."
       ],
@@ -18372,6 +22584,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to surround her goal.",
+        "ඇය තම ඉලක්කය වට කර ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can surround new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා වට කර ගැනීම හැකිය."
+      ],
       [
         "The residential area in the centre of the town is completely surrounded by a green belt of parkland.",
         "නගර මධ්‍යයේ පිහිටි නේවාසික ප්‍රදේශය සම්පූර්ණයෙන්ම හරිත උද්‍යාන තීරයකින් වට වී ඇත."
@@ -18408,6 +22628,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are subjected for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර යටත් කරන ලද වේ."
+      ],
+      [
+        "She gave a very subjected answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා යටත් කරන ලද පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "All new pharmaceutical products must be subjected to rigorous safety trials before reaching the market.",
         "සියලුම නව ඖෂධ නිෂ්පාදන වෙළඳපොළට නිකුත් කිරීමට පෙර දැඩි ආරක්ෂක පරීක්ෂණවලට භාජනය කළ යුතුය."
       ],
@@ -18442,6 +22670,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to monitor her goal.",
+        "ඇය තම ඉලක්කය නිරීක්ෂණය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can monitor new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා නිරීක්ෂණය කරන්න හැකිය."
+      ],
       [
         "Wearable fitness devices enable individuals to monitor their heart rate and daily physical activity.",
         "පැළඳිය හැකි ශාරීරික යෝග්‍යතා උපාංග මගින් පුද්ගලයන්ට තම හෘද ස්පන්දන වේගය සහ දෛනික ශාරීරික ක්‍රියාකාරකම් නිරීක්ෂණය කිරීමට හැකියාව ලැබේ."
@@ -18478,6 +22714,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are drastic for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර දැඩි වේ."
+      ],
+      [
+        "She gave a very drastic answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා දැඩි පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Governments must take drastic measures to curb plastic pollution before marine ecosystems collapse.",
         "සාගර පරිසර පද්ධති බිඳ වැටීමට පෙර ප්ලාස්ටික් දූෂණය පාලනය කිරීම සඳහා රජයන් දැඩි පියවර ගත යුතුය."
       ],
@@ -18512,6 +22756,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "It is important to object to your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි විරුද්ධ වෙන්න වැදගත් වේ."
+      ],
+      [
+        "She learned how to object to difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව විරුද්ධ වෙන්න ඇය ඉගෙන ගත්තාය."
+      ],
       [
         "Local residents strongly objected to the construction of a commercial airport near their neighbourhood.",
         "තම ප්‍රදේශය ආසන්නයේ වාණිජ ගුවන්තොටුපළක් ඉදිකිරීමට ප්‍රදේශවාසීහු දැඩි ලෙස විරෝධය පළ කළහ."
@@ -18548,6 +22800,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book on the part of learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට පාර්ශවයෙන් පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option on the part of this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී පාර්ශවයෙන් සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Solving urban homelessness requires a concerted effort on the part of both local councils and charities.",
         "නාගරික නිවාස අහිමිවීමේ ගැටලුව විසඳීම සඳහා පළාත් පාලන ආයතන සහ පුණ්‍යායතන යන දෙපාර්ශවයේම සාමූහික උත්සාහයක් අවශ්‍ය වේ."
       ],
@@ -18582,6 +22842,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of challenge clearly.",
+        "ගුරුවරයා අභියෝගය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your challenge.",
+        "හොඳ පුරුදු ඔබගේ අභියෝගය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Providing clean drinking water to rapidly growing megacities poses a major logistical challenge.",
         "ශීඝ්‍රයෙන් වර්ධනය වන මහා නගරවලට පිරිසිදු පානීය ජලය සැපයීම ප්‍රධාන සැපයුම් අභියෝගයක් එල්ල කරයි."
@@ -18618,6 +22886,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of climate clearly.",
+        "ගුරුවරයා දේශගුණය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your climate.",
+        "හොඳ පුරුදු ඔබගේ දේශගුණය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "In the current economic climate, many young couples are delaying purchasing their first home.",
         "වත්මන් ආර්ථික වාතාවරණය තුළ බොහෝ තරුණ ජෝඩු තම පළමු නිවස මිලදී ගැනීම ප්‍රමාද කරමින් සිටිති."
       ],
@@ -18652,6 +22928,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are microscopic for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අන්වීක්ෂීය වේ."
+      ],
+      [
+        "She gave a very microscopic answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අන්වීක්ෂීය පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Marine biologists have discovered microscopic plastic particles inside fish living in the deepest oceans.",
         "ගැඹුරුම සාගරවල ජීවත් වන මත්ස්‍යයන්ගේ සිරුරු තුළ තිබී අන්වීක්ෂීය ප්ලාස්ටික් අංශු සොයා ගැනීමට සමුද්‍ර ජීව විද්‍යාඥයින් සමත් වී ඇත."
@@ -18688,6 +22972,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are ideal for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර වඩාත්ම සුදුසු වේ."
+      ],
+      [
+        "She gave a very ideal answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා වඩාත්ම සුදුසු පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "A gap year provides an ideal opportunity for school leavers to gain practical life experience.",
         "පාසල් හැරයන්නන්ට ප්‍රායෝගික ජීවන අත්දැකීම් ලබා ගැනීම සඳහා පූර්ව-විශ්වවිද්‍යාල විවේක වසරක් (gap year) මගින් කදිම අවස්ථාවක් සලසා දෙයි."
       ],
@@ -18722,6 +23014,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are hostile for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සතුරු වේ."
+      ],
+      [
+        "She gave a very hostile answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සතුරු පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Space exploration requires spacecraft engineered to withstand the hostile environment of outer space.",
         "අභ්‍යවකාශ ගවේෂණය සඳහා බාහිර අභ්‍යවකාශයේ කටුක පරිසරයට ඔරොත්තු දෙන ලෙස නිර්මාණය කරන ලද යානා අවශ්‍ය වේ."
@@ -18758,6 +23058,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are susceptible to for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර පහසුවෙන් ගොදුරු විය හැකි වේ."
+      ],
+      [
+        "She gave a very susceptible to answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා පහසුවෙන් ගොදුරු විය හැකි පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Elderly citizens and young infants are particularly susceptible to respiratory infections during winter.",
         "වැඩිහිටි පුරවැසියන් සහ කුඩා බිළිඳුන් ශීත ඍතුවේදී ශ්වසන ආසාදනවලට පහසුවෙන්ම ගොදුරු විය හැකිය."
       ],
@@ -18792,6 +23100,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to examine her goal.",
+        "ඇය තම ඉලක්කය විමර්ශනය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can examine new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා විමර්ශනය කරන්න හැකිය."
+      ],
       [
         "Before implementing new transport policies, authorities must carefully examine their long-term environmental impact.",
         "නව ප්‍රවාහන ප්‍රතිපත්ති ක්‍රියාත්මක කිරීමට පෙර බලධාරීන් ඒවායේ දිගුකාලීන පාරිසරික බලපෑම ප්‍රවේශමෙන් විමර්ශනය කළ යුතුය."
@@ -18828,6 +23144,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of query clearly.",
+        "ගුරුවරයා විමසුම පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your query.",
+        "හොඳ පුරුදු ඔබගේ විමසුම කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Automated chatbots can handle simple customer queries, but complex complaints still require human staff.",
         "ස්වයංක්‍රීය චැට්බොට් පද්ධතිවලට සරල පාරිභෝගික විමසුම් හැසිරවිය හැකි වුවද, සංකීර්ණ පැමිණිලි සඳහා තවමත් මිනිස් කාර්ය මණ්ඩලය අවශ්‍ය වේ."
       ],
@@ -18862,6 +23186,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are modest for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සාමාන්‍ය වේ."
+      ],
+      [
+        "She gave a very modest answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සාමාන්‍ය පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "While software exports surged dramatically, agricultural output showed only a modest increase over the decade.",
         "මෘදුකාංග අපනයනය ශීඝ්‍රයෙන් ඉහළ ගිය අතර, දශකය තුළ කෘෂිකාර්මික නිෂ්පාදනය පෙන්නුම් කළේ සුළු වැඩිවීමක් පමණි."
@@ -18898,6 +23230,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of recipient clearly.",
+        "ගුරුවරයා ලබන්නා පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your recipient.",
+        "හොඳ පුරුදු ඔබගේ ලබන්නා කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Recipients of unemployment benefits should be required to participate in job training programmes.",
         "විරැකියා ප්‍රතිලාභ ලබන්නන් රැකියා පුහුණු වැඩසටහන්වලට සහභාගී වීම අනිවාර්ය කළ යුතුය."
       ],
@@ -18932,6 +23272,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book take heed of learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට අවධානය යොමු කිරීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option take heed of this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී අවධානය යොමු කිරීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "If governments fail to take heed of scientific warnings, coastal cities will face catastrophic flooding.",
         "රජයන් විද්‍යාත්මක අනතුරු ඇඟවීම් සැලකිල්ලට ගැනීමට අපොහොසත් වුවහොත්, වෙරළබඩ නගර ව්‍යසනකාරී ගංවතුර තත්ත්වයන්ට මුහුණ දෙනු ඇත."
@@ -18968,6 +23316,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to employ her goal.",
+        "ඇය තම ඉලක්කය සේවයේ යෙදවෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can employ new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සේවයේ යෙදවෙන්න හැකිය."
+      ],
+      [
         "Progressive teachers employ interactive methods to keep students engaged during long lectures.",
         "දිගු දේශන අතරතුර සිසුන්ගේ අවධානය රඳවා ගැනීම සඳහා ප්‍රගතිශීලී ගුරුවරු අන්තර්ක්‍රියාකාරී ක්‍රමවේද භාවිත කරති."
       ],
@@ -19002,6 +23358,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to condemn her goal.",
+        "ඇය තම ඉලක්කය දැඩි ලෙස හෙළා දැකීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can condemn new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා දැඩි ලෙස හෙළා දැකීම හැකිය."
+      ],
       [
         "International human rights organisations widely condemn the exploitation of child labour in factories.",
         "කර්මාන්තශාලාවල ළමා ශ්‍රමය සූරාකෑම ජාත්‍යන්තර මානව හිමිකම් සංවිධාන විසින් පුළුල් ලෙස හෙළා දකිනු ලැබේ."
@@ -19038,6 +23402,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are pointless for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර නිරර්ථක වේ."
+      ],
+      [
+        "She gave a very pointless answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා නිරර්ථක පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "It is pointless to pass strict environmental laws if authorities lack the resources to enforce them.",
         "පාරිසරික නීති ක්‍රියාත්මක කිරීමට බලධාරීන්ට සම්පත් නොමැති නම් දැඩි නීති සම්මත කිරීමෙන් කිසිදු ඵලක් නැත."
       ],
@@ -19072,6 +23444,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book supposed to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට බලාපොරොත්තු වන පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option supposed to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී බලාපොරොත්තු වන සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Prisons are supposed to rehabilitate offenders, yet many inmates reoffend shortly after release.",
         "බන්ධනාගාර මගින් වරදකරුවන් පුනරුත්ථාපනය කිරීමට අපේක්ෂා කළද, බොහෝ රැඳවියන් නිදහස් වී කෙටි කලකින්ම නැවත වැරදිවලට පෙළඹේ."
@@ -19108,6 +23488,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to divert her goal.",
+        "ඇය තම ඉලක්කය වෙනත් දිශාවකට හෝ කාර්යයකට යොමු කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can divert new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා වෙනත් දිශාවකට හෝ කාර්යයකට යොමු කරන්න හැකිය."
+      ],
+      [
         "Governments should divert a portion of military expenditure into preventive healthcare and education.",
         "රජයන් විසින් යුදමය වියදම්වලින් කොටසක් රෝග නිවාරණ සෞඛ්‍ය සේවා සහ අධ්‍යාපනය වෙත යොමු කළ යුතුය."
       ],
@@ -19142,6 +23530,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of decade clearly.",
+        "ගුරුවරයා දශකයක් (වසර දහයක කාලසීමාවක්) පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your decade.",
+        "හොඳ පුරුදු ඔබගේ දශකයක් (වසර දහයක කාලසීමාවක්) කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Over the past decade, renewable energy production has grown exponentially across Europe.",
         "පසුගිය දශකය පුරා යුරෝපය පුරා පුනර්ජනනීය බලශක්ති නිෂ්පාදනය ශීඝ්‍රයෙන් වර්ධනය වී ඇත."
@@ -19178,6 +23574,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to discard her goal.",
+        "ඇය තම ඉලක්කය ඉවත දැමීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can discard new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ඉවත දැමීම හැකිය."
+      ],
+      [
         "In today's throwaway society, consumers frequently discard functional appliances simply to buy the latest model.",
         "වර්තමාන පාරිභෝගික සමාජයේ බොහෝ දෙනා නවතම මාදිලිය මිලදී ගැනීම සඳහා පමණක් හොඳින් ක්‍රියා කරන උපකරණ නිතර ඉවත දමති."
       ],
@@ -19212,6 +23616,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Statistically, students need enough sleep before an exam.",
+        "සංඛ්‍යානමය වශයෙන්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will statistically improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ සංඛ්‍යානමය වශයෙන් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Statistically speaking, air travel remains far safer than driving on motorways.",
         "සංඛ්‍යාලේඛනවලට අනුව ගත් කල, අධිවේගී මාර්ගවල රිය පැදවීමට වඩා ගුවන් ගමන් බෙහෙවින් ආරක්ෂිත වේ."
@@ -19248,6 +23660,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are finite for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සීමිත වේ."
+      ],
+      [
+        "She gave a very finite answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සීමිත පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Fossil fuels such as coal and oil are finite resources that will eventually be depleted.",
         "ගල් අඟුරු සහ බොරතෙල් වැනි ෆොසිල ඉන්ධන කවදා හෝ අවසන් වී යන සීමිත සම්පත් වේ."
       ],
@@ -19282,6 +23702,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are compatible for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ගැළපෙන වේ."
+      ],
+      [
+        "She gave a very compatible answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ගැළපෙන පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Economic expansion is fully compatible with environmental conservation if clean technologies are adopted.",
         "පිරිසිදු තාක්ෂණයන් භාවිතයට ගන්නේ නම් ආර්ථික ප්‍රසාරණය පාරිසරික සංරක්ෂණය සමඟ සම්පූර්ණයෙන්ම ගැළපේ."
@@ -19318,6 +23746,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Respectively, students need enough sleep before an exam.",
+        "පිළිවෙළින්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will respectively improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ පිළිවෙළින් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Coal and natural gas accounted for 35% and 28% of total electricity generation, respectively.",
         "ගල් අඟුරු සහ ස්වභාවික වායුව සමස්ත විදුලි උත්පාදනයෙන් පිළිවෙළින් 35% ක් සහ 28% ක් සඳහා දායක විය."
       ],
@@ -19352,6 +23788,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are understandable for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර තේරුම් ගත හැකි වේ."
+      ],
+      [
+        "She gave a very understandable answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා තේරුම් ගත හැකි පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "It is perfectly understandable that parents worry about the safety of their children online.",
         "අන්තර්ජාලය තුළ තම දරුවන්ගේ ආරක්ෂාව පිළිබඳව දෙමාපියන් කනස්සල්ලට පත්වීම සම්පූර්ණයෙන්ම තේරුම් ගත හැකි කරුණකි."
@@ -19388,6 +23832,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are mature for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර පරිණත වේ."
+      ],
+      [
+        "She gave a very mature answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා පරිණත පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Living independently at university helps young people mature into self-reliant adults.",
         "විශ්වවිද්‍යාලයේදී ස්වාධීනව ජීවත් වීම තරුණ පිරිසට ස්වයං-ශක්තියෙන් යුත් වැඩිහිටියන් බවට පරිණත වීමට උපකාරී වේ."
       ],
@@ -19422,6 +23874,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Increasingly, students need enough sleep before an exam.",
+        "වඩ වඩාත්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will increasingly improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ වඩ වඩාත් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Modern societies are becoming increasingly reliant on digital infrastructure for banking and healthcare.",
         "නූතන සමාජයන් බැංකු සහ සෞඛ්‍ය සේවා සඳහා ඩිජිටල් යටිතල පහසුකම් මත වඩ වඩාත් යැපෙමින් පවතී."
@@ -19458,6 +23918,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book have implications for learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට සඳහා බලපෑම් හෝ ප්‍රතිවිපාක ඇති කිරීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option have implications for this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී සඳහා බලපෑම් හෝ ප්‍රතිවිපාක ඇති කිරීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "An ageing population will have far-reaching implications for state pension systems and healthcare funding.",
         "වැඩිහිටි ජනගහනය ඉහළ යාම රාජ්‍ය විශ්‍රාම වැටුප් ක්‍රම සහ සෞඛ්‍ය අරමුදල් සඳහා පුළුල් බලපෑම් ඇති කරනු ඇත."
       ],
@@ -19492,6 +23960,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book in agony learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට දැඩි වේදනාවෙන් පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option in agony this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී දැඩි වේදනාවෙන් සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Terminally ill patients should receive palliative care so that they do not spend their final days in agony.",
         "සුව කළ නොහැකි රෝගවලින් පෙළෙන රෝගීන් තම අවසාන කාලය දැඩි වේදනාවෙන් ගත නොකිරීම සඳහා ඔවුන්ට සහන සත්කාර ලබා දිය යුතුය."
@@ -19528,6 +24004,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of rapport clearly.",
+        "ගුරුවරයා සුහද සම්බන්ධතාවයක් පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your rapport.",
+        "හොඳ පුරුදු ඔබගේ සුහද සම්බන්ධතාවයක් කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Inspirational teachers take the time to build a strong rapport with their students.",
         "ආදර්ශමත් ගුරුවරු තම සිසුන් සමඟ ශක්තිමත් සුහද සම්බන්ධතාවයක් ගොඩනගා ගැනීමට කාලය වැය කරති."
       ],
@@ -19562,6 +24046,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book and vice versa learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට එසේම එහි අනෙක් පැත්තද (ප්‍රතිලෝමවද) එසේමය පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option and vice versa this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී එසේම එහි අනෙක් පැත්තද (ප්‍රතිලෝමවද) එසේමය සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Physical illness can negatively affect a person's mental well-being, and vice versa.",
         "කායික රෝගී තත්ත්වයක් පුද්ගලයෙකුගේ මානසික යහපැවැත්මට අහිතකර ලෙස බලපෑ හැකි අතර, එහි අනෙක් පැත්තද එසේම වේ."
@@ -19598,6 +24090,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are marked for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර කැපී පෙනෙන වේ."
+      ],
+      [
+        "She gave a very marked answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා කැපී පෙනෙන පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "There has been a marked decline in newspaper circulation since the rise of digital news platforms.",
         "ඩිජිටල් පුවත් වේදිකාවල නැගීමත් සමඟ පුවත්පත් බෙදාහැරීමේ කැපී පෙනෙන පහත වැටීමක් සිදුවී ඇත."
       ],
@@ -19632,6 +24132,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Apparently, students need enough sleep before an exam.",
+        "පෙනෙන විදිහට, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will apparently improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ පෙනෙන විදිහට ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "An apparently minor rise in global temperatures can trigger devastating changes in weather patterns.",
         "ගෝලීය උෂ්ණත්වයේ මතුපිටින් සුළු යැයි පෙනෙන ඉහළ යාමකින් පවා කාලගුණික රටාවල විනාශකාරී වෙනස්කම් ඇති කළ හැකිය."
@@ -19668,6 +24176,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are contented for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර තෘප්තිමත් වේ."
+      ],
+      [
+        "She gave a very contented answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා තෘප්තිමත් පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Material wealth alone does not guarantee that an individual will lead a contented life.",
         "භෞතික ධනය පමණක් පුද්ගලයෙකු තෘප්තිමත් ජීවිතයක් ගත කරන බවට සහතිකයක් ලබා නොදේ."
       ],
@@ -19702,6 +24218,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to purchase her goal.",
+        "ඇය තම ඉලක්කය මිලදී ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can purchase new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා මිලදී ගැනීම හැකිය."
+      ],
       [
         "A growing proportion of consumers prefer to purchase clothing and electronics online rather than in physical stores.",
         "වැඩි වන පාරිභෝගිකයින් පිරිසක් වෙළඳසැල්වලට ගොස් මිලදී ගන්නවාට වඩා අන්තර්ජාලය හරහා ඇඳුම් සහ ඉලෙක්ට්‍රොනික උපකරණ මිලදී ගැනීමට කැමැත්තක් දක්වති."
@@ -19738,6 +24262,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "It is important to reside with your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි (වගකීම හෝ බලය) පැවරී තිබීම වැදගත් වේ."
+      ],
+      [
+        "She learned how to reside with difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව (වගකීම හෝ බලය) පැවරී තිබීම ඇය ඉගෙන ගත්තාය."
+      ],
+      [
         "While schools can teach healthy eating habits, the ultimate responsibility for a child's diet resides with parents.",
         "පාසල්වලට සෞඛ්‍ය සම්පන්න ආහාර පුරුදු ඉගැන්විය හැකි වුවද, දරුවෙකුගේ ආහාර වේල පිළිබඳ අවසාන වගකීම දෙමාපියන් සතු වේ."
       ],
@@ -19772,6 +24304,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are detrimental for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අහිතකර වේ."
+      ],
+      [
+        "She gave a very detrimental answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අහිතකර පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Excessive consumption of processed fast food is highly detrimental to cardiovascular health.",
         "සැකසූ ක්ෂණික ආහාර අධික ලෙස පරිභෝජනය කිරීම හෘද සෞඛ්‍යයට ඉතා අහිතකර වේ."
@@ -19808,6 +24348,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are satisfied for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර තෘප්තිමත් වූ වේ."
+      ],
+      [
+        "She gave a very satisfied answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා තෘප්තිමත් වූ පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Surveys indicate that over 70% of commuters are satisfied with the reliability of the new metro system.",
         "මගීන්ගෙන් 70% කට වැඩි පිරිසක් නව මෙට්‍රෝ දුම්රිය පද්ධතියේ විශ්වසනීයත්වය පිළිබඳව තෘප්තිමත් වන බව සමීක්ෂණවලින් පෙන්නුම් කෙරේ."
       ],
@@ -19842,6 +24390,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book on a...scale learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට පරිමාණයෙන් පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option on a...scale this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී පරිමාණයෙන් සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Climate change is a crisis that requires coordinated action on a global scale.",
         "දේශගුණික විපර්යාස යනු ගෝලීය පරිමාණයෙන් සම්බන්ධීකරණය වූ ක්‍රියාමාර්ග අවශ්‍ය වන අර්බුදයකි."
@@ -19878,6 +24434,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of divorce clearly.",
+        "ගුරුවරයා දික්කසාදය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your divorce.",
+        "හොඳ පුරුදු ඔබගේ දික්කසාදය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Financial stress and poor work-life balance have contributed to rising divorce rates in many countries.",
         "මූල්‍ය ආතතිය සහ රැකියාව හා පවුල් ජීවිතය අතර සමබරතාවය බිඳ වැටීම බොහෝ රටවල දික්කසාද අනුපාතය ඉහළ යාමට දායක වී ඇත."
       ],
@@ -19912,6 +24476,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are convinced that for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර දැඩි ලෙස විශ්වාස කරන වේ."
+      ],
+      [
+        "She gave a very convinced that answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා දැඩි ලෙස විශ්වාස කරන පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Many educational psychologists are convinced that play-based learning is vital in early childhood.",
         "මුල් ළමාවියේදී ක්‍රීඩා පදනම් කරගත් ඉගෙනීම අත්‍යවශ්‍ය බව බොහෝ අධ්‍යාපන මනෝවිද්‍යාඥයෝ දැඩි ලෙස විශ්වාස කරති."
@@ -19948,6 +24520,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to suppress her goal.",
+        "ඇය තම ඉලක්කය යටපත් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can suppress new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා යටපත් කරන්න හැකිය."
+      ],
+      [
         "Chronic psychological stress can suppress the immune system and make individuals vulnerable to illness.",
         "දිගුකාලීන මානසික ආතතිය මගින් ප්‍රතිශක්තිකරණ පද්ධතිය යටපත් කළ හැකි අතර පුද්ගලයන් රෝගවලට ගොදුරු වීමේ අවදානම වැඩි කරයි."
       ],
@@ -19982,6 +24562,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of fluctuation clearly.",
+        "ගුරුවරයා උච්චාවචනයක් (ඉහළ පහළ යාමක්) පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your fluctuation.",
+        "හොඳ පුරුදු ඔබගේ උච්චාවචනයක් (ඉහළ පහළ යාමක්) කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Global oil prices experienced wild fluctuations between 2014 and 2022 due to geopolitical tensions.",
         "භූ-දේශපාලනික නොසන්සුන්තා හේතුවෙන් 2014 සහ 2022 අතර කාලය තුළ ගෝලීය බොරතෙල් මිල දැඩි උච්චාවචනයන්ට ලක් විය."
@@ -20018,6 +24606,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are erratic for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අක්‍රමවත් වේ."
+      ],
+      [
+        "She gave a very erratic answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අක්‍රමවත් පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Climate change has led to increasingly erratic weather patterns, making harvest predictions difficult for farmers.",
         "දේශගුණික විපර්යාස හේතුවෙන් වඩ වඩාත් අක්‍රමවත් කාලගුණික රටා ඇති වී තිබෙන අතර, එය ගොවීන්ට අස්වැන්න පුරෝකථනය කිරීම දුෂ්කර කරයි."
       ],
@@ -20052,6 +24648,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of discrepancy clearly.",
+        "ගුරුවරයා පරස්පරතාවයක් පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your discrepancy.",
+        "හොඳ පුරුදු ඔබගේ පරස්පරතාවයක් කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "The chart reveals a wide discrepancy between the average earnings of male and female executives.",
         "පිරිමි සහ කාන්තා විධායක නිලධාරීන්ගේ සාමාන්‍ය ආදායම අතර විශාල පරස්පරතාවයක් පවතින බව මෙම ප්‍රස්තාරයෙන් හෙළි වේ."
@@ -20088,6 +24692,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are minute for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ඉතාමත් කුඩා වේ."
+      ],
+      [
+        "She gave a very minute answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ඉතාමත් කුඩා පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Even minute quantities of toxic heavy metals can contaminate an entire municipal water supply.",
         "විෂ සහිත බැර ලෝහ ඉතා සුළු ප්‍රමාණයකට පවා සමස්ත නගරයකම ජල සැපයුම දූෂණය කළ හැකිය."
       ],
@@ -20122,6 +24734,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to loathe her goal.",
+        "ඇය තම ඉලක්කය දැඩි ලෙස පිළිකුල් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can loathe new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා දැඩි ලෙස පිළිකුල් කරන්න හැකිය."
+      ],
       [
         "Many city dwellers utterly loathe commuting on overcrowded trains during the morning rush hour.",
         "බොහෝ නගරවාසීන් උදෑසන කාර්යබහුල වේලාවේ අධික තදබදයක් සහිත දුම්රියවල ගමන් කිරීමට දැඩි ලෙස අකමැති වෙති."
@@ -20158,6 +24778,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to locate her goal.",
+        "ඇය තම ඉලක්කය පිහිටා තිබීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can locate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා පිහිටා තිබීම හැකිය."
+      ],
+      [
         "The proposed shopping mall will be located to the east of the existing railway station.",
         "යෝජිත සාප්පු සංකීර්ණය පවතින දුම්රිය ස්ථානයට නැගෙනහිරින් ස්ථාපිත කෙරෙනු ඇත."
       ],
@@ -20192,6 +24820,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to disintegrate her goal.",
+        "ඇය තම ඉලක්කය කැබලිවලට කැඩී බිඳී යාම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can disintegrate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා කැබලිවලට කැඩී බිඳී යාම හැකිය."
+      ],
       [
         "Discarded plastic bags do not biodegrade; instead, they disintegrate into toxic microplastics.",
         "ඉවත දමන ප්ලාස්ටික් බෑග් ස්වභාවිකව දිරාපත් නොවන අතර, ඒ වෙනුවට ඒවා විෂ සහිත ක්ෂුද්‍ර ප්ලාස්ටික් කැබලි බවට කැඩී යයි."
@@ -20228,6 +24864,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to accompany her goal.",
+        "ඇය තම ඉලක්කය සමඟ යාම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can accompany new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සමඟ යාම හැකිය."
+      ],
+      [
         "Rapid industrialisation is frequently accompanied by severe environmental degradation.",
         "වේගවත් කාර්මීකරණය සමඟ බොහෝවිට දරුණු පාරිසරික හායනයක්ද සමගාමීව සිදු වේ."
       ],
@@ -20262,6 +24906,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book in effect learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට සැබෑවටම ගත් කල (ප්‍රායෝගිකව) පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option in effect this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී සැබෑවටම ගත් කල (ප්‍රායෝගිකව) සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "By pricing public transport so high, authorities are, in effect, forcing commuters to use private cars.",
         "පොදු ප්‍රවාහන ගාස්තු ඉතා ඉහළ මට්ටමක තැබීමෙන් බලධාරීන් ප්‍රායෝගිකව සිදු කරන්නේ පෞද්ගලික මෝටර් රථ භාවිත කිරීමට මගීන්ට බල කිරීමයි."
@@ -20298,6 +24950,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to prolong her goal.",
+        "ඇය තම ඉලක්කය කාලය දීර්ඝ කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can prolong new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා කාලය දීර්ඝ කරන්න හැකිය."
+      ],
+      [
         "Advances in medical technology have significantly prolonged human life expectancy over the past century.",
         "පසුගිය ශතවර්ෂය පුරා වෛද්‍ය තාක්ෂණයේ සිදුවූ දියුණුව මගින් මිනිසාගේ ආයු අපේක්ෂාව සැලකිය යුතු ලෙස දීර්ඝ කර ඇත."
       ],
@@ -20332,6 +24992,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are dispensable for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර නැතිවම බැරි නොවන වේ."
+      ],
+      [
+        "She gave a very dispensable answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා නැතිවම බැරි නොවන පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "During economic recessions, households cut back on dispensable luxury items first.",
         "ආර්ථික අවපාත කාලවලදී පවුල් විසින් අත්‍යවශ්‍ය නොවන සුඛෝපභෝගී භාණ්ඩ සඳහා කරන වියදම් පළමුව කපා හරිනු ලැබේ."
@@ -20368,6 +25036,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of shelter clearly.",
+        "ගුරුවරයා සෙවණ පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your shelter.",
+        "හොඳ පුරුදු ඔබගේ සෙවණ කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Access to adequate food, clean water, and safe shelter is a fundamental human right.",
         "ප්‍රමාණවත් ආහාර, පිරිසිදු ජලය සහ ආරක්ෂිත නිවාස (සෙවණ) ලබා ගැනීම මූලික මිනිස් අයිතිවාසිකමකි."
       ],
@@ -20402,6 +25078,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are intact for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර හානියට පත් නොවූ වේ."
+      ],
+      [
+        "She gave a very intact answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා හානියට පත් නොවූ පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Strict conservation laws are needed to keep remaining tropical rainforests intact.",
         "ඉතිරිව ඇති නිවර්තන වැසි වනාන්තර හානියකින් තොරව ඒ අයුරින්ම ආරක්ෂා කර ගැනීම සඳහා දැඩි සංරක්ෂණ නීති අවශ්‍ය වේ."
@@ -20438,6 +25122,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book have commitments learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට වගකීම් හෝ බැඳීම් පැවතීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option have commitments this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී වගකීම් හෝ බැඳීම් පැවතීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Part-time degree programmes allow adults who have family commitments to continue their higher education.",
         "අර්ධකාලීන උපාධි පාඨමාලා මගින් පවුලේ වගකීම් ඇති වැඩිහිටියන්ට තම උසස් අධ්‍යාපනය අඛණ්ඩව කරගෙන යාමට ඉඩ සලසයි."
       ],
@@ -20472,6 +25164,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to channel her goal.",
+        "ඇය තම ඉලක්කය (අරමුදල්, ශක්තිය හෝ අවධානය) යම් අරමුණක් වෙත යොමු කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can channel new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා (අරමුදල්, ශක්තිය හෝ අවධානය) යම් අරමුණක් වෙත යොමු කරන්න හැකිය."
+      ],
       [
         "Community sports clubs help teenagers channel their energy into constructive team activities.",
         "ප්‍රජා ක්‍රීඩා සමාජ මගින් නව යෞවනයන්ට තම ජවය ඵලදායී කණ්ඩායම් ක්‍රියාකාරකම් වෙත යොමු කිරීමට උපකාරී වේ."
@@ -20508,6 +25208,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to fear her goal.",
+        "ඇය තම ඉලක්කය බිය වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can fear new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා බිය වෙන්න හැකිය."
+      ],
+      [
         "Conservationists fear that several iconic mammal species could become extinct within the next fifty years.",
         "ඉදිරි වසර පනහ ඇතුළත සුවිශේෂී ක්ෂීරපායී විශේෂ කිහිපයක් වඳ වී යා හැකි බවට පරිසර සංරක්ෂණවේදීහු බිය පළ කරති."
       ],
@@ -20542,6 +25250,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to cease her goal.",
+        "ඇය තම ඉලක්කය නතර වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can cease new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා නතර වෙන්න හැකිය."
+      ],
       [
         "Without urgent preservation efforts, hundreds of indigenous languages will cease to exist this century.",
         "කඩිනම් සංරක්ෂණ ප්‍රයත්නයන් නොමැති වුවහොත්, මෙම ශතවර්ෂය තුළ දේශීය භාෂා සිය ගණනක පැවැත්ම අවසන් වනු ඇත."
@@ -20578,6 +25294,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to govern her goal.",
+        "ඇය තම ඉලක්කය පාලනය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can govern new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා පාලනය කරන්න හැකිය."
+      ],
+      [
         "Strict regulations governing food labelling help consumers make informed dietary choices.",
         "ආහාර ලේබල් කිරීම පාලනය කරන දැඩි රෙගුලාසි මගින් දැනුවත් ආහාර තේරීම් සිදු කිරීමට පාරිභෝගිකයින්ට උපකාරී වේ."
       ],
@@ -20612,6 +25336,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of elite clearly.",
+        "ගුරුවරයා ප්‍රභූ පැලැන්තිය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your elite.",
+        "හොඳ පුරුදු ඔබගේ ප්‍රභූ පැලැන්තිය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Government sports funding should support grassroots facilities rather than focusing solely on elite athletes.",
         "රජයේ ක්‍රීඩා අරමුදල් විශිෂ්ට මට්ටමේ ක්‍රීඩකයින් කෙරෙහි පමණක් අවධානය යොමු නොකර බිම් මට්ටමේ ක්‍රීඩා පහසුකම් නැංවීමට සහාය විය යුතුය."
@@ -20648,6 +25380,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are uniform for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ඒකාකාරී (සැමතැනම එක හා සමාන) වේ."
+      ],
+      [
+        "She gave a very uniform answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ඒකාකාරී (සැමතැනම එක හා සමාන) පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Wearing school uniforms helps reduce visible socioeconomic differences among pupils.",
         "පාසල් නිල ඇඳුම් ඇඳීම සිසුන් අතර පෙනෙන්නට තිබෙන සමාජ-ආර්ථික වෙනස්කම් අවම කිරීමට උපකාරී වේ."
       ],
@@ -20682,6 +25422,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to emphasise her goal.",
+        "ඇය තම ඉලක්කය අවධාරණය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can emphasise new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අවධාරණය කරන්න හැකිය."
+      ],
       [
         "Nutritionists consistently emphasise the importance of eating fresh vegetables and whole grains.",
         "නැවුම් එළවළු සහ ධාන්‍ය වර්ග ආහාරයට ගැනීමේ වැදගත්කම පෝෂණවේදීහු නිරන්තරයෙන් අවධාරණය කරති."
@@ -20718,6 +25466,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "It is important to cope with your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි (දුෂ්කරතාවයකට හෝ පීඩනයකට) සාර්ථකව මුහුණ දීම වැදගත් වේ."
+      ],
+      [
+        "She learned how to cope with difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව (දුෂ්කරතාවයකට හෝ පීඩනයකට) සාර්ථකව මුහුණ දීම ඇය ඉගෙන ගත්තාය."
+      ],
+      [
         "Existing urban infrastructure is struggling to cope with the rapid influx of rural migrants.",
         "ග්‍රාමීය සංක්‍රමණිකයන්ගේ ශීඝ්‍ර පැමිණීමට මුහුණ දීමට පවතින නාගරික යටිතල පහසුකම් දැඩි වෙහෙසක් දරයි."
       ],
@@ -20752,6 +25508,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book by no means learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට කිසිසේත්ම නැත පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option by no means this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී කිසිසේත්ම නැත සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Graduating from a prestigious university is by no means a guarantee of lifelong career success.",
         "කීර්තිමත් විශ්වවිද්‍යාලයකින් උපාධියක් ලබා ගැනීම ජීවිත කාලය පුරාම වෘත්තීය සාර්ථකත්වය ලැබෙන බවට කිසිසේත්ම සහතිකයක් නොවේ."
@@ -20788,6 +25552,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to grant her goal.",
+        "ඇය තම ඉලක්කය ලබා දීම (අනුමත කිරීම) මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can grant new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ලබා දීම (අනුමත කිරීම) හැකිය."
+      ],
+      [
         "Governments should provide generous research grants to universities developing clean energy technologies.",
         "පිරිසිදු බලශක්ති තාක්ෂණයන් වැඩිදියුණු කරන විශ්වවිද්‍යාල සඳහා රජයන් විසින් පර්යේෂණ මූල්‍ය ප්‍රදාන ලබා දිය යුතුය."
       ],
@@ -20822,6 +25594,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to enjoy her goal.",
+        "ඇය තම ඉලක්කය සතුටින් අත්විඳීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can enjoy new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සතුටින් අත්විඳීම හැකිය."
+      ],
       [
         "Citizens in Nordic countries generally enjoy a remarkably high standard of living and social security.",
         "නෝර්ඩික් කලාපීය රටවල පුරවැසියෝ සාමාන්‍යයෙන් කැපී පෙනෙන ඉහළ ජීවන තත්ත්වයක් සහ සමාජ ආරක්ෂණයක් භුක්ති විඳිති."
@@ -20858,6 +25638,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Immediately, students need enough sleep before an exam.",
+        "වහාම, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will immediately improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ වහාම ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "The benefits of investing in early childhood education are not always immediately apparent.",
         "මුල් ළමාවිය අධ්‍යාපනය සඳහා ආයෝජනය කිරීමේ ප්‍රතිලාභ සෑම විටම ක්ෂණිකව පෙනෙන්නට නොතිබිය හැකිය."
       ],
@@ -20892,6 +25680,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are wise for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර නුවණැති වේ."
+      ],
+      [
+        "She gave a very wise answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා නුවණැති පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "It would be wise for municipal authorities to expand cycle lanes before traffic congestion worsens.",
         "රථවාහන තදබදය තවදුරටත් උග්‍ර වීමට පෙර පාපැදි මංතීරු පුළුල් කිරීමට නගර සභා බලධාරීන් පියවර ගැනීම නුවණට හුරුය."
@@ -20928,6 +25724,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are prominent for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර කැපී පෙනෙන වේ."
+      ],
+      [
+        "She gave a very prominent answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා කැපී පෙනෙන පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Renewable energy now plays a prominent role in the national power grids of many European countries.",
         "පුනර්ජනනීය බලශක්තිය දැන් බොහෝ යුරෝපීය රටවල ජාතික විදුලිබල පද්ධති තුළ ප්‍රමුඛ කාර්යභාරයක් ඉටු කරයි."
       ],
@@ -20962,6 +25766,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to suffer her goal.",
+        "ඇය තම ඉලක්කය පීඩා විඳීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can suffer new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා පීඩා විඳීම හැකිය."
+      ],
       [
         "Residents living near busy motorways often suffer from sleep deprivation and respiratory problems.",
         "කාර්යබහුල අධිවේගී මාර්ග ආසන්නයේ ජීවත් වන වැසියෝ බොහෝවිට නින්ද නොයාමෙන් සහ ශ්වසන ආබාධවලින් පීඩා විඳිති."
@@ -20998,6 +25810,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are graphic for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ඉතා පැහැදිලි සහ සවිස්තරාත්මක (බොහෝවිට කම්පනය දනවන) වේ."
+      ],
+      [
+        "She gave a very graphic answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ඉතා පැහැදිලි සහ සවිස්තරාත්මක (බොහෝවිට කම්පනය දනවන) පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Parents are rightly concerned about children being exposed to graphic violence in video games.",
         "වීඩියෝ ක්‍රීඩාවල අඩංගු බිහිසුණු ප්‍රචණ්ඩකාරී දර්ශනවලට දරුවන් නිරාවරණය වීම පිළිබඳව දෙමාපියන් සාධාරණ ලෙසම කනස්සල්ලට පත් වෙති."
       ],
@@ -21032,6 +25852,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to gather her goal.",
+        "ඇය තම ඉලක්කය එක්රැස් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can gather new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා එක්රැස් කරන්න හැකිය."
+      ],
       [
         "Researchers spent several months in the field to gather reliable data on rural migration.",
         "ග්‍රාමීය සංක්‍රමණ පිළිබඳ විශ්වාසදායක දත්ත එක්රැස් කිරීම සඳහා පර්යේෂකයෝ මාස කිහිපයක් ක්ෂේත්‍රයේ ගත කළහ."
@@ -21068,6 +25896,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to promote her goal.",
+        "ඇය තම ඉලක්කය ප්‍රවර්ධනය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can promote new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ප්‍රවර්ධනය කරන්න හැකිය."
+      ],
+      [
         "Public health campaigns are designed to promote healthier dietary habits among school children.",
         "පාසල් දරුවන් අතර වඩාත් සෞඛ්‍ය සම්පන්න ආහාර පුරුදු ප්‍රවර්ධනය කිරීම සඳහා මහජන සෞඛ්‍ය වැඩසටහන් සැලසුම් කර ඇත."
       ],
@@ -21102,6 +25938,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are volatile for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අස්ථාවර වේ."
+      ],
+      [
+        "She gave a very volatile answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අස්ථාවර පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Investing in cryptocurrency remains risky due to the highly volatile nature of digital markets.",
         "ඩිජිටල් වෙළඳපොළවල පවතින දැඩි අස්ථාවර ස්වභාවය හේතුවෙන් ක්‍රිප්ටෝ මුදල්වල ආයෝජනය කිරීම තවමත් අවදානම් සහගතය."
@@ -21138,6 +25982,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of fraction clearly.",
+        "ගුරුවරයා ඉතා සුළු කොටසක් පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your fraction.",
+        "හොඳ පුරුදු ඔබගේ ඉතා සුළු කොටසක් කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Online courses allow students to access university-level material at a fraction of the traditional cost.",
         "සාම්ප්‍රදායික වියදමෙන් ඉතා සුළු මුදලකට විශ්වවිද්‍යාල මට්ටමේ අධ්‍යයන තොරතුරු ලබා ගැනීමට මාර්ගගත පාඨමාලා සිසුන්ට අවස්ථාව සලසයි."
       ],
@@ -21172,6 +26024,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book for the duration of learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට පවතින මුළු කාලසීමාව පුරාවටම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option for the duration of this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී පවතින මුළු කාලසීමාව පුරාවටම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Passengers must keep their seatbelts fastened for the duration of the turbulent weather.",
         "කැළඹිලි සහිත කාලගුණය පවතින මුළු කාලසීමාව පුරාම මගීන් තම ආසන පටි පැළඳ සිටිය යුතුය."
@@ -21208,6 +26068,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are neutral for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර මධ්‍යස්ථ වේ."
+      ],
+      [
+        "She gave a very neutral answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා මධ්‍යස්ථ පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Journalists have a professional obligation to remain neutral when reporting on political controversies.",
         "දේශපාලන මතභේද පිළිබඳව වාර්තා කිරීමේදී මධ්‍යස්ථව සිටීමට මාධ්‍යවේදීන්ට වෘත්තීය වගකීමක් ඇත."
       ],
@@ -21242,6 +26110,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Partially, students need enough sleep before an exam.",
+        "අර්ධ වශයෙන්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will partially improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ අර්ධ වශයෙන් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Human agricultural expansion is at least partially responsible for the loss of native woodland.",
         "ස්වදේශික වනාන්තර අහිමි වීම සඳහා මිනිසාගේ කෘෂිකාර්මික ව්‍යාප්තිය අවම වශයෙන් අර්ධ වශයෙන් හෝ වගකිව යුතුය."
@@ -21278,6 +26154,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to appreciate her goal.",
+        "ඇය තම ඉලක්කය අගය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can appreciate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අගය කරන්න හැකිය."
+      ],
+      [
         "Travelling abroad helps young people appreciate the richness of diverse cultural traditions.",
         "විදේශයන්හි සංචාරය කිරීම විවිධ සංස්කෘතික සම්ප්‍රදායන්හි පොහොසත් බව අගය කිරීමට තරුණ පිරිසට උපකාරී වේ."
       ],
@@ -21312,6 +26196,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Likewise, students need enough sleep before an exam.",
+        "එලෙසම, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will likewise improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ එලෙසම ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Balanced nutrition is vital for physical health; likewise, adequate rest is essential for mental clarity.",
         "ශාරීරික සෞඛ්‍යයට සමබර පෝෂණය ඉතා වැදගත් වන අතර, එලෙසම මානසික නිරවුල්භාවය සඳහා ප්‍රමාණවත් විවේකයක් අත්‍යවශ්‍ය වේ."
@@ -21348,6 +26240,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are marginal for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ආන්තික වේ."
+      ],
+      [
+        "She gave a very marginal answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ආන්තික පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Despite heavy investment in advertising, the company experienced only a marginal increase in sales.",
         "වෙළඳ දැන්වීම් සඳහා විශාල ආයෝජනයක් කළද, සමාගම අත්දැක ඇත්තේ විකුණුම්වල ඉතා සුළු වැඩිවීමක් පමණි."
       ],
@@ -21382,6 +26282,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to deprive of her goal.",
+        "ඇය තම ඉලක්කය අහිමි කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can deprive of new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අහිමි කරන්න හැකිය."
+      ],
       [
         "Poverty should never deprive talented children of the opportunity to pursue higher education.",
         "දරිද්‍රතාවය හේතුවෙන් කිසිවිටෙකත් දක්ෂ දරුවන්ට උසස් අධ්‍යාපනය හැදෑරීමේ අවස්ථාව අහිමි නොවිය යුතුය."
@@ -21418,6 +26326,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Logically, students need enough sleep before an exam.",
+        "තාර්කිකව, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will logically improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ තාර්කිකව ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "To achieve a high score in academic writing, candidates must present their arguments logically.",
         "ශාස්ත්‍රීය ලේඛනයේදී ඉහළ ලකුණු මට්ටමක් ලබා ගැනීමට නම්, අපේක්ෂකයින් තම තර්ක තාර්කිකව ඉදිරිපත් කළ යුතුය."
       ],
@@ -21452,6 +26368,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to decline her goal.",
+        "ඇය තම ඉලක්කය පහත වැටීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can decline new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා පහත වැටීම හැකිය."
+      ],
       [
         "Birth rates in many industrialised nations have continued to decline over the past three decades.",
         "පසුගිය දශක තුනක කාලය තුළ බොහෝ කාර්මික රටවල උපත් අනුපාතය අඛණ්ඩව පහත වැටී ඇත."
@@ -21488,6 +26412,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Hastily, students need enough sleep before an exam.",
+        "කලබලයෙන්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will hastily improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ කලබලයෙන් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Laws that are hastily drafted in response to public panic often contain serious loopholes.",
         "මහජන කලබලයට ප්‍රතිචාර වශයෙන් ඉක්මන් වී කෙටුම්පත් කරනු ලබන නීතිවල බොහෝ විට බරපතල අඩුපාඩු අඩංගු වේ."
       ],
@@ -21522,6 +26454,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to suspend her goal.",
+        "ඇය තම ඉලක්කය තාවකාලිකව අත්හිටුවෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can suspend new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා තාවකාලිකව අත්හිටුවෙන්න හැකිය."
+      ],
       [
         "The airline was forced to suspend all international flights during the severe volcanic ash cloud.",
         "දරුණු ගිනිකඳු අළු වලාව පැවති කාලය තුළ සියලුම ජාත්‍යන්තර ගුවන් ගමන් තාවකාලිකව අත්හිටුවීමට ගුවන් සේවයට සිදු විය."
@@ -21558,6 +26498,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to revive her goal.",
+        "ඇය තම ඉලක්කය යළි පණ ගැන්වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can revive new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා යළි පණ ගැන්වෙන්න හැකිය."
+      ],
+      [
         "Government stimulus packages were introduced to revive the tourism sector after the pandemic.",
         "වසංගත තත්ත්වයෙන් පසු සංචාරක ක්ෂේත්‍රය යළි පණ ගැන්වීම සඳහා රජයේ ආර්ථික දිරිගැන්වීමේ වැඩසටහන් හඳුන්වා දෙන ලදී."
       ],
@@ -21592,6 +26540,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to extract her goal.",
+        "ඇය තම ඉලක්කය නිස්සාරණය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can extract new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා නිස්සාරණය කරන්න හැකිය."
+      ],
       [
         "Heavy machinery is used to extract valuable minerals from deep beneath the earth's surface.",
         "පොළොව අභ්‍යන්තරයේ ගැඹුරින් පිහිටි වටිනා ඛනිජ වර්ග නිස්සාරණය කර ගැනීම සඳහා බර යන්ත්‍රෝපකරණ භාවිත කෙරේ."
@@ -21628,6 +26584,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to verify her goal.",
+        "ඇය තම ඉලක්කය සත්‍යාපනය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can verify new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සත්‍යාපනය කරන්න හැකිය."
+      ],
+      [
         "Social media users should always verify the accuracy of sensational news stories before sharing them.",
         "සමාජ මාධ්‍ය භාවිත කරන්නන් ආන්දෝලනාත්මක පුවත් බෙදා ගැනීමට පෙර සෑම විටම ඒවායේ නිරවද්‍යතාව තහවුරු කර ගත යුතුය."
       ],
@@ -21662,6 +26626,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are wary of for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සැකමුසු අවධානයෙන් පසුවන වේ."
+      ],
+      [
+        "She gave a very wary of answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සැකමුසු අවධානයෙන් පසුවන පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Many older citizens remain wary of using online banking due to fears of cyber fraud.",
         "සයිබර් වංචා පිළිබඳ පවතින බිය හේතුවෙන් බොහෝ වැඩිහිටි පුරවැසියෝ මාර්ගගත බැංකු කටයුතු භාවිත කිරීම ගැන ප්‍රවේශම් සහගතව පසුවෙති."
@@ -21698,6 +26670,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are conspicuous for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර කැපී පෙනෙන වේ."
+      ],
+      [
+        "She gave a very conspicuous answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා කැපී පෙනෙන පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Advertising encourages conspicuous consumption by linking luxury brands with social status.",
         "වෙළඳ දැන්වීම් මගින් සුඛෝපභෝගී වෙළඳ නාම සමාජ තත්ත්වය සමඟ සම්බන්ධ කරමින් ප්‍රදර්ශනාත්මක පරිභෝජනය දිරිගන්වයි."
       ],
@@ -21732,6 +26712,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are disillusioned with for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර කලකිරීමට පත් වූ වේ."
+      ],
+      [
+        "She gave a very disillusioned with answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා කලකිරීමට පත් වූ පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Many young graduates become disillusioned with the corporate world when faced with long working hours.",
         "දීර්ඝ වැඩ මුරවලට මුහුණ දෙන විට බොහෝ තරුණ උපාධිධාරීහු ආයතනික රැකියා ලෝකය පිළිබඳව කලකිරීමට පත් වෙති."
@@ -21768,6 +26756,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are blessed with for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර දායාද කර ලද වේ."
+      ],
+      [
+        "She gave a very blessed with answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා දායාද කර ලද පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Countries blessed with abundant solar and wind energy have a distinct advantage in transitioning to green power.",
         "සූර්ය හා සුළං බලශක්තිය බහුලව දායාද වී ඇති රටවලට හරිත බලශක්තිය වෙත යොමු වීමේදී සුවිශේෂී වාසියක් හිමි වේ."
       ],
@@ -21802,6 +26798,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are repulsive for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර පිළිකුල් සහගත වේ."
+      ],
+      [
+        "She gave a very repulsive answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා පිළිකුල් සහගත පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Untreated industrial sewage released into the river created a repulsive odour across the entire town.",
         "පිරිපහදු නොකළ කාර්මික අපද්‍රව්‍ය ගංගාවට මුදා හැරීම නිසා මුළු නගරය පුරාම පිළිකුල් සහගත දුගඳක් පැතිර ගියේය."
@@ -21838,6 +26842,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are imminent for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අත ළඟම ඇති වේ."
+      ],
+      [
+        "She gave a very imminent answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අත ළඟම ඇති පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Early warning systems allow authorities to evacuate coastal towns before an imminent tsunami strikes.",
         "පූර්ව අනතුරු ඇඟවීමේ පද්ධති මගින් ආසන්න සුනාමි අවදානමක් ඇති වීමට පෙර වෙරළබඩ නගරවල ජනතාව ඉවත් කිරීමට බලධාරීන්ට ඉඩ සලසයි."
       ],
@@ -21872,6 +26884,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to upset her goal.",
+        "ඇය තම ඉලක්කය සිත රිදවෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can upset new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සිත රිදවෙන්න හැකිය."
+      ],
       [
         "Introducing non-native predators can severely upset the delicate balance of an island ecosystem.",
         "ආගන්තුක විලෝපික සතුන් හඳුන්වා දීමෙන් දූපත් පරිසර පද්ධතියක පවතින සියුම් සමබරතාවය දැඩි ලෙස බිඳ වැටිය හැකිය."
@@ -21908,6 +26928,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are ill for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අසනීප වූ වේ."
+      ],
+      [
+        "She gave a very ill answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අසනීප වූ පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Public awareness campaigns highlight the long-term ill effects of smoking and excessive sugar consumption.",
         "දුම්පානයේ සහ අධික සීනි පරිභෝජනයේ දිගුකාලීන අහිතකර ප්‍රතිවිපාක මහජන දැනුවත් කිරීමේ වැඩසටහන් මගින් අවධාරණය කෙරේ."
       ],
@@ -21942,6 +26970,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Conversely, students need enough sleep before an exam.",
+        "ඊට ප්‍රතිවිරුද්ධව, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will conversely improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ ඊට ප්‍රතිවිරුද්ධව ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Northern regions experienced record rainfall; conversely, southern provinces suffered from severe drought.",
         "උතුරු ප්‍රදේශවල වාර්තාගත වර්ෂාපතනයක් ලැබුණු අතර, ඊට ප්‍රතිවිරුද්ධව දකුණු පළාත් දැඩි නියඟයකින් පීඩා වින්දේය."
@@ -21978,6 +27014,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to fund her goal.",
+        "ඇය තම ඉලක්කය අරමුදල් සැපයීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can fund new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අරමුදල් සැපයීම හැකිය."
+      ],
+      [
         "Taxpayers often debate whether the government should fund contemporary art galleries and museums.",
         "සමකාලීන කලාගාර සහ කෞතුකාගාර සඳහා රජය මගින් අරමුදල් සැපයිය යුතුද යන්න පිළිබඳව බදු ගෙවන්නෝ බොහෝ විට වාද කරති."
       ],
@@ -22012,6 +27056,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of lecture clearly.",
+        "ගුරුවරයා දේශනය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your lecture.",
+        "හොඳ පුරුදු ඔබගේ දේශනය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "First-year undergraduates are expected to attend weekly lectures as well as smaller tutorial groups.",
         "පළමු වසරේ උපාධි අපේක්ෂකයින් සතිපතා පැවැත්වෙන දේශනවලට මෙන්ම කුඩා නිබන්ධන කණ්ඩායම්වලටද සහභාගී විය යුතු බව අපේක්ෂා කෙරේ."
@@ -22048,6 +27100,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to shun her goal.",
+        "ඇය තම ඉලක්කය මඟහැරීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can shun new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා මඟහැරීම හැකිය."
+      ],
+      [
         "Environmentally conscious consumers increasingly shun single-use plastics in favour of reusable alternatives.",
         "පරිසරය පිළිබඳ සංවේදී පාරිභෝගිකයෝ නැවත භාවිත කළ හැකි විකල්ප තෝරා ගනිමින් එක් වරක් පමණක් භාවිත කරන ප්ලාස්ටික් ක්‍රමයෙන් ප්‍රතික්ෂේප කරති."
       ],
@@ -22082,6 +27142,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of privilege clearly.",
+        "ගුරුවරයා වරප්‍රසාදය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your privilege.",
+        "හොඳ පුරුදු ඔබගේ වරප්‍රසාදය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Access to clean drinking water and primary healthcare should be treated as a fundamental right rather than a privilege.",
         "පිරිසිදු පානීය ජලය සහ ප්‍රාථමික සෞඛ්‍ය සේවාව ලබා ගැනීම වරප්‍රසාදයක් ලෙස නොව මූලික අයිතිවාසිකමක් ලෙස සැලකිය යුතුය."
@@ -22118,6 +27186,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are primitive for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ප්‍රාථමික වේ."
+      ],
+      [
+        "She gave a very primitive answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ප්‍රාථමික පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Archaeologists discovered primitive stone tools that date back more than fifty thousand years.",
         "වසර පනස් දහසකට වඩා පැරණි ආදිකාලීන ගල් ආයුධ පුරාවිද්‍යාඥයින් විසින් සොයා ගන්නා ලදී."
       ],
@@ -22152,6 +27228,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Instinctively, students need enough sleep before an exam.",
+        "ඉවෙන් මෙන්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will instinctively improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ ඉවෙන් මෙන් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Parents instinctively protect their children when they perceive a sudden physical threat.",
         "හදිසි ශාරීරික අනතුරක් දැනුණු විට දෙමාපියෝ නිරායාසයෙන්ම තම දරුවන් ආරක්ෂා කරති."
@@ -22188,6 +27272,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of disparity clearly.",
+        "ගුරුවරයා විෂමතාවය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your disparity.",
+        "හොඳ පුරුදු ඔබගේ විෂමතාවය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "There is a growing disparity between the quality of healthcare available in cities and that in remote villages.",
         "නගරවල පවතින සෞඛ්‍ය සේවාවේ ගුණාත්මකභාවය සහ දුෂ්කර ගම්මානවල සෞඛ්‍ය සේවාව අතර වර්ධනය වන විෂමතාවයක් පවතී."
       ],
@@ -22222,6 +27314,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are obscene for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අසභ්‍ය වේ."
+      ],
+      [
+        "She gave a very obscene answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අසභ්‍ය පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Critics argue that top professional footballers are paid obscene amounts of money compared to nurses and teachers.",
         "හෙදියන්ට සහ ගුරුවරුන්ට සාපේක්ෂව ප්‍රමුඛ පෙළේ වෘත්තීය පාපන්දු ක්‍රීඩකයින්ට අසාධාරණ ලෙස අධික මුදල් ප්‍රමාණයක් ගෙවන බව විචාරකයෝ තර්ක කරති."
@@ -22258,6 +27358,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are sheer for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර හුදු වේ."
+      ],
+      [
+        "She gave a very sheer answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා හුදු පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Emergency services were overwhelmed by the sheer scale of the devastation caused by the hurricane.",
         "සුළි කුණාටුවෙන් සිදු වූ විනාශයේ අතිවිශාල පරිමාණය හමුවේ හදිසි ආපදා සේවාවන් දැඩි අසීරුතාවයකට පත් විය."
       ],
@@ -22292,6 +27400,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are lethal for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර මාරාන්තික වේ."
+      ],
+      [
+        "She gave a very lethal answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා මාරාන්තික පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Driving while exhausted and texting on a mobile phone is a lethal combination on modern highways.",
         "අධික වෙහෙසකින් සිටින අතරතුර ජංගම දුරකථනයෙන් කෙටි පණිවිඩ යවමින් රිය පැදවීම නවීන මහාමාර්ගවල මාරාන්තික එකතුවකි."
@@ -22328,6 +27444,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of status quo clearly.",
+        "ගුරුවරයා දැනට පවතින තත්ත්වය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your status quo.",
+        "හොඳ පුරුදු ඔබගේ දැනට පවතින තත්ත්වය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Large fossil fuel corporations often lobby governments to maintain the status quo rather than transition to clean energy.",
         "විශාල ෆොසිල ඉන්ධන සමාගම් බොහෝ විට පිරිසිදු බලශක්තිය වෙත යොමු වනවාට වඩා දැනට පවතින තත්ත්වය එලෙසම පවත්වා ගැනීමට රජයන්ට බලපෑම් කරයි."
       ],
@@ -22362,6 +27486,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to inhale her goal.",
+        "ඇය තම ඉලක්කය ආශ්වාස කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can inhale new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ආශ්වාස කරන්න හැකිය."
+      ],
       [
         "Commuters stuck in heavy traffic inhale dangerous levels of exhaust fumes every day.",
         "දැඩි රථවාහන තදබදයේ සිරවී සිටින මගීහු දිනපතා අනතුරුදායක මට්ටමින් වාහන දුම ආශ්වාස කරති."
@@ -22398,6 +27530,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of phase clearly.",
+        "ගුරුවරයා අදියර පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your phase.",
+        "හොඳ පුරුදු ඔබගේ අදියර කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "The construction of the high-speed railway was completed in three separate phases over a decade.",
         "අධිවේගී දුම්රිය මාර්ගයේ ඉදිකිරීම් දශකයක් පුරා වෙනම අදියර තුනකින් නිම කරන ලදී."
       ],
@@ -22432,6 +27572,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are lucrative for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ඉතා ලාභදායී වේ."
+      ],
+      [
+        "She gave a very lucrative answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ඉතා ලාභදායී පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Many talented graduates abandon academic research to pursue more lucrative careers in the finance sector.",
         "බොහෝ දක්ෂ උපාධිධාරීහු මූල්‍ය ක්ෂේත්‍රයේ ඉහළ ආදායමක් ලබා දෙන වෘත්තීන් වෙත යොමු වීම සඳහා ශාස්ත්‍රීය පර්යේෂණ අත්හැර දමති."
@@ -22468,6 +27616,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to materialise her goal.",
+        "ඇය තම ඉලක්කය සැබෑවක් බවට පත්වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can materialise new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සැබෑවක් බවට පත්වෙන්න හැකිය."
+      ],
+      [
         "The economic boom predicted by proponents of the trade agreement failed to materialise.",
         "වෙළඳ ගිවිසුමට පක්ෂව කතා කළ අය විසින් පුරෝකථනය කරන ලද ආර්ථික පිබිදීම සැබෑවක් බවට පත් නොවීය."
       ],
@@ -22502,6 +27658,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are mutual for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අන්‍යෝන්‍ය වේ."
+      ],
+      [
+        "She gave a very mutual answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අන්‍යෝන්‍ය පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Cultural exchange programmes foster mutual understanding and tolerance between people from different backgrounds.",
         "සංස්කෘතික හුවමාරු වැඩසටහන් මගින් විවිධ පසුබිම්වලට අයත් ජනතාව අතර අන්‍යෝන්‍ය අවබෝධය සහ ඉවසීම වර්ධනය කරයි."
@@ -22538,6 +27702,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to coordinate her goal.",
+        "ඇය තම ඉලක්කය සම්බන්ධීකරණය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can coordinate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සම්බන්ධීකරණය කරන්න හැකිය."
+      ],
+      [
         "International agencies must coordinate their efforts effectively to combat cross-border cybercrime.",
         "දේශසීමා හරහා සිදුවන සයිබර් අපරාධ මැඩපැවැත්වීම සඳහා ජාත්‍යන්තර ආයතන තම ප්‍රයත්නයන් කාර්යක්ෂමව සම්බන්ධීකරණය කළ යුතුය."
       ],
@@ -22572,6 +27744,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are determined to for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර දැඩි අධිෂ්ඨානයෙන් පසුවන වේ."
+      ],
+      [
+        "She gave a very determined to answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා දැඩි අධිෂ්ඨානයෙන් පසුවන පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Despite facing severe financial constraints, she remained determined to complete her medical degree.",
         "දැඩි මූල්‍ය දුෂ්කරතාවලට මුහුණ දුන්නද, ඇය තම වෛද්‍ය උපාධිය අවසන් කිරීමේ දැඩි අධිෂ්ඨානයෙන් පසු වූවාය."
@@ -22608,6 +27788,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to approve of her goal.",
+        "ඇය තම ඉලක්කය අනුමත කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can approve of new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අනුමත කරන්න හැකිය."
+      ],
+      [
         "Many traditional parents do not approve of young children spending hours on social media platforms.",
         "කුඩා දරුවන් සමාජ මාධ්‍ය ජාලාවල පැය ගණනාවක් ගත කිරීම බොහෝ සාම්ප්‍රදායික දෙමාපියෝ අනුමත නොකරති."
       ],
@@ -22642,6 +27830,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Fiercely, students need enough sleep before an exam.",
+        "දැඩි ලෙස, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will fiercely improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ දැඩි ලෙස ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "In today's fiercely competitive job market, a university degree alone is no longer a guarantee of employment.",
         "වර්තමානයේ පවතින දැඩි තරඟකාරී රැකියා වෙළඳපොළ තුළ, විශ්වවිද්‍යාල උපාධියක් පමණක් තිබීම රැකියාවක් ලැබීමේ සහතිකයක් නොවේ."
@@ -22678,6 +27874,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are subjective for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර පුද්ගලබද්ධ වේ."
+      ],
+      [
+        "She gave a very subjective answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා පුද්ගලබද්ධ පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Appreciation of visual art and music is inherently subjective, as it depends on individual taste and culture.",
         "දෘශ්‍ය කලාව සහ සංගීතය රසවිඳීම පුද්ගල රුචිකත්වය හා සංස්කෘතිය මත රඳා පවතින බැවින් එය ස්වභාවයෙන්ම පුද්ගලබද්ධ වේ."
       ],
@@ -22712,6 +27916,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to embrace her goal.",
+        "ඇය තම ඉලක්කය කැමැත්තෙන් වැළඳ ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can embrace new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා කැමැත්තෙන් වැළඳ ගැනීම හැකිය."
+      ],
       [
         "Businesses that fail to embrace digital innovation risk being left behind by more agile competitors.",
         "ඩිජිටල් නවෝත්පාදනයන් වැළඳ ගැනීමට අපොහොසත් වන ව්‍යාපාර වඩාත් කාර්යක්ෂම තරඟකරුවන් හමුවේ පසුබෑමට ලක්වීමේ අවදානමක් පවතී."
@@ -22748,6 +27960,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are commonplace for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සාමාන්‍ය දෙයක් බවට පත් වූ වේ."
+      ],
+      [
+        "She gave a very commonplace answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සාමාන්‍ය දෙයක් බවට පත් වූ පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Working remotely from home has become commonplace in many knowledge-based industries.",
         "නිවසේ සිට දුරස්ථව රාජකාරි කිරීම දැනුම පදනම් කරගත් බොහෝ කර්මාන්තවල ඉතා සාමාන්‍ය දෙයක් බවට පත්ව ඇත."
       ],
@@ -22782,6 +28002,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are non-existent for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර නොපවතින වේ."
+      ],
+      [
+        "She gave a very non-existent answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා නොපවතින පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "In many isolated mountain villages, high-speed internet connectivity remains virtually non-existent.",
         "බොහෝ හුදකලා කඳුකර ගම්මානවල අධිවේගී අන්තර්ජාල පහසුකම් තවමත් කිසිසේත්ම නොමැති තරම්ය."
@@ -22818,6 +28046,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to surface her goal.",
+        "ඇය තම ඉලක්කය මතුවෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can surface new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා මතුවෙන්න හැකිය."
+      ],
+      [
         "Serious structural defects in the bridge began to surface only a few years after its completion.",
         "පාලමේ ඉදිකිරීම් අවසන් වී වසර කිහිපයකට පසුව එහි බරපතල ව්‍යුහාත්මක දෝෂ මතුවීමට පටන් ගත්තේය."
       ],
@@ -22852,6 +28088,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to eventuate her goal.",
+        "ඇය තම ඉලක්කය අවසන් ප්‍රතිඵලයක් ලෙස සිදුවෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can eventuate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අවසන් ප්‍රතිඵලයක් ලෙස සිදුවෙන්න හැකිය."
+      ],
       [
         "Although economists warned of a severe recession, the predicted downturn did not eventuate.",
         "ආර්ථික විද්‍යාඥයින් දරුණු ආර්ථික අවපාතයක් පිළිබඳව අනතුරු ඇඟවුවද, පුරෝකථනය කළ පසුබෑම සිදු වූයේ නැත."
@@ -22888,6 +28132,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book albeit learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට වුවද පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option albeit this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී වුවද සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Global carbon emissions have begun to stabilise in several regions, albeit at a much slower pace than scientists hoped.",
         "විද්‍යාඥයින් අපේක්ෂා කළාට වඩා බෙහෙවින් මන්දගාමී වේගයකින් වුවද, කලාප කිහිපයක ගෝලීය කාබන් විමෝචනය ස්ථාවර වීමට පටන් ගෙන ඇත."
       ],
@@ -22922,6 +28174,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of influx clearly.",
+        "ගුරුවරයා විශාල වශයෙන් ගලා ඒමක් පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your influx.",
+        "හොඳ පුරුදු ඔබගේ විශාල වශයෙන් ගලා ඒමක් කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Historic coastal towns often struggle to cope with a sudden influx of tourists during the summer holidays.",
         "ගිම්හාන නිවාඩු කාලය තුළ සංචාරකයින් විශාල පිරිසක් හදිසියේ පැමිණීම දරා ගැනීමට ඓතිහාසික වෙරළබඩ නගර බොහෝ විට දැඩි වෙහෙසක් දරයි."
@@ -22958,6 +28218,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are solitary for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර හුදකලා වේ."
+      ],
+      [
+        "She gave a very solitary answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා හුදකලා පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Unlike wolves, which hunt in packs, leopards are predominantly solitary creatures.",
         "රංචු වශයෙන් දඩයම් කරන වෘකයන් මෙන් නොව, දිවියන් යනු ප්‍රධාන වශයෙන්ම හුදකලාව වෙසෙන සත්ත්ව විශේෂයකි."
       ],
@@ -22992,6 +28260,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are prosperous for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සමෘද්ධිමත් වේ."
+      ],
+      [
+        "She gave a very prosperous answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සමෘද්ධිමත් පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "A well-educated workforce is the cornerstone of any prosperous and innovative modern economy.",
         "මනා අධ්‍යාපනයක් ලැබූ ශ්‍රම බලකායක් යනු ඕනෑම සමෘද්ධිමත් සහ නවෝත්පාදන නවීන ආර්ථිකයක මුල්ගලයි."
@@ -23028,6 +28304,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to dread her goal.",
+        "ඇය තම ඉලක්කය දැඩි බියකින් හෝ තැතිගැන්මකින් පසුවීම (නාම: දැඩි බිය) මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can dread new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා දැඩි බියකින් හෝ තැතිගැන්මකින් පසුවීම (නාම: දැඩි බිය) හැකිය."
+      ],
+      [
         "Many employees dread the prospect of returning to long daily commutes after working comfortably from home.",
         "නිවසේ සිට පහසුවෙන් රාජකාරි කිරීමෙන් පසුව නැවතත් දීර්ඝ දෛනික ගමන් බිමන්වලට යොමු වීමට බොහෝ සේවකයෝ දැඩි අකමැත්තක් හා තැතිගැන්මක් දක්වති."
       ],
@@ -23062,6 +28346,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are flawed for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර දෝෂ සහිත වේ."
+      ],
+      [
+        "She gave a very flawed answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා දෝෂ සහිත පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "The belief that economic growth alone guarantees human happiness is fundamentally flawed.",
         "ආර්ථික වර්ධනය පමණක් මගින් මානව සතුට තහවුරු කරන බවට පවතින විශ්වාසය මූලික වශයෙන්ම දෝෂ සහිතය."
@@ -23098,6 +28390,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of introduction clearly.",
+        "ගුරුවරයා හඳුන්වා දීම පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your introduction.",
+        "හොඳ පුරුදු ඔබගේ හඳුන්වා දීම කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Road fatalities declined noticeably following the introduction of mandatory seatbelt laws.",
         "අනිවාර්ය ආසන පටි නීති හඳුන්වා දීමත් සමඟම මාර්ග අනතුරු මරණ සංඛ්‍යාව කැපී පෙනෙන ලෙස පහත වැටුණි."
       ],
@@ -23132,6 +28432,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of individual clearly.",
+        "ගුරුවරයා තනි පුද්ගලයා පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your individual.",
+        "හොඳ පුරුදු ඔබගේ තනි පුද්ගලයා කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Protecting the environment requires concerted action from both governments and private individuals.",
         "පරිසරය ආරක්ෂා කිරීම සඳහා රජයන් සහ පෞද්ගලික පුද්ගලයින් යන දෙපාර්ශ්වයේම ඒකාබද්ධ ක්‍රියාමාර්ග අවශ්‍ය වේ."
@@ -23168,6 +28476,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are effective for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ඵලදායී වේ."
+      ],
+      [
+        "She gave a very effective answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ඵලදායී පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Investing in preventative healthcare is far more cost-effective than treating chronic illnesses later in life.",
         "රෝග වළක්වා ගැනීමේ සෞඛ්‍ය සේවාවන් සඳහා ආයෝජනය කිරීම පසුකාලීනව නිදන්ගත රෝගවලට ප්‍රතිකාර කිරීමට වඩා බෙහෙවින් පිරිවැය ඵලදායී වේ."
       ],
@@ -23202,6 +28518,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are conditioned to for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර හැඩගැසුණු වේ."
+      ],
+      [
+        "She gave a very conditioned to answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා හැඩගැසුණු පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "From an early age, consumers are conditioned to equate material possessions with personal success.",
         "කුඩා කල සිටම භෞතික දේපළ පෞද්ගලික සාර්ථකත්වය හා සමාන කොට සැලකීමට පාරිභෝගිකයින් හුරු කරනු ලැබේ."
@@ -23238,6 +28562,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are minor/major for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සුළු වේ."
+      ],
+      [
+        "She gave a very minor/major answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සුළු පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Community service is often a more rehabilitative punishment for minor offences than prison sentences, which should be reserved for major crimes.",
         "බරපතල අපරාධ සඳහා වෙන් කළ යුතු සිර දඬුවම්වලට වඩා, සුළු වැරදි සඳහා ප්‍රජා සේවය බොහෝ විට වඩාත් පුනරුත්ථාපනාත්මක දඬුවමකි."
       ],
@@ -23272,6 +28604,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Erroneously, students need enough sleep before an exam.",
+        "වැරදි ලෙස, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will erroneously improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ වැරදි ලෙස ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Many people erroneously assume that fluency in a foreign language can be achieved without grammar study.",
         "ව්‍යාකරණ හැදෑරීමකින් තොරව විදේශීය භාෂාවක චතුරත්වය ළඟා කර ගත හැකි බව බොහෝ දෙනා වැරදි ලෙස උපකල්පනය කරති."
@@ -23308,6 +28648,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to precede her goal.",
+        "ඇය තම ඉලක්කය පෙරටුව පැමිණීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can precede new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා පෙරටුව පැමිණීම හැකිය."
+      ],
+      [
         "Major volcanic eruptions are almost always preceded by a series of minor underground tremors.",
         "ප්‍රධාන ගිනිකඳු පිපිරීම්වලට පෙර සෑම විටම පාහේ සුළු භූගත කම්පන මාලාවක් සිදු වේ."
       ],
@@ -23342,6 +28690,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to excel her goal.",
+        "ඇය තම ඉලක්කය විශිෂ්ට දස්කම් දැක්වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can excel new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා විශිෂ්ට දස්කම් දැක්වෙන්න හැකිය."
+      ],
       [
         "Schools should recognise students who excel in creative arts and athletics just as much as those who excel academically.",
         "අධ්‍යාපනික වශයෙන් විශිෂ්ට දස්කම් දක්වන සිසුන් මෙන්ම නිර්මාණාත්මක කලා සහ මලල ක්‍රීඩා ක්ෂේත්‍රවල කැපී පෙනෙන දස්කම් දක්වන සිසුන්ද පාසල් මගින් ඇගයීමට ලක් කළ යුතුය."
@@ -23378,6 +28734,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to reciprocate her goal.",
+        "ඇය තම ඉලක්කය පෙරළා ප්‍රතිචාර දැක්වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can reciprocate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා පෙරළා ප්‍රතිචාර දැක්වෙන්න හැකිය."
+      ],
+      [
         "Healthy friendships rely on both individuals being willing to reciprocate support during difficult times.",
         "සාර්ථක මිත්‍රත්වයන් රඳා පවතින්නේ දුෂ්කර අවස්ථාවලදී එකිනෙකාට පෙරළා සහයෝගය දැක්වීමට දෙදෙනා තුළම පවතින කැමැත්ත මතය."
       ],
@@ -23412,6 +28776,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to manipulate her goal.",
+        "ඇය තම ඉලක්කය සූක්ෂ්ම ලෙස හැසිරවෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can manipulate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සූක්ෂ්ම ලෙස හැසිරවෙන්න හැකිය."
+      ],
       [
         "Sophisticated advertising campaigns use psychological triggers to manipulate consumer behaviour.",
         "සූක්ෂ්ම වෙළඳ ප්‍රචාරණ ව්‍යාපාර මගින් පාරිභෝගික හැසිරීම් තම වාසියට හසුරුවා ගැනීම සඳහා මනෝවිද්‍යාත්මක උපක්‍රම භාවිත කරයි."
@@ -23448,6 +28820,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to relay her goal.",
+        "ඇය තම ඉලක්කය තොරතුරු හෝ සංඥා අතරමැදිව සම්ප්‍රේෂණය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can relay new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා තොරතුරු හෝ සංඥා අතරමැදිව සම්ප්‍රේෂණය කරන්න හැකිය."
+      ],
+      [
         "Communications satellites orbiting the Earth relay television and internet signals across continents.",
         "පෘථිවිය වටා කක්ෂගතව ඇති සන්නිවේදන චන්ද්‍රිකා මගින් මහද්වීප හරහා රූපවාහිනී සහ අන්තර්ජාල සංඥා සම්ප්‍රේෂණය කරයි."
       ],
@@ -23482,6 +28862,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book have a command of learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට මනා ප්‍රවීණත්වයක් හෝ චතුරත්වයක් තිබීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option have a command of this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී මනා ප්‍රවීණත්වයක් හෝ චතුරත්වයක් තිබීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Applicants for international diplomatic posts must have an excellent command of at least two foreign languages.",
         "ජාත්‍යන්තර රාජ්‍යතාන්ත්‍රික තනතුරු සඳහා අයදුම් කරන්නන්ට අවම වශයෙන් විදේශීය භාෂා දෙකක් පිළිබඳව හෝ විශිෂ්ට ප්‍රවීණත්වයක් තිබිය යුතුය."
@@ -23518,6 +28906,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to polarise her goal.",
+        "ඇය තම ඉලක්කය ප්‍රතිවිරුද්ධ කඳවුරු දෙකකට බෙදා වෙන් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can polarise new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ප්‍රතිවිරුද්ධ කඳවුරු දෙකකට බෙදා වෙන් කරන්න හැකිය."
+      ],
+      [
         "Social media echo chambers tend to polarise public opinion by exposing users only to views they already agree with.",
         "සමාජ මාධ්‍ය ඇල්ගොරිතම මගින් පරිශීලකයින් දැනටමත් එකඟ වන මතවාද පමණක් ඔවුන්ට පෙන්වීම නිසා මහජන මතය ප්‍රතිවිරුද්ධ අන්ත දෙකකට බෙදී යාමට නැඹුරු වේ."
       ],
@@ -23552,6 +28948,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to abandon her goal.",
+        "ඇය තම ඉලක්කය අත්හැර දැමීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can abandon new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අත්හැර දැමීම හැකිය."
+      ],
       [
         "Globalisation should not compel young people to abandon their indigenous languages and cultural heritage.",
         "ගෝලීයකරණය හේතුවෙන් තරුණ පිරිසට තම ස්වදේශික භාෂාවන් සහ සංස්කෘතික උරුමයන් අත්හැර දැමීමට බල නොකළ යුතුය."
@@ -23588,6 +28992,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of ratio clearly.",
+        "ගුරුවරයා අනුපාතය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your ratio.",
+        "හොඳ පුරුදු ඔබගේ අනුපාතය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "A low student-to-teacher ratio allows educators to give more individual attention to struggling learners.",
         "අඩු සිසු-ගුරු අනුපාතයක් පැවතීම ඉගෙනීමට අපහසුතා දක්වන සිසුන් කෙරෙහි වැඩි පෞද්ගලික අවධානයක් යොමු කිරීමට ගුරුවරුන්ට අවස්ථාව සලසයි."
       ],
@@ -23622,6 +29034,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to infer her goal.",
+        "ඇය තම ඉලක්කය සාක්ෂි මත පදනම්ව අනුමාන කර නිගමනය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can infer new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සාක්ෂි මත පදනම්ව අනුමාන කර නිගමනය කරන්න හැකිය."
+      ],
       [
         "From the sharp rise in cinema ticket sales, we can infer that disposable incomes increased during that period.",
         "සිනමා ප්‍රවේශපත්‍ර අලෙවියේ සිදු වූ ශීඝ්‍ර ඉහළ යාමෙන් එම කාලසීමාව තුළ ජනතාවගේ වැය කළ හැකි ආදායම වැඩි වූ බව අපට නිගමනය කළ හැකිය."
@@ -23658,6 +29078,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of hierarchy clearly.",
+        "ගුරුවරයා ධූරාවලිය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your hierarchy.",
+        "හොඳ පුරුදු ඔබගේ ධූරාවලිය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Modern technology startups often prefer flat management structures over a rigid corporate hierarchy.",
         "නවීන තාක්ෂණික ව්‍යාපාර බොහෝ විට දැඩි ආයතනික ධූරාවලියකට වඩා නම්‍යශීලී හා සමතලා කළමනාකරණ ව්‍යුහයන්ට කැමැත්තක් දක්වයි."
       ],
@@ -23692,6 +29120,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are ongoing for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අඛණ්ඩව සිදුවෙමින් පවතින වේ."
+      ],
+      [
+        "She gave a very ongoing answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අඛණ්ඩව සිදුවෙමින් පවතින පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "There is an ongoing debate among educators regarding the ideal age at which children should start formal schooling.",
         "දරුවන් විධිමත් පාසල් අධ්‍යාපනය ආරම්භ කළ යුතු සුදුසුම වයස පිළිබඳව අධ්‍යාපනඥයින් අතර අඛණ්ඩ විවාදයක් පවතී."
@@ -23728,6 +29164,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "It is important to participate in your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි සහභාගී වෙන්න වැදගත් වේ."
+      ],
+      [
+        "She learned how to participate in difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව සහභාගී වෙන්න ඇය ඉගෙන ගත්තාය."
+      ],
+      [
         "Students who regularly participate in extracurricular activities develop stronger interpersonal skills.",
         "විෂය බාහිර ක්‍රියාකාරකම්වලට නිතිපතා සහභාගී වන සිසුහු වඩාත් ශක්තිමත් අන්තර් පුද්ගල සබඳතා කුසලතා වර්ධනය කර ගනිති."
       ],
@@ -23762,6 +29206,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of core clearly.",
+        "ගුරුවරයා හරය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your core.",
+        "හොඳ පුරුදු ඔබගේ හරය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Lack of affordable housing lies at the core of the rising homelessness crisis in major cities.",
         "ප්‍රධාන නගරවල ඉහළ යන නිවාස අහිමි වීමේ අර්බුදයේ මූලික හරය වන්නේ දැරිය හැකි මිලකට නිවාස නොමැතිකමයි."
@@ -23798,6 +29250,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to enforce her goal.",
+        "ඇය තම ඉලක්කය නීතියක් හෝ රීතියක් බලාත්මක කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can enforce new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා නීතියක් හෝ රීතියක් බලාත්මක කරන්න හැකිය."
+      ],
+      [
         "Passing environmental legislation is pointless unless authorities have the resources to strictly enforce it.",
         "පාරිසරික නීති දැඩි ලෙස ක්‍රියාත්මක කිරීමට බලධාරීන්ට ප්‍රමාණවත් සම්පත් නොමැති නම්, එවැනි නීති සම්මත කිරීමෙන් පමණක් ඵලක් නැත."
       ],
@@ -23832,6 +29292,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are distinct for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර පැහැදිලිවම වෙනස් වේ."
+      ],
+      [
+        "She gave a very distinct answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා පැහැදිලිවම වෙනස් පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "The manufacturing process can be divided into three distinct stages: preparation, assembly, and packaging.",
         "නිෂ්පාදන ක්‍රියාවලිය සූදානම් කිරීම, එකලස් කිරීම සහ ඇසුරුම් කිරීම යනුවෙන් පැහැදිලිව වෙන් වූ අදියර තුනකට බෙදිය හැකිය."
@@ -23868,6 +29336,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to differentiate between her goal.",
+        "ඇය තම ඉලක්කය අතර වෙනස හඳුනා ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can differentiate between new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අතර වෙනස හඳුනා ගැනීම හැකිය."
+      ],
+      [
         "Schools must teach students how to differentiate between credible journalism and online misinformation.",
         "විශ්වාසදායක පුවත්පත් කලාව සහ අන්තර්ජාලයේ පැතිරෙන වැරදි තොරතුරු අතර වෙනස හඳුනා ගන්නා ආකාරය පාසල් මගින් සිසුන්ට ඉගැන්විය යුතුය."
       ],
@@ -23902,6 +29378,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to deduce her goal.",
+        "ඇය තම ඉලක්කය තර්කානුකූලව නිගමනය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can deduce new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා තර්කානුකූලව නිගමනය කරන්න හැකිය."
+      ],
       [
         "By analysing fossilised teeth, palaeontologists can deduce the diet of prehistoric mammals.",
         "ෆොසිල බවට පත් වූ දත් විශ්ලේෂණය කිරීමෙන් ප්‍රාග් ඓතිහාසික ක්ෂීරපායී සතුන්ගේ ආහාර රටාව තර්කානුකූලව නිගමනය කිරීමට පාෂාණධාතු විද්‍යාඥයින්ට හැකිය."
@@ -23938,6 +29422,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to terminate her goal.",
+        "ඇය තම ඉලක්කය අවසන් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can terminate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අවසන් කරන්න හැකිය."
+      ],
+      [
         "Companies must provide adequate notice before they legally terminate an employee's contract.",
         "සේවකයෙකුගේ රැකියා ගිවිසුම නීත්‍යානුකූලව අවසන් කිරීමට පෙර සමාගම් විසින් ප්‍රමාණවත් පූර්ව දැනුම් දීමක් සිදු කළ යුතුය."
       ],
@@ -23972,6 +29464,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are arbitrary for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අත්තනෝමතික වේ."
+      ],
+      [
+        "She gave a very arbitrary answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අත්තනෝමතික පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Critics argue that a fixed retirement age of sixty is arbitrary because physical health varies greatly among individuals.",
         "පුද්ගලයින් අතර ශාරීරික සෞඛ්‍යය බෙහෙවින් වෙනස් වන බැවින් අවුරුදු හැටක ස්ථාවර විශ්‍රාම වයස් සීමාවක් පැනවීම තර්කානුකූල පදනමකින් තොර බව විචාරකයෝ තර්ක කරති."
@@ -24008,6 +29508,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are preliminary for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර මූලික වේ."
+      ],
+      [
+        "She gave a very preliminary answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා මූලික පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Preliminary findings from the clinical trial indicate that the new treatment has minimal side effects.",
         "සායනික පරීක්ෂණයේ මූලික සොයාගැනීම් මගින් පෙන්නුම් කරන්නේ නව ප්‍රතිකාරයේ අතුරු ආබාධ ඉතා අවම මට්ටමක පවතින බවයි."
       ],
@@ -24042,6 +29550,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of progress clearly.",
+        "ගුරුවරයා ප්‍රගතිය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your progress.",
+        "හොඳ පුරුදු ඔබගේ ප්‍රගතිය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Medical science has made remarkable progress in treating cardiovascular diseases over the last fifty years.",
         "පසුගිය වසර පනහක කාලය තුළ හෘද රෝගවලට ප්‍රතිකාර කිරීමේදී වෛද්‍ය විද්‍යාව කැපී පෙනෙන ප්‍රගතියක් අත්කර ගෙන ඇත."
@@ -24078,6 +29594,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book be offset by learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට මගින් හිලව් වීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option be offset by this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී මගින් හිලව් වීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "The high initial cost of installing solar panels is eventually offset by lower monthly electricity bills.",
         "සූර්ය පැනල සවිකිරීමේ ඉහළ මූලික පිරිවැය අවසානයේ අඩු මාසික විදුලි බිල්පත් මගින් පූර්ණ වශයෙන් හිලව් වේ."
       ],
@@ -24112,6 +29636,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "It is important to equate with your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි සමාන කොට සැලකීම වැදගත් වේ."
+      ],
+      [
+        "She learned how to equate with difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව සමාන කොට සැලකීම ඇය ඉගෙන ගත්තාය."
+      ],
       [
         "Materialistic societies often make the mistake of equating financial wealth with personal fulfilment.",
         "භෞතිකවාදී සමාජයන් බොහෝ විට මූල්‍යමය ධනය පෞද්ගලික තෘප්තිය හා සමාන කොට සැලකීමේ වරද සිදු කරයි."
@@ -24148,6 +29680,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to displace her goal.",
+        "ඇය තම ඉලක්කය අවතැන් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can displace new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අවතැන් කරන්න හැකිය."
+      ],
+      [
         "There is growing concern that artificial intelligence will displace millions of clerical and administrative workers.",
         "කෘත්‍රිම බුද්ධිය විසින් මිලියන ගණනක් ලිපිකරු සහ පරිපාලන සේවකයින්ගේ රැකියා අහිමි කරනු ඇතැයි යන්න පිළිබඳව වැඩිවන කනස්සල්ලක් පවතී."
       ],
@@ -24182,6 +29722,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are rigid for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර දැඩි වේ."
+      ],
+      [
+        "She gave a very rigid answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා දැඩි පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "An overly rigid school curriculum can stifle students' natural curiosity and creative thinking.",
         "ඕනෑවට වඩා දැඩි හා නම්‍යශීලී නොවන පාසල් විෂය මාලාවක් මගින් සිසුන්ගේ ස්වභාවික කුතුහලය සහ නිර්මාණශීලී චින්තනය යටපත් කළ හැකිය."
@@ -24218,6 +29766,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are straightforward for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සරල හා පැහැදිලි වේ."
+      ],
+      [
+        "She gave a very straightforward answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සරල හා පැහැදිලි පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Applying for a passport renewal online is now a relatively straightforward procedure.",
         "මාර්ගගතව විදේශ ගමන් බලපත්‍රයක් අලුත් කර ගැනීමට අයදුම් කිරීම දැන් සාපේක්ෂව සරල හා පැහැදිලි ක්‍රියාවලියකි."
       ],
@@ -24252,6 +29808,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are concurrent for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සමගාමී වේ."
+      ],
+      [
+        "She gave a very concurrent answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සමගාමී පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "The rapid expansion of urban areas and the concurrent decline in farmland pose a threat to food security.",
         "නාගරික ප්‍රදේශවල ශීඝ්‍ර ව්‍යාප්තිය සහ ඊට සමගාමීව කෘෂිකාර්මික ඉඩම් අඩුවීම ආහාර සුරක්ෂිතතාවයට තර්ජනයක් එල්ල කරයි."
@@ -24288,6 +29852,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of bias clearly.",
+        "ගුරුවරයා පක්ෂග්‍රාහී බව පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your bias.",
+        "හොඳ පුරුදු ඔබගේ පක්ෂග්‍රාහී බව කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Blind recruitment procedures help eliminate unconscious bias against candidates from minority backgrounds.",
         "අයදුම්කරුවන්ගේ පෞද්ගලික තොරතුරු සඟවා සිදු කරන බඳවා ගැනීමේ ක්‍රමවේද මගින් සුළුතර පසුබිම්වලින් පැමිණෙන අපේක්ෂකයින්ට එරෙහිව නොදැනුවත්වම ඇතිවන පක්ෂග්‍රාහී බව ඉවත් කිරීමට උපකාරී වේ."
       ],
@@ -24322,6 +29894,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to labelled as her goal.",
+        "ඇය තම ඉලක්කය ලෙස හංවඩු ගැසීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can labelled as new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ලෙස හංවඩු ගැසීම හැකිය."
+      ],
       [
         "Children who are unfairly labelled as low achievers at primary school often lose confidence in their abilities.",
         "ප්‍රාථමික පාසලේදී දුර්වල සිසුන් ලෙස අසාධාරණ ලෙස හංවඩු ගැසීමට ලක්වන දරුවෝ බොහෝ විට තම හැකියාවන් පිළිබඳ ආත්ම විශ්වාසය නැති කර ගනිති."
@@ -24358,6 +29938,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of motive clearly.",
+        "ගුරුවරයා අභිප්‍රාය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your motive.",
+        "හොඳ පුරුදු ඔබගේ අභිප්‍රාය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "When healthcare is driven primarily by the profit motive, low-income patients may be denied essential treatment.",
         "සෞඛ්‍ය සේවාව ප්‍රධාන වශයෙන්ම ලාභ ලැබීමේ අරමුණ මත ක්‍රියාත්මක වන විට, අඩු ආදායම්ලාභී රෝගීන්ට අත්‍යවශ්‍ය ප්‍රතිකාර අහිමි වී යා හැකිය."
       ],
@@ -24392,6 +29980,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are so-called for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ඊනියා වේ."
+      ],
+      [
+        "She gave a very so-called answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ඊනියා පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Many so-called eco-friendly products are actually packaged in non-recyclable plastic materials.",
         "පරිසර හිතකාමී යැයි හඳුන්වනු ලබන බොහෝ නිෂ්පාදන සැබවින්ම අසුරා ඇත්තේ ප්‍රතිචක්‍රීකරණය කළ නොහැකි ප්ලාස්ටික් ද්‍රව්‍යවලය."
@@ -24428,6 +30024,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are adjacent to for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර යාබදව පිහිටි වේ."
+      ],
+      [
+        "She gave a very adjacent to answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා යාබදව පිහිටි පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "According to the proposed map, a new car park will be constructed on the vacant land adjacent to the hospital.",
         "යෝජිත සිතියමට අනුව, රෝහලට යාබදව පිහිටි හිස් භූමියේ නව රථගාලක් ඉදිකරනු ඇත."
       ],
@@ -24462,6 +30066,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to insert her goal.",
+        "ඇය තම ඉලක්කය ඇතුළු කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can insert new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ඇතුළු කරන්න හැකිය."
+      ],
       [
         "To purchase a ticket from the machine, passengers must first insert their bank card or coins into the slot.",
         "යන්ත්‍රයෙන් ප්‍රවේශ පත්‍රයක් මිලදී ගැනීම සඳහා මගීන් පළමුව තම බැංකු කාඩ්පත හෝ කාසි නියමිත කවුළුවට ඇතුළු කළ යුතුය."
@@ -24498,6 +30110,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "It is important to orientate to/towards your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි දිශානත කරන්න වැදගත් වේ."
+      ],
+      [
+        "She learned how to orientate to/towards difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව දිශානත කරන්න ඇය ඉගෙන ගත්තාය."
+      ],
+      [
         "Vocational training programmes are specifically orientated towards equipping school leavers with practical job skills.",
         "වෘත්තීය පුහුණු වැඩසටහන් සැලසුම් කර ඇත්තේ පාසල් හැර යන්නන්ට ප්‍රායෝගික රැකියා කුසලතා ලබා දීම කෙරෙහි විශේෂයෙන් යොමු වෙමිනි."
       ],
@@ -24532,6 +30152,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to recover her goal.",
+        "ඇය තම ඉලක්කය යථා තත්ත්වයට පත් වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can recover new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා යථා තත්ත්වයට පත් වෙන්න හැකිය."
+      ],
       [
         "Small businesses often take several years to fully recover from a severe economic downturn.",
         "දරුණු ආර්ථික පසුබෑමකින් පසු සම්පූර්ණයෙන්ම යථා තත්ත්වයට පත් වීමට කුඩා ව්‍යාපාරවලට බොහෝ විට වසර කිහිපයක් ගත වේ."
@@ -24568,6 +30196,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are passive for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර නිෂ්ක්‍රීය වේ."
+      ],
+      [
+        "She gave a very passive answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා නිෂ්ක්‍රීය පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Excessive screen time encourages passive consumption of information rather than critical thinking.",
         "අධික ලෙස තිර භාවිතය විචාරාත්මක චින්තනයට වඩා තොරතුරු නිෂ්ක්‍රීය ලෙස පරිභෝජනය කිරීම දිරිමත් කරයි."
       ],
@@ -24602,6 +30238,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of scope clearly.",
+        "ගුරුවරයා විෂය පථය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your scope.",
+        "හොඳ පුරුදු ඔබගේ විෂය පථය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Studying abroad broadens the scope of a student's career prospects in the global market.",
         "විදේශයන්හි අධ්‍යාපනය ලැබීම ගෝලීය වෙළඳපොළ තුළ ශිෂ්‍යයෙකුගේ වෘත්තීය අවස්ථාවන්හි පරාසය පුළුල් කරයි."
@@ -24638,6 +30282,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book have insights into learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට පිළිබඳ ගැඹුරු අවබෝධයක් තිබීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option have insights into this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී පිළිබඳ ගැඹුරු අවබෝධයක් තිබීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Historical documents allow researchers to have insights into the daily lives of ancient civilisations.",
         "ඓතිහාසික ලේඛන මගින් පර්යේෂකයන්ට පැරණි ශිෂ්ටාචාරවල එදිනෙදා ජීවිතය පිළිබඳ ගැඹුරු අවබෝධයක් ලබා ගැනීමට ඉඩ සලසයි."
       ],
@@ -24672,6 +30324,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to communicate her goal.",
+        "ඇය තම ඉලක්කය සන්නිවේදනය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can communicate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සන්නිවේදනය කරන්න හැකිය."
+      ],
       [
         "Digital platforms enable multinational teams to communicate instantaneously across different time zones.",
         "ඩිජිටල් වේදිකා මගින් බහුජාතික කණ්ඩායම්වලට විවිධ වේලා කලාප හරහා ක්ෂණිකව සන්නිවේදනය කිරීමට හැකියාව ලබා දෙයි."
@@ -24708,6 +30368,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of entity clearly.",
+        "ගුරුවරයා ස්වාධීන ආයතනය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your entity.",
+        "හොඳ පුරුදු ඔබගේ ස්වාධීන ආයතනය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Both government agencies and private entities must collaborate to fund renewable energy projects.",
         "පුනර්ජනනීය බලශක්ති ව්‍යාපෘති සඳහා අරමුදල් සැපයීමට රාජ්‍ය ආයතන සහ පෞද්ගලික ආයතන යන දෙඅංශයම සහයෝගයෙන් කටයුතු කළ යුතුය."
       ],
@@ -24742,6 +30410,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are flexible for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර නම්‍යශීලී වේ."
+      ],
+      [
+        "She gave a very flexible answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා නම්‍යශීලී පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Offering flexible working hours helps companies retain talented parents and reduce staff turnover.",
         "නම්‍යශීලී සේවා පැය ගණන් ලබා දීම දක්ෂ දෙමාපියන් රැකියාවේ රඳවා ගැනීමටත් සේවකයින් රැකියාව හැර යාම අඩු කිරීමටත් සමාගම්වලට උපකාරී වේ."
@@ -24778,6 +30454,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to inhibit her goal.",
+        "ඇය තම ඉලක්කය අඩාල කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can inhibit new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අඩාල කරන්න හැකිය."
+      ],
+      [
         "Excessive bureaucracy and high corporate taxes can inhibit entrepreneurial innovation.",
         "අධික නිලධාරිවාදය සහ ඉහළ ආයතනික බදු මගින් ව්‍යවසායකත්ව නවෝත්පාදනයන් අඩාල කළ හැක."
       ],
@@ -24812,6 +30496,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to inspect her goal.",
+        "ඇය තම ඉලක්කය පරීක්ෂා කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can inspect new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා පරීක්ෂා කරන්න හැකිය."
+      ],
       [
         "Health authorities must regularly inspect food processing plants to prevent contamination.",
         "ආහාර අපවිත්‍ර වීම වැළැක්වීම සඳහා සෞඛ්‍ය බලධාරීන් විසින් ආහාර සැකසුම් මධ්‍යස්ථාන නිතිපතා පරීක්ෂා කළ යුතුය."
@@ -24848,6 +30540,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of agenda clearly.",
+        "ගුරුවරයා න්‍යාය පත්‍රය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your agenda.",
+        "හොඳ පුරුදු ඔබගේ න්‍යාය පත්‍රය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Environmental conservation should remain high on the policy agenda of every industrialised nation.",
         "පාරිසරික සංරක්ෂණය සෑම කාර්මික රටකම ප්‍රතිපත්ති න්‍යාය පත්‍රයේ ඉහළින්ම පැවතිය යුතුය."
       ],
@@ -24882,6 +30582,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are integral for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අත්‍යවශ්‍ය වේ."
+      ],
+      [
+        "She gave a very integral answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අත්‍යවශ්‍ය පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Digital literacy has become an integral part of modern primary and secondary education.",
         "ඩිජිටල් සාක්ෂරතාවය නූතන ප්‍රාථමික සහ ද්විතීයික අධ්‍යාපනයේ වෙන් කළ නොහැකි අත්‍යවශ්‍ය කොටසක් බවට පත්ව ඇත."
@@ -24918,6 +30626,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of sequence clearly.",
+        "ගුරුවරයා අනුපිළිවෙළ පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your sequence.",
+        "හොඳ පුරුදු ඔබගේ අනුපිළිවෙළ කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "The diagram illustrates the sequence of stages involved in recycling household plastic waste.",
         "මෙම රූපසටහන මගින් ගෘහස්ථ ප්ලාස්ටික් අපද්‍රව්‍ය ප්‍රතිචක්‍රීකරණය කිරීමට අදාළ පියවරයන්හි අනුපිළිවෙළ නිරූපණය කෙරේ."
       ],
@@ -24952,6 +30668,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book deviate from learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට සම්මතයෙන් බැහැර වීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option deviate from this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී සම්මතයෙන් බැහැර වීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "In traditional societies, individuals who deviate from social norms often face disapproval.",
         "සාම්ප්‍රදායික සමාජවල, සමාජ සම්මතයන්ගෙන් බැහැර වන පුද්ගලයින්ට බොහෝ විට අප්‍රසාදයට මුහුණ දීමට සිදු වේ."
@@ -24988,6 +30712,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to revise her goal.",
+        "ඇය තම ඉලක්කය සංශෝධනය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can revise new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සංශෝධනය කරන්න හැකිය."
+      ],
+      [
         "Lawmakers must periodically revise cybercrime legislation to keep up with new digital threats.",
         "නව ඩිජිටල් තර්ජනවලට මුහුණ දීම සඳහා නීති සම්පාදකයින් විසින් කලින් කලට සයිබර් අපරාධ නීති සංශෝධනය කළ යුතුය."
       ],
@@ -25022,6 +30754,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of misinformation clearly.",
+        "ගුරුවරයා සාවද්‍ය තොරතුරු පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your misinformation.",
+        "හොඳ පුරුදු ඔබගේ සාවද්‍ය තොරතුරු කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Unregulated social media networks have accelerated the rapid spread of political misinformation.",
         "නියාමනය නොකළ සමාජ මාධ්‍ය ජාල මගින් දේශපාලනික සාවද්‍ය තොරතුරු ශීඝ්‍රයෙන් ව්‍යාප්ත වීම වේගවත් කර ඇත."
@@ -25058,6 +30798,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to articulate her goal.",
+        "ඇය තම ඉලක්කය පැහැදිලිව සහ ව්‍යක්ත ලෙස අදහස් ප්‍රකාශ කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can articulate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා පැහැදිලිව සහ ව්‍යක්ත ලෙස අදහස් ප්‍රකාශ කරන්න හැකිය."
+      ],
+      [
         "Debating societies train university students to articulate complex arguments under pressure.",
         "විවාද සංගම් මගින් පීඩනයක් යටතේ වුවද සංකීර්ණ තර්ක පැහැදිලිව ඉදිරිපත් කිරීමට විශ්වවිද්‍යාල සිසුන් පුහුණු කරනු ලැබේ."
       ],
@@ -25092,6 +30840,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of interval clearly.",
+        "ගුරුවරයා කාල පරතරය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your interval.",
+        "හොඳ පුරුදු ඔබගේ කාල පරතරය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Public buses should run at regular intervals to encourage commuters to leave their cars at home.",
         "මගීන් තම පෞද්ගලික මෝටර් රථ නිවසේ තබා පැමිණීමට දිරිගැන්වීම සඳහා පොදු බස් රථ නිශ්චිත කාල පරතරයන්හිදී ධාවනය විය යුතුය."
@@ -25128,6 +30884,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to negate her goal.",
+        "ඇය තම ඉලක්කය නිෂ්ප්‍රභ කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can negate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා නිෂ්ප්‍රභ කරන්න හැකිය."
+      ],
+      [
         "A diet high in processed sugar can completely negate the health benefits of regular exercise.",
         "සැකසූ සීනි අධික ආහාර වේලක් මගින් ක්‍රමවත් ව්‍යායාමයේ සෞඛ්‍ය ප්‍රතිලාභ සම්පූර්ණයෙන්ම නිෂ්ප්‍රභ කළ හැක."
       ],
@@ -25162,6 +30926,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are liberal for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ලිබරල් වේ."
+      ],
+      [
+        "She gave a very liberal answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ලිබරල් පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "A broad liberal arts education equips graduates with adaptable critical thinking skills.",
         "පුළුල් ශාස්ත්‍රීය අධ්‍යාපනයක් මගින් උපාධිධාරීන්ට ඕනෑම තැනකට ගැළපෙන විචාරාත්මක චින්තන කුසලතා ලබා දෙයි."
@@ -25198,6 +30970,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of revenue clearly.",
+        "ගුරුවරයා ආදායම පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your revenue.",
+        "හොඳ පුරුදු ඔබගේ ආදායම කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Governments can use the revenue generated from carbon taxes to subsidise green energy.",
         "කාබන් බදුවලින් උත්පාදනය වන ආදායම හරිත බලශක්තිය සඳහා සහනාධාර ලබා දීමට රජයන්ට භාවිත කළ හැක."
       ],
@@ -25232,6 +31012,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book supplement with learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට මගින් අඩුව පිරිමසා ගැනීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option supplement with this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී මගින් අඩුව පිරිමසා ගැනීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Theoretical university lectures should always be supplemented with practical internships.",
         "විශ්වවිද්‍යාලවල න්‍යායාත්මක දේශන සැමවිටම ප්‍රායෝගික සීමාවාසික පුහුණුවීම් මගින් තවදුරටත් පෝෂණය කළ යුතුය."
@@ -25268,6 +31056,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to undergo her goal.",
+        "ඇය තම ඉලක්කය භාජනය වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can undergo new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා භාජනය වෙන්න හැකිය."
+      ],
+      [
         "The coastal town underwent a dramatic transformation after the new highway was constructed.",
         "නව අධිවේගී මාර්ගය ඉදිකිරීමෙන් පසු වෙරළබඩ නගරය දැවැන්ත පරිවර්තනයකට භාජනය විය."
       ],
@@ -25302,6 +31098,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of vehicle clearly.",
+        "ගුරුවරයා වාහනය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your vehicle.",
+        "හොඳ පුරුදු ඔබගේ වාහනය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Subsidising electric vehicles is a practical step towards reducing urban air pollution.",
         "විද්‍යුත් වාහන සඳහා සහනාධාර ලබා දීම නාගරික වායු දූෂණය අවම කිරීම සඳහා ගත හැකි ප්‍රායෝගික පියවරකි."
@@ -25338,6 +31142,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to trigger her goal.",
+        "ඇය තම ඉලක්කය ආරම්භ කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can trigger new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ආරම්භ කරන්න හැකිය."
+      ],
+      [
         "The sudden collapse of the housing market triggered a widespread financial crisis.",
         "නිවාස වෙළඳපොළේ හදිසි කඩාවැටීම පුළුල් මූල්‍ය අර්බුදයක් ඇති කිරීමට හේතු විය."
       ],
@@ -25372,6 +31184,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to overlap her goal.",
+        "ඇය තම ඉලක්කය අතිපිහිත වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can overlap new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අතිපිහිත වෙන්න හැකිය."
+      ],
       [
         "Confusion often arises when the duties of local and national authorities overlap.",
         "පළාත් පාලන සහ ජාතික බලධාරීන්ගේ රාජකාරි එකිනෙක මත වැටෙන විට බොහෝ විට ව්‍යාකූලත්වයක් හට ගනී."
@@ -25408,6 +31228,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to refine her goal.",
+        "ඇය තම ඉලක්කය වැඩිදියුණු කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can refine new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා වැඩිදියුණු කරන්න හැකිය."
+      ],
+      [
         "Apprenticeships allow young craftspeople to refine their technical skills under expert supervision.",
         "ආධුනිකත්ව පුහුණුව මගින් තරුණ ශිල්පීන්ට ප්‍රවීණයන්ගේ අධීක්ෂණය යටතේ තම තාක්ෂණික කුසලතා ඔප්නංවා ගැනීමට ඉඩ සලසයි."
       ],
@@ -25442,6 +31270,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of version clearly.",
+        "ගුරුවරයා අනුවාදය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your version.",
+        "හොඳ පුරුදු ඔබගේ අනුවාදය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Many readers prefer the original book to the abridged version adapted for television.",
         "බොහෝ පාඨකයින් රූපවාහිනිය සඳහා සකස් කරන ලද කෙටි අනුවාදයට වඩා මුල් කෘතියට වැඩි කැමැත්තක් දක්වයි."
@@ -25478,6 +31314,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of volume clearly.",
+        "ගුරුවරයා ප්‍රමාණය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your volume.",
+        "හොඳ පුරුදු ඔබගේ ප්‍රමාණය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Municipalities are struggling to cope with the sheer volume of non-biodegradable waste.",
         "දිරාපත් නොවන අපද්‍රව්‍යවල අතිවිශාල ප්‍රමාණය කළමනාකරණය කර ගැනීමට නගර සභා දැඩි අරගලයක නිරත වේ."
       ],
@@ -25512,6 +31356,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book indulge in learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට සතුටු වීම සඳහා (යමකට) යොමු වීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option indulge in this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී සතුටු වීම සඳහා (යමකට) යොමු වීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Aggressive advertising persuades consumers to indulge in impulse buying of luxury items they do not need.",
         "ආක්‍රමණශීලී වෙළඳ දැන්වීම් මගින් තමන්ට අවශ්‍ය නොවන සුඛෝපභෝගී භාණ්ඩ ක්ෂණිකව මිලදී ගැනීමට පාරිභෝගිකයින් පොළඹවනු ලබයි."
@@ -25548,6 +31400,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book reminiscent of learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට සිහිගන්වන පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option reminiscent of this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී සිහිගන්වන සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "The newly restored railway station features glass arches reminiscent of nineteenth-century Victorian design.",
         "අලුතින් ප්‍රතිසංස්කරණය කරන ලද දුම්රිය ස්ථානය දහනව වන සියවසේ වික්ටෝරියානු නිර්මාණ ශිල්පය සිහිගන්වන වීදුරු ආරුක්කුවලින් සමන්විත වේ."
       ],
@@ -25582,6 +31442,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are burgeoning for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ශීඝ්‍රයෙන් වර්ධනය වන වේ."
+      ],
+      [
+        "She gave a very burgeoning answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ශීඝ්‍රයෙන් වර්ධනය වන පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "A burgeoning urban population has placed immense strain on housing and sanitation infrastructure.",
         "ශීඝ්‍රයෙන් වර්ධනය වන නාගරික ජනගහනය නිවාස සහ සනීපාරක්ෂක යටිතල පහසුකම් මත දැඩි පීඩනයක් එල්ල කර ඇත."
@@ -25618,6 +31486,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of array clearly.",
+        "ගුරුවරයා විශාල පරාසයක් පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your array.",
+        "හොඳ පුරුදු ඔබගේ විශාල පරාසයක් කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Streaming services offer subscribers a vast array of educational documentaries and foreign films.",
         "අන්තර්ජාල විකාශන සේවා මගින් ග්‍රාහකයින්ට අධ්‍යාපනික වාර්තා චිත්‍රපට සහ විදේශීය චිත්‍රපට විශාල පරාසයක් පිරිනමනු ලබයි."
       ],
@@ -25652,6 +31528,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are prior for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර පෙර පැවති වේ."
+      ],
+      [
+        "She gave a very prior answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා පෙර පැවති පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Many entry-level positions unfairly require applicants to have several years of prior experience.",
         "ආධුනික මට්ටමේ රැකියා බොහොමයක් සඳහා අයදුම්කරුවන්ට වසර කිහිපයක පෙර පළපුරුද්දක් තිබිය යුතු බවට අසාධාරණ ලෙස කොන්දේසි පනවයි."
@@ -25688,6 +31572,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of mode clearly.",
+        "ගුරුවරයා ක්‍රමය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your mode.",
+        "හොඳ පුරුදු ඔබගේ ක්‍රමය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Cycling is one of the most sustainable and cost-effective modes of urban transport.",
         "පාපැදි ධාවනය යනු වඩාත්ම තිරසාර සහ පිරිවැය අවම නාගරික ප්‍රවාහන ක්‍රමවලින් එකකි."
       ],
@@ -25722,6 +31614,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are extensive for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර පුළුල් වේ."
+      ],
+      [
+        "She gave a very extensive answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා පුළුල් පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Pharmaceutical companies must conduct extensive clinical trials before releasing a new medication.",
         "ඖෂධ සමාගම් නව ඖෂධයක් වෙළඳපොළට නිකුත් කිරීමට පෙර පුළුල් සායනික පරීක්ෂණ සිදු කළ යුතුය."
@@ -25758,6 +31658,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to alienate her goal.",
+        "ඇය තම ඉලක්කය හුදකලා කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can alienate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා හුදකලා කරන්න හැකිය."
+      ],
+      [
         "Rapid digitalisation can alienate elderly citizens who lack access to modern technology.",
         "නවීන තාක්ෂණයට ප්‍රවේශයක් නොමැති වැඩිහිටි පුරවැසියන් වේගවත් ඩිජිටල්කරණය හේතුවෙන් සමාජයෙන් හුදකලා විය හැක."
       ],
@@ -25792,6 +31700,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are desolate for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ජනශූන්‍ය වේ."
+      ],
+      [
+        "She gave a very desolate answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ජනශූන්‍ය පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Decades of strip mining and deforestation have turned the once-fertile valley into a desolate landscape.",
         "දශක ගණනාවක් තිස්සේ සිදු කළ පතල් කැණීම් සහ වන විනාශය හේතුවෙන් වරෙක සාරවත්ව පැවති නිම්නය ජනශූන්‍ය භූමියක් බවට පත්ව ඇත."
@@ -25828,6 +31744,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of notion clearly.",
+        "ගුරුවරයා මතය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your notion.",
+        "හොඳ පුරුදු ඔබගේ මතය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Recent psychological research challenges the popular notion that multitasking increases productivity.",
         "එකවර කාර්යයන් කිහිපයක් කිරීමෙන් ඵලදායිතාව ඉහළ යන බවට පවතින ජනප්‍රිය මතය මෑතකාලීන මනෝවිද්‍යාත්මක පර්යේෂණ මගින් අභියෝගයට ලක් කරයි."
       ],
@@ -25862,6 +31786,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are thrilling for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර උද්වේගකර වේ."
+      ],
+      [
+        "She gave a very thrilling answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා උද්වේගකර පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Watching a live championship match in a packed stadium is a thrilling experience for sports fans.",
         "ප්‍රේක්ෂකයින්ගෙන් පිරී ගිය ක්‍රීඩාංගණයක සජීවී ශූරතා තරගයක් නැරඹීම ක්‍රීඩා ලෝලීන්ට ඉතාමත් උද්වේගකර අත්දැකීමකි."
@@ -25898,6 +31830,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are potent for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ප්‍රබල වේ."
+      ],
+      [
+        "She gave a very potent answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ප්‍රබල පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Methane is a far more potent greenhouse gas than carbon dioxide in the short term.",
         "මීතේන් යනු කෙටි කාලීනව කාබන් ඩයොක්සයිඩ්වලට වඩා බෙහෙවින් ප්‍රබල හරිතාගාර වායුවකි."
       ],
@@ -25932,6 +31872,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book tempted to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට (යමක් කිරීමට) පෙළඹීමක් ඇති වීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option tempted to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී (යමක් කිරීමට) පෙළඹීමක් ඇති වීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Without strict regulation, profit-driven corporations may be tempted to cut corners on environmental safety.",
         "දැඩි නියාමනයක් නොමැති විට, ලාභය පමණක් අපේක්ෂා කරන සමාගම් පාරිසරික ආරක්ෂාව නොසලකා හැරීමට පෙළඹිය හැක."
@@ -25968,6 +31916,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to overtake her goal.",
+        "ඇය තම ඉලක්කය පසුකර යාම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can overtake new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා පසුකර යාම හැකිය."
+      ],
+      [
         "By 2020, renewable energy generation had overtaken coal as the primary source of electricity in the region.",
         "2020 වසර වන විට පුනර්ජනනීය බලශක්ති උත්පාදනය එම කලාපයේ ප්‍රධාන විදුලි ප්‍රභවය ලෙස ගල් අඟුරු අභිබවා ගොස් තිබුණි."
       ],
@@ -26002,6 +31958,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are innocent for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර නිර්දෝෂී වේ."
+      ],
+      [
+        "She gave a very innocent answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා නිර්දෝෂී පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "A fundamental principle of modern justice is that an accused person is presumed innocent until proven guilty.",
         "නූතන යුක්තිය පසිඳලීමේ මූලික මූලධර්මයක් වන්නේ චූදිතයෙකු වරදකරු බව ඔප්පු වන තුරු නිර්දෝෂී යැයි සැලකීමයි."
@@ -26038,6 +32002,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are incremental for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ක්‍රමානුකූලව සිදුවන වේ."
+      ],
+      [
+        "She gave a very incremental answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ක්‍රමානුකූලව සිදුවන පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Incremental changes in daily habits, such as reducing plastic use, can collectively yield major environmental benefits.",
         "ප්ලාස්ටික් භාවිතය අවම කිරීම වැනි එදිනෙදා පුරුදුවල සිදු කරන කුඩා ක්‍රමානුකූල වෙනස්කම් මගින් සාමූහිකව විශාල පාරිසරික ප්‍රතිලාභ අත්කර ගත හැක."
       ],
@@ -26072,6 +32044,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book qualify for learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට සඳහා සුදුසුකම් ලැබීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option qualify for this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී සඳහා සුදුසුකම් ලැබීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Students from low-income households should automatically qualify for university tuition grants.",
         "අඩු ආදායම්ලාභී පවුල්වල සිසුන් විශ්වවිද්‍යාල අධ්‍යාපන ආධාර සඳහා නිතැතින්ම සුදුසුකම් ලැබිය යුතුය."
@@ -26108,6 +32088,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to hesitate her goal.",
+        "ඇය තම ඉලක්කය පැකිළීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can hesitate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා පැකිළීම හැකිය."
+      ],
+      [
         "Employees often hesitate to report workplace harassment if they fear retaliation from management.",
         "කළමනාකාරිත්වයෙන් පළිගැනීම් සිදුවේ යැයි බියක් පවතී නම් සේවකයින් රැකියා ස්ථානයේ සිදුවන හිරිහැර වාර්තා කිරීමට බොහෝ විට පැකිළේ."
       ],
@@ -26142,6 +32130,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are exponential for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ඝාතීය වේ."
+      ],
+      [
+        "She gave a very exponential answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ඝාතීය පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "The past two decades have witnessed an exponential growth in computing power and data storage.",
         "පසුගිය දශක දෙක තුළ පරිගණක බලයේ සහ දත්ත ගබඩා කිරීමේ හැකියාවෙහි අතිශය වේගවත් වර්ධනයක් දක්නට ලැබුණි."
@@ -26178,6 +32174,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Alongside, students need enough sleep before an exam.",
+        "සමඟ එක්ව, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will alongside improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ සමඟ එක්ව ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Vocational training should be promoted alongside traditional academic degrees in secondary schools.",
         "ද්විතීයික පාසල්වල සාම්ප්‍රදායික ශාස්ත්‍රීය අධ්‍යාපනයට සමගාමීව වෘත්තීය පුහුණුවද ප්‍රවර්ධනය කළ යුතුය."
       ],
@@ -26212,6 +32216,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book venture to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට අවදානමක් ගෙන යමක් කිරීමට නිර්භීත වීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option venture to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී අවදානමක් ගෙන යමක් කිරීමට නිර්භීත වීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Few economists would venture to predict the exact state of the global market fifty years from now.",
         "මෙතැන් සිට වසර පනහකින් ගෝලීය වෙළඳපොළ පවතින නිශ්චිත ස්වභාවය පුරෝකථනය කිරීමට ඉදිරිපත් වන්නේ ආර්ථික විද්‍යාඥයින් අතළොස්සක් පමණි."
@@ -26248,6 +32260,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book in the interim learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට මේ අතරවාරයේදී පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option in the interim this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී මේ අතරවාරයේදී සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Transitioning entirely to renewable energy will take decades; in the interim, energy conservation is vital.",
         "සම්පූර්ණයෙන්ම පුනර්ජනනීය බලශක්තිය වෙත මාරු වීමට දශක ගණනාවක් ගතවනු ඇති අතර, ඒ අතරවාරයේදී බලශක්ති සංරක්ෂණය අත්‍යවශ්‍ය වේ."
       ],
@@ -26282,6 +32302,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to downplay her goal.",
+        "ඇය තම ඉලක්කය වැදගත්කම හෝ බරපතළකම අඩු කර පෙන්වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can downplay new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා වැදගත්කම හෝ බරපතළකම අඩු කර පෙන්වෙන්න හැකිය."
+      ],
       [
         "Tobacco companies historically attempted to downplay the severe health risks associated with smoking.",
         "දුම්කොළ සමාගම් ඉතිහාසය පුරාම දුම්පානය හා බැඳුණු දරුණු සෞඛ්‍ය අවදානම් අඩු කර පෙන්වීමට උත්සාහ කළේය."
@@ -26318,6 +32346,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book advisable to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට (යමක් කිරීම) නුවණට හුරු වීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option advisable to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී (යමක් කිරීම) නුවණට හුරු වීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "It is advisable to consult a qualified financial advisor before making high-risk investments.",
         "අධි අවදානම් ආයෝජන සිදු කිරීමට පෙර සුදුසුකම් ලත් මූල්‍ය උපදේශකයෙකුගේ උපදෙස් ලබා ගැනීම නුවණට හුරුය."
       ],
@@ -26352,6 +32388,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Virtually, students need enough sleep before an exam.",
+        "සම්පූර්ණයෙන්ම පාහේ, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will virtually improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ සම්පූර්ණයෙන්ම පාහේ ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Without affordable public childcare, it is virtually impossible for many single parents to work full-time.",
         "දැරිය හැකි මිලකට පොදු ළමා සුරැකුම් පහසුකම් නොමැතිව, බොහෝ තනි දෙමාපියන්ට පූර්ණ කාලීන රැකියාවක නිරත වීම කළ නොහැකි තරම්ය."
@@ -26388,6 +32432,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to notify her goal.",
+        "ඇය තම ඉලක්කය දැනුම් දීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can notify new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා දැනුම් දීම හැකිය."
+      ],
+      [
         "Banks are legally required to notify customers immediately if they detect suspicious account activity.",
         "ගිණුමක සැකසහිත ක්‍රියාකාරකමක් හඳුනාගතහොත් වහාම ඒ බව ගනුදෙනුකරුවන්ට දැනුම් දීමට බැංකු නීතියෙන් බැඳී සිටී."
       ],
@@ -26422,6 +32474,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to function her goal.",
+        "ඇය තම ඉලක්කය ක්‍රියාත්මක වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can function new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ක්‍රියාත්මක වෙන්න හැකිය."
+      ],
       [
         "Modern cities cannot function effectively without reliable public transit and waste management systems.",
         "විශ්වාසදායක පොදු ප්‍රවාහන සහ අපද්‍රව්‍ය කළමනාකරණ පද්ධති නොමැතිව නූතන නගරවලට ඵලදායී ලෙස ක්‍රියාත්මක විය නොහැක."
@@ -26458,6 +32518,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of gender clearly.",
+        "ගුරුවරයා ස්ත්‍රී පුරුෂ භාවය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your gender.",
+        "හොඳ පුරුදු ඔබගේ ස්ත්‍රී පුරුෂ භාවය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Achieving gender equality in leadership positions benefits both corporate culture and economic productivity.",
         "නායකත්ව තනතුරුවල ස්ත්‍රී පුරුෂ සමානාත්මතාවය ඇති කිරීම ආයතනික සංස්කෘතියට සහ ආර්ථික ඵලදායිතාවයට යන දෙකටම හිතකර වේ."
       ],
@@ -26492,6 +32560,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book confuse with learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට (තවත් දෙයක් සමඟ) පටලවා ගැනීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option confuse with this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී (තවත් දෙයක් සමඟ) පටලවා ගැනීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Memorising facts for an examination should not be confused with genuine intellectual understanding.",
         "විභාගයක් සඳහා කරුණු කටපාඩම් කිරීම සැබෑ බුද්ධිමය අවබෝධය සමඟ පටලවා නොගත යුතුය."
@@ -26528,6 +32604,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to dismantle her goal.",
+        "ඇය තම ඉලක්කය ගලවා ඉවත් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can dismantle new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ගලවා ඉවත් කරන්න හැකිය."
+      ],
+      [
         "International treaties have helped dismantle trade barriers and foster global economic integration.",
         "ජාත්‍යන්තර ගිවිසුම් මගින් වෙළඳ බාධක ඉවත් කිරීමට සහ ගෝලීය ආර්ථික ඒකාබද්ධතාවය ප්‍රවර්ධනය කිරීමට උපකාරී වී ඇත."
       ],
@@ -26562,6 +32646,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to support her goal.",
+        "ඇය තම ඉලක්කය සහාය දැක්වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can support new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සහාය දැක්වෙන්න හැකිය."
+      ],
       [
         "Empirical evidence strongly supports the claim that early literacy programmes reduce school dropout rates.",
         "මුල් ළමාවිය සාක්ෂරතා වැඩසටහන් මගින් පාසල් හැර යාමේ අනුපාතය අඩු කරන බවට වන මතය ප්‍රායෝගික සාක්ෂි මගින් ප්‍රබලව තහවුරු කරයි."
@@ -26598,6 +32690,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of guidance clearly.",
+        "ගුරුවරයා මඟපෙන්වීම පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your guidance.",
+        "හොඳ පුරුදු ඔබගේ මඟපෙන්වීම කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Secondary schools should provide comprehensive career guidance to help students choose suitable degree programmes.",
         "සිසුන්ට සුදුසු උපාධි පාඨමාලා තෝරා ගැනීමට උපකාර කිරීම සඳහා ද්විතීයික පාසල් මගින් පුළුල් වෘත්තීය මඟපෙන්වීමක් ලබා දිය යුතුය."
       ],
@@ -26632,6 +32732,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to ridicule her goal.",
+        "ඇය තම ඉලක්කය සමච්චලයට ලක් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can ridicule new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සමච්චලයට ලක් කරන්න හැකිය."
+      ],
       [
         "Groundbreaking scientific theories were often ridiculed by contemporaries before being proven correct.",
         "විප්ලවීය විද්‍යාත්මක න්‍යායන් නිවැරදි බව ඔප්පු වීමට පෙර බොහෝ විට සමකාලීනයන් විසින් සමච්චලයට ලක් කරන ලදී."
@@ -26668,6 +32776,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Presumably, students need enough sleep before an exam.",
+        "බොහෝ විට, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will presumably improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ බොහෝ විට ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Cinema attendance dropped sharply in 2020, presumably due to pandemic restrictions and the rise of streaming.",
         "2020 වසරේදී සිනමා ශාලාවලට පැමිණීම සීඝ්‍රයෙන් පහත වැටුණු අතර, එය බොහෝ විට වසංගත සීමාවන් සහ අන්තර්ජාල විකාශන සේවා ප්‍රචලිත වීම නිසා සිදුවන්නට ඇත."
       ],
@@ -26702,6 +32818,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to frustrate her goal.",
+        "ඇය තම ඉලක්කය කලකිරීමට පත් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can frustrate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා කලකිරීමට පත් කරන්න හැකිය."
+      ],
       [
         "Corruption and weak governance frequently frustrate international efforts to alleviate poverty.",
         "දූෂණය සහ දුර්වල පාලනය බොහෝ විට දරිද්‍රතාවය පිටුදැකීම සඳහා ගන්නා ජාත්‍යන්තර උත්සාහයන් ව්‍යර්ථ කරයි."
@@ -26738,6 +32862,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to testify her goal.",
+        "ඇය තම ඉලක්කය සාක්ෂි දීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can testify new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සාක්ෂි දීම හැකිය."
+      ],
+      [
         "Rising global temperatures testify to the urgent need for decisive climate action.",
         "ඉහළ යන ගෝලීය උෂ්ණත්වය තීරණාත්මක දේශගුණික ක්‍රියාමාර්ගයක හදිසි අවශ්‍යතාවයට සාක්ෂි දරයි."
       ],
@@ -26772,6 +32904,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of glimpse clearly.",
+        "ගුරුවරයා ක්ෂණික දසුන පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your glimpse.",
+        "හොඳ පුරුදු ඔබගේ ක්ෂණික දසුන කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Archaeological excavations provide a fascinating glimpse into the customs of prehistoric societies.",
         "පුරාවිද්‍යාත්මක කැණීම් මගින් ප්‍රාග් ඓතිහාසික සමාජවල සිරිත් විරිත් පිළිබඳ ආකර්ෂණීය දසුනක් ලබා දෙයි."
@@ -26808,6 +32948,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to erode her goal.",
+        "ඇය තම ඉලක්කය ඛාදනය වීම (හෝ කිරීම) මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can erode new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ඛාදනය වීම (හෝ කිරීම) හැකිය."
+      ],
+      [
         "Deforestation leaves hillsides vulnerable to heavy rains that rapidly erode fertile topsoil.",
         "වන විනාශය හේතුවෙන් කඳු බෑවුම් තද වැසිවලට නිරාවරණය වන අතර එමගින් සාරවත් මතුපිට පස ශීඝ්‍රයෙන් ඛාදනය වේ."
       ],
@@ -26842,6 +32990,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to construct her goal.",
+        "ඇය තම ඉලක්කය ඉදිකරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can construct new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ඉදිකරන්න හැකිය."
+      ],
       [
         "A modern bypass was constructed to divert heavy commercial traffic away from the historic town centre.",
         "ඓතිහාසික නගර මධ්‍යයෙන් බර වාණිජ වාහන ඉවත් කර වෙනත් මඟකට යොමු කිරීම සඳහා නවීන අතුරු මාර්ගයක් ඉදිකරන ලදී."
@@ -26878,6 +33034,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Legally, students need enough sleep before an exam.",
+        "නීත්‍යානුකූලව, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will legally improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ නීත්‍යානුකූලව ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "International climate pledges are ineffective unless they are backed by legally binding treaties.",
         "ජාත්‍යන්තර දේශගුණික ප්‍රතිඥා නීත්‍යානුකූලව බැඳී පවතින ගිවිසුම් මගින් ශක්තිමත් නොකළහොත් ඒවා නිෂ්ඵල වේ."
       ],
@@ -26912,6 +33076,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book subservient to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට (යමකට) යටත් වූ පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option subservient to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී (යමකට) යටත් වූ සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Public health and environmental safety should never become subservient to corporate profit.",
         "මහජන සෞඛ්‍යය සහ පාරිසරික ආරක්ෂාව කිසිවිටෙකත් ආයතනික ලාභයට දෙවැනි නොවිය යුතුය."
@@ -26948,6 +33120,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Whereby, students need enough sleep before an exam.",
+        "ඒ මගින්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will whereby improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ ඒ මගින් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "The municipality introduced a scheme whereby residents receive discounts for sorting their recyclable waste.",
         "ප්‍රතිචක්‍රීකරණය කළ හැකි අපද්‍රව්‍ය වෙන් කර ලබා දීම වෙනුවෙන් නිවැසියන්ට වට්ටම් හිමිවන වැඩපිළිවෙළක් නගර සභාව විසින් හඳුන්වා දෙන ලදී."
       ],
@@ -26982,6 +33162,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book inflict on learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට (හානියක් හෝ පීඩාවක්) එල්ල කිරීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option inflict on this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී (හානියක් හෝ පීඩාවක්) එල්ල කිරීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Industrial oil spills inflict irreversible damage on fragile marine ecosystems.",
         "කාර්මික තෙල් කාන්දුවීම් සංවේදී සමුද්‍ර පරිසර පද්ධතිවලට යථා තත්ත්වයට පත් කළ නොහැකි හානියක් සිදු කරයි."
@@ -27018,6 +33206,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Deliberately, students need enough sleep before an exam.",
+        "හිතාමතාම, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will deliberately improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ හිතාමතාම ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Some manufacturers deliberately design electronic appliances with a short lifespan to encourage repeat purchases.",
         "ඇතැම් නිෂ්පාදකයින් පාරිභෝගිකයින් නැවත නැවතත් භාණ්ඩ මිලදී ගැනීමට පෙළඹවීම සඳහා හිතාමතාම ඉලෙක්ට්‍රොනික උපකරණ කෙටි ආයු කාලයක් සහිතව නිර්මාණය කරයි."
       ],
@@ -27052,6 +33248,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to deposit her goal.",
+        "ඇය තම ඉලක්කය තැන්පත් කිරීම (මුදල් හෝ ද්‍රව්‍ය) මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can deposit new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා තැන්පත් කිරීම (මුදල් හෝ ද්‍රව්‍ය) හැකිය."
+      ],
       [
         "First-time homebuyers often struggle to save enough money for a mortgage deposit.",
         "පළමු වරට නිවසක් මිලදී ගන්නා පුද්ගලයින්ට නිවාස ණය තැන්පතුවක් සඳහා ප්‍රමාණවත් මුදලක් ඉතිරි කර ගැනීමට බොහෝ විට අපහසු වේ."
@@ -27088,6 +33292,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are outspoken for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ඍජුව අදහස් ප්‍රකාශ කරන වේ."
+      ],
+      [
+        "She gave a very outspoken answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ඍජුව අදහස් ප්‍රකාශ කරන පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "The scientist has been an outspoken critic of the government's failure to regulate industrial emissions.",
         "කාර්මික විමෝචන නියාමනය කිරීමට රජය අපොහොසත් වීම පිළිබඳව එම විද්‍යාඥයා ඍජු විවේචකයෙකු වී සිටියි."
       ],
@@ -27122,6 +33334,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are vacant for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර හිස්ව පවතින වේ."
+      ],
+      [
+        "She gave a very vacant answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා හිස්ව පවතින පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Converting vacant office buildings into affordable apartments could help ease the urban housing crisis.",
         "හිස්ව පවතින කාර්යාල ගොඩනැගිලි දැරිය හැකි මිලකට ලබා දෙන නිවාස බවට පත් කිරීමෙන් නාගරික නිවාස අර්බුදය සමනය කර ගත හැක."
@@ -27158,6 +33378,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to travel her goal.",
+        "ඇය තම ඉලක්කය සංචාරය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can travel new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සංචාරය කරන්න හැකිය."
+      ],
+      [
         "The rise of video conferencing has significantly reduced the need for international business travel.",
         "වීඩියෝ සම්මන්ත්‍රණ තාක්ෂණයේ දියුණුව ජාත්‍යන්තර ව්‍යාපාරික ගමන් බිමන් සඳහා ඇති අවශ්‍යතාවය සැලකිය යුතු ලෙස අඩු කර ඇත."
       ],
@@ -27192,6 +33420,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of magnitude clearly.",
+        "ගුරුවරයා විශාලත්වය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your magnitude.",
+        "හොඳ පුරුදු ඔබගේ විශාලත්වය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Many policymakers still fail to grasp the sheer magnitude of the global biodiversity crisis.",
         "බොහෝ ප්‍රතිපත්ති සම්පාදකයින් තවමත් ගෝලීය ජෛව විවිධත්ව අර්බුදයේ සැබෑ බරපතළකම වටහා ගැනීමට අපොහොසත් වේ."
@@ -27228,6 +33464,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are deceptive for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර රැවටිලිකාර වේ."
+      ],
+      [
+        "She gave a very deceptive answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා රැවටිලිකාර පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Consumer protection agencies must penalise corporations that engage in deceptive advertising.",
         "රැවටිලිකාර වෙළඳ දැන්වීම්කරණයේ නිරත වන සමාගම්වලට පාරිභෝගික ආරක්ෂණ ආයතන විසින් දඬුවම් පැමිණවිය යුතුය."
       ],
@@ -27262,6 +33506,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to underestimate her goal.",
+        "ඇය තම ඉලක්කය අවතක්සේරු කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can underestimate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අවතක්සේරු කරන්න හැකිය."
+      ],
       [
         "The psychological impact of long-term unemployment on an individual's self-esteem should not be underestimated.",
         "දිගුකාලීන විරැකියාව පුද්ගලයෙකුගේ ආත්ම අභිමානය මත ඇති කරන මනෝවිද්‍යාත්මක බලපෑම අවතක්සේරු නොකළ යුතුය."
@@ -27298,6 +33550,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book take for granted learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට අගය නොකර සාමාන්‍ය දෙයක් ලෙස සැලකීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option take for granted this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී අගය නොකර සාමාන්‍ය දෙයක් ලෙස සැලකීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Citizens in developed nations often take uninterrupted electricity and clean tap water for granted.",
         "සංවර්ධිත රටවල පුරවැසියෝ අඛණ්ඩ විදුලි සැපයුම සහ පිරිසිදු නළ ජලය බොහෝ විට විශේෂ අගය කිරීමකින් තොරව සාමාන්‍ය දෙයක් ලෙස සලකති."
       ],
@@ -27332,6 +33592,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are immune for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ප්‍රතිශක්තියක් සහිත වේ."
+      ],
+      [
+        "She gave a very immune answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ප්‍රතිශක්තියක් සහිත පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "In an interconnected global economy, no single nation is completely immune to financial crises abroad.",
         "එකිනෙක බැඳුණු ගෝලීය ආර්ථිකයක් තුළ කිසිදු තනි රටක් විදේශයන්හි ඇති වන මූල්‍ය අර්බුදවල බලපෑමෙන් සම්පූර්ණයෙන්ම නිදහස් නැත."
@@ -27368,6 +33636,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are promising for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අනාගත සාර්ථකත්වයේ ලකුණු පෙන්වන වේ."
+      ],
+      [
+        "She gave a very promising answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අනාගත සාර්ථකත්වයේ ලකුණු පෙන්වන පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Hydrogen fuel cells represent a promising alternative to conventional petrol engines in heavy transport.",
         "බර වාහන ප්‍රවාහනයේදී සාම්ප්‍රදායික පෙට්‍රල් එන්ජින් සඳහා හයිඩ්‍රජන් ඉන්ධන කෝෂ බලාපොරොත්තු තැබිය හැකි විකල්පයක් නියෝජනය කරයි."
       ],
@@ -27402,6 +33678,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to worship her goal.",
+        "ඇය තම ඉලක්කය වන්දනාමාන කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can worship new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා වන්දනාමාන කරන්න හැකිය."
+      ],
       [
         "Ancient temples and places of worship attract millions of cultural tourists every year.",
         "පැරණි දේවාල, විහාරස්ථාන සහ ආගමික සිද්ධස්ථාන සෑම වසරකම සංස්කෘතික සංචාරකයින් මිලියන ගණනක් ආකර්ෂණය කර ගනී."
@@ -27438,6 +33722,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book reason that learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට තාර්කිකව නිගමනය කිරීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option reason that this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී තාර්කිකව නිගමනය කිරීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Advocates of free public transport reason that lower fares will significantly reduce private car usage.",
         "නොමිලේ පොදු ප්‍රවාහන පහසුකම් ලබා දීමට පක්ෂව කතා කරන්නන් තර්ක කරන්නේ අඩු ගාස්තු මගින් පෞද්ගලික මෝටර් රථ භාවිතය සැලකිය යුතු ලෙස අඩු කරනු ඇති බවයි."
       ],
@@ -27472,6 +33764,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of ultimatum clearly.",
+        "ගුරුවරයා අවසන් නිවේදනය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your ultimatum.",
+        "හොඳ පුරුදු ඔබගේ අවසන් නිවේදනය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Environmental regulators issued an ultimatum to the factory to install filters or face immediate closure.",
         "පෙරහන් පද්ධති සවි කරන ලෙස හෝ වහාම කර්මාන්තශාලාව වසා දැමීමට මුහුණ දෙන ලෙස පාරිසරික නියාමකයින් විසින් අවසන් නිවේදනයක් නිකුත් කරන ලදී."
@@ -27508,6 +33808,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to bewilder her goal.",
+        "ඇය තම ඉලක්කය ව්‍යාකූලත්වයට පත් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can bewilder new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ව්‍යාකූලත්වයට පත් කරන්න හැකිය."
+      ],
+      [
         "Rapidly changing nutritional advice often leaves the general public bewildered about what to eat.",
         "වේගයෙන් වෙනස් වන පෝෂණ උපදෙස් බොහෝ විට කුමක් ආහාරයට ගත යුතුද යන්න පිළිබඳව සාමාන්‍ය ජනතාව ව්‍යාකූලත්වයට පත් කරයි."
       ],
@@ -27542,6 +33850,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book from the outset learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට ආරම්භයේ පටන්ම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option from the outset this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී ආරම්භයේ පටන්ම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Foreign languages should be taught from the outset of primary school when children absorb sounds effortlessly.",
         "දරුවන් ඉතා පහසුවෙන් ශබ්ද ග්‍රහණය කර ගන්නා ප්‍රාථමික පාසල් අවධියේ ආරම්භයේ පටන්ම විදේශීය භාෂා ඉගැන්විය යුතුය."
@@ -27578,6 +33894,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book cooperate about learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට (යම් කරුණක් සම්බන්ධයෙන්) සහයෝගයෙන් කටයුතු කිරීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option cooperate about this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී (යම් කරුණක් සම්බන්ධයෙන්) සහයෝගයෙන් කටයුතු කිරීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Neighbouring countries must cooperate about water resource management to prevent regional conflicts.",
         "කලාපීය ගැටුම් වළක්වා ගැනීම සඳහා අසල්වැසි රටවල් ජල සම්පත් කළමනාකරණය සම්බන්ධයෙන් සහයෝගයෙන් කටයුතු කළ යුතුය."
       ],
@@ -27612,6 +33936,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book fare well learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට සාර්ථකව මුහුණ දීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option fare well this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී සාර්ථකව මුහුණ දීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Businesses with strong online platforms fared well during the pandemic compared to traditional retailers.",
         "සාම්ප්‍රදායික සිල්ලර වෙළෙන්දන් හා සැසඳීමේදී ශක්තිමත් අන්තර්ජාල වේදිකා සහිත ව්‍යාපාර වසංගත සමය තුළ සාර්ථකව කටයුතු කළේය."
@@ -27648,6 +33980,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book enthusiastic about learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට (යමක් පිළිබඳව) දැඩි උද්‍යෝගයකින් පසුවීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option enthusiastic about this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී (යමක් පිළිබඳව) දැඩි උද්‍යෝගයකින් පසුවීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Young children are naturally enthusiastic about exploring the outdoors when given the opportunity.",
         "අවස්ථාව ලබා දුන් විට කුඩා දරුවෝ බාහිර පරිසරය ගවේෂණය කිරීම පිළිබඳව ස්වභාවිකවම දැඩි උද්‍යෝගයක් දක්වති."
       ],
@@ -27682,6 +34022,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to remain her goal.",
+        "ඇය තම ඉලක්කය තවදුරටත් (එම තත්ත්වයේම) පැවතීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can remain new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා තවදුරටත් (එම තත්ත්වයේම) පැවතීම හැකිය."
+      ],
       [
         "Despite advances in medicine, heart disease remains one of the leading causes of mortality worldwide.",
         "වෛද්‍ය විද්‍යාවේ දියුණුව තිබියදීත්, හෘද රෝග ලොව පුරා මරණ සඳහා බලපාන ප්‍රධානතම හේතුවක් ලෙස තවදුරටත් පවතී."
@@ -27718,6 +34066,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book dispense with learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට (තවදුරටත් අවශ්‍ය නොවන දෙයක්) ඉවත් කිරීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option dispense with this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී (තවදුරටත් අවශ්‍ය නොවන දෙයක්) ඉවත් කිරීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Many retail businesses have dispensed with physical cash altogether in favour of contactless digital payments.",
         "බොහෝ සිල්ලර ව්‍යාපාර ඩිජිටල් ගෙවීම් ක්‍රම වෙනුවෙන් භෞතික මුදල් භාවිතය සම්පූර්ණයෙන්ම බැහැර කර ඇත."
       ],
@@ -27752,6 +34108,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are significant for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සැලකිය යුතු වේ."
+      ],
+      [
+        "She gave a very significant answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සැලකිය යුතු පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "A significant proportion of household budgets in major cities is spent on rent and utilities.",
         "ප්‍රධාන නගරවල පවුල්වල අයවැයෙන් සැලකිය යුතු කොටසක් නිවාස කුලී සහ උපයෝගිතා බිල්පත් සඳහා වැය කෙරේ."
@@ -27788,6 +34152,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of mission clearly.",
+        "ගුරුවරයා මෙහෙවර පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your mission.",
+        "හොඳ පුරුදු ඔබගේ මෙහෙවර කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Critics argue that billions spent on space missions could be better used to combat poverty on Earth.",
         "අභ්‍යවකාශ මෙහෙයුම් සඳහා වැය කරන බිලියන ගණනක මුදල් පෘථිවියේ දරිද්‍රතාවය පිටුදැකීම සඳහා වඩාත් හොඳින් යොදා ගත හැකි බව විචාරකයෝ තර්ක කරති."
       ],
@@ -27822,6 +34194,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book insofar as learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට යම් තාක් දුරට පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option insofar as this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී යම් තාක් දුරට සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Artificial intelligence is beneficial in classrooms insofar as it supports, rather than replaces, human teachers.",
         "කෘත්‍රිම බුද්ධිය පන්ති කාමර තුළ ප්‍රයෝජනවත් වන්නේ එය මිනිස් ගුරුවරුන් විস্থাপනය නොකර ඔවුන්ට සහාය වන තාක් දුරට පමණි."
@@ -27858,6 +34238,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book at the expense of learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට (තවත් වැදගත් දෙයක්) කැප කරමින් පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option at the expense of this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී (තවත් වැදගත් දෙයක්) කැප කරමින් සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Developing nations should not pursue rapid industrialisation at the expense of environmental sustainability.",
         "සංවර්ධනය වෙමින් පවතින රටවල් පාරිසරික තිරසාරත්වය පරදුවට තබමින් ශීඝ්‍ර කාර්මීකරණයක් හඹා නොයා යුතුය."
       ],
@@ -27892,6 +34280,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are notorious for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර කුප්‍රකට වේ."
+      ],
+      [
+        "She gave a very notorious answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා කුප්‍රකට පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Many rapidly growing megacities have become notorious for severe air pollution and traffic gridlock.",
         "ශීඝ්‍රයෙන් වර්ධනය වන බොහෝ ප්‍රධාන නගර දරුණු වායු දූෂණය සහ රථවාහන තදබදය සම්බන්ධයෙන් කුප්‍රකට වී ඇත."
@@ -27928,6 +34324,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to attract her goal.",
+        "ඇය තම ඉලක්කය ආකර්ෂණය කර ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can attract new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ආකර්ෂණය කර ගැනීම හැකිය."
+      ],
+      [
         "Stable political institutions and modern infrastructure help countries attract foreign direct investment.",
         "ස්ථාවර දේශපාලන ආයතන සහ නවීන යටිතල පහසුකම් රටවලට සෘජු විදේශ ආයෝජන ආකර්ෂණය කර ගැනීමට උපකාරී වේ."
       ],
@@ -27962,6 +34366,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are mainstream for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ප්‍රධාන ධාරාවේ වේ."
+      ],
+      [
+        "She gave a very mainstream answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ප්‍රධාන ධාරාවේ පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Electric vehicles have rapidly moved from a niche product into the automotive mainstream.",
         "විද්‍යුත් වාහන සීමිත පිරිසකට වෙන් වූ භාණ්ඩයක සිට ශීඝ්‍රයෙන් මෝටර් රථ වෙළඳපොළේ ප්‍රධාන ධාරාවට එක් වී ඇත."
@@ -27998,6 +34410,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are envious for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ඊර්ෂ්‍යා සහගත වේ."
+      ],
+      [
+        "She gave a very envious answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ඊර්ෂ්‍යා සහගත පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Constant exposure to luxury lifestyles on social media can make teenagers feel envious of their peers.",
         "සමාජ මාධ්‍යවල සුඛෝපභෝගී ජීවන රටාවන්ට නිරන්තරයෙන් නිරාවරණය වීම නිසා නව යොවුන් වියේ දරුවන් තුළ තම සමවයසේ මිතුරන් කෙරෙහි ඊර්ෂ්‍යාවක් ඇති විය හැක."
       ],
@@ -28032,6 +34452,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of contradiction clearly.",
+        "ගුරුවරයා පරස්පර විරෝධීතාවය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your contradiction.",
+        "හොඳ පුරුදු ඔබගේ පරස්පර විරෝධීතාවය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "There is a clear contradiction between the government's climate pledges and its approval of new coal mines.",
         "රජයේ දේශගුණික ප්‍රතිඥා සහ නව ගල් අඟුරු පතල් සඳහා අනුමැතිය ලබා දීම අතර පැහැදිලි පරස්පර විරෝධීතාවයක් පවතී."
@@ -28068,6 +34496,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are ruthless for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අනුකම්පා විරහිත වේ."
+      ],
+      [
+        "She gave a very ruthless answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අනුකම්පා විරහිත පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Small local retailers often struggle to survive amidst ruthless competition from multinational corporations.",
         "බහුජාතික සමාගම්වල අනුකම්පා විරහිත තරඟකාරීත්වය හමුවේ කුඩා දේශීය වෙළෙඳුන්ට තම පැවැත්ම තහවුරු කර ගැනීමට දැඩි වෙහෙසක් දැරීමට සිදු වේ."
       ],
@@ -28102,6 +34538,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to engulf her goal.",
+        "ඇය තම ඉලක්කය සම්පූර්ණයෙන්ම වෙළා ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can engulf new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සම්පූර්ණයෙන්ම වෙළා ගැනීම හැකිය."
+      ],
       [
         "Prolonged droughts have left vast areas of forest dry and vulnerable to being engulfed by wildfires.",
         "දිගුකාලීන නියඟය හේතුවෙන් විශාල වනාන්තර ප්‍රදේශ වියළී ගොස් ලැව්ගිනිවලින් වෙළා ගැනීමේ දැඩි අවදානමකට ලක්ව ඇත."
@@ -28138,6 +34582,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of stamina clearly.",
+        "ගුරුවරයා දරාගැනීමේ ශක්තිය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your stamina.",
+        "හොඳ පුරුදු ඔබගේ දරාගැනීමේ ශක්තිය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Long-distance runners must train consistently for years to build the stamina required for marathons.",
         "මැරතන් ධාවන තරඟ සඳහා අවශ්‍ය දරාගැනීමේ ශක්තිය ගොඩනඟා ගැනීමට දිගු දුර ධාවකයින් වසර ගණනාවක් අඛණ්ඩව පුහුණු විය යුතුය."
       ],
@@ -28172,6 +34624,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are accountable to/for for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර වගකීමට බැඳී සිටින වේ."
+      ],
+      [
+        "She gave a very accountable to/for answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා වගකීමට බැඳී සිටින පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "In a democratic society, elected officials must remain accountable to the citizens they represent.",
         "ප්‍රජාතන්ත්‍රවාදී සමාජයක, තේරී පත් වූ නිලධාරීන් තමන් නියෝජනය කරන පුරවැසියන්ට වගවීමට බැඳී සිටිය යුතුය."
@@ -28208,6 +34668,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Wittingly, students need enough sleep before an exam.",
+        "දැනුවත්ව, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will wittingly improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ දැනුවත්ව ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Consumers who buy counterfeit goods wittingly or unwittingly support illegal manufacturing networks.",
         "ව්‍යාජ භාණ්ඩ මිලදී ගන්නා පාරිභෝගිකයින් දැනුවත්ව හෝ නොදැනුවත්ව නීති විරෝධී නිෂ්පාදන ජාලවලට අනුබල දෙති."
       ],
@@ -28242,6 +34710,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book on the brink of learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට අද්දර පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option on the brink of this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී අද්දර සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Habitat destruction and poaching have pushed several endangered species to the brink of extinction.",
         "වාසස්ථාන විනාශය සහ දඩයම් කිරීම නිසා වඳවීමේ තර්ජනයට ලක්ව ඇති සත්ත්ව විශේෂ කිහිපයක්ම වඳ වී යාමේ අද්දරටම තල්ලු වී ඇත."
@@ -28278,6 +34754,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are intelligible for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර තේරුම් ගත හැකි වේ."
+      ],
+      [
+        "She gave a very intelligible answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා තේරුම් ගත හැකි පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Medical professionals should explain diagnoses in plain language that is intelligible to ordinary patients.",
         "වෛද්‍ය වෘත්තිකයන් සාමාන්‍ය රෝගීන්ට තේරුම් ගත හැකි සරල භාෂාවකින් රෝග විනිශ්චයන් පැහැදිලි කළ යුතුය."
       ],
@@ -28312,6 +34796,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "It is important to coerce into your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි බලහත්කාරයෙන් හෝ තර්ජනයෙන් යමක් කරවීමට පෙළඹවෙන්න වැදගත් වේ."
+      ],
+      [
+        "She learned how to coerce into difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව බලහත්කාරයෙන් හෝ තර්ජනයෙන් යමක් කරවීමට පෙළඹවෙන්න ඇය ඉගෙන ගත්තාය."
+      ],
       [
         "Labour laws are designed to ensure that workers cannot be coerced into working unpaid overtime.",
         "සේවකයින් ලවා වැටුප් රහිත අතිකාල සේවය බලහත්කාරයෙන් කරවා ගැනීමට නොහැකි බව තහවුරු කිරීමට කම්කරු නීති සකස් කර ඇත."
@@ -28348,6 +34840,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are antiquated for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර යල් පැන ගිය වේ."
+      ],
+      [
+        "She gave a very antiquated answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා යල් පැන ගිය පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Many commuters face daily delays due to the city's antiquated railway network.",
         "නගරයේ පවතින යල් පැන ගිය දුම්රිය ජාලය හේතුවෙන් බොහෝ මගීන්ට දෛනිකව ප්‍රමාදයන්ට මුහුණ දීමට සිදු වේ."
       ],
@@ -28382,6 +34882,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book contrary to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට ඊට පටහැනිව පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option contrary to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී ඊට පටහැනිව සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Contrary to popular belief, working longer hours does not necessarily lead to higher productivity.",
         "පොදු පිළිගැනීමට පටහැනිව, වැඩි පැය ගණනක් වැඩ කිරීම අනිවාර්යයෙන්ම ඉහළ ඵලදායිතාවයකට හේතු නොවේ."
@@ -28418,6 +34926,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are complacent for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අනවශ්‍ය ලෙස තෘප්තිමත් වී නොසැලකිලිමත් වන වේ."
+      ],
+      [
+        "She gave a very complacent answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අනවශ්‍ය ලෙස තෘප්තිමත් වී නොසැලකිලිමත් වන පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Public health authorities cannot afford to become complacent even after an infectious disease has been contained.",
         "බෝවන රෝගයක් පාලනය කිරීමෙන් පසුව වුවද මහජන සෞඛ්‍ය බලධාරීන්ට ඒ පිළිබඳව නොසැලකිලිමත් විය නොහැක."
       ],
@@ -28452,6 +34968,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are fatal for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර මාරාන්තික වේ."
+      ],
+      [
+        "She gave a very fatal answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා මාරාන්තික පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Stricter speed limits and tougher penalties have significantly reduced the number of fatal road accidents.",
         "දැඩි වේග සීමාවන් සහ දඬුවම් මගින් මාරාන්තික රිය අනතුරු සංඛ්‍යාව සැලකිය යුතු ලෙස අඩු කර ඇත."
@@ -28488,6 +35012,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are warranted for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සාධාරණීකරණය කළ හැකි වේ."
+      ],
+      [
+        "She gave a very warranted answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සාධාරණීකරණය කළ හැකි පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Given the rapid rise in youth unemployment, urgent government intervention is clearly warranted.",
         "තරුණ විරැකියාවේ වේගවත් ඉහළ යාම සැලකිල්ලට ගත් විට, රජයේ කඩිනම් මැදිහත්වීමක් පැහැදිලිවම යුක්ති සහගත වේ."
       ],
@@ -28522,6 +35054,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to accelerate her goal.",
+        "ඇය තම ඉලක්කය වේගවත් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can accelerate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා වේගවත් කරන්න හැකිය."
+      ],
       [
         "Global lockdowns during the pandemic helped accelerate the adoption of remote working technologies.",
         "වසංගත සමයේ පැවති ගෝලීය සංචරණ සීමා දුරස්ථ රැකියා තාක්ෂණයන් භාවිතයට ගැනීම වේගවත් කිරීමට උපකාරී විය."
@@ -28558,6 +35098,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to dominate her goal.",
+        "ඇය තම ඉලක්කය ආධිපත්‍යය පැතිරවෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can dominate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ආධිපත්‍යය පැතිරවෙන්න හැකිය."
+      ],
+      [
         "A handful of technology giants currently dominate the global digital advertising market.",
         "තාක්ෂණික දැවැන්තයින් කිහිප දෙනෙකු දැනට ගෝලීය ඩිජිටල් ප්‍රචාරණ වෙළෙඳපොළේ ආධිපත්‍යය දරයි."
       ],
@@ -28592,6 +35140,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to propose her goal.",
+        "ඇය තම ඉලක්කය යෝජනා කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can propose new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා යෝජනා කරන්න හැකිය."
+      ],
       [
         "Urban planners have proposed expanding pedestrian zones to reduce traffic congestion in the city centre.",
         "නගර මධ්‍යයේ රථවාහන තදබදය අවම කිරීම සඳහා පදික කලාප පුළුල් කිරීමට නගර සැලසුම්කරුවන් යෝජනා කර ඇත."
@@ -28628,6 +35184,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to ponder her goal.",
+        "ඇය තම ඉලක්කය ගැඹුරින් කල්පනා කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can ponder new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ගැඹුරින් කල්පනා කරන්න හැකිය."
+      ],
+      [
         "Philosophers and scientists continue to ponder the ethical implications of artificial intelligence.",
         "දාර්ශනිකයින් සහ විද්‍යාඥයින් කෘත්‍රිම බුද්ධියේ සදාචාරාත්මක ප්‍රතිවිපාක පිළිබඳව අඛණ්ඩව ගැඹුරින් කල්පනා කරති."
       ],
@@ -28662,6 +35226,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book along with learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට සමඟින් පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option along with this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී සමඟින් සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Rising sea levels, along with extreme weather events, pose a severe threat to coastal communities.",
         "මුහුදු මට්ටම ඉහළ යාම, ආන්තික කාලගුණික තත්ත්වයන් සමඟින් වෙරළබඩ ප්‍රජාවන්ට දැඩි තර්ජනයක් එල්ල කරයි."
@@ -28698,6 +35270,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Commercially, students need enough sleep before an exam.",
+        "වාණිජමය වශයෙන්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will commercially improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ වාණිජමය වශයෙන් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Solar power has become commercially viable even in regions with moderate levels of sunlight.",
         "සාමාන්‍ය හිරු එළියක් ලැබෙන කලාපවල පවා සූර්ය බලශක්තිය වාණිජමය වශයෙන් සාර්ථක කරගත හැකි මට්ටමට පත්ව ඇත."
       ],
@@ -28732,6 +35312,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to signal her goal.",
+        "ඇය තම ඉලක්කය සංඥා කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can signal new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සංඥා කරන්න හැකිය."
+      ],
       [
         "The surge in electric vehicle sales signals a major shift in consumer attitudes towards sustainability.",
         "විද්‍යුත් වාහන අලෙවියේ ශීඝ්‍ර ඉහළ යාම තිරසාරත්වය කෙරෙහි පාරිභෝගික ආකල්පවල විශාල වෙනසක් පෙන්නුම් කරයි."
@@ -28768,6 +35356,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of boom clearly.",
+        "ගුරුවරයා ශීඝ්‍ර පිබිදීම පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your boom.",
+        "හොඳ පුරුදු ඔබගේ ශීඝ්‍ර පිබිදීම කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "The coastal town experienced an unprecedented economic boom following the opening of the new port.",
         "නව වරාය විවෘත කිරීමෙන් පසු එම වෙරළබඩ නගරය පෙර නොවූ විරූ ආර්ථික පිබිදීමක් අත්වින්දේය."
       ],
@@ -28802,6 +35398,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are edible for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ආහාරයට ගත හැකි වේ."
+      ],
+      [
+        "She gave a very edible answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ආහාරයට ගත හැකි පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Supermarkets discard tonnes of perfectly edible produce simply because of minor cosmetic blemishes.",
         "මතුපිට පවතින සුළු පෙනුමේ අඩුපාඩු නිසාම සුපිරි වෙළෙඳසැල් විසින් ආහාරයට ගත හැකි ඉතා හොඳ තත්ත්වයේ එළවළු සහ පලතුරු ටොන් ගණනක් ඉවත දමනු ලැබේ."
@@ -28838,6 +35442,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Yet, students need enough sleep before an exam.",
+        "තවමත්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will yet improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ තවමත් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Many developing countries have yet to establish comprehensive recycling facilities in rural districts.",
         "සංවර්ධනය වෙමින් පවතින බොහෝ රටවල් ග්‍රාමීය දිස්ත්‍රික්කවල තවමත් පුළුල් ප්‍රතිචක්‍රීකරණ පහසුකම් ස්ථාපිත කර නොමැත."
       ],
@@ -28872,6 +35484,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book versus learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට එදිරිව පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option versus this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී එදිරිව සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "The debate over nature versus nurture remains central to modern developmental psychology.",
         "ජානමය බලපෑම එදිරිව පාරිසරික බලපෑම පිළිබඳ විවාදය නවීන සංවර්ධන මනෝවිද්‍යාවේ ප්‍රධාන මාතෘකාවක් ලෙස පවතී."
@@ -28908,6 +35528,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of opportunity clearly.",
+        "ගුරුවරයා අවස්ථාව පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your opportunity.",
+        "හොඳ පුරුදු ඔබගේ අවස්ථාව කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Online learning platforms provide an opportunity for working adults to upgrade their professional skills.",
         "මාර්ගගත ඉගෙනුම් වේදිකා රැකියාවල නිරත වැඩිහිටියන්ට තම වෘත්තීය කුසලතා වැඩිදියුණු කර ගැනීමට අවස්ථාවක් සලසා දෙයි."
       ],
@@ -28942,6 +35570,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "It is important to appeal to your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි ආකර්ෂණය වෙන්න වැදගත් වේ."
+      ],
+      [
+        "She learned how to appeal to difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව ආකර්ෂණය වෙන්න ඇය ඉගෙන ගත්තාය."
+      ],
       [
         "Flexible working hours particularly appeal to parents who need to balance career and childcare responsibilities.",
         "නම්‍යශීලී වැඩ කරන වේලාවන් රැකියාව සහ දරුවන් රැකබලා ගැනීමේ වගකීම් සමබර කර ගැනීමට අවශ්‍ය දෙමාපියන්ගේ සිත් විශේෂයෙන්ම ඇද ගනී."
@@ -28978,6 +35614,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are dramatic for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර කැපී පෙනෙන වේ."
+      ],
+      [
+        "She gave a very dramatic answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා කැපී පෙනෙන පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "The graph illustrates a dramatic decline in landline telephone usage over the twenty-year period.",
         "මෙම ප්‍රස්තාරය මගින් වසර විස්සක කාලය තුළ ස්ථාවර දුරකථන භාවිතයේ කැපී පෙනෙන පහත වැටීමක් පෙන්නුම් කරයි."
       ],
@@ -29012,6 +35656,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to isolate her goal.",
+        "ඇය තම ඉලක්කය හුදකලා කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can isolate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා හුදකලා කරන්න හැකිය."
+      ],
       [
         "Excessive reliance on virtual communication can gradually isolate individuals from their local communities.",
         "අතථ්‍ය සන්නිවේදනය මත පමණට වඩා යැපීම මගින් පුද්ගලයන් තම ප්‍රාදේශීය ප්‍රජාවන්ගෙන් ක්‍රමයෙන් හුදකලා කළ හැකිය."
@@ -29048,6 +35700,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book even so learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට එසේ වුවද පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option even so this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී එසේ වුවද සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Public transport fares have risen slightly this year; even so, commuting by train remains cheaper than driving.",
         "මෙම වසරේ පොදු ප්‍රවාහන ගාස්තු සුළු වශයෙන් ඉහළ ගොස් ඇත; එසේ වුවද, දුම්රියෙන් ගමන් කිරීම තවමත් මෝටර් රථයකින් යාමට වඩා ලාභදායී වේ."
       ],
@@ -29082,6 +35742,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to request her goal.",
+        "ඇය තම ඉලක්කය ඉල්ලා සිටීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can request new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ඉල්ලා සිටීම හැකිය."
+      ],
       [
         "Employees have the legal right to request flexible working arrangements after six months of service.",
         "මාස හයක සේවා කාලයකින් පසු නම්‍යශීලී සේවා කොන්දේසි ඉල්ලා සිටීමට සේවකයින්ට නීතිමය අයිතියක් ඇත."
@@ -29118,6 +35786,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to declare her goal.",
+        "ඇය තම ඉලක්කය නිල වශයෙන් ප්‍රකාශයට පත් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can declare new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා නිල වශයෙන් ප්‍රකාශයට පත් කරන්න හැකිය."
+      ],
+      [
         "The government was forced to declare a state of emergency after severe flooding devastated the province.",
         "දරුණු ගංවතුර තත්ත්වයක් හේතුවෙන් පළාත විනාශ වීමෙන් පසු හදිසි තත්ත්වයක් ප්‍රකාශයට පත් කිරීමට රජයට සිදු විය."
       ],
@@ -29152,6 +35828,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to strengthen her goal.",
+        "ඇය තම ඉලක්කය ශක්තිමත් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can strengthen new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ශක්තිමත් කරන්න හැකිය."
+      ],
       [
         "Sharing evening meals without digital distractions can significantly strengthen family bonds.",
         "ඩිජිටල් උපාංගවල බාධාවකින් තොරව රාත්‍රී ආහාරය එක්ව ගැනීමෙන් පවුල් බැඳීම් සැලකිය යුතු ලෙස ශක්තිමත් කළ හැකිය."
@@ -29188,6 +35872,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book grounds for learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට සාධාරණ හේතු පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option grounds for this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී සාධාරණ හේතු සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Recent breakthroughs in battery storage technology provide strong grounds for optimism about clean energy.",
         "බැටරි ගබඩා කිරීමේ තාක්ෂණයේ මෑතකාලීන ජයග්‍රහණ පිරිසිදු බලශක්තිය පිළිබඳව සුබවාදී වීමට ප්‍රබල පදනමක් සපයයි."
       ],
@@ -29222,6 +35914,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to expand her goal.",
+        "ඇය තම ඉලක්කය පුළුල් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can expand new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා පුළුල් කරන්න හැකිය."
+      ],
       [
         "Travelling abroad allows young people to expand their cultural horizons and develop greater tolerance.",
         "විදේශගතව සංචාරය කිරීම තරුණ පිරිසට තම සංස්කෘතික දැනුම් පරාසය පුළුල් කර ගැනීමට සහ ඉවසීම ප්‍රගුණ කිරීමට ඉඩ සලසයි."
@@ -29258,6 +35958,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "It is important to coincide with your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි එකම කාලයක සිදු වෙන්න වැදගත් වේ."
+      ],
+      [
+        "She learned how to coincide with difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව එකම කාලයක සිදු වෙන්න ඇය ඉගෙන ගත්තාය."
+      ],
+      [
         "The sharp drop in cinema attendance coincided with the widespread adoption of home streaming services.",
         "සිනමා ශාලාවලට පැමිණීමේ තියුණු පහත වැටීම නිවසේ සිට නැරඹිය හැකි ස්ට්‍රීමින් (streaming) සේවා පුළුල්ව ව්‍යාප්ත වීමත් සමඟ එකම කාලයක සිදු විය."
       ],
@@ -29292,6 +36000,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of escalation clearly.",
+        "ගුරුවරයා උත්සන්න වීම පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your escalation.",
+        "හොඳ පුරුදු ඔබගේ උත්සන්න වීම කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Diplomatic negotiations were held urgently to prevent a further escalation of regional tensions.",
         "කලාපීය ආතතීන් තවදුරටත් උත්සන්න වීම වැළැක්වීම සඳහා රාජ්‍යතාන්ත්‍රික සාකච්ඡා කඩිනමින් පවත්වන ලදී."
@@ -29328,6 +36044,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to strike her goal.",
+        "ඇය තම ඉලක්කය සමබරතාවයකට හෝ එකඟතාවයකට එළඹීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can strike new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සමබරතාවයකට හෝ එකඟතාවයකට එළඹීම හැකිය."
+      ],
+      [
         "Governments must strike a delicate balance between promoting economic growth and protecting the environment.",
         "රජයන් විසින් ආර්ථික වර්ධනය ප්‍රවර්ධනය කිරීම සහ පරිසරය ආරක්ෂා කිරීම අතර සියුම් සමබරතාවයක් ඇති කර ගත යුතුය."
       ],
@@ -29362,6 +36086,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to confiscate her goal.",
+        "ඇය තම ඉලක්කය රාජසන්තක කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can confiscate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා රාජසන්තක කරන්න හැකිය."
+      ],
       [
         "Many secondary schools authorise teachers to confiscate mobile phones if students use them during lessons.",
         "පාඩම් අතරතුර සිසුන් ජංගම දුරකථන භාවිත කළහොත් ඒවා තම භාරයට ගැනීමට බොහෝ ද්විතීයික පාසල් ගුරුවරුන්ට බලය ලබා දෙයි."
@@ -29398,6 +36130,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to relieve her goal.",
+        "ඇය තම ඉලක්කය සමනය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can relieve new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සමනය කරන්න හැකිය."
+      ],
+      [
         "Constructing ring roads around major cities can effectively relieve traffic congestion in commercial districts.",
         "ප්‍රධාන නගර වටා වටරවුම් මාර්ග ඉදිකිරීමෙන් වාණිජ දිස්ත්‍රික්කවල පවතින රථවාහන තදබදය සාර්ථකව ලිහිල් කළ හැකිය."
       ],
@@ -29432,6 +36172,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to discourage her goal.",
+        "ඇය තම ඉලක්කය අධෛර්යමත් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can discourage new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අධෛර්යමත් කරන්න හැකිය."
+      ],
       [
         "High taxes on tobacco products are intended to discourage young people from taking up smoking.",
         "දුම්කොළ නිෂ්පාදන මත පනවන ඉහළ බදු මගින් තරුණ පිරිස දුම්පානයට යොමු වීමෙන් අධෛර්යමත් කිරීම අපේක්ෂා කෙරේ."
@@ -29468,6 +36216,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are vast for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අතිවිශාල වේ."
+      ],
+      [
+        "She gave a very vast answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අතිවිශාල පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "The vast majority of climate scientists agree that human activity is the primary driver of global warming.",
         "මිනිස් ක්‍රියාකාරකම් ගෝලීය උණුසුම ඉහළ යාමේ ප්‍රධාන සාධකය බවට දේශගුණ විද්‍යාඥයින්ගෙන් අතිබහුතරයක් එකඟ වෙති."
       ],
@@ -29502,6 +36258,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to recognize her goal.",
+        "ඇය තම ඉලක්කය පිළිගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can recognize new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා පිළිගැනීම හැකිය."
+      ],
       [
         "It is widely recognized that early childhood nutrition plays a vital role in cognitive development.",
         "මුල් ළමාවිය පෝෂණය දරුවෙකුගේ බුද්ධිමය වර්ධනය සඳහා තීරණාත්මක කාර්යභාරයක් ඉටු කරන බව පුළුල්ව පිළිගැනේ."
@@ -29538,6 +36302,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to perceive as her goal.",
+        "ඇය තම ඉලක්කය ලෙස දැකීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can perceive as new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ලෙස දැකීම හැකිය."
+      ],
+      [
         "In many societies, owning a luxury car is still perceived as a primary symbol of personal success.",
         "බොහෝ සමාජවල සුඛෝපභෝගී මෝටර් රථයක් හිමිකර ගැනීම තවමත් පුද්ගලික සාර්ථකත්වයේ ප්‍රධාන සංකේතයක් ලෙස සලකනු ලැබේ."
       ],
@@ -29572,6 +36344,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to offer her goal.",
+        "ඇය තම ඉලක්කය ලබා දීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can offer new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ලබා දීම හැකිය."
+      ],
       [
         "Remote work arrangements offer employees greater flexibility in managing their daily schedules.",
         "දුරස්ථ රැකියා ක්‍රමවේද මගින් සේවකයින්ට තම දෛනික කාලසටහන් කළමනාකරණය කර ගැනීමේදී වැඩි නම්‍යශීලීභාවයක් ලබා දෙයි."
@@ -29608,6 +36388,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are unavoidable for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර වැළැක්විය නොහැකි වේ."
+      ],
+      [
+        "She gave a very unavoidable answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා වැළැක්විය නොහැකි පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Some degree of cultural homogenisation may be an unavoidable consequence of global media networks.",
         "ගෝලීය මාධ්‍ය ජාලයන්හි වැළැක්විය නොහැකි ප්‍රතිවිපාකයක් ලෙස යම් ප්‍රමාණයක සංස්කෘතික ඒකාකාරී බවක් ඇති විය හැකිය."
       ],
@@ -29642,6 +36430,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of desire clearly.",
+        "ගුරුවරයා දැඩි ආශාව පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your desire.",
+        "හොඳ පුරුදු ඔබගේ දැඩි ආශාව කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Consumerism is largely fuelled by the desire for social status and material possessions.",
         "පාරිභෝගිකවාදය බොහෝ දුරට මෙහෙයවනු ලබන්නේ සමාජ තත්ත්වය සහ භෞතික දේපළ සඳහා ඇති දැඩි ආශාව මගිනි."
@@ -29678,6 +36474,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are extreme for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ආන්තික වේ."
+      ],
+      [
+        "She gave a very extreme answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ආන්තික පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Global warming has increased both the frequency and severity of extreme weather events worldwide.",
         "ගෝලීය උණුසුම ඉහළ යාම ලොව පුරා ආන්තික කාලගුණික සිදුවීම් ඇතිවීමේ වාර ගණන සහ දරුණු බව යන දෙකම වැඩි කර ඇත."
       ],
@@ -29712,6 +36516,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are counterproductive for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අපේක්ෂිත ප්‍රතිඵලයට හාත්පසින්ම ප්‍රතිවිරුද්ධ (අහිතකර) ප්‍රතිඵල ගෙන දෙන වේ."
+      ],
+      [
+        "She gave a very counterproductive answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අපේක්ෂිත ප්‍රතිඵලයට හාත්පසින්ම ප්‍රතිවිරුද්ධ (අහිතකර) ප්‍රතිඵල ගෙන දෙන පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Assigning excessive homework to primary school children can be counterproductive, as it often leads to burnout.",
         "ප්‍රාථමික පාසල් දරුවන්ට පමණට වඩා ගෙදර වැඩ පැවරීම අපේක්ෂිත ප්‍රතිඵලයට පටහැනි විය හැකි අතර, එය බොහෝ විට ඔවුන්ව අධික වෙහෙසට පත් කරයි."
@@ -29748,6 +36560,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to lessen her goal.",
+        "ඇය තම ඉලක්කය අඩු කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can lessen new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අඩු කරන්න හැකිය."
+      ],
+      [
         "Subsidising childcare costs can significantly lessen the financial burden on low-income families.",
         "දරුවන් රැකබලා ගැනීමේ පිරිවැය සඳහා සහනාධාර ලබා දීමෙන් අඩු ආදායම්ලාභී පවුල් මත පවතින මූල්‍ය බර සැලකිය යුතු ලෙස අඩු කළ හැකිය."
       ],
@@ -29782,6 +36602,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are affluent for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ධනවත් වේ."
+      ],
+      [
+        "She gave a very affluent answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ධනවත් පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Affluent nations have a moral obligation to assist developing countries in adapting to climate change.",
         "දේශගුණික විපර්යාසවලට හැඩගැසීම සඳහා සංවර්ධනය වෙමින් පවතින රටවලට සහාය වීමට ධනවත් රටවලට සදාචාරාත්මක බැඳීමක් ඇත."
@@ -29818,6 +36646,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are remaining for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ඉතිරිව පවතින වේ."
+      ],
+      [
+        "She gave a very remaining answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ඉතිරිව පවතින පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "While 60% of respondents preferred online shopping, the remaining 40% favoured traditional retail stores.",
         "ප්‍රතිචාර දැක්වූවන්ගෙන් 60%ක් මාර්ගගතව භාණ්ඩ මිලදී ගැනීමට කැමැත්ත පළ කළ අතර, ඉතිරි 40% සාම්ප්‍රදායික වෙළෙඳසැල් ප්‍රිය කළහ."
       ],
@@ -29852,6 +36688,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are associated for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සම්බන්ධිත වේ."
+      ],
+      [
+        "She gave a very associated answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සම්බන්ධිත පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Public awareness campaigns have highlighted the severe health risks associated with a sedentary lifestyle.",
         "මහජන දැනුවත් කිරීමේ වැඩසටහන් මගින් ව්‍යායාම රහිත ජීවන රටාවක් හා බැඳී පවතින දරුණු සෞඛ්‍ය අවදානම් පෙන්වා දී ඇත."
@@ -29888,6 +36732,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to quantify her goal.",
+        "ඇය තම ඉලක්කය ප්‍රමාණාත්මකව මැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can quantify new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ප්‍රමාණාත්මකව මැනීම හැකිය."
+      ],
+      [
         "While the financial cost of arts education is clear, its cultural value is much harder to quantify.",
         "කලා අධ්‍යාපනයේ මූල්‍ය පිරිවැය පැහැදිලි වුවද, එහි සංස්කෘතික වටිනාකම ප්‍රමාණාත්මකව මැනීම බෙහෙවින් අපහසු ය."
       ],
@@ -29922,6 +36774,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Hence, students need enough sleep before an exam.",
+        "එබැවින්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will hence improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ එබැවින් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Fossil fuels are finite resources; hence, investing in renewable energy is essential for long-term energy security.",
         "පොසිල ඉන්ධන යනු සීමිත සම්පත් වේ; එබැවින් දිගුකාලීන බලශක්ති සුරක්ෂිතතාව සඳහා පුනර්ජනනීය බලශක්තියේ ආයෝජනය කිරීම අත්‍යවශ්‍ය වේ."
@@ -29958,6 +36818,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to evaluate her goal.",
+        "ඇය තම ඉලක්කය ඇගයීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can evaluate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ඇගයීම හැකිය."
+      ],
+      [
         "Students should be taught how to critically evaluate information they encounter on social media.",
         "සමාජ මාධ්‍යවලදී හමුවන තොරතුරු විචාරාත්මකව ඇගයීමට සිසුන්ට ඉගැන්විය යුතුය."
       ],
@@ -29992,6 +36860,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to protest her goal.",
+        "ඇය තම ඉලක්කය විරෝධය පළ කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can protest new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා විරෝධය පළ කරන්න හැකිය."
+      ],
       [
         "Thousands of citizens gathered in the capital to protest against the proposed increase in tuition fees.",
         "යෝජිත අධ්‍යාපන ගාස්තු ඉහළ දැමීමට එරෙහිව විරෝධය පළ කිරීම සඳහා දහස් ගණනක් පුරවැසියෝ අගනුවරට රැස් වූහ."
@@ -30028,6 +36904,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Much, students need enough sleep before an exam.",
+        "බොහෝ සෙයින්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will much improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ බොහෝ සෙයින් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Preventative healthcare is much more cost-effective than treating chronic illnesses at an advanced stage.",
         "නිදන්ගත රෝග උත්සන්න වූ අවධියකදී ප්‍රතිකාර කරනවාට වඩා රෝග නිවාරණ සෞඛ්‍ය සේවාව බෙහෙවින් ලාභදායී වේ."
       ],
@@ -30062,6 +36946,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to collaborate her goal.",
+        "ඇය තම ඉලක්කය සහයෝගයෙන් කටයුතු කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can collaborate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සහයෝගයෙන් කටයුතු කරන්න හැකිය."
+      ],
       [
         "Universities and private enterprises should collaborate closely to align degree programmes with industry needs.",
         "උපාධි පාඨමාලා කර්මාන්ත අවශ්‍යතා සමඟ ගැළපීම සඳහා විශ්වවිද්‍යාල සහ පෞද්ගලික ව්‍යවසායන් සමීපව සහයෝගයෙන් කටයුතු කළ යුතුය."
@@ -30098,6 +36990,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to cover her goal.",
+        "ඇය තම ඉලක්කය ආවරණය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can cover new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ආවරණය කරන්න හැකිය."
+      ],
+      [
         "Many university students take part-time jobs to help cover the rising cost of accommodation and textbooks.",
         "ඉහළ යන නවාතැන් සහ පෙළපොත් වියදම් පියවා ගැනීමට බොහෝ විශ්වවිද්‍යාල සිසුන් අර්ධකාලීන රැකියාවල නිරත වෙති."
       ],
@@ -30132,6 +37032,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to document her goal.",
+        "ඇය තම ඉලක්කය ලේඛනගත කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can document new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ලේඛනගත කරන්න හැකිය."
+      ],
       [
         "The link between air pollution and childhood asthma is well documented in medical literature.",
         "වායු දූෂණය සහ ළමා ඇදුම රෝගය අතර පවතින සම්බන්ධය වෛද්‍ය පර්යේෂණ ලේඛනවල මැනවින් තහවුරු කර ඇත."
@@ -30168,6 +37076,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Elsewhere, students need enough sleep before an exam.",
+        "වෙනත් තැනක, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will elsewhere improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ වෙනත් තැනක ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "When skilled graduates cannot find suitable employment domestically, they often seek opportunities elsewhere.",
         "දක්ෂ උපාධිධාරීන්ට රට තුළ සුදුසු රැකියා සොයා ගැනීමට නොහැකි වූ විට, ඔවුහු බොහෝ විට වෙනත් රටවල අවස්ථා සොයති."
       ],
@@ -30202,6 +37118,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book on the point of learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට යමක් සිදු කිරීමට හෝ සිදු වීමට ඉතාමත් ආසන්නයේ පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option on the point of this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී යමක් සිදු කිරීමට හෝ සිදු වීමට ඉතාමත් ආසන්නයේ සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Several rural bus routes were on the point of closing before the local council stepped in with emergency funding.",
         "පළාත් සභාව හදිසි අරමුදල් ලබා දෙමින් මැදිහත් වීමට පෙර ග්‍රාමීය බස් මාර්ග කිහිපයක්ම වැසී යාමට ඉතා ආසන්නව පැවතුණි."
@@ -30238,6 +37162,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are irrevocable for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ආපසු හැරවිය නොහැකි වේ."
+      ],
+      [
+        "She gave a very irrevocable answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ආපසු හැරවිය නොහැකි පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Unchecked industrial pollution could inflict irrevocable damage on fragile marine ecosystems.",
         "පාලනයකින් තොර කාර්මික දූෂණය මගින් සංවේදී සාගර පරිසර පද්ධතිවලට යළි සැකසිය නොහැකි හානියක් සිදු කළ හැකිය."
       ],
@@ -30272,6 +37204,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to alter her goal.",
+        "ඇය තම ඉලක්කය වෙනස් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can alter new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා වෙනස් කරන්න හැකිය."
+      ],
       [
         "Social media platforms have fundamentally altered the way political campaigns communicate with voters.",
         "සමාජ මාධ්‍ය වේදිකා දේශපාලන ව්‍යාපාර ඡන්දදායකයින් සමඟ සන්නිවේදනය කරන ආකාරය මූලික වශයෙන්ම වෙනස් කර ඇත."
@@ -30308,6 +37248,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are comparable for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සංසන්දනය කළ හැකි වේ."
+      ],
+      [
+        "She gave a very comparable answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සංසන්දනය කළ හැකි පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Online degree programmes now offer academic standards that are comparable to traditional campus-based courses.",
         "මාර්ගගත උපාධි වැඩසටහන් දැන් සාම්ප්‍රදායික විශ්වවිද්‍යාල පාඨමාලාවලට සමාන අධ්‍යයන ප්‍රමිතීන් පිරිනමයි."
       ],
@@ -30342,6 +37290,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to entail her goal.",
+        "ඇය තම ඉලක්කය අනිවාර්ය කොටසක් හෝ ප්‍රතිඵලයක් ලෙස ඇතුළත් වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can entail new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා අනිවාර්ය කොටසක් හෝ ප්‍රතිඵලයක් ලෙස ඇතුළත් වෙන්න හැකිය."
+      ],
       [
         "Transitioning to a zero-carbon economy will entail substantial investment in national power grids.",
         "කාබන් විමෝචනයෙන් තොර ආර්ථිකයක් කරා මාරුවීම සඳහා ජාතික විදුලිබල පද්ධතිවල විශාල ආයෝජනයක් සිදු කිරීමට සිදු වනු ඇත."
@@ -30378,6 +37334,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to convey her goal.",
+        "ඇය තම ඉලක්කය සන්නිවේදනය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can convey new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සන්නිවේදනය කරන්න හැකිය."
+      ],
+      [
         "Visual arts can often convey complex human emotions more powerfully than written language.",
         "දෘශ්‍ය කලාවන්ට බොහෝ විට ලිඛිත භාෂාවට වඩා ප්‍රබල ලෙස සංකීර්ණ මිනිස් හැඟීම් ප්‍රකාශ කළ හැකිය."
       ],
@@ -30412,6 +37376,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to devote her goal.",
+        "ඇය තම ඉලක්කය කැප කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can devote new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා කැප කරන්න හැකිය."
+      ],
       [
         "Busy professionals often struggle to devote sufficient time to their children's upbringing.",
         "කාර්යබහුල වෘත්තිකයන්ට බොහෝ විට තම දරුවන් හදා වඩා ගැනීම සඳහා ප්‍රමාණවත් කාලයක් කැප කිරීමට අපහසු වේ."
@@ -30448,6 +37420,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to depict as her goal.",
+        "ඇය තම ඉලක්කය ලෙස නිරූපණය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can depict as new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ලෙස නිරූපණය කරන්න හැකිය."
+      ],
+      [
         "In many mainstream films, artificial intelligence is depicted as a hostile force threatening humanity.",
         "බොහෝ ජනප්‍රිය චිත්‍රපටවල කෘත්‍රිම බුද්ධිය මානව වර්ගයාට තර්ජනයක් වන සතුරු බලවේගයක් ලෙස නිරූපණය කෙරේ."
       ],
@@ -30482,6 +37462,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to deplete her goal.",
+        "ඇය තම ඉලක්කය ක්ෂය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can deplete new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ක්ෂය කරන්න හැකිය."
+      ],
       [
         "Intensive industrial farming practices can rapidly deplete soil nutrients and groundwater reserves.",
         "තීව්‍ර කාර්මික කෘෂිකාර්මික ක්‍රමවේද මගින් පසෙහි පෝෂක කොටස් සහ භූගත ජල සංචිත ශීඝ්‍රයෙන් ක්ෂය කළ හැකිය."
@@ -30518,6 +37506,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are maximum for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර උපරිම වේ."
+      ],
+      [
+        "She gave a very maximum answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා උපරිම පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Public buses often operate beyond their maximum capacity during weekday rush hours.",
         "සතියේ දිනවල කාර්යබහුල වේලාවන්හිදී පොදු බස් රථ බොහෝ විට ඒවායේ උපරිම ධාරිතාව ඉක්මවා ධාවනය වේ."
       ],
@@ -30552,6 +37548,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book keep pace with learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට සමගාමීව හෝ එකම වේගයෙන් ඉදිරියට යාම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option keep pace with this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී සමගාමීව හෝ එකම වේගයෙන් ඉදිරියට යාම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "In many rapidly growing cities, public infrastructure has failed to keep pace with population expansion.",
         "ශීඝ්‍රයෙන් වර්ධනය වන බොහෝ නගරවල, පොදු යටිතල පහසුකම් ජනගහන වර්ධනයට සමගාමීව දියුණු වීමට අපොහොසත් වී ඇත."
@@ -30588,6 +37592,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are sizeable for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සැලකිය යුතු තරම් විශාල වේ."
+      ],
+      [
+        "She gave a very sizeable answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සැලකිය යුතු තරම් විශාල පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "A sizeable proportion of household income in metropolitan areas is spent on rent and utilities.",
         "ප්‍රධාන නාගරික ප්‍රදේශවල ගෘහස්ථ ආදායමෙන් සැලකිය යුතු කොටසක් නිවාස කුලී සහ බිල්පත් සඳහා වැය කෙරේ."
       ],
@@ -30622,6 +37634,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to gauge her goal.",
+        "ඇය තම ඉලක්කය මැන බැලීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can gauge new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා මැන බැලීම හැකිය."
+      ],
       [
         "Governments often conduct national surveys to gauge public opinion before introducing major tax reforms.",
         "ප්‍රධාන බදු ප්‍රතිසංස්කරණ හඳුන්වා දීමට පෙර මහජන මතය මැන බැලීම සඳහා රජයන් බොහෝ විට ජාතික සමීක්ෂණ පවත්වයි."
@@ -30658,6 +37678,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Otherwise, students need enough sleep before an exam.",
+        "එසේ නොමැති නම්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will otherwise improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ එසේ නොමැති නම් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Governments must enforce strict fishing quotas; otherwise, commercial fish species will face collapse.",
         "රජයන් විසින් දැඩි මසුන් ඇල්ලීමේ සීමාවන් ක්‍රියාත්මක කළ යුතුය; එසේ නොමැති නම්, වාණිජ මත්ස්‍ය විශේෂ විනාශ වී යාමේ තර්ජනයට මුහුණ දෙනු ඇත."
       ],
@@ -30692,6 +37720,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of degree clearly.",
+        "ගුරුවරයා මට්ටම පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your degree.",
+        "හොඳ පුරුදු ඔබගේ මට්ටම කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Employees tend to be more motivated when they are granted a high degree of autonomy in their daily work.",
         "තම දෛනික රාජකාරිවලදී ඉහළ මට්ටමේ ස්වාධීනත්වයක් ලබා දෙන විට සේවකයින් වඩාත් උද්‍යෝගිමත් වීමට නැඹුරු වෙති."
@@ -30728,6 +37764,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of period clearly.",
+        "ගුරුවරයා කාලසීමාව පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your period.",
+        "හොඳ පුරුදු ඔබගේ කාලසීමාව කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "The line graph illustrates changes in global energy consumption over a thirty-year period.",
         "මෙම රේඛීය ප්‍රස්තාරය මගින් වසර තිහක කාලසීමාවක් තුළ ගෝලීය බලශක්ති පරිභෝජනයේ සිදු වූ වෙනස්කම් පෙන්නුම් කරයි."
       ],
@@ -30762,6 +37806,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book former/the latter learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට කලින් සඳහන් කළ දෙය (the former) පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option former/the latter this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී කලින් සඳහන් කළ දෙය (the former) සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Both solar and nuclear power reduce carbon emissions, but the former poses far fewer waste-disposal risks than the latter.",
         "සූර්ය බලශක්තිය සහ න්‍යෂ්ටික බලශක්තිය යන දෙකම කාබන් විමෝචනය අඩු කරන නමුත්, පසුව සඳහන් කළ දෙයට වඩා පළමුවැන්නෙහි අපද්‍රව්‍ය බැහැර කිරීමේ අවදානම බෙහෙවින් අඩුය."
@@ -30798,6 +37850,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of nature clearly.",
+        "ගුරුවරයා ස්වභාවය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your nature.",
+        "හොඳ පුරුදු ඔබගේ ස්වභාවය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Digital automation and remote connectivity have transformed the nature of modern office work.",
         "ඩිජිටල් ස්වයංක්‍රීයකරණය සහ දුරස්ථ සම්බන්ධතාවය නවීන කාර්යාල රැකියාවල ස්වභාවය මුළුමනින්ම පරිවර්තනය කර ඇත."
       ],
@@ -30832,6 +37892,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book leaving aside learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට පසෙකින් තබා පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option leaving aside this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී පසෙකින් තබා සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Leaving aside the immense financial cost, space exploration inspires scientific innovation across multiple industries.",
         "අතිවිශාල මූල්‍ය පිරිවැය පසෙකින් තබා බැලූ විට, අභ්‍යවකාශ ගවේෂණය කර්මාන්ත රැසක විද්‍යාත්මක නවෝත්පාදනයන් සඳහා පෙළඹවීමක් ඇති කරයි."
@@ -30868,6 +37936,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are daily for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර දෛනික වේ."
+      ],
+      [
+        "She gave a very daily answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා දෛනික පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Long daily commutes in congested traffic significantly reduce workers' leisure time and overall well-being.",
         "තදබදය සහිත මාර්ගවල සිදු කරන දිගු දෛනික ගමනාගමනය සේවකයින්ගේ විවේක කාලය සහ සමස්ත යහපැවැත්ම සැලකිය යුතු ලෙස අඩු කරයි."
       ],
@@ -30902,6 +37978,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are preventable for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර වළක්වා ගත හැකි වේ."
+      ],
+      [
+        "She gave a very preventable answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා වළක්වා ගත හැකි පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Clean drinking water and basic sanitation can save millions of children from preventable diseases.",
         "පිරිසිදු පානීය ජලය සහ මූලික සනීපාරක්ෂක පහසුකම් මගින් වළක්වා ගත හැකි රෝගවලින් දරුවන් මිලියන ගණනක් බේරා ගත හැකිය."
@@ -30938,6 +38022,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "It is important to compete with/for your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි (කෙනෙකු සමඟ වැදගත් වේ."
+      ],
+      [
+        "She learned how to compete with/for difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව (කෙනෙකු සමඟ ඇය ඉගෙන ගත්තාය."
+      ],
+      [
         "Independent bookshops find it increasingly difficult to compete with online retail giants on price.",
         "මිල ගණන් අතින් දැවැන්ත මාර්ගගත වෙළෙඳ ආයතන සමඟ තරඟ කිරීම ස්වාධීන පොත්හල්වලට ක්‍රමයෙන් දුෂ්කර වී ඇත."
       ],
@@ -30972,6 +38064,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "It is important to subscribe to your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි (මතයක් හෝ ප්‍රතිපත්තියක්) පිළිගැනීම වැදගත් වේ."
+      ],
+      [
+        "She learned how to subscribe to difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව (මතයක් හෝ ප්‍රතිපත්තියක්) පිළිගැනීම ඇය ඉගෙන ගත්තාය."
+      ],
       [
         "Many educators subscribe to the view that continuous assessment is fairer than a single final examination.",
         "තනි අවසාන විභාගයකට වඩා අඛණ්ඩ ඇගයීම් ක්‍රමය වඩාත් සාධාරණ බවට වන මතය බොහෝ අධ්‍යාපනඥයෝ පිළිගනිති."
@@ -31008,6 +38108,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of component clearly.",
+        "ගුරුවරයා සංරචකය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your component.",
+        "හොඳ පුරුදු ඔබගේ සංරචකය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Critical thinking is a vital component of university education in the twenty-first century.",
         "විසිඑක්වන සියවසේ විශ්වවිද්‍යාල අධ්‍යාපනයේ අත්‍යවශ්‍ය අංගයක් වන්නේ විචාරාත්මක චින්තනයයි."
       ],
@@ -31042,6 +38150,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to represent her goal.",
+        "ඇය තම ඉලක්කය නියෝජනය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can represent new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා නියෝජනය කරන්න හැකිය."
+      ],
       [
         "According to the pie chart, hydroelectric power represented 22% of total electricity generation in 2020.",
         "වෘත්ත ප්‍රස්තාරයට අනුව, 2020 වසරේදී සමස්ත විදුලි උත්පාදනයෙන් 22%ක් නියෝජනය කළේ ජල විදුලියයි."
@@ -31078,6 +38194,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are optimistic for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සුබවාදී වේ."
+      ],
+      [
+        "She gave a very optimistic answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සුබවාදී පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Economists are cautiously optimistic that inflation will stabilise by the end of the fiscal year.",
         "මූල්‍ය වර්ෂය අවසන් වන විට උද්ධමනය ස්ථාවර වනු ඇතැයි ආර්ථික විද්‍යාඥයෝ ප්‍රවේශම් සහගතව සුබවාදී වෙති."
       ],
@@ -31112,6 +38236,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to emulate her goal.",
+        "ඇය තම ඉලක්කය (සාර්ථකත්වයක් හෝ ආදර්ශයක්) අනුගමනය කරමින් ඒ හා සමාන මට්ටමකට ළඟා වීමට උත්සාහ කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can emulate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා (සාර්ථකත්වයක් හෝ ආදර්ශයක්) අනුගමනය කරමින් ඒ හා සමාන මට්ටමකට ළඟා වීමට උත්සාහ කරන්න හැකිය."
+      ],
       [
         "Adolescents naturally tend to emulate the behaviour and fashion choices of famous athletes and musicians.",
         "නව යොවුන් වියේ පසුවන්නන් ප්‍රසිද්ධ ක්‍රීඩකයින්ගේ සහ සංගීතඥයින්ගේ හැසිරීම් සහ විලාසිතා තේරීම් අනුගමනය කිරීමට ස්වභාවිකවම නැඹුරු වෙති."
@@ -31148,6 +38280,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to sacrifice her goal.",
+        "ඇය තම ඉලක්කය කැප කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can sacrifice new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා කැප කරන්න හැකිය."
+      ],
+      [
         "Ambitious professionals should not have to sacrifice their mental health in order to achieve career promotion.",
         "වෘත්තීය උසස්වීම් ලබා ගැනීම සඳහා අභිලාෂකාමී වෘත්තිකයන්ට තම මානසික සෞඛ්‍යය කැප කිරීමට සිදු නොවිය යුතුය."
       ],
@@ -31182,6 +38322,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to differ her goal.",
+        "ඇය තම ඉලක්කය වෙනස් වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can differ new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා වෙනස් වෙන්න හැකිය."
+      ],
       [
         "Educational systems differ significantly from country to country in terms of assessment methods.",
         "ඇගයීම් ක්‍රමවේද අතින් අධ්‍යාපන පද්ධති රටින් රටට සැලකිය යුතු ලෙස වෙනස් වේ."
@@ -31218,6 +38366,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are rapid for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර වේගවත් වේ."
+      ],
+      [
+        "She gave a very rapid answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා වේගවත් පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Rapid urbanisation has placed immense strain on housing and sanitation infrastructure in developing cities.",
         "ශීඝ්‍ර නාගරීකරණය සංවර්ධනය වෙමින් පවතින නගරවල නිවාස සහ සනීපාරක්ෂක යටිතල පහසුකම් මත දැඩි පීඩනයක් එල්ල කර ඇත."
       ],
@@ -31252,6 +38408,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Thereby, students need enough sleep before an exam.",
+        "එමගින්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will thereby improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ එමගින් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Congestion charges discourage private car use in city centres, thereby reducing carbon emissions.",
         "නගර මධ්‍යයේ පෞද්ගලික මෝටර් රථ භාවිතය තදබද ගාස්තු මගින් අධෛර්යමත් කරන අතර, එමගින් කාබන් විමෝචනය අඩු කරයි."
@@ -31288,6 +38452,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to remove her goal.",
+        "ඇය තම ඉලක්කය ඉවත් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can remove new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ඉවත් කරන්න හැකිය."
+      ],
+      [
         "Free trade agreements are designed to remove tariffs and other regulatory barriers between partner nations.",
         "නිදහස් වෙළෙඳ ගිවිසුම් සැලසුම් කර ඇත්තේ හවුල්කාර රටවල් අතර තීරුබදු සහ අනෙකුත් නියාමන බාධක ඉවත් කිරීම සඳහා ය."
       ],
@@ -31322,6 +38494,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to invite her goal.",
+        "ඇය තම ඉලක්කය ආරාධනා කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can invite new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ආරාධනා කරන්න හැකිය."
+      ],
       [
         "The city council decided to invite public feedback before finalising the new urban zoning plan.",
         "නව නාගරික කලාප සැලැස්ම අවසන් කිරීමට පෙර මහජන අදහස් හා ප්‍රතිපෝෂණ කැඳවීමට නගර සභාව තීරණය කළේය."
@@ -31358,6 +38538,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to indicate her goal.",
+        "ඇය තම ඉලක්කය පෙන්නුම් කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can indicate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා පෙන්නුම් කරන්න හැකිය."
+      ],
+      [
         "Recent sociological studies indicate that flexible working hours improve overall job satisfaction.",
         "මෑතකාලීන සමාජ විද්‍යාත්මක අධ්‍යයනවලින් පෙන්නුම් කරන්නේ නම්‍යශීලී වැඩ කරන වේලාවන් සමස්ත රැකියා තෘප්තිය වැඩිදියුණු කරන බවයි."
       ],
@@ -31392,6 +38580,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book rather than learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට වෙනුවට පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option rather than this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී වෙනුවට සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Healthcare systems should allocate more funding to preventing illnesses rather than merely treating symptoms.",
         "සෞඛ්‍ය සේවා පද්ධති හුදෙක් රෝග ලක්ෂණවලට ප්‍රතිකාර කරනවා වෙනුවට රෝග වළක්වා ගැනීම සඳහා වැඩි අරමුදල් ප්‍රමාණයක් වෙන් කළ යුතුය."
@@ -31428,6 +38624,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to generate her goal.",
+        "ඇය තම ඉලක්කය උත්පාදනය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can generate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා උත්පාදනය කරන්න හැකිය."
+      ],
+      [
         "Offshore wind farms can generate clean electricity for hundreds of thousands of coastal homes.",
         "ගැඹුරු මුහුදේ ඉදිකරන සුළං බලාගාර මගින් වෙරළබඩ නිවාස ලක්ෂ ගණනකට පිරිසිදු විදුලිය උත්පාදනය කළ හැකිය."
       ],
@@ -31462,6 +38666,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to determine her goal.",
+        "ඇය තම ඉලක්කය තීරණය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can determine new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා තීරණය කරන්න හැකිය."
+      ],
       [
         "A child's socio-economic background still largely determines their access to quality higher education.",
         "දරුවෙකුගේ සමාජ-ආර්ථික පසුබිම තවමත් ගුණාත්මක උසස් අධ්‍යාපනයක් සඳහා ඔවුන්ට ඇති ප්‍රවේශය බොහෝ දුරට තීරණය කරයි."
@@ -31498,6 +38710,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to exclude her goal.",
+        "ඇය තම ඉලක්කය බැහැර කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can exclude new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා බැහැර කරන්න හැකිය."
+      ],
+      [
         "Lack of basic digital literacy can effectively exclude elderly citizens from essential modern services.",
         "මූලික ඩිජිටල් සාක්ෂරතාවය නොමැතිකම වැඩිහිටි පුරවැසියන් අත්‍යවශ්‍ය නවීන සේවාවන්ගෙන් බැහැර කිරීමට හේතු විය හැකිය."
       ],
@@ -31532,6 +38752,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are underlying for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර යටින් පවතින වේ."
+      ],
+      [
+        "She gave a very underlying answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා යටින් පවතින පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Governments must address the underlying causes of poverty rather than merely offering temporary financial relief.",
         "රජයන් හුදෙක් තාවකාලික මූල්‍ය සහන ලබා දෙනවා වෙනුවට දරිද්‍රතාවයට බලපාන මූලික හේතු විසඳිය යුතුය."
@@ -31568,6 +38796,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of infrastructure clearly.",
+        "ගුරුවරයා යටිතල පහසුකම් පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your infrastructure.",
+        "හොඳ පුරුදු ඔබගේ යටිතල පහසුකම් කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Rapid urbanisation has placed immense pressure on the existing transport infrastructure of major cities.",
         "ශීඝ්‍ර නාගරීකරණය ප්‍රධාන නගරවල පවතින ප්‍රවාහන යටිතල පහසුකම් මත දැඩි පීඩනයක් එල්ල කර ඇත."
       ],
@@ -31602,6 +38838,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are appropriate for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සුදුසු වේ."
+      ],
+      [
+        "She gave a very appropriate answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සුදුසු පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Parents should monitor online platforms to ensure that digital content is appropriate for young children.",
         "ඩිජිටල් අන්තර්ගතයන් කුඩා දරුවන්ට සුදුසු බව තහවුරු කර ගැනීම සඳහා දෙමාපියන් අන්තර්ජාල වේදිකා නිරීක්ෂණය කළ යුතුය."
@@ -31638,6 +38882,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to realise her goal.",
+        "ඇය තම ඉලක්කය වටහා ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can realise new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා වටහා ගැනීම හැකිය."
+      ],
+      [
         "Inclusive education systems enable every student to realise their full academic potential.",
         "සියලු දෙනා ඇතුළත් කරගත් අධ්‍යාපන ක්‍රම මගින් සෑම සිසුවෙකුටම තම උපරිම අධ්‍යයන හැකියාව සාක්ෂාත් කර ගැනීමට අවස්ථාව සලසයි."
       ],
@@ -31672,6 +38924,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to justify her goal.",
+        "ඇය තම ඉලක්කය සාධාරණීකරණය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can justify new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සාධාරණීකරණය කරන්න හැකිය."
+      ],
       [
         "Economic growth alone cannot justify the irreversible destruction of ancient rainforests.",
         "ආර්ථික වර්ධනය පමණක් පදනම් කරගෙන පැරණි වැසි වනාන්තරවලට සිදුවන යළි යථා තත්ත්වයට පත් කළ නොහැකි විනාශය සාධාරණීකරණය කළ නොහැක."
@@ -31708,6 +38968,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to rank her goal.",
+        "ඇය තම ඉලක්කය ශ්‍රේණිගත කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can rank new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ශ්‍රේණිගත කරන්න හැකිය."
+      ],
+      [
         "Nordic countries consistently rank among the happiest nations in global quality-of-life surveys.",
         "ජීවන තත්ත්වය පිළිබඳ ගෝලීය සමීක්ෂණවලදී නෝර්ඩික් රටවල් නිරන්තරයෙන්ම ප්‍රීතිමත්ම ජාතීන් අතරට ශ්‍රේණිගත වේ."
       ],
@@ -31742,6 +39010,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are essential for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර අත්‍යවශ්‍ය වේ."
+      ],
+      [
+        "She gave a very essential answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා අත්‍යවශ්‍ය පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Critical thinking skills are essential for navigating the vast amount of misinformation on the internet.",
         "අන්තර්ජාලයේ පවතින විශාල වැරදි තොරතුරු ප්‍රමාණය හඳුනා ගනිමින් කටයුතු කිරීමට විචාරාත්මක චින්තන කුසලතා අත්‍යවශ්‍ය වේ."
@@ -31778,6 +39054,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Consequently, students need enough sleep before an exam.",
+        "එහි ප්‍රතිඵලයක් වශයෙන්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will consequently improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ එහි ප්‍රතිඵලයක් වශයෙන් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Agricultural land has been degraded by overuse of fertilisers; consequently, crop yields have declined.",
         "පොහොර අධික ලෙස භාවිත කිරීම හේතුවෙන් කෘෂිකාර්මික ඉඩම් නිසරු වී ඇති අතර, එහි ප්‍රතිඵලයක් වශයෙන් අස්වැන්න අඩු වී ඇත."
       ],
@@ -31812,6 +39096,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book be largely learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට බොහෝ දුරට පැවතීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option be largely this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී බොහෝ දුරට පැවතීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "The rise in childhood obesity is largely attributable to sedentary lifestyles and aggressive junk-food marketing.",
         "ළමා ස්ථුලතාවය ඉහළ යාමට බොහෝ දුරට හේතු වී ඇත්තේ ව්‍යායාම රහිත ජීවන රටාව සහ ක්ෂණික ආහාර ප්‍රවර්ධනයයි."
@@ -31848,6 +39140,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book to the extent that learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට කොතෙක් දුරටද යත් පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option to the extent that this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී කොතෙක් දුරටද යත් සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Air quality in the metropolis deteriorated to the extent that schools had to be closed for a week.",
         "නගරයේ වාතයේ ගුණාත්මකභාවය කොතෙක් දුරට පිරිහුණේද යත් සතියක කාලයක් සඳහා පාසල් වසා දැමීමට සිදු විය."
       ],
@@ -31882,6 +39182,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of factors clearly.",
+        "ගුරුවරයා සාධක පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your factors.",
+        "හොඳ පුරුදු ඔබගේ සාධක කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Several environmental and genetic factors contribute to the development of cardiovascular disease.",
         "හෘද වාහිනී රෝග ඇතිවීමට පාරිසරික සහ ජානමය සාධක කිහිපයක් බලපායි."
@@ -31918,6 +39226,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of misconception clearly.",
+        "ගුරුවරයා දුර්මතය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your misconception.",
+        "හොඳ පුරුදු ඔබගේ දුර්මතය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "It is a common misconception that renewable energy technologies are too unreliable to power heavy industry.",
         "පුනර්ජනනීය බලශක්ති තාක්ෂණයන් බැර කර්මාන්ත ක්‍රියාත්මක කිරීමට තරම් විශ්වාසදායක නොවන බවට පැවතීම පොදු දුර්මතයකි."
       ],
@@ -31952,6 +39268,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to inherit her goal.",
+        "ඇය තම ඉලක්කය උරුම කර ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can inherit new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා උරුම කර ගැනීම හැකිය."
+      ],
       [
         "While children inherit physical traits from their parents, their social behaviour is largely shaped by their environment.",
         "දරුවන් තම දෙමාපියන්ගෙන් ශාරීරික ලක්ෂණ උරුම කර ගත්තද, ඔවුන්ගේ සමාජ හැසිරීම බොහෝ දුරට හැඩගැසෙන්නේ ඔවුන් අවට පරිසරය මගිනි."
@@ -31988,6 +39312,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "It is important to belong to your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි අයත් වෙන්න වැදගත් වේ."
+      ],
+      [
+        "She learned how to belong to difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව අයත් වෙන්න ඇය ඉගෙන ගත්තාය."
+      ],
+      [
         "Historical artefacts displayed in foreign museums should be returned to the nations they rightfully belong to.",
         "විදේශීය කෞතුකාගාරවල ප්‍රදර්ශනය කෙරෙන ඓතිහාසික කෞතුක වස්තු ඒවා නීත්‍යානුකූලව අයත් වන රටවලට නැවත ලබා දිය යුතුය."
       ],
@@ -32022,6 +39354,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Periodically, students need enough sleep before an exam.",
+        "කලින් කලට, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will periodically improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ කලින් කලට ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "School curricula should be reviewed periodically to ensure they reflect contemporary workplace skills.",
         "වත්මන් රැකියා වෙළඳපොළේ කුසලතා පිළිබිඹු වන බව තහවුරු කිරීම සඳහා පාසල් විෂයමාලා කලින් කලට සමාලෝචනය කළ යුතුය."
@@ -32058,6 +39398,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to assume her goal.",
+        "ඇය තම ඉලක්කය උපකල්පනය කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can assume new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා උපකල්පනය කරන්න හැකිය."
+      ],
+      [
         "It is often assumed that economic prosperity automatically leads to higher levels of personal happiness.",
         "ආර්ථික සමෘද්ධිය නිරායාසයෙන්ම ඉහළ පුද්ගලික සතුටක් කරා මග පාදන බව බොහෝ විට උපකල්පනය කෙරේ."
       ],
@@ -32092,6 +39440,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Specifically, students need enough sleep before an exam.",
+        "විශේෂයෙන්ම, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will specifically improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ විශේෂයෙන්ම ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Public bicycle lanes are specifically designed to encourage environmentally friendly commuting.",
         "පොදු පාපැදි මංතීරු විශේෂයෙන්ම සැලසුම් කර ඇත්තේ පරිසර හිතකාමී ගමනාගමනය දිරිමත් කිරීම සඳහාය."
@@ -32128,6 +39484,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of existence clearly.",
+        "ගුරුවරයා පැවැත්ම පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your existence.",
+        "හොඳ පුරුදු ඔබගේ පැවැත්ම කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Rising sea levels directly threaten the existence of several low-lying island nations.",
         "මුහුදු මට්ටම ඉහළ යාම පහත් බිම්වල පිහිටි දූපත් රාජ්‍යයන් කිහිපයකම පැවැත්මට සෘජුවම තර්ජනයක් එල්ල කරයි."
       ],
@@ -32162,6 +39526,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are controversial for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර මතභේදාත්මක වේ."
+      ],
+      [
+        "She gave a very controversial answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා මතභේදාත්මක පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "The use of genetically modified organisms in agriculture remains a highly controversial issue worldwide.",
         "කෘෂිකර්මාන්තයේදී ජාන වෙනස් කළ ජීවීන් භාවිත කිරීම ලොව පුරා තවදුරටත් ඉතා මතභේදාත්මක කරුණක්ව පවතී."
@@ -32198,6 +39570,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are sceptical for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සැක සහිතව බලන වේ."
+      ],
+      [
+        "She gave a very sceptical answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සැක සහිතව බලන පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Many economists remain sceptical about the long-term stability of unregulated cryptocurrencies.",
         "නියාමනය නොකළ ක්‍රිප්ටෝ මුදල්වල දිගුකාලීන ස්ථාවරත්වය පිළිබඳව බොහෝ ආර්ථික විද්‍යාඥයින් තවදුරටත් සැකයෙන් පසුවෙති."
       ],
@@ -32232,6 +39612,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book have an impact on learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට බලපෑමක් ඇති කිරීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option have an impact on this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී බලපෑමක් ඇති කිරීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Excessive screen time can have a detrimental impact on adolescents' sleep patterns and concentration.",
         "තිර ඉදිරියේ අධික කාලයක් ගත කිරීම නව යොවුන් වියේ දරුවන්ගේ නින්දේ රටාවන් සහ අවධානය මත අහිතකර බලපෑමක් ඇති කළ හැක."
@@ -32268,6 +39656,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of diversity clearly.",
+        "ගුරුවරයා විවිධත්වය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your diversity.",
+        "හොඳ පුරුදු ඔබගේ විවිධත්වය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Globalisation should not erase the rich diversity of local languages and indigenous traditions.",
         "ගෝලීයකරණය හේතුවෙන් දේශීය භාෂාවන්ගේ සහ සම්ප්‍රදායන්ගේ පොහොසත් විවිධත්වය මැකී නොයා යුතුය."
       ],
@@ -32302,6 +39698,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book in part learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට යම් තරමකට පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option in part this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී යම් තරමකට සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "The surge in housing prices is due in part to a shortage of skilled construction workers.",
         "නිවාස මිල ඉහළ යාමට යම් තරමකට හේතු වී ඇත්තේ පුහුණු ඉදිකිරීම් සේවකයින්ගේ හිඟයයි."
@@ -32338,6 +39742,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to establish her goal.",
+        "ඇය තම ඉලක්කය ස්ථාපිත කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can establish new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ස්ථාපිත කරන්න හැකිය."
+      ],
+      [
         "Medical researchers have established a clear link between air pollution and respiratory illnesses.",
         "වායු දූෂණය සහ ශ්වසන රෝග අතර පැහැදිලි සම්බන්ධයක් පවතින බව වෛද්‍ය පර්යේෂකයන් විසින් තහවුරු කර ඇත."
       ],
@@ -32372,6 +39784,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are compelling for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ප්‍රබල වේ."
+      ],
+      [
+        "She gave a very compelling answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ප්‍රබල පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "There is compelling scientific evidence that human activity is accelerating global climate change.",
         "මිනිස් ක්‍රියාකාරකම් හේතුවෙන් ගෝලීය දේශගුණික විපර්යාස වේගවත් වන බවට ප්‍රබල විද්‍යාත්මක සාක්ෂි පවතී."
@@ -32408,6 +39828,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Ultimately, students need enough sleep before an exam.",
+        "අවසාන වශයෙන්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will ultimately improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ අවසාන වශයෙන් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "While schools can teach healthy habits, parents are ultimately responsible for their children's diet.",
         "පාසල්වලට සෞඛ්‍ය සම්පන්න පුරුදු ඉගැන්විය හැකි වුවද, දරුවන්ගේ ආහාර වේල පිළිබඳව අවසාන වශයෙන් වගකිව යුත්තේ දෙමාපියන්ය."
       ],
@@ -32442,6 +39870,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to enhance her goal.",
+        "ඇය තම ඉලක්කය වැඩිදියුණු කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can enhance new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා වැඩිදියුණු කරන්න හැකිය."
+      ],
       [
         "Accessible green spaces in urban areas significantly enhance residents' physical and mental well-being.",
         "නාගරික ප්‍රදේශවල පහසුවෙන් පිවිසිය හැකි හරිත කලාප පැවතීම පදිංචිකරුවන්ගේ ශාරීරික හා මානසික යහපැවැත්ම සැලකිය යුතු ලෙස ඉහළ නංවයි."
@@ -32478,6 +39914,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "It is important to lie in/with your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි පැවතීම වැදගත් වේ."
+      ],
+      [
+        "She learned how to lie in/with difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව පැවතීම ඇය ඉගෙන ගත්තාය."
+      ],
+      [
         "The long-term solution to plastic pollution lies in redesigning packaging materials rather than cleaning oceans.",
         "ප්ලාස්ටික් දූෂණයට දිගුකාලීන විසඳුම පවතින්නේ සාගර පිරිසිදු කිරීම තුළ නොව ඇසුරුම් ද්‍රව්‍ය නැවත සැලසුම් කිරීම තුළය."
       ],
@@ -32512,6 +39956,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "It is important to derive from your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි ලබා ගැනීම වැදගත් වේ."
+      ],
+      [
+        "She learned how to derive from difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව ලබා ගැනීම ඇය ඉගෙන ගත්තාය."
+      ],
       [
         "Many life-saving pharmaceutical drugs are derived from compounds found in tropical rainforest plants.",
         "ජීවිත ආරක්ෂක ඖෂධ රැසක් නිවර්තන වැසි වනාන්තර ශාකවල ඇති සංයෝගවලින් උකහා ගනු ලැබේ."
@@ -32548,6 +40000,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "It is important to enable to your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි හැකියාව ලබා දීම වැදගත් වේ."
+      ],
+      [
+        "She learned how to enable to difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව හැකියාව ලබා දීම ඇය ඉගෙන ගත්තාය."
+      ],
+      [
         "High-speed internet connections enable rural entrepreneurs to compete in international markets.",
         "අධිවේගී අන්තර්ජාල සබඳතා ග්‍රාමීය ව්‍යවසායකයින්ට ජාත්‍යන්තර වෙළඳපොළේ තරග කිරීමට හැකියාව ලබා දෙයි."
       ],
@@ -32582,6 +40042,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Surely, students need enough sleep before an exam.",
+        "නිසැකවම, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will surely improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ නිසැකවම ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Investing in preventive healthcare will surely reduce hospital expenditure in the long run.",
         "රෝග නිවාරණ සෞඛ්‍ය සේවාවන් සඳහා ආයෝජනය කිරීම දිගුකාලීනව රෝහල් වියදම් නිසැකවම අඩු කරනු ඇත."
@@ -32618,6 +40086,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Basically, students need enough sleep before an exam.",
+        "මූලික වශයෙන්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will basically improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ මූලික වශයෙන් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Although the two proposals differ in detail, their economic objectives are basically the same.",
         "යෝජනා දෙක සවිස්තරාත්මකව වෙනස් වුවද, ඒවායේ ආර්ථික අරමුණු මූලික වශයෙන් එක හා සමාන වේ."
       ],
@@ -32652,6 +40128,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "It is important to provide with your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි ලබා දීම වැදගත් වේ."
+      ],
+      [
+        "She learned how to provide with difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව ලබා දීම ඇය ඉගෙන ගත්තාය."
+      ],
       [
         "Vocational colleges provide young people with practical skills that are directly applicable in the workplace.",
         "වෘත්තීය විද්‍යාල තරුණ පිරිසට රැකියා ස්ථානයේදී සෘජුවම භාවිත කළ හැකි ප්‍රායෝගික කුසලතා ලබා දෙයි."
@@ -32688,6 +40172,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book provided that learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට එසේ වුවහොත් පමණක් පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option provided that this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී එසේ වුවහොත් පමණක් සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Nuclear energy can be a safe alternative to fossil fuels, provided that strict safety protocols are enforced.",
         "දැඩි ආරක්ෂක ක්‍රමවේද ක්‍රියාත්මක කරන්නේ නම් පමණක්, න්‍යෂ්ටික බලශක්තිය ෆොසිල ඉන්ධන සඳහා ආරක්ෂිත විකල්පයක් විය හැක."
       ],
@@ -32722,6 +40214,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Relatively, students need enough sleep before an exam.",
+        "සාපේක්ෂව, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will relatively improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ සාපේක්ෂව ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "While train fares rose sharply, the cost of bus travel remained relatively stable over the ten-year period.",
         "දුම්රිය ගාස්තු සීඝ්‍රයෙන් ඉහළ ගියද, වසර දහයක කාලසීමාව තුළ බස් ගාස්තු සාපේක්ෂව ස්ථාවරව පැවතුණි."
@@ -32758,6 +40258,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book take into account learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට සැලකිල්ලට ගැනීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option take into account this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී සැලකිල්ලට ගැනීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Standardised school tests often fail to take into account students' creative and practical abilities.",
         "සම්මත පාසල් පරීක්ෂණ බොහෝ විට සිසුන්ගේ නිර්මාණශීලී සහ ප්‍රායෝගික හැකියාවන් සැලකිල්ලට ගැනීමට අපොහොසත් වේ."
       ],
@@ -32792,6 +40300,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book regardless of learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට නොසලකා පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option regardless of this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී නොසලකා සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Every child deserves access to high-quality healthcare regardless of their family's socio-economic background.",
         "පවුලේ සමාජ-ආර්ථික පසුබිම නොසලකා සෑම දරුවෙකුටම උසස් තත්ත්වයේ සෞඛ්‍ය සේවාවක් ලබා ගැනීමේ අයිතිය හිමි විය යුතුය."
@@ -32828,6 +40344,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to claim her goal.",
+        "ඇය තම ඉලක්කය ප්‍රකාශ කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can claim new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ප්‍රකාශ කරන්න හැකිය."
+      ],
+      [
         "Some educators claim that traditional homework places unnecessary stress on primary school children.",
         "සාම්ප්‍රදායික ගෙදර වැඩ මගින් ප්‍රාථමික පාසල් දරුවන් මත අනවශ්‍ය මානසික පීඩනයක් එල්ල කරන බව ඇතැම් අධ්‍යාපනඥයෝ ප්‍රකාශ කරති."
       ],
@@ -32862,6 +40386,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Initially, students need enough sleep before an exam.",
+        "මුලදී, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will initially improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ මුලදී ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Although solar power systems are initially expensive to install, they significantly reduce household energy bills over time.",
         "සූර්ය බලශක්ති පද්ධති සවි කිරීමට මුලදී අධික වියදමක් වැය වුවද, කාලයත් සමඟ ඒවා නිවෙස්වල විදුලි බිල්පත් සැලකිය යුතු ලෙස අඩු කරයි."
@@ -32898,6 +40430,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to survive her goal.",
+        "ඇය තම ඉලක්කය දිවි ගලවා ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can survive new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා දිවි ගලවා ගැනීම හැකිය."
+      ],
+      [
         "Independent local retailers often struggle to survive when multinational supermarket chains open nearby.",
         "බහුජාතික සුපිරි වෙළඳසැල් ජාලයන් ආසන්නයේ විවෘත වූ විට ස්වාධීන ප්‍රාදේශීය සිල්ලර වෙළඳුන් බොහෝ විට නොනැසී පැවතීමට දැඩි අරගලයක නිරත වෙති."
       ],
@@ -32932,6 +40472,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book certain number/amount learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට එක්තරා සංඛ්‍යාවක් පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option certain number/amount this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී එක්තරා සංඛ්‍යාවක් සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "A certain amount of competition in the classroom can motivate students to strive for academic excellence.",
         "පන්ති කාමරය තුළ පවතින එක්තරා තරගකාරිත්වයේ ප්‍රමාණයක් මගින් අධ්‍යයන විශිෂ්ටත්වය කරා යාමට සිසුන්ව පෙළඹවිය හැක."
@@ -32968,6 +40516,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book at least learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට අවම වශයෙන් පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option at least this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී අවම වශයෙන් සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Health authorities recommend that adults engage in moderate physical exercise for at least thirty minutes daily.",
         "වැඩිහිටියන් දිනකට අවම වශයෙන් මිනිත්තු තිහක්වත් මධ්‍යම ප්‍රමාණයේ ශාරීරික ව්‍යායාමවල නිරත විය යුතු බව සෞඛ්‍ය බලධාරීහු නිර්දේශ කරති."
       ],
@@ -33002,6 +40558,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of prospect clearly.",
+        "ගුරුවරයා අනාගත බලාපොරොත්තුව පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your prospect.",
+        "හොඳ පුරුදු ඔබගේ අනාගත බලාපොරොත්තුව කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Acquiring digital literacy skills significantly improves a graduate's long-term career prospects.",
         "ඩිජිටල් සාක්ෂරතා කුසලතා අත්කර ගැනීම උපාධිධාරියෙකුගේ දිගුකාලීන වෘත්තීය ඉදිරි අවස්ථා සැලකිය යුතු ලෙස වැඩිදියුණු කරයි."
@@ -33038,6 +40602,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of advantage clearly.",
+        "ගුරුවරයා වාසිය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your advantage.",
+        "හොඳ පුරුදු ඔබගේ වාසිය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Bilingual candidates often hold a distinct advantage when applying for positions in multinational corporations.",
         "බහුජාතික සමාගම්වල තනතුරු සඳහා අයදුම් කිරීමේදී ද්විභාෂා හැකියාව ඇති අයදුම්කරුවන්ට බොහෝ විට පැහැදිලි වාසියක් හිමි වේ."
       ],
@@ -33072,6 +40644,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to exacerbate her goal.",
+        "ඇය තම ඉලක්කය උග්‍ර කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can exacerbate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා උග්‍ර කරන්න හැකිය."
+      ],
       [
         "Building wider highways in city centres often exacerbates traffic congestion by encouraging more people to drive.",
         "නගර මධ්‍යයේ පළල් අධිවේගී මාර්ග ඉදිකිරීම මගින් වැඩි පිරිසක් වාහන ධාවනයට පොළඹවන බැවින් එය බොහෝ විට රථවාහන තදබදය තවදුරටත් උග්‍ර කරයි."
@@ -33108,6 +40688,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to restrict her goal.",
+        "ඇය තම ඉලක්කය සීමා කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can restrict new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සීමා කරන්න හැකිය."
+      ],
+      [
         "Many municipalities have decided to restrict private car access in historic town centres.",
         "බොහෝ නගර සභා ඓතිහාසික නගර මධ්‍යයන් වෙත පෞද්ගලික මෝටර් රථ ඇතුළු කිරීම සීමා කිරීමට තීරණය කර ඇත."
       ],
@@ -33142,6 +40730,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to accomplish her goal.",
+        "ඇය තම ඉලක්කය සාර්ථකව ඉටු කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can accomplish new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සාර්ථකව ඉටු කරන්න හැකිය."
+      ],
       [
         "International cooperation can accomplish environmental goals that no single nation could achieve alone.",
         "තනි රටකට තනිවම අත්කර ගත නොහැකි පාරිසරික ඉලක්ක ජාත්‍යන්තර සහයෝගීතාවය මගින් සාර්ථකව ඉටු කර ගත හැක."
@@ -33178,6 +40774,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book given that learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට යන කරුණ සැලකිල්ලට ගත් විට පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option given that this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී යන කරුණ සැලකිල්ලට ගත් විට සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Given that global populations are ageing rapidly, governments must reform pension systems urgently.",
         "ගෝලීය ජනගහනය වේගයෙන් වියපත් වෙමින් පවතින බව සැලකිල්ලට ගත් විට, රජයන් විශ්‍රාම වැටුප් ක්‍රම කඩිනමින් ප්‍රතිසංස්කරණය කළ යුතුය."
       ],
@@ -33212,6 +40816,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of contributor clearly.",
+        "ගුරුවරයා දායක වන්නා පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your contributor.",
+        "හොඳ පුරුදු ඔබගේ දායක වන්නා කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Aviation emissions are a significant contributor to anthropogenic climate change.",
         "ගුවන් ගමන් විමෝචනය මිනිස් ක්‍රියාකාරකම් නිසා ඇති වන දේශගුණික විපර්යාස සඳහා බලපාන සැලකිය යුතු සාධකයකි."
@@ -33248,6 +40860,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "The teacher explained the concept of outcome clearly.",
+        "ගුරුවරයා අවසාන ප්‍රතිඵලය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your outcome.",
+        "හොඳ පුරුදු ඔබගේ අවසාන ප්‍රතිඵලය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
+      [
         "Early intervention programmes produce positive health outcomes for children from low-income households.",
         "මුල් කාලීන මැදිහත්වීමේ වැඩසටහන් අඩු ආදායම්ලාභී පවුල්වල දරුවන් සඳහා ධනාත්මක සෞඛ්‍ය ප්‍රතිඵල අත්කර දෙයි."
       ],
@@ -33282,6 +40902,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "It is important to concentrate on/in your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි අවධානය යොමු කිරීම (concentrate on) වැදගත් වේ."
+      ],
+      [
+        "She learned how to concentrate on/in difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව අවධානය යොමු කිරීම (concentrate on) ඇය ඉගෙන ගත්තාය."
+      ],
       [
         "Secondary schools should allow older students to concentrate on subjects that align with their career goals.",
         "ද්විතීයික පාසල් මගින් වැඩිහිටි සිසුන්ට ඔවුන්ගේ වෘත්තීය ඉලක්කවලට ගැළපෙන විෂයයන් කෙරෙහි අවධානය යොමු කිරීමට ඉඩ ලබා දිය යුතුය."
@@ -33318,6 +40946,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Previously, students need enough sleep before an exam.",
+        "මීට පෙර, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will previously improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ මීට පෙර ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Telemedicine has made specialist consultations accessible to rural patients who previously had to travel for hours.",
         "මීට පෙර පැය ගණනාවක් ගමන් කිරීමට සිදු වූ ග්‍රාමීය රෝගීන්ට දුරස්ථ වෛද්‍ය සේවාව මගින් විශේෂඥ වෛද්‍ය උපදෙස් ලබා ගැනීමේ පහසුව සලසා දී ඇත."
       ],
@@ -33352,6 +40988,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book other time phrases learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට වෙනත් කාලවාචී ප්‍රකාශන (උදා: ඉන් අනතුරුව, ඊට පෙර, ඒ සමඟම) පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option other time phrases this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී වෙනත් කාලවාචී ප්‍රකාශන (උදා: ඉන් අනතුරුව, ඊට පෙර, ඒ සමඟම) සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Over the course of the twenty-year period, wind power output increased fivefold.",
         "වසර විස්සක කාලසීමාව තුළ සුළං බලශක්ති නිෂ්පාදනය පස් ගුණයකින් ඉහළ ගියේය."
@@ -33388,6 +41032,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Invariably, students need enough sleep before an exam.",
+        "සෑම විටම, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will invariably improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ සෑම විටම ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Cuts to public education funding invariably affect students from low-income families the hardest.",
         "පොදු අධ්‍යාපන අරමුදල් කප්පාදු කිරීම සෑම විටම අඩු ආදායම්ලාභී පවුල්වල සිසුන්ට දැඩි ලෙස බලපායි."
       ],
@@ -33422,6 +41074,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to exploit her goal.",
+        "ඇය තම ඉලක්කය උපරිම ප්‍රයෝජන ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can exploit new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා උපරිම ප්‍රයෝජන ගැනීම හැකිය."
+      ],
       [
         "Strict labour laws are necessary to prevent multinational corporations from exploiting workers in developing nations.",
         "සංවර්ධනය වෙමින් පවතින රටවල කම්කරුවන් බහුජාතික සමාගම් විසින් සූරාකෑම වැළැක්වීම සඳහා දැඩි කම්කරු නීති අවශ්‍ය වේ."
@@ -33458,6 +41118,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are universal for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර විශ්වීය වේ."
+      ],
+      [
+        "She gave a very universal answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා විශ්වීය පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Access to clean drinking water and sanitation should be recognised as a universal human right.",
         "පිරිසිදු පානීය ජලය සහ සනීපාරක්ෂාව ලබා ගැනීමේ හැකියාව විශ්වීය මානව අයිතිවාසිකමක් ලෙස පිළිගත යුතුය."
       ],
@@ -33492,6 +41160,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book have access to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට ලබා ගැනීමේ හැකියාව තිබීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option have access to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී ලබා ගැනීමේ හැකියාව තිබීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "In a fair society, all citizens should have equal access to legal representation.",
         "සාධාරණ සමාජයක සියලුම පුරවැසියන්ට නීතිමය නියෝජනය ලබා ගැනීමට සමාන ප්‍රවේශයක් තිබිය යුතුය."
@@ -33528,6 +41204,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book far outweigh learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට බෙහෙවින් අභිබවා යාම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option far outweigh this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී බෙහෙවින් අභිබවා යාම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "In my view, the environmental benefits of transitioning to solar energy far outweigh the initial installation costs.",
         "මගේ අදහසට අනුව, සූර්ය බලශක්තිය වෙත යොමු වීමේ පාරිසරික ප්‍රතිලාභ එහි මූලික සවිකිරීමේ පිරිවැය බෙහෙවින් අභිබවා යයි."
       ],
@@ -33562,6 +41246,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of equivalent clearly.",
+        "ගුරුවරයා සමාන දෙය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your equivalent.",
+        "හොඳ පුරුදු ඔබගේ සමාන දෙය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Every year, global food waste amounts to the equivalent of billions of dollars in lost agricultural output.",
         "සෑම වසරකම ගෝලීය ආහාර නාස්තිය අහිමි වූ කෘෂිකාර්මික නිෂ්පාදන වශයෙන් ඩොලර් බිලියන ගණනකට සමාන ප්‍රමාණයක් වේ."
@@ -33598,6 +41290,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to demonstrate her goal.",
+        "ඇය තම ඉලක්කය පෙන්වා දීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can demonstrate new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා පෙන්වා දීම හැකිය."
+      ],
+      [
         "The bar chart clearly demonstrates a steady upward trend in renewable energy investment between 2010 and 2020.",
         "2010 සහ 2020 අතර කාලය තුළ පුනර්ජනනීය බලශක්ති ආයෝජනයේ අඛණ්ඩ ඉහළ යාමේ ප්‍රවණතාවක් මෙම තීරු ප්‍රස්තාරයෙන් පැහැදිලිව පෙන්වා දෙයි."
       ],
@@ -33632,6 +41332,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to suggest her goal.",
+        "ඇය තම ඉලක්කය යෝජනා කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can suggest new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා යෝජනා කරන්න හැකිය."
+      ],
       [
         "Recent medical findings suggest that ultra-processed foods accelerate cognitive decline in older adults.",
         "අධික ලෙස සකස් කළ ආහාර වැඩිහිටියන්ගේ බුද්ධිමය හැකියාවන් පිරිහීම වේගවත් කරන බව මෑතකාලීන වෛද්‍ය සොයාගැනීම් මගින් පෙන්වා දෙයි."
@@ -33668,6 +41376,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book critical of learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට විවේචනාත්මක වීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option critical of this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී විවේචනාත්මක වීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Environmentalists are highly critical of governments that continue to subsidise fossil fuel extraction.",
         "ෆොසිල ඉන්ධන කැණීම් සඳහා තවදුරටත් සහනාධාර ලබා දෙන රජයන් පිළිබඳව පරිසරවේදීන් දැඩි ලෙස විවේචනාත්මක වෙති."
       ],
@@ -33702,6 +41418,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book according to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට අනුව පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option according to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී අනුව සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "According to the pie chart, household heating accounted for the largest share of energy consumption.",
         "වෘත්ත ප්‍රස්තාරයට අනුව, බලශක්ති පරිභෝජනයෙන් විශාලතම කොටස නිවාස උණුසුම් කිරීම සඳහා වැය වී ඇත."
@@ -33738,6 +41462,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are rational for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර තාර්කික වේ."
+      ],
+      [
+        "She gave a very rational answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා තාර්කික පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Fear-mongering in the media often prevents the public from having a rational debate about immigration.",
         "මාධ්‍ය මගින් අනියත බියක් ඇති කිරීම බොහෝ විට සංක්‍රමණ පිළිබඳව තාර්කික සංවාදයක් පැවැත්වීමෙන් මහජනතාව වළක්වයි."
       ],
@@ -33772,6 +41504,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of aspect clearly.",
+        "ගුරුවරයා අංශය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your aspect.",
+        "හොඳ පුරුදු ඔබගේ අංශය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Digital technology has transformed virtually every aspect of modern communication and commerce.",
         "ඩිජිටල් තාක්ෂණය නවීන සන්නිවේදනයේ සහ වාණිජ්‍යයේ සෑම අංශයක්ම පාහේ වෙනස් කර ඇත."
@@ -33808,6 +41548,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to appear her goal.",
+        "ඇය තම ඉලක්කය පෙනී යාම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can appear new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා පෙනී යාම හැකිය."
+      ],
+      [
         "There appears to be a strong link between urban green spaces and lower rates of depression.",
         "නාගරික හරිත කලාප සහ විශාදය අඩුවීම අතර ප්‍රබල සම්බන්ධයක් පවතින බව පෙනී යයි."
       ],
@@ -33842,6 +41590,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book directly related to learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට සෘජුවම සම්බන්ධ වූ පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option directly related to this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී සෘජුවම සම්බන්ධ වූ සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "The rise in respiratory illnesses is directly related to high levels of vehicular emissions in urban centres.",
         "ශ්වසන රෝග ඉහළ යාම නාගරික මධ්‍යස්ථානවල පවතින අධික රථවාහන දුම් විමෝචනයට සෘජුවම සම්බන්ධ වේ."
@@ -33878,6 +41634,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "It is important to benefit from your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි ප්‍රතිලාභ ලැබීම වැදගත් වේ."
+      ],
+      [
+        "She learned how to benefit from difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව ප්‍රතිලාභ ලැබීම ඇය ඉගෙන ගත්තාය."
+      ],
+      [
         "Developing economies can benefit greatly from foreign direct investment and technology transfer.",
         "සංවර්ධනය වෙමින් පවතින ආර්ථිකයන්ට සෘජු විදේශ ආයෝජන සහ තාක්ෂණ හුවමාරුව තුළින් බෙහෙවින් ප්‍රතිලාභ ලැබිය හැක."
       ],
@@ -33912,6 +41676,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Obviously, students need enough sleep before an exam.",
+        "පැහැදිලිවම, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will obviously improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ පැහැදිලිවම ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "Public libraries are obviously beneficial for students who lack quiet study spaces at home.",
         "නිවසේ නිස්කලංක අධ්‍යයන පරිසරයක් නොමැති සිසුන්ට මහජන පුස්තකාල පැහැදිලිවම ප්‍රතිලාභදායක වේ."
@@ -33948,6 +41720,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to extend her goal.",
+        "ඇය තම ඉලක්කය දීර්ඝ කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can extend new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා දීර්ඝ කරන්න හැකිය."
+      ],
+      [
         "Advances in medical technology have significantly extended average human life expectancy over the past century.",
         "පසුගිය සියවස තුළ වෛද්‍ය තාක්ෂණයේ දියුණුව මගින් සාමාන්‍ය මිනිස් ආයු අපේක්ෂාව සැලකිය යුතු ලෙස දීර්ඝ කර ඇත."
       ],
@@ -33982,6 +41762,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to ensure her goal.",
+        "ඇය තම ඉලක්කය තහවුරු කරන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can ensure new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා තහවුරු කරන්න හැකිය."
+      ],
       [
         "Strict food safety regulations are required to ensure that imported agricultural produce is free from harmful pesticides.",
         "ආනයනික කෘෂිකාර්මික නිෂ්පාදන අහිතකර පළිබෝධනාශකවලින් තොර බව තහවුරු කිරීම සඳහා දැඩි ආහාර සුරක්ෂිතතා නියාමනයන් අවශ්‍ය වේ."
@@ -34018,6 +41806,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are feasible for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර ප්‍රායෝගිකව කළ හැකි වේ."
+      ],
+      [
+        "She gave a very feasible answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා ප්‍රායෝගිකව කළ හැකි පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "Desalination plants are now a technologically feasible solution for coastal cities facing severe water shortages.",
         "දැඩි ජල හිඟයකට මුහුණ දෙන වෙරළබඩ නගර සඳහා මුහුදු ජලයෙන් ලුණු ඉවත් කිරීමේ බලාගාර දැන් තාක්ෂණික වශයෙන් ක්‍රියාත්මක කළ හැකි විසඳුමකි."
       ],
@@ -34052,6 +41848,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "The teacher explained the concept of sector clearly.",
+        "ගුරුවරයා අංශය පිළිබඳ අදහස පැහැදිලිව විස්තර කළේය."
+      ],
+      [
+        "Good habits have a positive effect on your sector.",
+        "හොඳ පුරුදු ඔබගේ අංශය කෙරෙහි ධනාත්මක බලපෑමක් ඇති කරයි."
+      ],
       [
         "Automation has significantly reduced the number of manual jobs in the manufacturing sector.",
         "ස්වයංක්‍රීයකරණය මගින් නිෂ්පාදන අංශයේ කායික ශ්‍රමය යොදන රැකියා සංඛ්‍යාව සැලකිය යුතු ලෙස අඩු කර ඇත."
@@ -34088,6 +41892,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Clean water and fresh food are noticeable for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර කැපී පෙනෙන වේ."
+      ],
+      [
+        "She gave a very noticeable answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා කැපී පෙනෙන පිළිතුරක් ලබා දුන්නාය."
+      ],
+      [
         "There has been a noticeable improvement in river water quality since industrial dumping was banned.",
         "කාර්මික අපද්‍රව්‍ය බැහැර කිරීම තහනම් කළ දා සිට ගංගා ජලයේ ගුණාත්මකභාවයේ කැපී පෙනෙන දියුණුවක් ඇති වී තිබේ."
       ],
@@ -34122,6 +41934,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book devoid of learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට සම්පූර්ණයෙන්ම තොර වූ පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option devoid of this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී සම්පූර්ණයෙන්ම තොර වූ සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Concrete-dominated city centres that are devoid of trees and parks negatively affect residents' mental health.",
         "ගස්කොළන් සහ උද්‍යානවලින් සම්පූර්ණයෙන්ම තොර වූ කොන්ක්‍රීට් පිරුණු නගර මධ්‍යයන් පදිංචිකරුවන්ගේ මානසික සෞඛ්‍යයට අහිතකර ලෙස බලපායි."
@@ -34158,6 +41978,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to imply her goal.",
+        "ඇය තම ඉලක්කය ව්‍යංගයෙන් පැවසීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can imply new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ව්‍යංගයෙන් පැවසීම හැකිය."
+      ],
+      [
         "A statistical correlation between two trends does not necessarily imply that one causes the other.",
         "ප්‍රවණතා දෙකක් අතර පවතින සංඛ්‍යාත්මක සහසම්බන්ධයකින් එකක් නිසා අනෙක සිදුවන බව අනිවාර්යයෙන්ම අදහස් නොවේ."
       ],
@@ -34192,6 +42020,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are inevitable for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර වැළැක්විය නොහැකි වේ."
+      ],
+      [
+        "She gave a very inevitable answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා වැළැක්විය නොහැකි පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Technological unemployment in routine clerical jobs seems an inevitable consequence of automation.",
         "සාමාන්‍ය ලිපිකරු රැකියාවල තාක්ෂණික විරැකියාව ඇතිවීම ස්වයංක්‍රීයකරණයේ වැළැක්විය නොහැකි ප්‍රතිවිපාකයක් බව පෙනේ."
@@ -34228,6 +42064,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "It is important to respond to your studies every day.",
+        "සෑම දිනකම ඔබගේ අධ්‍යයන කටයුතු කෙරෙහි ප්‍රතිචාර දැක්වෙන්න වැදගත් වේ."
+      ],
+      [
+        "She learned how to respond to difficult situations calmly.",
+        "දුෂ්කර අවස්ථාවලදී සන්සුන්ව ප්‍රතිචාර දැක්වෙන්න ඇය ඉගෙන ගත්තාය."
+      ],
+      [
         "Universities must respond to changing labour market demands by updating their degree programmes.",
         "වෙනස් වන ශ්‍රම වෙළඳපොළ ඉල්ලුමට ප්‍රතිචාර දැක්වීම සඳහා විශ්වවිද්‍යාල සිය උපාධි වැඩසටහන් යාවත්කාලීන කළ යුතුය."
       ],
@@ -34262,6 +42106,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are questionable for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සැක සහිත වේ."
+      ],
+      [
+        "She gave a very questionable answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සැක සහිත පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "It is questionable whether imposing heavier fines alone will deter repeat traffic offenders.",
         "දඩ මුදල් ඉහළ දැමීමෙන් පමණක් නැවත නැවතත් මාර්ග නීති කඩ කරන්නන් වළක්වා ගත හැකිද යන්න සැක සහිතය."
@@ -34298,6 +42150,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to proceed her goal.",
+        "ඇය තම ඉලක්කය ඉදිරියට යාම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can proceed new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ඉදිරියට යාම හැකිය."
+      ],
+      [
         "Genetic researchers must proceed with caution when editing human embryos to avoid unintended mutations.",
         "අනපේක්ෂිත ජාන විකෘති වළක්වා ගැනීම සඳහා මිනිස් කලලවල ජාන සංස්කරණය කිරීමේදී පර්යේෂකයන් ඉතා ප්‍රවේශමෙන් කටයුතු කළ යුතුය."
       ],
@@ -34332,6 +42192,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clearly, students need enough sleep before an exam.",
+        "පැහැදිලිව, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will clearly improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ පැහැදිලිව ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "The line graph clearly illustrates the rapid rise in smartphone ownership across all age groups.",
         "සියලුම වයස් කාණ්ඩ හරහා ස්මාර්ට් ජංගම දුරකථන භාවිතයේ සීඝ්‍ර වර්ධනය රේඛීය ප්‍රස්තාරයෙන් පැහැදිලිව විදහා දක්වයි."
@@ -34368,6 +42236,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Frequently, students need enough sleep before an exam.",
+        "නිතර, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will frequently improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ නිතර ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Extreme weather events are occurring more frequently as global temperatures continue to climb.",
         "ගෝලීය උෂ්ණත්වය අඛණ්ඩව ඉහළ යාමත් සමඟ ආන්තික කාලගුණික සිදුවීම් වඩාත් නිතර සිදුවෙමින් පවතී."
       ],
@@ -34402,6 +42278,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to assess her goal.",
+        "ඇය තම ඉලක්කය ඇගයීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can assess new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා ඇගයීම හැකිය."
+      ],
       [
         "Continuous coursework is a fairer way to assess students' academic progress than a single final examination.",
         "එක් අවසාන විභාගයකට වඩා අඛණ්ඩ පැවරුම් ක්‍රමය සිසුන්ගේ අධ්‍යයන ප්‍රගතිය ඇගයීම සඳහා වඩාත් සාධාරණ ක්‍රමයකි."
@@ -34438,6 +42322,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "He read the book reach the stage learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට එක්තරා අදියරකට පැමිණීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option reach the stage this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී එක්තරා අදියරකට පැමිණීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
+      [
         "Plastic pollution in the oceans has reached the stage where microplastics are entering the human food chain.",
         "සාගරවල ප්ලාස්ටික් දූෂණය ක්ෂුද්‍ර ප්ලාස්ටික් මිනිස් ආහාර දාමයට එක් වන මට්ටමටම පැමිණ ඇත."
       ],
@@ -34472,6 +42364,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Considerably, students need enough sleep before an exam.",
+        "සැලකිය යුතු තරමින්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will considerably improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ සැලකිය යුතු තරමින් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
       [
         "The cost of renting an apartment in the city centre is considerably higher than in suburban areas.",
         "නගර මධ්‍යයේ මහල් නිවාසයක් කුලියට ගැනීමේ පිරිවැය තදාසන්න ප්‍රදේශවලට වඩා සැලකිය යුතු තරම් ඉහළය."
@@ -34508,6 +42408,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Theoretically, students need enough sleep before an exam.",
+        "න්‍යායාත්මකව, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will theoretically improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ න්‍යායාත්මකව ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Although online courses are theoretically accessible to everyone, many rural students lack reliable internet connections.",
         "මාර්ගගත පාඨමාලා න්‍යායාත්මකව සැමට විවෘත වුවද, බොහෝ ග්‍රාමීය සිසුන්ට විශ්වාසදායක අන්තර්ජාල පහසුකම් නොමැත."
       ],
@@ -34542,6 +42450,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "She worked hard to possess her goal.",
+        "ඇය තම ඉලක්කය සතු වෙන්න මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can possess new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා සතු වෙන්න හැකිය."
+      ],
       [
         "Modern employers seek graduates who possess strong interpersonal and communication skills.",
         "නවීන සේවායෝජකයින් සොයන්නේ ප්‍රබල අන්තර්පුද්ගල සහ සන්නිවේදන කුසලතා සතු උපාධිධාරීන්වය."
@@ -34578,6 +42494,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Primarily, students need enough sleep before an exam.",
+        "ප්‍රධාන වශයෙන්ම, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will primarily improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ ප්‍රධාන වශයෙන්ම ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Urban sprawl is driven primarily by population growth and the demand for larger family homes.",
         "නාගරික ව්‍යාප්තිය ප්‍රධාන වශයෙන්ම මෙහෙයවනු ලබන්නේ ජනගහන වර්ධනය සහ විශාල නිවාස සඳහා පවතින ඉල්ලුම මගිනි."
       ],
@@ -34612,6 +42536,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are entire for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර සමස්ත වේ."
+      ],
+      [
+        "She gave a very entire answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා සමස්ත පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "A severe cyberattack on the banking system could paralyse the economy of an entire nation.",
         "බැංකු පද්ධතියට එල්ල වන දරුණු සයිබර් ප්‍රහාරයකින් සමස්ත රටකම ආර්ථිකය අඩපණ කළ හැක."
@@ -34648,6 +42580,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "Predominantly, students need enough sleep before an exam.",
+        "බහුතරයක් වශයෙන්, විභාගයකට පෙර සිසුන්ට ප්‍රමාණවත් නින්දක් අවශ්‍ය වේ."
+      ],
+      [
+        "With patient practice, you will predominantly improve your English.",
+        "ඉවසීමෙන් පුහුණුවීම තුළින් ඔබ බහුතරයක් වශයෙන් ඔබේ ඉංග්‍රීසි දියුණු කරගනු ඇත."
+      ],
+      [
         "Nursing and primary school teaching remain predominantly female professions in many countries.",
         "හෙද සේවය සහ ප්‍රාථමික පාසල් ඉගැන්වීම බොහෝ රටවල තවදුරටත් ප්‍රධාන වශයෙන්ම කාන්තාවන් නියැලෙන වෘත්තීන් ලෙස පවතී."
       ],
@@ -34682,6 +42622,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book have a perception learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට ආකල්පයක් පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option have a perception this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී ආකල්පයක් සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Heavy exposure to sensationalist news causes many citizens to have an exaggerated perception of crime rates.",
         "සංවේදී පුවත්වලට අධික ලෙස නිරාවරණය වීම නිසා බොහෝ පුරවැසියන් තුළ අපරාධ අනුපාතය පිළිබඳව අතිශයෝක්තියෙන් යුත් වැටහීමක් ඇති වේ."
@@ -34718,6 +42666,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to maintain her goal.",
+        "ඇය තම ඉලක්කය පවත්වා ගැනීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can maintain new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා පවත්වා ගැනීම හැකිය."
+      ],
+      [
         "Local councils often lack sufficient funds to maintain rural roads and bridges properly.",
         "ග්‍රාමීය මාර්ග සහ පාලම් නිසි ලෙස නඩත්තු කිරීමට පළාත් පාලන ආයතනවලට බොහෝ විට ප්‍රමාණවත් අරමුදල් නොමැත."
       ],
@@ -34752,6 +42708,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "Clean water and fresh food are negligible for healthy living.",
+        "නිරෝගී ජීවිතයක් සඳහා පිරිසිදු ජලය සහ නැවුම් ආහාර නොගිණිය හැකි තරම් කුඩා වේ."
+      ],
+      [
+        "She gave a very negligible answer to the difficult question.",
+        "ඇය එම අසීරු ප්‍රශ්නයට ඉතා නොගිණිය හැකි තරම් කුඩා පිළිතුරක් ලබා දුන්නාය."
+      ],
       [
         "Token fines have a negligible impact on large corporations that violate environmental regulations.",
         "පාරිසරික රෙගුලාසි උල්ලංඝනය කරන මහා පරිමාණ සමාගම් මත සුළු දඩ මුදල් මගින් ඇති කරන්නේ නොගිණිය හැකි තරම් සුළු බලපෑමකි."
@@ -34788,6 +42752,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
     ],
     "examples": [
       [
+        "She worked hard to release her goal.",
+        "ඇය තම ඉලක්කය මුදා හැරීම මහන්සි වී වැඩ කළාය."
+      ],
+      [
+        "You can release new skills with daily practice.",
+        "දිනපතා පුහුණුවීමෙන් ඔබට නව කුසලතා මුදා හැරීම හැකිය."
+      ],
+      [
         "Burning fossil fuels releases vast quantities of carbon dioxide into the atmosphere.",
         "ෆොසිල ඉන්ධන දහනය කිරීම මගින් වායුගෝලයට අතිවිශාල කාබන් ඩයොක්සයිඩ් ප්‍රමාණයක් මුදා හරියි."
       ],
@@ -34822,6 +42794,14 @@ export const ACADEMIC_VOCAB_DICTIONARY: Record<string, RichVocabEntry> = {
       ]
     ],
     "examples": [
+      [
+        "He read the book aware of/that learning new ideas.",
+        "ඔහු නව අදහස් ඉගෙන ගැනීමට දැනුවත්ව සිටීම පොත කියෙව්වා."
+      ],
+      [
+        "We must consider every option aware of/that this project.",
+        "අපි මෙම ව්‍යාපෘතියේදී දැනුවත්ව සිටීම සෑම විකල්පයක් ගැනම සලකා බැලිය යුතුය."
+      ],
       [
         "Consumers are becoming increasingly aware that fast fashion contributes heavily to landfill waste.",
         "ක්ෂණික විලාසිතා මගින් කසළ ගොඩකිරීම් සඳහා දැඩි ලෙස දායක වන බව පිළිබඳව පාරිභෝගිකයින් වඩ වඩාත් දැනුවත් වෙමින් සිටිති."

@@ -122,6 +122,8 @@ export interface ReadingQuestion {
   correctAnswer: string;
   explanation: string;
   explanationSi?: string;
+  evidence?: string;
+  whyWrong?: Record<string, string> | string;
   paragraphReference: string;
   vocabularyFocus?: { term: string; meaning: string; academicCollocation: string };
 }
@@ -132,6 +134,24 @@ export interface ReadingPassage {
   title: string;
   paragraphs: { label: string; text: string }[];
   questions: ReadingQuestion[];
+  wordBank?: string[];
+  tableContext?: {
+    title: string;
+    headers: string[];
+    rows: string[][];
+  };
+  summaryContext?: {
+    title: string;
+    instruction?: string;
+    exampleText?: string;
+    exampleAnswer?: string;
+    fullText?: string;
+  };
+  matchingContext?: {
+    title: string;
+    instruction?: string;
+    options?: { code: string; text: string }[];
+  };
 }
 
 export interface ListeningQuestion {
@@ -162,10 +182,13 @@ export interface ListeningQuestionFeedback {
   number: number;
   userAnswer: string;
   correctAnswer: string;
+  officialAnswer?: string;
   isCorrect: boolean;
   errorType: 'correct' | 'distractor_trap' | 'spelling_grammar' | 'omission' | 'word_limit' | 'other';
   feedback: string;
   feedbackSi?: string;
+  explanation?: string;
+  explanationSi?: string;
 }
 
 export interface ListeningAIReport {
@@ -176,6 +199,8 @@ export interface ListeningAIReport {
   distractorVulnerability: 'Low' | 'Medium' | 'High';
   executiveSummary: string;
   executiveSummarySi: string;
+  teacherRecommendation?: string;
+  teacherRecommendationSi?: string;
   acousticAnalysis: string;
   acousticAnalysisSi?: string;
   questionBreakdown: ListeningQuestionFeedback[];

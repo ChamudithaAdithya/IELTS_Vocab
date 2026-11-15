@@ -1,3278 +1,1739 @@
 import type { ReadingPassage } from '../types/tutor';
 
 /* ===================================================================== */
-/* CAMBRIDGE 1 - FULL READING MODULE (Academic Tests 1 to 4 + GT)        */
-/* 100% COMPLETE: All 199 Questions across all 15 authentic passages     */
-/* Verbatim Passages, Official Cambridge Keys & Sinhala Explanations     */
+/* CAMBRIDGE IELTS 1 - READING TEST 1 & TEST 2                           */
+/* Test 1 (Questions 1-40):                                              */
+/*   Passage 1: A spark, a flint: How fire leapt to life (Q1-15)         */
+/*   Passage 2: Zoo conservation programmes (Q16-28)                     */
+/*   Passage 3: ARCHITECTURE - Reaching for the Sky (Q29-40)             */
+/* Test 2 (Questions 1-41):                                              */
+/*   Passage 1: Right and left-handedness in humans (Q1-12)              */
+/*   Passage 2: MIGRATORY BEEKEEPING - Taking Wing (Q13-27)              */
+/*   Passage 3: TOURISM (Q28-41)                                         */
 /* ===================================================================== */
 
 export const CAMBRIDGE_1_READING_TESTS: ReadingPassage[] = [
+  /* =================================================================== */
+  /* TEST 1 - PASSAGE 1: A spark, a flint: How fire leapt to life (Q1-15)*/
+  /* =================================================================== */
   {
-    "id": "c1-t1-pass1",
-    "cambridgeSource": "Cambridge IELTS 1, Test 1 - Reading Passage 1",
-    "title": "A spark, a flint: How fire leapt to life",
-    "paragraphs": [
+    id: 'c1-t1-pass1',
+    cambridgeSource: 'Cambridge IELTS 1, Test 1 - Reading Passage 1',
+    title: 'A spark, a flint: How fire leapt to life — The control of fire was the first and perhaps greatest of humanity’s steps towards a life-enhancing technology',
+    paragraphs: [
       {
-        "label": "Paragraph 1",
-        "text": "The control of fire was the first and perhaps greatest of humanity’s steps towards a life-enhancing technology. To early man, fire was a divine gift randomly delivered in the form of lightning, forest fire or burning lava. Unable to make flame for themselves, the earliest peoples probably stored fire by keeping slow burning logs alight or by carrying charcoal in pots."
+        label: 'Paragraph 1',
+        text: 'To early man, fire was a divine gift randomly delivered in the form of lightning, forest fire or burning lava. Unable to make flame for themselves, the earliest peoples probably stored fire by keeping slow burning logs alight or by carrying charcoal in pots.',
       },
       {
-        "label": "Paragraph 2",
-        "text": "How and where man learnt how to produce flame at will is unknown. It was probably a secondary invention, accidentally made during tool-making operations with wood or stone. Studies of primitive societies suggest that the earliest method of making fire was through friction. European peasants would insert a wooden drill in a round hole and rotate it briskly between their palms. This process could be speeded up by wrapping a cord around the drill and pulling on each end."
+        label: 'Paragraph 2',
+        text: 'How and where man learnt how to produce flame at will is unknown. It was probably a secondary invention, accidentally made during tool-making operations with wood or stone. Studies of primitive societies suggest that the earliest method of making fire was through friction. European peasants would insert a wooden drill in a round hole and rotate it briskly between their palms. This process could be speeded up by wrapping a cord around the drill and pulling on each end.',
       },
       {
-        "label": "Paragraph 3",
-        "text": "The Ancient Greeks used lenses or concave mirrors to concentrate the sun’s rays and burning glasses were also used by Mexican Aztecs and the Chinese. Percussion methods of fire-lighting date back to Paleolithic times, when some Stone Age tool-makers discovered that chipping flints produced sparks. The technique became more efficient after the discovery of iron, about 5000 years ago."
+        label: 'Paragraph 3',
+        text: 'The Ancient Greeks used lenses or concave mirrors to concentrate the sun’s rays and burning glasses were also used by Mexican Aztecs and the Chinese.',
       },
       {
-        "label": "Paragraph 4",
-        "text": "In Arctic regions, Eskimos produced a slow-burning flame by striking quartz against iron pyrites, though the process required exceptional perseverance. Despite these inventive efforts, making fire remained notoriously laborious until the chemical revolution of the 18th and 19th centuries brought the development of modern matches."
+        label: 'Paragraph 4',
+        text: 'Percussion methods of fire-lighting date back to Paleolithic times, when some Stone Age tool-makers discovered that chipping flints produced sparks. The technique became more efficient after the discovery of iron, about 5000 years ago. In Arctic North America, the Eskimos produced a slow-burning spark by striking quartz against iron pyrites, a compound that contains sulphur. The Chinese lit their fires by striking porcelain with bamboo. In Europe, the combination of steel, flint and tinder remained the main method of fire-lighting until the mid 19th century.',
       },
       {
-        "label": "Paragraph 5",
-        "text": "In 1827 John Walker, an English pharmacist, invented the friction match, coating wooden splints with antimony sulfide, potassium chlorate, gum and starch. Striking the match against sandpaper ignited the head with a ferocious explosion, producing toxic fumes and erratic burning."
+        label: 'Paragraph 5',
+        text: 'Fire-lighting was revolutionised by the discovery of phosphorus, isolated in 1669 by a German alchemist trying to transmute silver into gold. Impressed by the element’s combustibility, several 17th century chemists used it to manufacture fire-lighting devices, but the results were dangerously inflammable. With phosphorus costing the equivalent of several hundred pounds per ounce, the first matches were expensive.',
       },
       {
-        "label": "Paragraph 6",
-        "text": "Phosphorus proved revolutionary. The Ethereal Match (A) introduced in 1781 consisted of a sealed glass tube containing phosphorus which ignited when broken open. The Instantaneous Light Box (B) sold in 1805 used concentrated sulfuric acid. The Congreve (C) was copied from military rocket makers and ignited with a violent bang. The Promethean Match (D), patented in 1828, enclosed a glass bead of acid within paper. Lucifers (E) used white phosphorus and emitted deadly poison. The Safety Match (F), invented by Pasch in Sweden, used non-toxic red phosphorus. Book Matches (G) were invented in 1892 when a brewing company used them to advertise beer."
-      }
+        label: 'Paragraph 6',
+        text: 'The quest for a practical match really began after 1781 when a group of French chemists came up with the Phosphoric Candle or Ethereal Match, a sealed glass tube containing a twist of paper tipped with phosphorus. When the tube was broken, air rushed in, causing the phosphorus to self-combust. An even more hazardous device, popular in America, was the Instantaneous Light Box — a bottle filled with sulphuric acid into which splints treated with chemicals were dipped.',
+      },
+      {
+        label: 'Paragraph 7',
+        text: 'The first matches resembling those used today were made in 1827 by John Walker, an English pharmacist who borrowed the formula from a military rocket-maker called Congreve. Costing a shilling a box, Congreves were splints coated with sulphur and tipped with potassium chlorate. To light them, the user drew them quickly through folded glass paper.',
+      },
+      {
+        label: 'Paragraph 8',
+        text: 'Walker never patented his invention, and three years later it was copied by a Samuel Jones, who marketed his product as Lucifers. About the same time, a French chemistry student called Charles Sauria produced the first “strike-anywhere” match by substituting white phosphorus for the potassium chlorate in the Walker formula. However, since white phosphorus is a deadly poison, from 1845 match-makers exposed to its fumes succumbed to necrosis, a disease that eats away jaw-bones. It wasn’t until 1906 that the substance was eventually banned.',
+      },
+      {
+        label: 'Paragraph 9',
+        text: 'That was 62 years after a Swedish chemist called Pasch had discovered non-toxic red or amorphous phosphorus, a development exploited commercially by Pasch’s compatriot J E Lundstrom in 1885. Lundstrom’s safety matches were safe because the red phosphorus was non-toxic; it was painted on to the striking surface instead of the match tip, which contained potassium chlorate with a relatively high ignition temperature of 182 degrees centigrade.',
+      },
+      {
+        label: 'Paragraph 10',
+        text: 'America lagged behind Europe in match technology and safety standards. It wasn’t until 1900 that the Diamond Match Company bought a French patent for safety matches — but the formula did not work properly in the different climatic conditions prevailing in America and it was another 11 years before scientists finally adapted the French patent for the US.',
+      },
+      {
+        label: 'Paragraph 11',
+        text: 'The Americans, however, can claim several “firsts” in match technology and marketing. In 1892 the Diamond Match Company pioneered book matches. The innovation didn’t catch on until after 1896, when a brewery had the novel idea of advertising its product in match books. Today book matches are the most widely used type in the US, with 90 percent handed out free by hotels, restaurants and others.',
+      },
+      {
+        label: 'Paragraph 12',
+        text: 'Other American innovations include an anti-afterglow solution to prevent the match from smouldering after it has been blown out; and the waterproof match, which lights after eight hours in water.',
+      },
     ],
-    "questions": [
+    wordBank: [
+      'Mexicans',
+      'despite',
+      'sunlight',
+      'percussion',
+      'unaware',
+      'heating',
+      'until',
+      'random',
+      'preserve',
+      'lacking',
+      'chance',
+      'without',
+      'Eskimos',
+      'smoke',
+      'rotating',
+      'realising',
+      'heavenly',
+      'friction',
+      'make',
+      'surprised',
+    ],
+    summaryContext: {
+      title: 'EARLY FIRE-LIGHTING METHODS',
+      instruction:
+        'Complete the summary below. Choose your answers from the box at the bottom of the page and write them in boxes 1-8 on your answer sheet.\nNB There are more words than spaces so you will not use them all. You may use any of the words more than once.',
+      exampleAnswer: 'Primitive societies saw fire as a heavenly gift.',
+      fullText:
+        'Primitive societies saw fire as a heavenly gift.\nThey tried to (1) .......... burning logs or charcoal (2) .......... that they could create fire themselves. It is suspected that the first man-made flames were produced by (3) .......... .\nThe very first fire-lighting methods involved the creation of (4) .......... by, for example, rapidly (5) .......... a wooden stick in a round hole. The use of (6) .......... or persistent chipping was also widespread in Europe and among other peoples such as the Chinese and (7) .......... . European practice of this method continued until the 1850s (8) .......... the discovery of phosphorus some years earlier.',
+    },
+    matchingContext: {
+      title: 'Questions 9-15',
+      instruction:
+        'Look at the following notes that have been made about the matches described in Reading Passage 1. Decide which type of match (A-H) corresponds with each description and write your answers in boxes 9-15 on your answer sheet.\nNB There are more matches than descriptions so you will not use them all. You may use any match more than once.',
+      options: [
+        { code: 'A', text: 'the Ethereal Match' },
+        { code: 'B', text: 'the Instantaneous Lightbox' },
+        { code: 'C', text: 'Congreves' },
+        { code: 'D', text: 'Lucifers' },
+        { code: 'E', text: 'the first strike-anywhere match' },
+        { code: 'F', text: 'Lundstrom’s safety match' },
+        { code: 'G', text: 'book matches' },
+        { code: 'H', text: 'waterproof matches' },
+      ],
+    },
+    questions: [
       {
-        "id": "c1-t1-p1-q1",
-        "type": "summary",
-        "question": "Unable to create fire themselves, early humans sought to __________ fire by preserving burning logs.",
-        "correctAnswer": "preserve",
-        "explanation": "Early humans had to store and preserve naturally occurring fire.",
-        "explanationSi": "මුල් මිනිසාට ගින්දර නිපදවා ගත නොහැකි වූ බැවින් ගින්දර ආරක්ෂා කර තබාගැනීමට (preserve) සිදුවිය.",
-        "paragraphReference": "Paragraph 1"
+        id: 'c1-t1-p1-q1',
+        type: 'summary',
+        question: 'They tried to (1) .......... burning logs or charcoal',
+        correctAnswer: 'preserve',
+        evidence:
+          'Unable to make flame for themselves, the earliest peoples probably stored fire by keeping slow burning logs alight or by carrying charcoal in pots.',
+        explanation:
+          'Paragraph 1 states that early humans stored ("preserved") fire by keeping slow-burning logs alight or carrying charcoal in pots.',
+        paragraphReference: 'Paragraph 1',
       },
       {
-        "id": "c1-t1-p1-q2",
-        "type": "summary",
-        "question": "Researchers remain largely __________ of the precise historical location where humans first produced flame at will.",
-        "correctAnswer": "unaware",
-        "explanation": "Scholars remain unaware of how and where fire was first made.",
-        "explanationSi": "මිනිසා මුලින්ම ගින්දර නිපදවූයේ කවදා කොතැනදැයි මෙතෙක් අනාවරණය වී නොමැත (unaware).",
-        "paragraphReference": "Paragraph 2"
+        id: 'c1-t1-p1-q2',
+        type: 'summary',
+        question: 'burning logs or charcoal (2) .......... that they could create fire themselves.',
+        correctAnswer: 'unaware',
+        evidence:
+          'Unable to make flame for themselves, the earliest peoples probably stored fire... How and where man learnt how to produce flame at will is unknown.',
+        explanation:
+          'Early peoples were "unaware" that they could create fire themselves.',
+        paragraphReference: 'Paragraph 1',
       },
       {
-        "id": "c1-t1-p1-q3",
-        "type": "summary",
-        "question": "The first deliberate ignition was likely an accidental discovery made by __________ during tool-making.",
-        "correctAnswer": "chance",
-        "explanation": "Accidental discovery made by chance during tool manufacturing.",
-        "explanationSi": "ගින්දර සොයාගැනීම ආයුධ තැනීමේදී අහඹු ලෙස (by chance) සිදුවූවකි.",
-        "paragraphReference": "Paragraph 2"
+        id: 'c1-t1-p1-q3',
+        type: 'summary',
+        question: 'It is suspected that the first man-made flames were produced by (3) .......... .',
+        correctAnswer: 'chance',
+        evidence:
+          'It was probably a secondary invention, accidentally made during tool-making operations with wood or stone.',
+        explanation:
+          '"Accidentally made" corresponds to produced by "chance".',
+        paragraphReference: 'Paragraph 2',
       },
       {
-        "id": "c1-t1-p1-q4",
-        "type": "summary",
-        "question": "Studies of primitive tribes suggest the earliest active method of fire-lighting was through __________.",
-        "correctAnswer": "friction",
-        "explanation": "Studies suggest the earliest method was through friction.",
-        "explanationSi": "ගින්දර නිපදවීමේ මුල්ම ක්‍රමය වූයේ ඝර්ෂණයයි (friction).",
-        "paragraphReference": "Paragraph 2"
+        id: 'c1-t1-p1-q4',
+        type: 'summary',
+        question: 'The very first fire-lighting methods involved the creation of (4) ..........',
+        correctAnswer: 'friction',
+        evidence:
+          'Studies of primitive societies suggest that the earliest method of making fire was through friction.',
+        explanation:
+          'Paragraph 2 explicitly states that the earliest method of making fire was through "friction".',
+        paragraphReference: 'Paragraph 2',
       },
       {
-        "id": "c1-t1-p1-q5",
-        "type": "summary",
-        "question": "European peasants generated heat by __________ a wooden drill briskly inside a hole.",
-        "correctAnswer": "rotating",
-        "explanation": "Peasants rotated a wooden drill rapidly between their hands.",
-        "explanationSi": "දැවමය කූරක් සිදුරක් තුළ භ්‍රමණය කරමින් (rotating) ගින්දර නිපදවන ලදී.",
-        "paragraphReference": "Paragraph 2"
+        id: 'c1-t1-p1-q5',
+        type: 'summary',
+        question: 'by, for example, rapidly (5) .......... a wooden stick in a round hole.',
+        correctAnswer: 'rotating',
+        evidence:
+          'European peasants would insert a wooden drill in a round hole and rotate it briskly between their palms.',
+        explanation:
+          '"Rotate it briskly" matches rapidly "rotating" a wooden stick in a round hole.',
+        paragraphReference: 'Paragraph 2',
       },
       {
-        "id": "c1-t1-p1-q6",
-        "type": "summary",
-        "question": "Stone Age tool-makers also utilized __________ methods by chipping flints together to create sparks.",
-        "correctAnswer": "percussion",
-        "explanation": "Percussion methods involve striking flints to produce sparks.",
-        "explanationSi": "ගල් එකිනෙක ගැටීමෙන් (percussion) ගිනි පුපුරු නිපදවීම සිදු විය.",
-        "paragraphReference": "Paragraph 3"
+        id: 'c1-t1-p1-q6',
+        type: 'summary',
+        question: 'The use of (6) .......... or persistent chipping was also widespread in Europe',
+        correctAnswer: 'percussion',
+        evidence:
+          'Percussion methods of fire-lighting date back to Paleolithic times, when some Stone Age tool-makers discovered that chipping flints produced sparks.',
+        explanation:
+          'Paragraph 4 defines chipping flints to produce sparks as "percussion" methods.',
+        paragraphReference: 'Paragraph 4',
       },
       {
-        "id": "c1-t1-p1-q7",
-        "type": "summary",
-        "question": "In frozen northern regions, __________ managed to light fire by striking quartz against iron pyrites.",
-        "correctAnswer": "Eskimos",
-        "explanation": "In Arctic regions, Eskimos struck quartz against iron pyrites.",
-        "explanationSi": "ආක්ටික් ප්‍රදේශයේ එස්කිමෝවරුන් (Eskimos) ක්වාර්ට්ස් සහ යකඩ ගැටීමෙන් ගිනි දල්වා ගත්හ.",
-        "paragraphReference": "Paragraph 4"
+        id: 'c1-t1-p1-q7',
+        type: 'summary',
+        question: 'and among other peoples such as the Chinese and (7) .......... .',
+        correctAnswer: 'Eskimos',
+        evidence:
+          'In Arctic North America, the Eskimos produced a slow-burning spark by striking quartz against iron pyrites... The Chinese lit their fires by striking porcelain with bamboo.',
+        explanation:
+          'Paragraph 4 mentions both the Chinese and the "Eskimos" using percussion methods.',
+        paragraphReference: 'Paragraph 4',
       },
       {
-        "id": "c1-t1-p1-q8",
-        "type": "summary",
-        "question": "Making fire remained an exceptionally tedious task __________ all these primitive inventions.",
-        "correctAnswer": "despite",
-        "explanation": "Despite these inventive efforts, making fire remained laborious.",
-        "explanationSi": "මෙම සියලු සොයාගැනීම් තිබුණද (despite), ගින්දර නිපදවීම දුෂ්කර කාර්යයක්ව පැවතුණි.",
-        "paragraphReference": "Paragraph 4"
+        id: 'c1-t1-p1-q8',
+        type: 'summary',
+        question: 'European practice of this method continued until the 1850s (8) .......... the discovery of phosphorus some years earlier.',
+        correctAnswer: 'despite',
+        evidence:
+          'In Europe, the combination of steel, flint and tinder remained the main method of fire-lighting until the mid 19th century. Fire-lighting was revolutionised by the discovery of phosphorus, isolated in 1669...',
+        explanation:
+          'Europeans continued using steel, flint, and tinder until the 1850s "despite" phosphorus having been discovered in 1669.',
+        paragraphReference: 'Paragraph 4',
       },
       {
-        "id": "c1-t1-p1-q9",
-        "type": "mcq",
-        "question": "Which match type was noted because the red phosphorus utilized was completely non-toxic?",
-        "options": [
-          "A: The Ethereal Match",
-          "B: The Instantaneous Light Box",
-          "C: The Congreve",
-          "D: The Promethean Match",
-          "E: Lucifers",
-          "F: The Safety Match",
-          "G: Book Matches"
+        id: 'c1-t1-p1-q9',
+        type: 'mcq',
+        question: 'made using a less poisonous type of phosphorus',
+        options: [
+          'A: the Ethereal Match',
+          'B: the Instantaneous Lightbox',
+          'C: Congreves',
+          'D: Lucifers',
+          'E: the first strike-anywhere match',
+          'F: Lundstrom’s safety match',
+          'G: book matches',
+          'H: waterproof matches',
         ],
-        "correctAnswer": "F",
-        "explanation": "Match F (The Safety Match) used non-toxic red phosphorus.",
-        "explanationSi": "නොවිෂ රතු පොස්පරස් භාවිතා කළේ Safety Match (F) වේ.",
-        "paragraphReference": "Paragraph 6"
+        correctAnswer: 'F',
+        evidence:
+          'Lundstrom’s safety matches were safe because the red phosphorus was non-toxic; it was painted on to the striking surface instead of the match tip...',
+        explanation:
+          'Lundstrom’s safety match (F) used non-toxic red phosphorus.',
+        paragraphReference: 'Paragraph 9',
       },
       {
-        "id": "c1-t1-p1-q10",
-        "type": "mcq",
-        "question": "Which match type was copied directly from an earlier invention three years later?",
-        "options": [
-          "A: The Ethereal Match",
-          "B: The Instantaneous Light Box",
-          "C: The Congreve",
-          "D: The Promethean Match",
-          "E: Lucifers",
-          "F: The Safety Match",
-          "G: Book Matches"
+        id: 'c1-t1-p1-q10',
+        type: 'mcq',
+        question: 'identical to a previous type of match',
+        options: [
+          'A: the Ethereal Match',
+          'B: the Instantaneous Lightbox',
+          'C: Congreves',
+          'D: Lucifers',
+          'E: the first strike-anywhere match',
+          'F: Lundstrom’s safety match',
+          'G: book matches',
+          'H: waterproof matches',
         ],
-        "correctAnswer": "D",
-        "explanation": "The Promethean Match was copied 3 years after the friction match.",
-        "explanationSi": "වසර තුනකට පසු පිටපත් කළේ Promethean Match (D) වේ.",
-        "paragraphReference": "Paragraph 6"
+        correctAnswer: 'D',
+        evidence:
+          'Walker never patented his invention, and three years later it was copied by a Samuel Jones, who marketed his product as Lucifers.',
+        explanation:
+          'Lucifers (D) were a direct copy of John Walker’s Congreves.',
+        paragraphReference: 'Paragraph 8',
       },
       {
-        "id": "c1-t1-p1-q11",
-        "type": "mcq",
-        "question": "Which match type was hazardous because white phosphorus caused deadly poisoning?",
-        "options": [
-          "A: The Ethereal Match",
-          "B: The Instantaneous Light Box",
-          "C: The Congreve",
-          "D: The Promethean Match",
-          "E: Lucifers",
-          "F: The Safety Match",
-          "G: Book Matches"
+        id: 'c1-t1-p1-q11',
+        type: 'mcq',
+        question: 'caused a deadly illness',
+        options: [
+          'A: the Ethereal Match',
+          'B: the Instantaneous Lightbox',
+          'C: Congreves',
+          'D: Lucifers',
+          'E: the first strike-anywhere match',
+          'F: Lundstrom’s safety match',
+          'G: book matches',
+          'H: waterproof matches',
         ],
-        "correctAnswer": "E",
-        "explanation": "Lucifers used deadly white phosphorus causing necrosis in workers.",
-        "explanationSi": "සුදු පොස්පරස් නිසා විෂ සහිත වූයේ Lucifers (E) ය.",
-        "paragraphReference": "Paragraph 6"
+        correctAnswer: 'E',
+        evidence:
+          'About the same time, a French chemistry student called Charles Sauria produced the first “strike-anywhere” match by substituting white phosphorus... from 1845 match-makers exposed to its fumes succumbed to necrosis, a disease that eats away jaw-bones.',
+        explanation:
+          'The first strike-anywhere match (E) used white phosphorus, causing deadly necrosis.',
+        paragraphReference: 'Paragraph 8',
       },
       {
-        "id": "c1-t1-p1-q12",
-        "type": "mcq",
-        "question": "Which match type was the first to resemble modern matches in appearance and action?",
-        "options": [
-          "A: The Ethereal Match",
-          "B: The Instantaneous Light Box",
-          "C: The Congreve",
-          "D: The Promethean Match",
-          "E: Lucifers",
-          "F: The Safety Match",
-          "G: Book Matches"
+        id: 'c1-t1-p1-q12',
+        type: 'mcq',
+        question: 'first to look like modern matches',
+        options: [
+          'A: the Ethereal Match',
+          'B: the Instantaneous Lightbox',
+          'C: Congreves',
+          'D: Lucifers',
+          'E: the first strike-anywhere match',
+          'F: Lundstrom’s safety match',
+          'G: book matches',
+          'H: waterproof matches',
         ],
-        "correctAnswer": "C",
-        "explanation": "The Congreve resembled modern matches.",
-        "explanationSi": "නූතන ගිනිකූරුවලට සමාන වූ මුල්ම වර්ගය Congreve (C) විය.",
-        "paragraphReference": "Paragraph 6"
+        correctAnswer: 'C',
+        evidence:
+          'The first matches resembling those used today were made in 1827 by John Walker... Congreves were splints coated with sulphur and tipped with potassium chlorate.',
+        explanation:
+          'Congreves (C) were the first matches resembling those used today.',
+        paragraphReference: 'Paragraph 7',
       },
       {
-        "id": "c1-t1-p1-q13",
-        "type": "mcq",
-        "question": "Which match type was used by a commercial brewery to advertise its products?",
-        "options": [
-          "A: The Ethereal Match",
-          "B: The Instantaneous Light Box",
-          "C: The Congreve",
-          "D: The Promethean Match",
-          "E: Lucifers",
-          "F: The Safety Match",
-          "G: Book Matches"
+        id: 'c1-t1-p1-q13',
+        type: 'mcq',
+        question: 'first matches used for advertising',
+        options: [
+          'A: the Ethereal Match',
+          'B: the Instantaneous Lightbox',
+          'C: Congreves',
+          'D: Lucifers',
+          'E: the first strike-anywhere match',
+          'F: Lundstrom’s safety match',
+          'G: book matches',
+          'H: waterproof matches',
         ],
-        "correctAnswer": "G",
-        "explanation": "Book matches were used by a brewery to advertise beer.",
-        "explanationSi": "බීර වෙළඳ ප්‍රචාරණය සඳහා භාවිතා කළේ Book Matches (G) ය.",
-        "paragraphReference": "Paragraph 6"
+        correctAnswer: 'G',
+        evidence:
+          'In 1892 the Diamond Match Company pioneered book matches. The innovation didn’t catch on until after 1896, when a brewery had the novel idea of advertising its product in match books.',
+        explanation:
+          'Book matches (G) were the first matches used for advertising.',
+        paragraphReference: 'Paragraph 11',
       },
       {
-        "id": "c1-t1-p1-q14",
-        "type": "mcq",
-        "question": "Which match type consisted of a sealed glass tube containing phosphorus?",
-        "options": [
-          "A: The Ethereal Match",
-          "B: The Instantaneous Light Box",
-          "C: The Congreve",
-          "D: The Promethean Match",
-          "E: Lucifers",
-          "F: The Safety Match",
-          "G: Book Matches"
+        id: 'c1-t1-p1-q14',
+        type: 'mcq',
+        question: 'relied on an airtight glass container',
+        options: [
+          'A: the Ethereal Match',
+          'B: the Instantaneous Lightbox',
+          'C: Congreves',
+          'D: Lucifers',
+          'E: the first strike-anywhere match',
+          'F: Lundstrom’s safety match',
+          'G: book matches',
+          'H: waterproof matches',
         ],
-        "correctAnswer": "A",
-        "explanation": "The Ethereal Match consisted of a sealed glass tube.",
-        "explanationSi": "මුද්‍රා තැබූ වීදුරු බටයක අඩංගු වූයේ Ethereal Match (A) ය.",
-        "paragraphReference": "Paragraph 6"
+        correctAnswer: 'A',
+        evidence:
+          '...a group of French chemists came up with the Phosphoric Candle or Ethereal Match, a sealed glass tube containing a twist of paper tipped with phosphorus.',
+        explanation:
+          'The Ethereal Match (A) relied on a sealed (airtight) glass tube.',
+        paragraphReference: 'Paragraph 6',
       },
       {
-        "id": "c1-t1-p1-q15",
-        "type": "mcq",
-        "question": "Which match type borrowed its chemical formula from a military rocket maker?",
-        "options": [
-          "A: The Ethereal Match",
-          "B: The Instantaneous Light Box",
-          "C: The Congreve",
-          "D: The Promethean Match",
-          "E: Lucifers",
-          "F: The Safety Match",
-          "G: Book Matches"
+        id: 'c1-t1-p1-q15',
+        type: 'mcq',
+        question: 'made with the help of an army design',
+        options: [
+          'A: the Ethereal Match',
+          'B: the Instantaneous Lightbox',
+          'C: Congreves',
+          'D: Lucifers',
+          'E: the first strike-anywhere match',
+          'F: Lundstrom’s safety match',
+          'G: book matches',
+          'H: waterproof matches',
         ],
-        "correctAnswer": "C",
-        "explanation": "The Congreve borrowed formula from military rocket-makers.",
-        "explanationSi": "මිලිටරි රොකට් සාදන්නන්ගේ සූත්‍රය ලබාගත්තේ Congreve (C) ය.",
-        "paragraphReference": "Paragraph 6"
-      }
-    ]
+        correctAnswer: 'C',
+        evidence:
+          'The first matches resembling those used today were made in 1827 by John Walker, an English pharmacist who borrowed the formula from a military rocket-maker called Congreve.',
+        explanation:
+          'Congreves (C) borrowed their formula from a military rocket-maker.',
+        paragraphReference: 'Paragraph 7',
+      },
+    ],
   },
+
+  /* =================================================================== */
+  /* TEST 1 - PASSAGE 2: Zoo conservation programmes (Questions 16-28)   */
+  /* =================================================================== */
   {
-    "id": "c1-t1-pass2",
-    "cambridgeSource": "Cambridge IELTS 1, Test 1 - Reading Passage 2",
-    "title": "Zoo conservation programmes",
-    "paragraphs": [
+    id: 'c1-t1-pass2',
+    cambridgeSource: 'Cambridge IELTS 1, Test 1 - Reading Passage 2',
+    title: 'Zoo conservation programmes',
+    paragraphs: [
       {
-        "label": "Paragraph A",
-        "text": "One of London Zoo’s recent advertisements urged people to \"Join us and help save wildlife\". Zoos throughout the world present themselves as essential champions of global conservation. They highlight their captive breeding programmes, portraying captive reproduction as a crucial lifeline for species teetering on the edge of extinction."
+        label: 'Paragraph 1',
+        text: 'One of London Zoo’s recent advertisements caused me some irritation, so patently did it distort reality. Headlined “Without zoos you might as well tell these animals to get stuffed”, it was bordered with illustrations of several endangered species and went on to extol the myth that without zoos like London Zoo these animals “will almost certainly disappear forever”. With the zoo world’s rather mediocre record on conservation, one might be forgiven for being slightly sceptical about such an advertisement.',
       },
       {
-        "label": "Paragraph B",
-        "text": "The cornerstone of this public relations drive is the World Zoo Conservation Strategy (WZCS), authored by the World Zoo Organization (IUDZG) and the Captive Breeding Specialist Group of the IUCN. The strategy claims that the world’s 10,000 zoos attract over 600 million visitors annually and possess the infrastructure to preserve biodiversity."
+        label: 'Paragraph 2',
+        text: 'Zoos were originally created as places of entertainment, and their suggested involvement with conservation didn’t seriously arise until about 30 years ago, when the Zoological Society of London held the first formal international meeting on the subject. Eight years later, a series of world conferences took place, entitled “The Breeding of Endangered Species”, and from this point onwards conservation became the zoo community’s buzzword. This commitment has now been clearly defined in The World Zoo Conservation Strategy (WZCS, September 1993), which although an important and welcome document does seem to be based on an unrealistic optimism about the nature of the zoo industry',
       },
       {
-        "label": "Paragraph C",
-        "text": "However, this document suffers from severe methodological flaws. Firstly, 10,000 is a serious underestimate of the total number of places masquerading as zoological establishments worldwide; roadside menageries and substandard collections proliferate unmonitored. Secondly, the document uncritically lumps all collections together. One would assume that the calibre of these institutions would have been carefully examined, but fewer than 1,000 zoos belong to recognised national or international associations enforcing ethical standards."
+        label: 'Paragraph 3',
+        text: 'The WZCS estimates that there are about 10,000 zoos in the world, of which around 1,000 represent a core of quality collections capable of participating in co-ordinated conservation programmes. This is probably the document’s first failing, as I believe that 10,000 is a serious underestimate of the total number of places masquerading as zoological establishments. Of course it is difficult to get accurate data but, to put the issue into perspective, I have found that, in a year of working in Eastern Europe, I discover fresh zoos on almost a weekly basis.',
       },
       {
-        "label": "Paragraph D",
-        "text": "Furthermore, captive breeding is prohibitively expensive and plagued by low success rates. Returning captive-bred animals to the wild is fraught with peril. Reintroduced specimens frequently perish due to lack of survival instincts, disease transmission, or territorial conflict with wild counterparts. Most critically, captive breeding does nothing to address the catastrophic destruction of natural habitats."
+        label: 'Paragraph 4',
+        text: 'The second flaw in the reasoning of the WZCS document is the naive faith it places in its 1,000 core zoos. One would assume that the calibre of these institutions would have been carefully examined, but it appears that the criterion for inclusion on this select list might merely be that the zoo is a member of a zoo federation or association. This might be a good starting point, working on the premise that members must meet certain standards, but again the facts don’t support the theory. The greatly respected American Association of Zoological Parks and Aquariums (AAZPA) has had extremely dubious members, and in the UK the Federation of Zoological Gardens of Great Britain and Ireland has occasionally had members that have been roundly censured in the national press. These include Robin Hill Adventure Park on the Isle of Wight, which many considered the most notorious collection of animals in the country. This establishment, which for years was protected by the Isle’s local council (which viewed it as a tourist amenity), was finally closed down following a damning report by a veterinary inspector appointed under the terms of the Zoo Licensing Act 1981. As it was always a collection of dubious repute, one is obliged to reflect upon the standards that the Zoo Federation sets when granting membership. The situation is even worse in developing countries where little money is available for redevelopment and it is hard to see a way of incorporating collections into the overall scheme of the WZCS.',
       },
       {
-        "label": "Paragraph E",
-        "text": "Today approximately 16 species might be said to have been \"saved\" from extinction by captive breeding programmes, although a number of these can hardly be looked upon as resounding successes. Millions of dollars poured into high-profile captive displays would yield exponentially greater ecological returns if redirected towards in situ conservation and habitat protection in developing nations."
-      }
+        label: 'Paragraph 5',
+        text: 'Even assuming that the WZCS’s 1,000 core zoos are all of a high standard complete with scientific staff and research facilities, trained and dedicated keepers, accommodation that permits normal or natural behaviour, and a policy of co-operating fully with one another what might be the potential for conservation? Colin Tudge, author of Last Animals at the Zoo (Oxford University Press, 1992), argues that “if the world’s zoos worked together in co-operative breeding programmes, then even without further expansion they could save around 2,000 species of endangered land vertebrates”. This seems an extremely optimistic proposition from a man who must be aware of the failings and weaknesses of the zoo industry the man who, when a member of the council of London Zoo, had to persuade the zoo to devote more of its activities to conservation. Moreover, where are the facts to support such optimism?',
+      },
+      {
+        label: 'Paragraph 6',
+        text: 'Today approximately 16 species might be said to have been “saved” by captive breeding programmes, although a number of these can hardly be looked upon as resounding successes. Beyond that, about a further 20 species are being seriously considered for zoo conservation programmes. Given that the international conference at London Zoo was held 30 years ago, this is pretty slow progress, and a long way off Tudge’s target of 2,000.',
+      },
     ],
-    "questions": [
+    questions: [
       {
-        "id": "c1-t1-p2-q16",
-        "type": "TFNG",
-        "question": "London Zoo promotes itself as playing an active role in saving wildlife.",
-        "options": [
-          "YES",
-          "NO",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "YES",
-        "explanation": "Paragraph A mentions London Zoo urged people to join them and help save wildlife.",
-        "explanationSi": "ලන්ඩන් සත්වෝද්‍යානය වනජීවී සංරක්ෂණයට දායක වන බවට ප්‍රචාරය කරයි.",
-        "paragraphReference": "Paragraph A"
+        id: 'c1-t1-p2-q16',
+        type: 'TFNG',
+        question: 'London Zoo’s advertisements are dishonest.',
+        options: ['YES', 'NO', 'NOT GIVEN'],
+        correctAnswer: 'YES',
+        evidence:
+          'One of London Zoo’s recent advertisements caused me some irritation, so patently did it distort reality... went on to extol the myth...',
+        explanation:
+          'The writer states that London Zoo’s advertisement patently distorted reality and extolled a myth, agreeing that it is dishonest.',
+        paragraphReference: 'Paragraph 1',
       },
       {
-        "id": "c1-t1-p2-q17",
-        "type": "TFNG",
-        "question": "The World Zoo Conservation Strategy argues that zoos have the capacity to protect biodiversity.",
-        "options": [
-          "YES",
-          "NO",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "YES",
-        "explanation": "Paragraph B states the WZCS claims zoos have the capacity to preserve biodiversity.",
-        "explanationSi": "සත්වෝද්‍යානවලට ජෛව විවිධත්වය රැකීමේ හැකියාව ඇති බව ලේඛනය පවසයි.",
-        "paragraphReference": "Paragraph B"
+        id: 'c1-t1-p2-q17',
+        type: 'TFNG',
+        question: 'Zoos made an insignificant contribution to conservation up until 30 years ago.',
+        options: ['YES', 'NO', 'NOT GIVEN'],
+        correctAnswer: 'YES',
+        evidence:
+          'Zoos were originally created as places of entertainment, and their suggested involvement with conservation didn’t seriously arise until about 30 years ago...',
+        explanation:
+          'Zoos were created for entertainment and did not seriously engage with conservation until about 30 years ago.',
+        paragraphReference: 'Paragraph 2',
       },
       {
-        "id": "c1-t1-p2-q18",
-        "type": "TFNG",
-        "question": "The authors of the WZCS consulted local wildlife rangers in developing nations before drafting the report.",
-        "options": [
-          "YES",
-          "NO",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "NOT GIVEN",
-        "explanation": "The text does not state whether rangers were consulted.",
-        "explanationSi": "වනජීවී නිලධාරීන්ගෙන් උපදෙස් ලබාගත්තේද නැද්ද යන්න සඳහන් නොවේ.",
-        "paragraphReference": "Paragraph B"
+        id: 'c1-t1-p2-q18',
+        type: 'TFNG',
+        question: 'The WZCS document is not known in Eastern Europe.',
+        options: ['YES', 'NO', 'NOT GIVEN'],
+        correctAnswer: 'NOT GIVEN',
+        evidence:
+          '...in a year of working in Eastern Europe, I discover fresh zoos on almost a weekly basis.',
+        explanation:
+          'The writer mentions discovering unlisted zoos in Eastern Europe, but never states whether the WZCS document is known there.',
+        paragraphReference: 'Paragraph 3',
       },
       {
-        "id": "c1-t1-p2-q19",
-        "type": "TFNG",
-        "question": "The author believes that 10,000 is an exaggeration of the total number of zoos worldwide.",
-        "options": [
-          "YES",
-          "NO",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "NO",
-        "explanation": "Paragraph C states 10,000 is a \"serious underestimate\" (not an exaggeration).",
-        "explanationSi": "කර්තෘ පවසන්නේ 10,000 යනු සැබෑ සංඛ්‍යාවට වඩා අඩු තක්සේරුවක් (underestimate) බවයි.",
-        "paragraphReference": "Paragraph C"
+        id: 'c1-t1-p2-q19',
+        type: 'TFNG',
+        question: 'Zoos in the WZCS select list were carefully inspected.',
+        options: ['YES', 'NO', 'NOT GIVEN'],
+        correctAnswer: 'NO',
+        evidence:
+          'One would assume that the calibre of these institutions would have been carefully examined, but it appears that the criterion for inclusion on this select list might merely be that the zoo is a member of a zoo federation or association.',
+        explanation:
+          'The writer contradicts the idea that they were carefully inspected, noting inclusion was merely based on federation membership.',
+        paragraphReference: 'Paragraph 4',
       },
       {
-        "id": "c1-t1-p2-q20",
-        "type": "TFNG",
-        "question": "The majority of zoos worldwide belong to registered national and international zoo associations.",
-        "options": [
-          "YES",
-          "NO",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "NO",
-        "explanation": "Paragraph C states fewer than 1,000 of the 10,000+ zoos belong to recognized associations.",
-        "explanationSi": "පිළිගත් සංගම්වල සාමාජිකත්වය ඇත්තේ 1,000 කට අඩු ප්‍රමාණයකට පමණි.",
-        "paragraphReference": "Paragraph C"
+        id: 'c1-t1-p2-q20',
+        type: 'TFNG',
+        question: 'No-one knew how the animals were being treated at Robin Hill Adventure Park.',
+        options: ['YES', 'NO', 'NOT GIVEN'],
+        correctAnswer: 'NO',
+        evidence:
+          '...in the UK the Federation of Zoological Gardens of Great Britain and Ireland has occasionally had members that have been roundly censured in the national press. These include Robin Hill Adventure Park on the Isle of Wight, which many considered the most notorious collection of animals in the country.',
+        explanation:
+          'Robin Hill Adventure Park was roundly censured in the national press and widely considered notorious, so people clearly knew.',
+        paragraphReference: 'Paragraph 4',
       },
       {
-        "id": "c1-t1-p2-q21",
-        "type": "TFNG",
-        "question": "Captive-bred animals released into the wild cost less to maintain than wild animals.",
-        "options": [
-          "YES",
-          "NO",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "NOT GIVEN",
-        "explanation": "No financial comparison between maintenance of wild vs captive-bred animals is given.",
-        "explanationSi": "මුදාහරින ලද සතුන් නඩත්තු කිරීමේ පිරිවැය සංසන්දනය කර නොමැත.",
-        "paragraphReference": "Paragraph D"
+        id: 'c1-t1-p2-q21',
+        type: 'TFNG',
+        question: 'Colin Tudge was dissatisfied with the treatment of animals at London Zoo.',
+        options: ['YES', 'NO', 'NOT GIVEN'],
+        correctAnswer: 'NOT GIVEN',
+        evidence:
+          '...the man who, when a member of the council of London Zoo, had to persuade the zoo to devote more of its activities to conservation.',
+        explanation:
+          'The passage mentions Tudge persuading London Zoo to devote more activities to conservation, but says nothing about dissatisfaction with how animals were treated there.',
+        paragraphReference: 'Paragraph 5',
       },
       {
-        "id": "c1-t1-p2-q22",
-        "type": "TFNG",
-        "question": "Habitat destruction remains the most critical threat that captive breeding cannot resolve.",
-        "options": [
-          "YES",
-          "NO",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "YES",
-        "explanation": "Paragraph D notes captive breeding does nothing to prevent habitat destruction.",
-        "explanationSi": "වාසස්ථාන විනාශවීම වැළැක්වීමට කෘතිම අභිජනනයෙන් නොහැකි බව සනාථ කරයි.",
-        "paragraphReference": "Paragraph D"
+        id: 'c1-t1-p2-q22',
+        type: 'TFNG',
+        question: 'The number of successful zoo conservation programmes is unsatisfactory.',
+        options: ['YES', 'NO', 'NOT GIVEN'],
+        correctAnswer: 'YES',
+        evidence:
+          'Today approximately 16 species might be said to have been “saved” by captive breeding programmes, although a number of these can hardly be looked upon as resounding successes... Given that the international conference at London Zoo was held 30 years ago, this is pretty slow progress...',
+        explanation:
+          'The writer considers 16 species over 30 years (with many not resounding successes) slow and unsatisfactory progress.',
+        paragraphReference: 'Paragraph 6',
       },
       {
-        "id": "c1-t1-p2-q23",
-        "type": "mcq",
-        "question": "What is the author’s primary criticism of the WZCS document?",
-        "options": [
-          "A: It costs too much to distribute",
-          "B: It fails to distinguish between high-calibre and substandard zoos",
-          "C: It opposes all captive breeding",
-          "D: It ignores the IUCN altogether"
+        id: 'c1-t1-p2-q23',
+        type: 'mcq',
+        question: 'What were the objectives of the WZCS document?',
+        options: [
+          'A: to improve the calibre of zoos world-wide',
+          'B: to identify zoos suitable for conservation practice',
+          'C: to provide funds for zoos in underdeveloped countries',
+          'D: to list the endangered species of the world',
         ],
-        "correctAnswer": "B",
-        "explanation": "Paragraph C states the document uncritically lumps all collections together without examining calibre.",
-        "explanationSi": "උසස් තත්ත්වයේ සහ බාල සත්වෝද්‍යාන අතර වෙනසක් නොදැක්වීම ප්‍රධාන දෝෂයකි.",
-        "paragraphReference": "Paragraph C"
+        correctAnswer: 'B',
+        evidence:
+          'The WZCS estimates that there are about 10,000 zoos in the world, of which around 1,000 represent a core of quality collections capable of participating in co-ordinated conservation programmes.',
+        explanation:
+          'The WZCS aimed to identify a core of quality zoos capable of participating in coordinated conservation programmes (B).',
+        paragraphReference: 'Paragraph 3',
       },
       {
-        "id": "c1-t1-p2-q24",
-        "type": "mcq",
-        "question": "When captive-bred animals are reintroduced into the wild, they often:",
-        "options": [
-          "A: Breed uncontrollably",
-          "B: Join existing zoo herds",
-          "C: Struggle to survive due to lacking natural survival instincts",
-          "D: Migrate to cities"
+        id: 'c1-t1-p2-q24',
+        type: 'mcq',
+        question: 'Why does the writer refer to Robin Hill Adventure Park?',
+        options: [
+          'A: to support the Isle of Wight local council',
+          'B: to criticise the 1981 Zoo Licensing Act',
+          'C: to illustrate a weakness in the WZCS document',
+          'D: to exemplify the standards in AAZPA zoos',
         ],
-        "correctAnswer": "C",
-        "explanation": "Paragraph D states reintroduced animals often perish due to lacking wild survival instincts.",
-        "explanationSi": "ස්වාභාවික පැවැත්මේ හැකියාවන් නොමැති නිසා සතුන් මිය යාමට ඉඩ ඇත.",
-        "paragraphReference": "Paragraph D"
+        correctAnswer: 'C',
+        evidence:
+          'The second flaw in the reasoning of the WZCS document is the naive faith it places in its 1,000 core zoos... These include Robin Hill Adventure Park on the Isle of Wight...',
+        explanation:
+          'Robin Hill Adventure Park is cited to illustrate the second flaw/weakness in the WZCS document (C).',
+        paragraphReference: 'Paragraph 4',
       },
       {
-        "id": "c1-t1-p2-q25",
-        "type": "mcq",
-        "question": "The author suggests that wildlife conservation funding would be better spent on:",
-        "options": [
-          "A: Protecting natural habitats in developing countries",
-          "B: Building larger city aquariums",
-          "C: Breeding rare birds exclusively",
-          "D: Advertising zoo entry tickets"
+        id: 'c1-t1-p2-q25',
+        type: 'mcq',
+        question: 'What word best describes the writer’s response to Colin Tudges’ prediction on captive breeding programmes?',
+        options: [
+          'A: disbelieving',
+          'B: impartial',
+          'C: prejudiced',
+          'D: accepting',
         ],
-        "correctAnswer": "A",
-        "explanation": "Paragraph E states funding would yield far greater returns redirected to habitat protection in developing nations.",
-        "explanationSi": "සංවර්ධනය වෙමින් පවතින රටවල ස්වභාවික පරිසර පද්ධති ආරක්ෂා කිරීමට මුදල් යෙදවීම වඩා ඵලදායී වේ.",
-        "paragraphReference": "Paragraph E"
+        correctAnswer: 'A',
+        evidence:
+          'This seems an extremely optimistic proposition from a man who must be aware of the failings and weaknesses of the zoo industry... Moreover, where are the facts to support such optimism?',
+        explanation:
+          'The writer is sceptical and disbelieving (A) of Tudge’s optimistic prediction.',
+        paragraphReference: 'Paragraph 5',
       },
       {
-        "id": "c1-t1-p2-q26",
-        "type": "mcq",
-        "question": "Why does the author doubt the value of the WZCS? (Select Factor 1):",
-        "options": [
-          "A: The document underestimates total zoo numbers",
-          "B: Zoo tickets are too cheap",
-          "C: Animals dislike visitors",
-          "D: The quality of member zoos is unverified",
-          "E: Very few species have actually been saved",
-          "F: Zoos employ too many staff"
+        id: 'c1-t1-p2-q26',
+        type: 'mcq',
+        question: 'Which THREE of the following factors are mentioned? (Factor 1 of 3)',
+        options: [
+          'A: the number of unregistered zoos in the world',
+          'B: the lack of money in developing countries',
+          'C: the actions of the Isle of Wight local council',
+          'D: the failure of the WZCS to examine the standards of the “core zoos”',
+          'E: the unrealistic aim of the WZCS in view of the number of species “saved” to date',
+          'F: the policies of WZCS zoo managers',
         ],
-        "correctAnswer": "A",
-        "explanation": "Factor A: 10,000 seriously underestimates places masquerading as zoos.",
-        "explanationSi": "සත්වෝද්‍යාන සංඛ්‍යාව අවතක්සේරු කර ඇත (Factor A).",
-        "paragraphReference": "Paragraph C"
+        correctAnswer: 'A // D // E',
+        evidence:
+          'Paragraph 3 (underestimate of total zoos = A), Paragraph 4 (naive faith in 1,000 core zoos without examining calibre = D), Paragraph 6 (only ~16 species saved vs target of 2,000 = E).',
+        explanation:
+          'The three factors that lead the writer to doubt the value of the WZCS document are A, D, and E.',
+        paragraphReference: 'Paragraph 3',
       },
       {
-        "id": "c1-t1-p2-q27",
-        "type": "mcq",
-        "question": "Why does the author doubt the value of the WZCS? (Select Factor 2):",
-        "options": [
-          "A: The document underestimates total zoo numbers",
-          "B: Zoo tickets are too cheap",
-          "C: Animals dislike visitors",
-          "D: The calibre of institutions has not been carefully assessed",
-          "E: Very few species have actually been saved",
-          "F: Zoos employ too many staff"
+        id: 'c1-t1-p2-q27',
+        type: 'mcq',
+        question: 'Which THREE of the following factors are mentioned? (Factor 2 of 3)',
+        options: [
+          'A: the number of unregistered zoos in the world',
+          'B: the lack of money in developing countries',
+          'C: the actions of the Isle of Wight local council',
+          'D: the failure of the WZCS to examine the standards of the “core zoos”',
+          'E: the unrealistic aim of the WZCS in view of the number of species “saved” to date',
+          'F: the policies of WZCS zoo managers',
         ],
-        "correctAnswer": "D",
-        "explanation": "Factor D: One would assume calibre was examined, but it was not.",
-        "explanationSi": "ආයතනවල ප්‍රමිතිය සහ ගුණාත්මකභාවය පරීක්ෂා කර නොමැත (Factor D).",
-        "paragraphReference": "Paragraph C"
+        correctAnswer: 'A // D // E',
+        evidence:
+          'Paragraph 3 (A), Paragraph 4 (D), Paragraph 6 (E).',
+        explanation:
+          'The three factors mentioned by the writer are A, D, and E.',
+        paragraphReference: 'Paragraph 4',
       },
       {
-        "id": "c1-t1-p2-q28",
-        "type": "mcq",
-        "question": "Why does the author doubt the value of the WZCS? (Select Factor 3):",
-        "options": [
-          "A: The document underestimates total zoo numbers",
-          "B: Zoo tickets are too cheap",
-          "C: Animals dislike visitors",
-          "D: The calibre of institutions has not been carefully assessed",
-          "E: Only a negligible number of species (approx 16) have been saved",
-          "F: Zoos employ too many staff"
+        id: 'c1-t1-p2-q28',
+        type: 'mcq',
+        question: 'Which THREE of the following factors are mentioned? (Factor 3 of 3)',
+        options: [
+          'A: the number of unregistered zoos in the world',
+          'B: the lack of money in developing countries',
+          'C: the actions of the Isle of Wight local council',
+          'D: the failure of the WZCS to examine the standards of the “core zoos”',
+          'E: the unrealistic aim of the WZCS in view of the number of species “saved” to date',
+          'F: the policies of WZCS zoo managers',
         ],
-        "correctAnswer": "E",
-        "explanation": "Factor E: Only approx 16 species might be said to have been saved.",
-        "explanationSi": "බේරාගෙන ඇත්තේ සත්ත්ව විශේෂ 16 ක් වැනි ඉතා සුළු ප්‍රමාණයකි (Factor E).",
-        "paragraphReference": "Paragraph E"
-      }
-    ]
+        correctAnswer: 'A // D // E',
+        evidence:
+          'Paragraph 3 (A), Paragraph 4 (D), Paragraph 6 (E).',
+        explanation:
+          'The three factors mentioned by the writer are A, D, and E.',
+        paragraphReference: 'Paragraph 6',
+      },
+    ],
   },
+
+  /* =================================================================== */
+  /* TEST 1 - PASSAGE 3: ARCHITECTURE - Reaching for the Sky (Q29-40)    */
+  /* =================================================================== */
   {
-    "id": "c1-t1-pass3",
-    "cambridgeSource": "Cambridge IELTS 1, Test 1 - Reading Passage 3",
-    "title": "Architecture - Reaching for the Sky",
-    "paragraphs": [
+    id: 'c1-t1-pass3',
+    cambridgeSource: 'Cambridge IELTS 1, Test 1 - Reading Passage 3',
+    title: 'ARCHITECTURE - Reaching for the Sky',
+    paragraphs: [
       {
-        "label": "Paragraph A",
-        "text": "Architecture is the art and science of designing buildings and structures. Throughout history, vernacular architectural traditions utilized local timber and stone to create resilient dwellings tailored to indigenous climates."
+        label: 'Paragraph 1',
+        text: 'Architecture is the art and science of designing buildings and structures. A building reflects the scientific and technological achievements of the age as well as the ideas and aspirations of the designer and client. The appearance of individual buildings, however, is often controversial.',
       },
       {
-        "label": "Paragraph B",
-        "text": "The Industrial Revolution transformed the discipline. With the development of mass manufacturing, wrought iron and subsequently structural steel allowed architects to envision buildings of unprecedented height. The rapid expansion of 19th-century urban populations created acute overcrowding and helped to turn parts of cities into slums."
+        label: 'Paragraph 2',
+        text: 'The use of an architectural style cannot be said to start or finish on a specific date. Neither is it possible to say exactly what characterises a particular movement. But the origins of what is now generally known as modern architecture can be traced back to the social and technological changes of the 18th and 19th centuries.',
       },
       {
-        "label": "Paragraph C",
-        "text": "In the early 20th century, European visionary architects pioneered Modernism. They stripped structures of ornate classical decoration, asserting that form must strictly follow function. Buildings were designed as efficient \"machines for living\"."
+        label: 'Paragraph 3',
+        text: 'Instead of using timber, stone and traditional building techniques, architects began to explore ways of creating buildings by using the latest technology and materials such as steel, glass and concrete strengthened steel bars, known as reinforced concrete. Technological advances also helped bring about the decline of rural industries and an increase in urban populations as people moved to the towns to work in the new factories. Such rapid and uncontrolled growth helped to turn parts of cities into slums.',
       },
       {
-        "label": "Paragraph D",
-        "text": "This philosophy evolved into the International Style, characterized by reinforced concrete, structural steel frames, and expansive glass curtain walls. However, the economic depression of the 1930s prevented these ideas from being widely realised until postwar conditions improved."
+        label: 'Paragraph 4',
+        text: 'By the 1920s architects throughout Europe were reacting against the conditions created by industrialisation. A new style of architecture emerged to reflect more idealistic notions for the future. It was made possible by new materials and construction techniques and was known as Modernism.',
       },
       {
-        "label": "Paragraph E",
-        "text": "In the 1950s and 60s, city authorities embraced mass-produced, low-cost high-rises to solve housing shortages. Unfortunately, many badly designed buildings and multi-storey towers failed socially and structurally, leading to widespread alienation and demolition."
+        label: 'Paragraph 5',
+        text: 'By the 1930s many buildings emerging from this movement were designed in the International Style. This was largely characterised by the bold use of new materials and simple, geometric forms, often with white walls supported by stilt-like pillars. These were stripped of unnecessary decoration that would detract from their primary purpose — to be used or lived in.',
       },
       {
-        "label": "Paragraph F",
-        "text": "A public backlash spurred the historic preservation movement, demanding the protection of heritage streetscapes. Simultaneously, High-Tech architecture emerged, proudly exposing structural bracing and mechanical ducts on building exteriors, exemplified by the Pompidou Centre in Paris."
+        label: 'Paragraph 6',
+        text: 'Walter Gropius, Charles Jeanneret (better known as Le Corbusier) and Ludwig Mies van der Rohe were among the most influential of the many architects who contributed to the development of Modernism in the first half of the century. But the economic depression of the 1930s and the second world war (1939-45) prevented their ideas from being widely realised until the economic conditions improved and war-torn cities had to be rebuilt. By the 1950s, the International Style had developed into a universal approach to building, which standardised the appearance of new buildings in cities across the world.',
       },
       {
-        "label": "Paragraph G",
-        "text": "Today, contemporary architecture embraces a co-existence of styles. Modern cities juxtapose historic restoration with cutting-edge ecological glass towers, acknowledging that diversity and context matter above dogma."
-      }
+        label: 'Paragraph 7',
+        text: 'Unfortunately, this Modernist interest in geometric simplicity and function became exploited for profit. The rediscovery of quick-and-easy-to-handle reinforced concrete and an improved ability to prefabricate building sections meant that builders could meet the budgets of commissioning authorities and handle a renewed demand for development quickly and cheaply. But this led to many badly designed buildings, which discredited the original aims of Modernism.',
+      },
+      {
+        label: 'Paragraph 8',
+        text: 'Influenced by Le Corbusier’s ideas on town planning, every large British city built multi-storey housing estates in the 1960s. Mass-produced, low-cost high-rises seemed to offer a solution to the problem of housing a growing inner-city population. But far from meeting human needs, the new estates often proved to be windswept deserts lacking essential social facilities and services. Many of these buildings were poorly designed and constructed and have since been demolished.',
+      },
+      {
+        label: 'Paragraph 9',
+        text: 'By the 1970s, a new respect for the place of buildings within the existing townscape arose. Preserving historic buildings or keeping only their facades (or fronts) grew common. Architects also began to make more use of building styles and materials that were traditional to the area. The architectural style usually referred to as High Tech was also emerging. It celebrated scientific and engineering achievements by openly parading the sophisticated techniques used in construction. Such buildings are commonly made of metal and glass; examples are Stansted airport and the Lloyd’s building in London.',
+      },
+      {
+        label: 'Paragraph 10',
+        text: 'Disillusionment at the failure of many of the poor imitations of Modernist architecture led to interest in various styles and ideas from the past and present. By the 1980s the coexistence of different styles of architecture in the same building became known as Post Modern. Other architects looked back to the classical tradition. The trend in architecture now favours smaller scale building design that reflects a growing public awareness of environmental issues such as energy efficiency. Like the Modernists, people today recognise that a well designed environment improves the quality of life but is not necessarily achieved by adopting one well defined style of architecture.',
+      },
+      {
+        label: 'Paragraph 11',
+        text: 'Twentieth century architecture will mainly be remembered for its tall buildings. They have been made possible by the development of light steel frames and safe passenger lifts. They originated in the US over a century ago to help meet the demand for more economical use of land. As construction techniques improved, the skyscraper became a reality.\n\nRuth Coleman',
+      },
     ],
-    "questions": [
+    tableContext: {
+      title: 'Questions 29-35',
+      headers: ['PERIOD', 'STYLE OF PERIOD', 'BUILDING MATERIALS', 'CHARACTERISTICS'],
+      rows: [
+        ['Before 18th century', 'traditional', '(29)', ''],
+        ['1920s', 'introduction of (30)', 'steel, glass and concrete', 'exploration of latest technology'],
+        ['1930s - 1950s', '(31)', '', 'geometric forms'],
+        ['1960s', 'decline of Modernism', 'pre-fabricated sections', '(32)'],
+        ['1970s', 'end of Modernist era', 'traditional materials', '(33) historic buildings'],
+        ['1970s', 'beginning of (34) era', 'metal and glass', 'sophisticated techniques paraded'],
+        ['1980s', 'Post-Modernism', '', '(35)'],
+      ],
+    },
+    matchingContext: {
+      title: 'Questions 36-40',
+      instruction:
+        'Reading Passage 3 describes a number of cause and effect relationships. Match each Cause (36-40) in List A, with its Effect (A-H) in List B.\nWrite your answers (A-H) in boxes 36-40 on your answer sheet.\nNB There are more effects in List B than you will need, so you will not use all of them. You may use any effect more than once if you wish.',
+      options: [
+        { code: 'A', text: 'The quality of life is improved.' },
+        { code: 'B', text: 'Architecture reflects the age.' },
+        { code: 'C', text: 'A number of these have been knocked down.' },
+        { code: 'D', text: 'Light steel frames and lifts are developed.' },
+        { code: 'E', text: 'Historical buildings are preserved.' },
+        { code: 'F', text: 'All decoration is removed.' },
+        { code: 'G', text: 'Parts of cities become slums.' },
+        { code: 'H', text: 'Modernist ideas cannot be put into practice until the second half of the 20th century.' },
+      ],
+    },
+    questions: [
       {
-        "id": "c1-t1-p3-q29",
-        "type": "summary",
-        "question": "Traditional vernacular builders constructed resilient shelters utilizing local __________.",
-        "correctAnswer": "timber and stone",
-        "explanation": "Vernacular architecture relied on local timber and stone.",
-        "explanationSi": "දේශීය දැව සහ ගල් (timber and stone) භාවිතා කර ගොඩනැගිලි තනන ලදී.",
-        "paragraphReference": "Paragraph A"
+        id: 'c1-t1-p3-q29',
+        type: 'summary',
+        question: 'Before 18th century — Building Materials',
+        correctAnswer: 'timber and stone // timber, stone // wood and stone // stone and timber',
+        evidence:
+          'Instead of using timber, stone and traditional building techniques, architects began to explore ways of creating buildings by using the latest technology...',
+        explanation:
+          'Before the 18th century, traditional building materials were "timber, stone" (or "timber and stone").',
+        paragraphReference: 'Paragraph 3',
       },
       {
-        "id": "c1-t1-p3-q30",
-        "type": "summary",
-        "question": "The early 20th century functionalist design movement was known as __________.",
-        "correctAnswer": "Modernism",
-        "explanation": "Functionalist visionaries pioneered Modernism.",
-        "explanationSi": "20 වන සියවසේ මුල් භාගයේ බිහිවූයේ Modernism ව්‍යාපාරයයි.",
-        "paragraphReference": "Paragraph C"
+        id: 'c1-t1-p3-q30',
+        type: 'summary',
+        question: '1920s — Style of Period: introduction of ..........',
+        correctAnswer: 'Modernism',
+        evidence:
+          'By the 1920s architects throughout Europe were reacting against the conditions created by industrialisation... It was made possible by new materials and construction techniques and was known as Modernism.',
+        explanation:
+          'The 1920s saw the introduction of "Modernism".',
+        paragraphReference: 'Paragraph 4',
       },
       {
-        "id": "c1-t1-p3-q31",
-        "type": "summary",
-        "question": "Postwar architecture dominated by steel frames and glass curtain walls was termed the __________.",
-        "correctAnswer": "International style",
-        "explanation": "Characterized by concrete and glass, termed the International Style.",
-        "explanationSi": "වීදුරු සහ වානේ භාවිතයෙන් යුත් ශෛලිය International style විය.",
-        "paragraphReference": "Paragraph D"
+        id: 'c1-t1-p3-q31',
+        type: 'summary',
+        question: '1930s - 1950s — Style of Period',
+        correctAnswer: 'International Style // the International Style',
+        evidence:
+          'By the 1930s many buildings emerging from this movement were designed in the International Style.',
+        explanation:
+          'From the 1930s to the 1950s, the style characterized by geometric forms was the "International Style".',
+        paragraphReference: 'Paragraph 5',
       },
       {
-        "id": "c1-t1-p3-q32",
-        "type": "summary",
-        "question": "Social alienation and demolition resulted from the failure of __________.",
-        "correctAnswer": "badly designed buildings",
-        "explanation": "Many badly designed buildings / multi-storey high-rises failed and were demolished.",
-        "explanationSi": "නුසුදුසු ලෙස සැලසුම් කළ ගොඩනැගිලි (badly designed buildings) කඩා බිඳ දැමීමට සිදුවිය.",
-        "paragraphReference": "Paragraph E"
+        id: 'c1-t1-p3-q32',
+        type: 'summary',
+        question: '1960s — Characteristics',
+        correctAnswer: 'badly designed buildings // poorly designed buildings // multi-storey housing // multi-storey housing estates // low-cost high-rises // poorly designed',
+        evidence:
+          'But this led to many badly designed buildings... Influenced by Le Corbusier’s ideas on town planning, every large British city built multi-storey housing estates in the 1960s... Many of these buildings were poorly designed and constructed...',
+        explanation:
+          'The 1960s decline of Modernism using prefabricated sections resulted in "badly designed buildings" / "multi-storey housing estates".',
+        paragraphReference: 'Paragraph 7',
       },
       {
-        "id": "c1-t1-p3-q33",
-        "type": "summary",
-        "question": "Public reaction against sterile concrete redevelopment gave birth to the historic __________ movement.",
-        "correctAnswer": "preservation",
-        "explanation": "Spurred the historic preservation movement.",
-        "explanationSi": "ඓතිහාසික ගොඩනැගිලි සංරක්ෂණ (preservation) ව්‍යාපාරය බිහිවිය.",
-        "paragraphReference": "Paragraph F"
+        id: 'c1-t1-p3-q33',
+        type: 'summary',
+        question: '1970s (end of Modernist era) — Characteristics: .......... historic buildings',
+        correctAnswer: 'preservation of // preserving',
+        evidence:
+          'By the 1970s, a new respect for the place of buildings within the existing townscape arose. Preserving historic buildings or keeping only their facades (or fronts) grew common.',
+        explanation:
+          'In the 1970s, "preserving" (or "preservation of") historic buildings became a key characteristic.',
+        paragraphReference: 'Paragraph 9',
       },
       {
-        "id": "c1-t1-p3-q34",
-        "type": "summary",
-        "question": "An architectural style that celebrates mechanical systems on the exterior is known as __________.",
-        "correctAnswer": "High-Tech",
-        "explanation": "High-Tech architecture exposes structural and mechanical ducts externally.",
-        "explanationSi": "යන්ත්‍රෝපකරණ පිටතට පෙනෙන ලෙස නිර්මාණය වූයේ High-Tech ශෛලියයි.",
-        "paragraphReference": "Paragraph F"
+        id: 'c1-t1-p3-q34',
+        type: 'summary',
+        question: '1970s — Style of Period: beginning of .......... era',
+        correctAnswer: 'High Tech // High-Tech',
+        evidence:
+          'The architectural style usually referred to as High Tech was also emerging. It celebrated scientific and engineering achievements by openly parading the sophisticated techniques used in construction.',
+        explanation:
+          'The 1970s style using metal and glass and parading sophisticated techniques was the "High Tech" era.',
+        paragraphReference: 'Paragraph 9',
       },
       {
-        "id": "c1-t1-p3-q35",
-        "type": "summary",
-        "question": "Modern urban design is characterized by the harmonious __________.",
-        "correctAnswer": "co-existence of styles",
-        "explanation": "Contemporary cities feature a co-existence of styles.",
-        "explanationSi": "වර්තමාන නගර විවිධ ගෘහ නිර්මාණ ශෛලීන්ගේ සහජීවනයක් (co-existence of styles) දක්වයි.",
-        "paragraphReference": "Paragraph G"
+        id: 'c1-t1-p3-q35',
+        type: 'summary',
+        question: '1980s (Post-Modernism) — Characteristics',
+        correctAnswer: 'coexistence of styles // different styles // coexistence of different styles // styles mixed',
+        evidence:
+          'By the 1980s the coexistence of different styles of architecture in the same building became known as Post Modern.',
+        explanation:
+          'Post-Modernism in the 1980s was characterized by the "coexistence of styles" (or "different styles").',
+        paragraphReference: 'Paragraph 10',
       },
       {
-        "id": "c1-t1-p3-q36",
-        "type": "mcq",
-        "question": "Rapid and uncontrolled growth in 19th-century urban populations:",
-        "options": [
-          "A: Sparked riots",
-          "B: Eliminated sickness",
-          "C: Were demolished later",
-          "D: Made economical use of land",
-          "E: Stopped timber trade",
-          "F: Stripped decoration",
-          "G: Helped turn parts of cities into slums",
-          "H: Delayed implementation until economy recovered"
+        id: 'c1-t1-p3-q36',
+        type: 'mcq',
+        question: 'A rapid movement of people from rural areas to cities is triggered by technological advance.',
+        options: [
+          'A: The quality of life is improved.',
+          'B: Architecture reflects the age.',
+          'C: A number of these have been knocked down.',
+          'D: Light steel frames and lifts are developed.',
+          'E: Historical buildings are preserved.',
+          'F: All decoration is removed.',
+          'G: Parts of cities become slums.',
+          'H: Modernist ideas cannot be put into practice until the second half of the 20th century.',
         ],
-        "correctAnswer": "G",
-        "explanation": "Paragraph B explicitly states rapid growth turned parts of cities into slums (G).",
-        "explanationSi": "නගර කොටස් මුඩුක්කු බවට පත්කිරීමට (G) හේතු විය.",
-        "paragraphReference": "Paragraph B"
+        correctAnswer: 'G',
+        evidence:
+          'Technological advances also helped bring about the decline of rural industries and an increase in urban populations as people moved to the towns to work in the new factories. Such rapid and uncontrolled growth helped to turn parts of cities into slums.',
+        explanation:
+          'Rapid rural-to-urban migration caused parts of cities to become slums (G).',
+        paragraphReference: 'Paragraph 3',
       },
       {
-        "id": "c1-t1-p3-q37",
-        "type": "mcq",
-        "question": "The functionalist philosophy of the early Modernist movement:",
-        "options": [
-          "A: Sparked riots",
-          "B: Eliminated sickness",
-          "C: Were demolished later",
-          "D: Made economical use of land",
-          "E: Stopped timber trade",
-          "F: Stripped buildings of unnecessary decoration",
-          "G: Helped turn parts of cities into slums",
-          "H: Delayed implementation until economy recovered"
+        id: 'c1-t1-p3-q37',
+        type: 'mcq',
+        question: 'Buildings become simple and functional.',
+        options: [
+          'A: The quality of life is improved.',
+          'B: Architecture reflects the age.',
+          'C: A number of these have been knocked down.',
+          'D: Light steel frames and lifts are developed.',
+          'E: Historical buildings are preserved.',
+          'F: All decoration is removed.',
+          'G: Parts of cities become slums.',
+          'H: Modernist ideas cannot be put into practice until the second half of the 20th century.',
         ],
-        "correctAnswer": "F",
-        "explanation": "Paragraph C states buildings were stripped of unnecessary decoration (F).",
-        "explanationSi": "අනවශ්‍ය විසිතුරු කැටයම් ඉවත් කරන ලදී (F).",
-        "paragraphReference": "Paragraph C"
+        correctAnswer: 'F',
+        evidence:
+          'This was largely characterised by the bold use of new materials and simple, geometric forms... These were stripped of unnecessary decoration that would detract from their primary purpose — to be used or lived in.',
+        explanation:
+          'To make buildings simple and functional, all unnecessary decoration was removed (F).',
+        paragraphReference: 'Paragraph 5',
       },
       {
-        "id": "c1-t1-p3-q38",
-        "type": "mcq",
-        "question": "The economic depression of the 1930s:",
-        "options": [
-          "A: Sparked riots",
-          "B: Eliminated sickness",
-          "C: Were demolished later",
-          "D: Made economical use of land",
-          "E: Stopped timber trade",
-          "F: Stripped decoration",
-          "G: Helped turn parts of cities into slums",
-          "H: Prevented ideas from being widely realised until conditions improved"
+        id: 'c1-t1-p3-q38',
+        type: 'mcq',
+        question: 'An economic depression and the second world war hit Europe.',
+        options: [
+          'A: The quality of life is improved.',
+          'B: Architecture reflects the age.',
+          'C: A number of these have been knocked down.',
+          'D: Light steel frames and lifts are developed.',
+          'E: Historical buildings are preserved.',
+          'F: All decoration is removed.',
+          'G: Parts of cities become slums.',
+          'H: Modernist ideas cannot be put into practice until the second half of the 20th century.',
         ],
-        "correctAnswer": "H",
-        "explanation": "Paragraph D states the depression delayed implementation until conditions improved (H).",
-        "explanationSi": "ආර්ථිකය යහපත් වන තෙක් අදහස් ක්‍රියාත්මක කිරීම ප්‍රමාද විය (H).",
-        "paragraphReference": "Paragraph D"
+        correctAnswer: 'H',
+        evidence:
+          'But the economic depression of the 1930s and the second world war (1939-45) prevented their ideas from being widely realised until the economic conditions improved and war-torn cities had to be rebuilt. By the 1950s...',
+        explanation:
+          'The 1930s depression and WWII prevented Modernist ideas from being put into practice until the second half of the 20th century (H).',
+        paragraphReference: 'Paragraph 6',
       },
       {
-        "id": "c1-t1-p3-q39",
-        "type": "mcq",
-        "question": "Mass-produced low-cost multi-storey towers built in the 1950s:",
-        "options": [
-          "A: Sparked riots",
-          "B: Eliminated sickness",
-          "C: Have since been demolished due to failures",
-          "D: Made economical use of land",
-          "E: Stopped timber trade",
-          "F: Stripped decoration",
-          "G: Helped turn parts of cities into slums",
-          "H: Delayed implementation until economy recovered"
+        id: 'c1-t1-p3-q39',
+        type: 'mcq',
+        question: 'Multi-storey housing estates are built according to contemporary ideas on town planning.',
+        options: [
+          'A: The quality of life is improved.',
+          'B: Architecture reflects the age.',
+          'C: A number of these have been knocked down.',
+          'D: Light steel frames and lifts are developed.',
+          'E: Historical buildings are preserved.',
+          'F: All decoration is removed.',
+          'G: Parts of cities become slums.',
+          'H: Modernist ideas cannot be put into practice until the second half of the 20th century.',
         ],
-        "correctAnswer": "C",
-        "explanation": "Paragraph E confirms many such buildings have since been demolished (C).",
-        "explanationSi": "අසාර්ථක වීම නිසා පසුව කඩා බිඳ දමන ලදී (C).",
-        "paragraphReference": "Paragraph E"
+        correctAnswer: 'C',
+        evidence:
+          'Influenced by Le Corbusier’s ideas on town planning, every large British city built multi-storey housing estates in the 1960s... Many of these buildings were poorly designed and constructed and have since been demolished.',
+        explanation:
+          'Many of these 1960s multi-storey housing estates have since been demolished / knocked down (C).',
+        paragraphReference: 'Paragraph 8',
       },
       {
-        "id": "c1-t1-p3-q40",
-        "type": "mcq",
-        "question": "Multi-storey buildings and skyscrapers originally originated in the US to:",
-        "options": [
-          "A: Sparked riots",
-          "B: Eliminated sickness",
-          "C: Were demolished later",
-          "D: Help meet the demand for more economical use of urban land",
-          "E: Stopped timber trade",
-          "F: Stripped decoration",
-          "G: Helped turn parts of cities into slums",
-          "H: Delayed implementation until economy recovered"
+        id: 'c1-t1-p3-q40',
+        type: 'mcq',
+        question: 'Less land must be used for building.',
+        options: [
+          'A: The quality of life is improved.',
+          'B: Architecture reflects the age.',
+          'C: A number of these have been knocked down.',
+          'D: Light steel frames and lifts are developed.',
+          'E: Historical buildings are preserved.',
+          'F: All decoration is removed.',
+          'G: Parts of cities become slums.',
+          'H: Modernist ideas cannot be put into practice until the second half of the 20th century.',
         ],
-        "correctAnswer": "D",
-        "explanation": "Originating in US to meet demand for economical use of urban land (D).",
-        "explanationSi": "නාගරික ඉඩම් වඩාත් කාර්යක්ෂමව භාවිතා කිරීමේ අවශ්‍යතාව (D) සඳහා බිහිවිය.",
-        "paragraphReference": "Paragraph B"
-      }
-    ]
+        correctAnswer: 'D',
+        evidence:
+          'Twentieth century architecture will mainly be remembered for its tall buildings. They have been made possible by the development of light steel frames and safe passenger lifts. They originated in the US over a century ago to help meet the demand for more economical use of land.',
+        explanation:
+          'The need for more economical use of land led to tall buildings made possible by developing light steel frames and lifts (D).',
+        paragraphReference: 'Paragraph 11',
+      },
+    ],
   },
+
+  /* =================================================================== */
+  /* TEST 2 - PASSAGE 1: Right and left-handedness in humans (Q1-12)     */
+  /* =================================================================== */
   {
-    "id": "c1-t2-pass1",
-    "cambridgeSource": "Cambridge IELTS 1, Test 2 - Reading Passage 1",
-    "title": "Right and left-handedness in humans",
-    "paragraphs": [
+    id: 'c1-t2-pass1',
+    cambridgeSource: 'Cambridge IELTS 1, Test 2 - Reading Passage 1',
+    title: 'Right and left-handedness in humans',
+    paragraphs: [
       {
-        "label": "Paragraph 1",
-        "text": "Why do humans, virtually alone among all animal species, display a striking population-level hand preference? In all human cultures across the globe, roughly 90% of individuals are right-handed. Professor Turner noted that this distinctive asymmetry in the human population is itself systematic and genetically influenced."
+        label: 'Paragraph 1',
+        text: 'Why do humans, virtually alone among all animal species, display a distinct left or right-handedness? Not even our closest relatives among the apes possess such decided lateral asymmetry, as psychologists call it. Yet about 90 per cent of every human population that has ever lived appears to have been right-handed. Professor Bryan Turner at Deakin University has studied the research literature on left-handedness and found that handedness goes with sidedness. So nine out of ten people are right-handed and eight are right-footed. He noted that this distinctive asymmetry in the human population is itself systematic. “Humans think in categories: black and white, up and down, left and right. It’s a system of signs that enables us to categorise phenomena that are essentially ambiguous.”',
       },
       {
-        "label": "Paragraph 2",
-        "text": "Dr Geschwind and colleagues discovered that the anatomical left-right asymmetry of the human brain exists well before birth. They documented that fetal ultrasound scans show thumb-sucking preferences as early as the first trimester, with the vast majority favoring the right thumb. Furthermore, demographic surveys consistently reveal that there are significantly more left-handed males than females."
+        label: 'Paragraph 2',
+        text: 'Research has shown that there is a genetic or inherited element to handedness. But while left-handedness tends to run in families, neither left nor right handers will automatically produce off-spring with the same handedness; in fact about 6 per cent of children with two right-handed parents will be left-handed. However, among two left-handed parents, perhaps 40 per cent of the children will also be left-handed. With one right and one left-handed parent, 15 to 20 per cent of the offspring will be left-handed. Even among identical twins who have exactly the same genes, one in six pairs will differ in their handedness.',
       },
       {
-        "label": "Paragraph 3",
-        "text": "Marian Annett proposed the \"right-shift\" genetic theory. She argued that the evolutionary emergence of human speech and language processing in the left cerebral hemisphere coincided with right-handed manual dexterity. Intriguingly, Annett demonstrated that if a left-handed individual suffers unilateral brain damage in the left hemisphere, their clinical recovery of speech is quite often better and more rapid than that of a strongly right-handed patient."
+        label: 'Paragraph 3',
+        text: 'What then makes people left-handed if it is not simply genetic? Other factors must be at work and researchers have turned to the brain for clues. In the 1860s the French surgeon and anthropologist, Dr Paul Broca, made the remarkable finding that patients who had lost their powers of speech as a result of a stroke (a blood clot in the brain) had paralysis of the right half of their body. He noted that since the left hemisphere of the brain controls the right half of their body, and vice versa, the brain damage must have been in the brain’s left hemisphere. Psychologists now believe that among right-handed people, probably 95 per cent have their language centre in the left hemisphere, while 5 per cent have right-sided language. Left-handers, however, do not show the reverse pattern but instead a majority also have their language in the left hemisphere. Some 30 per cent have right hemisphere language.',
       },
       {
-        "label": "Paragraph 4",
-        "text": "Neurological mapping shows that among right-handers, 95% process language predominantly in the left hemisphere. Among left-handers, approximately 70% still process language on the left, but 15-20% show bilateral speech representation, and roughly 15% utilize the right hemisphere exclusively. In twins, the concordance of left-handedness reaches about 40%, whereas among siblings in general the baseline incidence remains roughly 6%."
+        label: 'Paragraph 4',
+        text: 'Dr Brinkman, a brain researcher at the Australian National University in Canberra, has suggested that evolution of speech went with right-handed preference. According to Brinkman, as the brain evolved, one side became specialised for fine control of movement (necessary for producing speech) and along with this evolution came right-hand preference. According to Brinkman, most left-handers have left hemisphere dominance but also some capacity in the right hemisphere. She has observed that if a left-handed person is brain-damaged in the left hemisphere, the recovery of speech is quite often better and this is explained by the fact that left-handers have a more bilateral speech function.',
       },
       {
-        "label": "Paragraph 5",
-        "text": "Professor Corballis argues that human handedness reflects deep evolutionary adaptations linked to bipedalism, stone-tool manufacture, and symbolic gestural communication. Left-handedness persists in the gene pool due to frequency-dependent advantages in interactive combat and athletics."
-      }
+        label: 'Paragraph 5',
+        text: 'In her studies of macaque monkeys, Brinkman has noticed that primates (monkeys) seem to learn a hand preference from their mother in the first year of life but this could be one hand or the other. In humans, however, the specialisation in function of the two hemispheres results in anatomical differences: areas that are involved with the production of speech are usually larger on the left side than on the right. Since monkeys have not acquired the art of speech, one would not expect to see such a variation but Brinkman claims to have discovered a trend in monkeys towards the asymmetry that is evident in the human brain.',
+      },
+      {
+        label: 'Paragraph 6',
+        text: 'Two American researchers, Geschwind and Galaburda, studied the brains of human embryos and discovered that the left-right asymmetry exists before birth. But as the brain develops, a number of things can affect it. Every brain is initially female in its organisation and it only becomes a male brain when the male foetus begins to secrete hormones. Geschwind and Galaburda knew that different parts of the brain mature at different rates; the right hemisphere develops first, then the left. Moreover, a girl’s brain develops somewhat faster than that of a boy. So, if something happens to the brain’s development during pregnancy, it is more likely to be affected in a male and the hemisphere more likely to be involved is the left. The brain may become less lateralised and this in turn could result in left-handedness and the development of certain superior skills that have their origins in the left hemisphere such as logic, rationality and abstraction. It should be no surprise then that among mathematicians and architects, left-handers tend to be more common and there are more left-handed males than females.',
+      },
+      {
+        label: 'Paragraph 7',
+        text: 'The results of this research may be some consolation to left-handers who have for centuries lived in a world designed to suit right-handed people. However, what is alarming, according to Mr. Charles Moore, a writer and journalist, is the way the word “right” reinforces its own virtue. Subliminally he says, language tells people to think that anything on the right can be trusted while anything on the left is dangerous or even sinister. We speak of left-handed compliments and according to Moore, “it is no coincidence that left-handed children, forced to use their right hand, often develop a stammer as they are robbed of their freedom of speech”. However, as more research is undertaken on the causes of left-handedness, attitudes towards left-handed people are gradually changing for the better. Indeed when the champion tennis player Ivan Lendl was asked what the single thing was that he would choose in order to improve his game, he said he would like to become a left-hander.',
+      },
     ],
-    "questions": [
+    matchingContext: {
+      title: 'Questions 1-7',
+      instruction:
+        'Use the information in the text to match the people (listed A-E) with the opinions (listed 1-7) below. Write the appropriate letter (A-E) in boxes 1-7 on your answer sheet. Some people match more than one opinion.',
+      options: [
+        { code: 'A', text: 'Dr Broca' },
+        { code: 'B', text: 'Dr Brinkman' },
+        { code: 'C', text: 'Geschwind and Galaburda' },
+        { code: 'D', text: 'Charles Moore' },
+        { code: 'E', text: 'Professor Turner' },
+      ],
+    },
+    tableContext: {
+      title: 'Percentage of children left-handed',
+      headers: ["Parents' handedness", 'Percentage of children left-handed'],
+      rows: [
+        ['One parent left-handed\nOne parent right-handed', '(8) ........................................ %'],
+        ['Both parents left-handed', '(9) ........................................ %'],
+        ['Both parents right-handed', '(10) ........................................ %'],
+      ],
+    },
+    questions: [
       {
-        "id": "c1-t2-p1-q1",
-        "type": "mcq",
-        "question": "Which researcher argued that the evolution of human speech coincided with right-hand preference?",
-        "options": [
-          "A: Professor Turner",
-          "B: Marian Annett",
-          "C: Dr Geschwind",
-          "D: Professor Corballis",
-          "E: Dr Springer"
+        id: 'c1-t2-p1-q1',
+        type: 'mcq',
+        question: 'Human beings started to show a preference for right-handedness when they first developed language.',
+        options: [
+          'A: Dr Broca',
+          'B: Dr Brinkman',
+          'C: Geschwind and Galaburda',
+          'D: Charles Moore',
+          'E: Professor Turner',
         ],
-        "correctAnswer": "B",
-        "explanation": "Marian Annett proposed speech evolution went hand-in-hand with right-handed preference.",
-        "explanationSi": "භාෂා පරිණාමය සහ දකුණත් හුරුව එකට බැඳී ඇති බව Marian Annett (B) පෙන්වා දුන්නාය.",
-        "paragraphReference": "Paragraph 3"
+        correctAnswer: 'B',
+        evidence:
+          'Dr Brinkman, a brain researcher at the Australian National University in Canberra, has suggested that evolution of speech went with right-handed preference.',
+        explanation:
+          'Dr Brinkman proposed that as the human brain evolved for speech, one side specialised in fine movement control, bringing right-hand preference.',
+        explanationSi:
+          'මිනිසුන් භාෂාව වර්ධනය කරගත් මුල් අවධියේදී දකුණත් භාවිතයට නැඹුරුවක් දැක්වූ බව යෝජනා කළේ Dr Brinkman (B) විසිනි (ඡේදය 4).',
+        paragraphReference: 'Paragraph 4',
       },
       {
-        "id": "c1-t2-p1-q2",
-        "type": "mcq",
-        "question": "Which researcher highlighted the evolutionary advantages of handedness linked to bipedalism and combat?",
-        "options": [
-          "A: Professor Turner",
-          "B: Marian Annett",
-          "C: Dr Geschwind",
-          "D: Professor Corballis",
-          "E: Dr Springer"
+        id: 'c1-t2-p1-q2',
+        type: 'mcq',
+        question: 'Society is prejudiced against left-handed people.',
+        options: [
+          'A: Dr Broca',
+          'B: Dr Brinkman',
+          'C: Geschwind and Galaburda',
+          'D: Charles Moore',
+          'E: Professor Turner',
         ],
-        "correctAnswer": "D",
-        "explanation": "Professor Corballis linked handedness to bipedalism, tools, and combat.",
-        "explanationSi": "දෙපයින් ඇවිදීම සහ සටන් හැකියාව සමඟ සම්බන්ධ බව Professor Corballis (D) පවසයි.",
-        "paragraphReference": "Paragraph 5"
+        correctAnswer: 'D',
+        evidence:
+          'However, what is alarming, according to Mr. Charles Moore, a writer and journalist, is the way the word “right” reinforces its own virtue. Subliminally he says, language tells people to think that anything on the right can be trusted while anything on the left is dangerous or even sinister.',
+        explanation:
+          'Charles Moore highlights how language and societal attitudes reinforce prejudice against left-handed people.',
+        explanationSi:
+          'සමාජය සහ භාෂාව වමත්කරුවන් කෙරෙහි අගතියකින් කටයුතු කරන බව පෙන්වා දෙන්නේ Charles Moore (D) ය (ඡේදය 7).',
+        paragraphReference: 'Paragraph 7',
       },
       {
-        "id": "c1-t2-p1-q3",
-        "type": "mcq",
-        "question": "Which researcher documented that there are noticeably more left-handed males than females?",
-        "options": [
-          "A: Professor Turner",
-          "B: Marian Annett",
-          "C: Dr Geschwind",
-          "D: Professor Corballis",
-          "E: Dr Springer"
+        id: 'c1-t2-p1-q3',
+        type: 'mcq',
+        question: 'Boys are more likely to be left-handed.',
+        options: [
+          'A: Dr Broca',
+          'B: Dr Brinkman',
+          'C: Geschwind and Galaburda',
+          'D: Charles Moore',
+          'E: Professor Turner',
         ],
-        "correctAnswer": "C",
-        "explanation": "Dr Geschwind documented higher prevalence of left-handed males.",
-        "explanationSi": "කාන්තාවන්ට වඩා පිරිමින් අතර වමත් හුරුව වැඩි බව Dr Geschwind (C) සොයාගත්තේය.",
-        "paragraphReference": "Paragraph 2"
+        correctAnswer: 'C',
+        evidence:
+          'So, if something happens to the brain’s development during pregnancy, it is more likely to be affected in a male and the hemisphere more likely to be involved is the left... there are more left-handed males than females.',
+        explanation:
+          'Geschwind and Galaburda explained why male foetuses are more likely to experience left-hemisphere developmental shifts resulting in higher rates of left-handedness in boys.',
+        explanationSi:
+          'පිරිමි ළමුන් වමත්කරුවන් වීමේ වැඩි සම්භාවිතාවක් ඇති බව කලල පර්යේෂණ මගින් පෙන්වා දුන්නේ Geschwind and Galaburda (C) ය (ඡේදය 6).',
+        paragraphReference: 'Paragraph 6',
       },
       {
-        "id": "c1-t2-p1-q4",
-        "type": "mcq",
-        "question": "Which researcher found that left-handers often recover speech better after left-hemisphere brain injury?",
-        "options": [
-          "A: Professor Turner",
-          "B: Marian Annett",
-          "C: Dr Geschwind",
-          "D: Professor Corballis",
-          "E: Dr Springer"
+        id: 'c1-t2-p1-q4',
+        type: 'mcq',
+        question: 'After a stroke, left-handed people recover their speech more quickly than right-handed people.',
+        options: [
+          'A: Dr Broca',
+          'B: Dr Brinkman',
+          'C: Geschwind and Galaburda',
+          'D: Charles Moore',
+          'E: Professor Turner',
         ],
-        "correctAnswer": "B",
-        "explanation": "Marian Annett noted better speech recovery in left-handers post left-brain trauma.",
-        "explanationSi": "වම් මොළයට හානි වූ විට වමත්කරුවන් වඩා හොඳින් සුවය ලබන බව Marian Annett (B) පෙන්වා දුන්නාය.",
-        "paragraphReference": "Paragraph 3"
+        correctAnswer: 'B',
+        evidence:
+          'She has observed that if a left-handed person is brain-damaged in the left hemisphere, the recovery of speech is quite often better and this is explained by the fact that left-handers have a more bilateral speech function.',
+        explanation:
+          'Dr Brinkman observed better speech recovery in left-handers following left-hemisphere brain damage because their speech function is more bilateral.',
+        explanationSi:
+          'ආඝාතයකින් පසු වමත්කරුවන්ගේ කථන හැකියාව වඩා ඉක්මනින් යථා තත්ත්වයට පත්වන බව නිරීක්ෂණය කළේ Dr Brinkman (B) ය (ඡේදය 4).',
+        paragraphReference: 'Paragraph 4',
       },
       {
-        "id": "c1-t2-p1-q5",
-        "type": "mcq",
-        "question": "Which researcher emphasized that human population-level lateral asymmetry is systematic?",
-        "options": [
-          "A: Professor Turner",
-          "B: Marian Annett",
-          "C: Dr Geschwind",
-          "D: Professor Corballis",
-          "E: Dr Springer"
+        id: 'c1-t2-p1-q5',
+        type: 'mcq',
+        question: 'People who suffer strokes on the left side of the brain usually lose their power of speech.',
+        options: [
+          'A: Dr Broca',
+          'B: Dr Brinkman',
+          'C: Geschwind and Galaburda',
+          'D: Charles Moore',
+          'E: Professor Turner',
         ],
-        "correctAnswer": "A",
-        "explanation": "Professor Turner identified systematic population asymmetry.",
-        "explanationSi": "ජනගහනයේ සමමිතික නොවන බව ක්‍රමවත් එකක් බව Professor Turner (A) සඳහන් කළේය.",
-        "paragraphReference": "Paragraph 1"
+        correctAnswer: 'A',
+        evidence:
+          'In the 1860s the French surgeon and anthropologist, Dr Paul Broca, made the remarkable finding that patients who had lost their powers of speech as a result of a stroke (a blood clot in the brain) had paralysis of the right half of their body. He noted that... the brain damage must have been in the brain’s left hemisphere.',
+        explanation:
+          'Dr Paul Broca discovered the link between left-hemisphere stroke damage and loss of speech.',
+        explanationSi:
+          'මොළයේ වම් පැත්තේ ආඝාතයකට ලක්වූවන්ගේ කථන හැකියාව නැතිවන බව සොයාගත්තේ Dr Paul Broca (A) ය (ඡේදය 3).',
+        paragraphReference: 'Paragraph 3',
       },
       {
-        "id": "c1-t2-p1-q6",
-        "type": "mcq",
-        "question": "Which researcher discovered that anatomical left-right brain asymmetry emerges prior to birth?",
-        "options": [
-          "A: Professor Turner",
-          "B: Marian Annett",
-          "C: Dr Geschwind",
-          "D: Professor Corballis",
-          "E: Dr Springer"
+        id: 'c1-t2-p1-q6',
+        type: 'mcq',
+        question: 'The two sides of the brain develop different functions before birth.',
+        options: [
+          'A: Dr Broca',
+          'B: Dr Brinkman',
+          'C: Geschwind and Galaburda',
+          'D: Charles Moore',
+          'E: Professor Turner',
         ],
-        "correctAnswer": "C",
-        "explanation": "Dr Geschwind demonstrated fetal asymmetry before birth.",
-        "explanationSi": "උපතට පෙරම මොළයේ අසමමිතික බව හටගන්නා බව Dr Geschwind (C) තහවුරු කළේය.",
-        "paragraphReference": "Paragraph 2"
+        correctAnswer: 'C',
+        evidence:
+          'Two American researchers, Geschwind and Galaburda, studied the brains of human embryos and discovered that the left-right asymmetry exists before birth.',
+        explanation:
+          'Geschwind and Galaburda studied human embryos and proved that left-right hemisphere asymmetry is present prior to birth.',
+        explanationSi:
+          'උපතට පෙරම මොළයේ දෙපැත්ත විවිධ කාර්යයන් වර්ධනය කරගන්නා බව සොයාගත්තේ Geschwind and Galaburda (C) ය (ඡේදය 6).',
+        paragraphReference: 'Paragraph 6',
       },
       {
-        "id": "c1-t2-p1-q7",
-        "type": "mcq",
-        "question": "Which researcher noted that lateral asymmetry is a widespread organizing principle across human anatomy?",
-        "options": [
-          "A: Professor Turner",
-          "B: Marian Annett",
-          "C: Dr Geschwind",
-          "D: Professor Corballis",
-          "E: Dr Springer"
+        id: 'c1-t2-p1-q7',
+        type: 'mcq',
+        question: 'Asymmetry is a common feature of the human body.',
+        options: [
+          'A: Dr Broca',
+          'B: Dr Brinkman',
+          'C: Geschwind and Galaburda',
+          'D: Charles Moore',
+          'E: Professor Turner',
         ],
-        "correctAnswer": "E",
-        "explanation": "Dr Springer studied functional lateralization throughout anatomy.",
-        "explanationSi": "මානව දේහයේ පාර්ශ්වික අසමමිතිය පිළිබඳව Dr Springer (E) විග්‍රහ කළේය.",
-        "paragraphReference": "Paragraph 1"
+        correctAnswer: 'E',
+        evidence:
+          'Professor Bryan Turner at Deakin University has studied the research literature on left-handedness and found that handedness goes with sidedness. So nine out of ten people are right-handed and eight are right-footed. He noted that this distinctive asymmetry in the human population is itself systematic.',
+        explanation:
+          'Professor Turner demonstrated that asymmetry (handedness and footedness) is a systematic, common feature across the human population.',
+        explanationSi:
+          'අසමමිතිය මිනිස් සිරුරේ පොදු ලක්ෂණයක් බව පෙන්වා දුන්නේ Professor Turner (E) ය (ඡේදය 1).',
+        paragraphReference: 'Paragraph 1',
       },
       {
-        "id": "c1-t2-p1-q8",
-        "type": "summary",
-        "question": "Percentage of left-handers who exhibit bilateral speech representation across both hemispheres: __________",
-        "correctAnswer": "15-20%",
-        "explanation": "Paragraph 4 states 15-20% of left-handers show bilateral speech processing.",
-        "explanationSi": "වමත්කරුවන්ගෙන් 15-20% ක් මොළයේ අර්ධගෝල දෙකම භාෂාව සඳහා භාවිතා කරයි.",
-        "paragraphReference": "Paragraph 4"
+        id: 'c1-t2-p1-q8',
+        type: 'summary',
+        question: 'One parent left-handed, One parent right-handed (% left-handed)',
+        correctAnswer: '15-20% // 15 to 20% // 15-20 // 15 to 20 // 15–20% // 15–20',
+        evidence:
+          'With one right and one left-handed parent, 15 to 20 per cent of the offspring will be left-handed.',
+        explanation:
+          'Paragraph 2 explicitly states that with one right-handed and one left-handed parent, 15 to 20 per cent of the children will be left-handed.',
+        explanationSi:
+          'එක් මව්පියෙකු වමත් සහ අනෙකා දකුණත් වූ විට දරුවන් වමත් වීමේ ප්‍රතිශතය 15–20% කි (ඡේදය 2).',
+        paragraphReference: 'Paragraph 2',
       },
       {
-        "id": "c1-t2-p1-q9",
-        "type": "summary",
-        "question": "Concordance rate of shared handedness among identical twins: __________",
-        "correctAnswer": "40%",
-        "explanation": "Paragraph 4 states twin concordance reaches 40%.",
-        "explanationSi": "නිවුන් දරුවන් අතර හුරුව සමාන වීමේ ප්‍රතිශතය 40% කි.",
-        "paragraphReference": "Paragraph 4"
+        id: 'c1-t2-p1-q9',
+        type: 'summary',
+        question: 'Both parents left-handed (% left-handed)',
+        correctAnswer: '40% // 40 // 40 percent',
+        evidence:
+          'However, among two left-handed parents, perhaps 40 per cent of the children will also be left-handed.',
+        explanation:
+          'Paragraph 2 states that when both parents are left-handed, 40 per cent of the children will also be left-handed.',
+        explanationSi:
+          'දෙමාපියන් දෙදෙනාම වමත් වූ විට දරුවන් වමත් වීමේ ප්‍රතිශතය 40% කි (ඡේදය 2).',
+        paragraphReference: 'Paragraph 2',
       },
       {
-        "id": "c1-t2-p1-q10",
-        "type": "summary",
-        "question": "Baseline incidence of left-handedness among siblings in general: __________",
-        "correctAnswer": "6%",
-        "explanation": "Paragraph 4 states general sibling baseline incidence is 6%.",
-        "explanationSi": "සහෝදර සහෝදරියන් අතර වමත් හුරුවේ මූලික සම්භාවිතාව 6% කි.",
-        "paragraphReference": "Paragraph 4"
+        id: 'c1-t2-p1-q10',
+        type: 'summary',
+        question: 'Both parents right-handed (% left-handed)',
+        correctAnswer: '6% // 6 // 6 percent',
+        evidence:
+          '...in fact about 6 per cent of children with two right-handed parents will be left-handed.',
+        explanation:
+          'Paragraph 2 reports that about 6 per cent of children with two right-handed parents will be left-handed.',
+        explanationSi:
+          'දෙමාපියන් දෙදෙනාම දකුණත් වූ විට දරුවන් වමත් වීමේ ප්‍රතිශතය 6% කි (ඡේදය 2).',
+        paragraphReference: 'Paragraph 2',
       },
       {
-        "id": "c1-t2-p1-q11",
-        "type": "mcq",
-        "question": "The fact that thumb-sucking preference is observed in first-trimester ultrasound scans proves that:",
-        "options": [
-          "A: Handedness is taught by parents",
-          "B: Language creates motor control",
-          "C: Ultrasound alters development",
-          "D: Lateral hand preference is innate and biological rather than culturally learned"
+        id: 'c1-t2-p1-q11',
+        type: 'mcq',
+        question: 'A study of monkeys has shown that',
+        options: [
+          'A: monkeys are not usually right-handed.',
+          'B: monkeys display a capacity for speech.',
+          'C: monkey brains are smaller than human brains.',
+          'D: monkey brains are asymmetric.',
         ],
-        "correctAnswer": "D",
-        "explanation": "Fetal thumb-sucking proves handedness is biological/innate (Option D).",
-        "explanationSi": "භ්‍රෑණ අවධියේ පටන්ම මෙය සිදුවන බැවින් එය සංස්කෘතික නොව ජීවවිද්‍යාත්මක එකකි (D).",
-        "paragraphReference": "Paragraph 2"
+        correctAnswer: 'D',
+        evidence:
+          'Since monkeys have not acquired the art of speech, one would not expect to see such a variation but Brinkman claims to have discovered a trend in monkeys towards the asymmetry that is evident in the human brain.',
+        explanation:
+          'Dr Brinkman discovered a trend in monkey brains toward structural asymmetry similar to that seen in the human brain.',
+        explanationSi:
+          'වඳුරන්ගේ මොළයද මිනිස් මොළය මෙන් අසමමිතික (asymmetric - D) බව අධ්‍යයනයෙන් හෙළි විය (ඡේදය 5).',
+        paragraphReference: 'Paragraph 5',
       },
       {
-        "id": "c1-t2-p1-q12",
-        "type": "mcq",
-        "question": "Why does left-handedness persist in the human population despite being a minority trait?",
-        "options": [
-          "A: Right-handers have lower immunity",
-          "B: Frequency-dependent competitive advantages in combat and sports",
-          "C: Left-handers live longer",
-          "D: Modern tools favor left-handers"
+        id: 'c1-t2-p1-q12',
+        type: 'mcq',
+        question: 'According to the writer, left-handed people',
+        options: [
+          'A: will often develop a stammer.',
+          'B: have undergone hardship for years.',
+          'C: are untrustworthy.',
+          'D: are good tennis players.',
         ],
-        "correctAnswer": "B",
-        "explanation": "Persists due to frequency-dependent tactical advantages in combat/sports (Option B).",
-        "explanationSi": "සටන් සහ ක්‍රීඩාවලදී ලැබෙන උපක්‍රමශීලී වාසිය (B) නිසා එය පරම්පරාගතව පවතී.",
-        "paragraphReference": "Paragraph 5"
-      }
-    ]
+        correctAnswer: 'B',
+        evidence:
+          'The results of this research may be some consolation to left-handers who have for centuries lived in a world designed to suit right-handed people.',
+        explanation:
+          'The writer notes that left-handers have lived for centuries in a world built for right-handers, undergoing long-standing hardship.',
+        explanationSi:
+          'කතුවරයාට අනුව වමත්කරුවන් සියවස් ගණනාවක් තිස්සේ දුෂ්කරතාවලට මුහුණ දී ඇත (B) (ඡේදය 7).',
+        paragraphReference: 'Paragraph 7',
+      },
+    ],
   },
+
+  /* ------------------------------------------------------------------- */
+  /* PASSAGE 2: MIGRATORY BEEKEEPING - Taking Wing (Questions 13-27)     */
+  /* ------------------------------------------------------------------- */
   {
-    "id": "c1-t2-pass2",
-    "cambridgeSource": "Cambridge IELTS 1, Test 2 - Reading Passage 2",
-    "title": "Migratory beekeeping",
-    "paragraphs": [
+    id: 'c1-t2-pass2',
+    cambridgeSource: 'Cambridge IELTS 1, Test 2 - Reading Passage 2',
+    title: 'MIGRATORY BEEKEEPING — Taking Wing',
+    paragraphs: [
       {
-        "label": "Paragraph A",
-        "text": "In the United States, commercial beekeeping is not merely about honey harvesting; it is a vital migratory pollination industry. Millions of beehives are loaded onto tractor-trailers and transported across states to pollinate almond orchards, apple groves, and blueberry fields."
+        label: 'Paragraph 1',
+        text: 'To eke out a full-time living from their honeybees, about half the nation’s 2,000 commercial beekeepers pull up stakes each spring, migrating north to find more flowers for their bees. Besides turning floral nectar into honey, these hardworking insects also pollinate crops for farmers -for a fee. As autumn approaches, the beekeepers pack up their hives and go south, scrambling for pollination contracts in hot spots like California’s fertile Central Valley.',
       },
       {
-        "label": "Paragraph B",
-        "text": "By early March, migratory beekeepers begin intensive preparations. Hives are inspected for queen vigor, supplemental sugar syrup is fed to stimulate brood rearing, and equipment is overhauled."
+        label: 'Paragraph 2',
+        text: 'Of the 2,000 commercial beekeepers in the United States about half migrate This pays off in two ways Moving north in the summer and south in the winter lets bees work a longer blooming season, making more honey — and money — for their keepers. Second, beekeepers can carry their hives to farmers who need bees to pollinate their crops. Every spring a migratory beekeeper in California may move up to 160 million bees to flowering fields in Minnesota and every winter his family may haul the hives back to California, where farmers will rent the bees to pollinate almond and cherry trees.',
       },
       {
-        "label": "Paragraph C",
-        "text": "Beehives are never moved during the heat of the day because foraging bees would be left stranded in the fields. Instead, beekeepers work at night or dawn when the hive is completely full. When handling colonies, bees can be pacified with a few puffs of cool smoke from a burlap-burning smoker, which masks alarm pheromones."
+        label: 'Paragraph 3',
+        text: 'Migratory beekeeping is nothing new. The ancient Egyptians moved clay hives, probably on rafts, down the Nile to follow the bloom and nectar flow as it moved toward Cairo. In the 1880s North American beekeepers experimented with the same idea, moving bees on barges along the Mississippi and on waterways in Florida, but their lighter, wooden hives kept falling into the water. Other keepers tried the railroad and horse-drawn wagons, but that didn’t prove practical. Not until the 1920s when cars and trucks became affordable and roads improved, did migratory beekeeping begin to catch on.',
       },
       {
-        "label": "Paragraph D",
-        "text": "Upon reaching agricultural destinations, farmers pay a substantial rental charge per hive for pollination services. Later in the season, when honeycombs are heavy, high-speed automated machines uncap the wax cappings, and centrifugal extractors fling golden honey from the spinning combs."
+        label: 'Paragraph 4',
+        text: 'For the Californian beekeeper, the pollination season begins in February. At this time, the beehives are in particular demand by farmers who have almond groves; they need two hives an acre. For the three-week long bloom, beekeepers can hire out their hives for $32 each. It’s a bonanza for the bees too. Most people consider almond honey too bitter to eat so the bees get to keep it for themselves.',
       },
       {
-        "label": "Paragraph E",
-        "text": "Finally, as colonies flourish in late spring, beekeepers split robust double hives into two separate colonies, introducing a new queen to multiply their stock."
+        label: 'Paragraph 5',
+        text: 'By early March it is time to move the bees. It can take up to seven nights to pack the 4,000 or so hives that a beekeeper may own. These are not moved in the middle of the day because too many of the bees would end up homeless. But at night, the hives are stacked onto wooden pallets, back-to-back in sets of four, and lifted onto a truck. It is not necessary to wear gloves or a beekeeper’s veil because the hives are not being opened and the bees should remain relatively quiet. Just in case some are still lively, bees can be pacified with a few puffs of smoke blown into each hive’s narrow entrance.',
       },
       {
-        "label": "Paragraph F",
-        "text": "The standard modern Langstroth beehive consists of precise interchangeable parts: an outer telescoping cover, an inner cover, upper honey supers containing hexagonal cells within removable wooden frames, a queen excluder wire screen that prevents the queen from laying eggs in honey supers, and a deep bottom brood chamber where the queen lays eggs and larvae mature."
-      }
+        label: 'Paragraph 6',
+        text: 'In their new location, the beekeeper will pay the farmer to allow his bees to feed in such places as orange groves. The honey produced here is fragrant and sweet and can be sold by the beekeepers. To encourage the bees to produce as much honey as possible during this period, the beekeepers open the hives and stack extra boxes called supers on top. These temporary hive extensions contain frames of empty comb for the bees to fill with honey. In the brood chamber below, the bees will stash honey to eat later. To prevent the queen from crawling up to the top and laying eggs, a screen can be inserted between the brood chamber and the supers. Three weeks later the honey can be gathered.',
+      },
+      {
+        label: 'Paragraph 7',
+        text: 'Foul smelling chemicals are often used to irritate the bees and drive them down into the hive’s bottom boxes, leaving the honey-filled supers more or less bee free. These can then be pulled off the hive. They are heavy with honey and may weigh up to 90 pounds each. The supers are taken to a warehouse. In the extracting room, the frames are lilted out and lowered into an “uncapper” where rotating blades shave away the wax that covers each cell. The uncapped frames are put in a carousel that sits on the bottom of a large stainless steel drum. The carousel is filled to capacity with 72 frames. A switch is flipped and the frames begin to whirl at 300 revolutions per minute; centrifugal force throws the honey out of the combs. Finally the honey is poured into barrels for shipment.',
+      },
+      {
+        label: 'Paragraph 8',
+        text: 'After this, approximately a quarter of the hives weakened by disease, mites, or an ageing or dead queen, will have to be replaced. To create new colonies, a healthy double hive, teeming with bees, can be separated into two boxes. One half will hold the queen and a young, already mated queen can be put in the other half, to make two hives from one. By the time the flowers bloom, the new queens will be laying eggs, filling each hive with young worker bees. The beekeeper’s family will then migrate with them to their summer location.',
+      },
     ],
-    "questions": [
+    wordBank: [
+      'smoke',
+      'barrels',
+      'set off',
+      'pollinate',
+      'combs',
+      'full',
+      'chemicals',
+      'protection',
+      'light',
+      'machines',
+      'screen',
+      'empty',
+      'pay',
+      'charge',
+      'split',
+      'supers',
+      'prepare',
+      'queens',
+    ],
+    summaryContext: {
+      title: 'BEEKEEPER MOVEMENTS (Questions 13–19)',
+      instruction:
+        'The flow chart below outlines the movements of the migratory beekeeper as described in Reading Passage 2. Complete the flow chart. Choose your answers from the box and write your answers in boxes 13–19 on your answer sheet.',
+      exampleText: 'In February, Californian farmers hire bees to help .......... almond trees.',
+      exampleAnswer: 'pollinate',
+      fullText:
+        'Example: In February, Californian farmers hire bees to help pollinate almond trees.\n↓\nIn March, beekeepers (13) .......... for migration at night when the hives are (14) .......... and the bees are generally tranquil. A little (15) .......... can ensure that this is the case.\n↓\nThey transport their hives to orange groves where farmers (16) .......... beekeepers for placing them on their land. Here the bees make honey.\n↓\nAfter three weeks, the supers can be taken to a warehouse where (17) .......... are used to remove the wax and extract the honey from the (18) .......... .\n↓\nAfter the honey collection, the old hives are rejected. Good double hives are (19) .......... and re-queened and the beekeeper transports them to their summer base.',
+    },
+    questions: [
       {
-        "id": "c1-t2-p2-q13",
-        "type": "summary",
-        "question": "At the start of migration in early March, beekeepers must thoroughly __________ their hives and equipment.",
-        "correctAnswer": "prepare",
-        "explanation": "Beekeepers prepare hives, feed sugar syrup, and check queens.",
-        "explanationSi": "සංක්‍රමණය ආරම්භයේදී මීමැසි පාලකයන් සූදානම් (prepare) විය යුතුය.",
-        "paragraphReference": "Paragraph B"
+        id: 'c1-t2-p2-q13',
+        type: 'summary',
+        question: 'In March, beekeepers (13) .......... for migration at night',
+        correctAnswer: 'prepare // set off',
+        evidence:
+          'By early March it is time to move the bees. It can take up to seven nights to pack the 4,000 or so hives that a beekeeper may own.',
+        explanation:
+          'In early March, beekeepers spend up to seven nights packing and preparing their hives for migration.',
+        explanationSi:
+          'මාර්තු මාසයේදී මීමැසි පාලකයන් රාත්‍රී කාලයේදී සංක්‍රමණය සඳහා සූදානම් වේ (prepare) (ඡේදය 5).',
+        paragraphReference: 'Paragraph 5',
       },
       {
-        "id": "c1-t2-p2-q14",
-        "type": "summary",
-        "question": "Hives are moved only at night or dawn when the entire colony is __________ inside.",
-        "correctAnswer": "full",
-        "explanation": "Moved when the hive is full so foraging bees are not lost.",
-        "explanationSi": "සියලු මීමැස්සන් පෙට්ටිය තුළ සිටින (full) විට පමණක් රැගෙන යයි.",
-        "paragraphReference": "Paragraph C"
+        id: 'c1-t2-p2-q14',
+        type: 'summary',
+        question: 'when the hives are (14) .......... and the bees are generally tranquil.',
+        correctAnswer: 'full',
+        evidence:
+          'These are not moved in the middle of the day because too many of the bees would end up homeless. But at night, the hives are stacked onto wooden pallets...',
+        explanation:
+          'Hives are moved at night when all the foraging bees have returned inside, so the hives are full rather than missing daytime foragers.',
+        explanationSi:
+          'රාත්‍රී කාලයේදී සියලුම මීමැස්සන් වදය තුළ සිටින බැවින් මී වද පිරී පවතී (full) (ඡේදය 5).',
+        paragraphReference: 'Paragraph 5',
       },
       {
-        "id": "c1-t2-p2-q15",
-        "type": "summary",
-        "question": "Before opening boxes, agitated guard bees can be calmed using puffs of __________.",
-        "correctAnswer": "smoke",
-        "explanation": "Bees are pacified with a few puffs of smoke.",
-        "explanationSi": "දුම් (smoke) පිඹීම මගින් මීමැස්සන් සන්සුන් කළ හැක.",
-        "paragraphReference": "Paragraph C"
+        id: 'c1-t2-p2-q15',
+        type: 'summary',
+        question: 'A little (15) .......... can ensure that this is the case.',
+        correctAnswer: 'smoke',
+        evidence:
+          'Just in case some are still lively, bees can be pacified with a few puffs of smoke blown into each hive’s narrow entrance.',
+        explanation:
+          'A few puffs of smoke blown into the hive entrance pacifies the bees and keeps them tranquil.',
+        explanationSi:
+          'මීමැස්සන් සන්සුන්ව තැබීමට දුම් ස්වල්පයක් (smoke) භාවිතා කළ හැක (ඡේදය 5).',
+        paragraphReference: 'Paragraph 5',
       },
       {
-        "id": "c1-t2-p2-q16",
-        "type": "summary",
-        "question": "Fruit orchard growers pay beekeepers a pollination __________ for every hive placed.",
-        "correctAnswer": "charge",
-        "explanation": "Farmers pay a substantial rental fee / charge per hive.",
-        "explanationSi": "ගොවීන් මීවද කුලියට ගැනීම වෙනුවෙන් ගාස්තුවක් (charge // fee) ගෙවයි.",
-        "paragraphReference": "Paragraph D"
+        id: 'c1-t2-p2-q16',
+        type: 'summary',
+        question: 'They transport their hives to orange groves where farmers (16) .......... beekeepers for placing them on their land.',
+        correctAnswer: 'charge',
+        evidence:
+          'In their new location, the beekeeper will pay the farmer to allow his bees to feed in such places as orange groves.',
+        explanation:
+          'Since the beekeeper pays the farmer, the farmers charge the beekeepers for placing hives on their orange groves.',
+        explanationSi:
+          'දොඩම් වතුවල මී වද තැබීම සඳහා ගොවීන් මීමැසි පාලකයන්ගෙන් මුදල් අය කරයි (charge) (ඡේදය 6).',
+        paragraphReference: 'Paragraph 6',
       },
       {
-        "id": "c1-t2-p2-q17",
-        "type": "summary",
-        "question": "To extract honey quickly, commercial warehouses utilize automated __________.",
-        "correctAnswer": "machines",
-        "explanation": "High-speed automated machines uncap and spin combs.",
-        "explanationSi": "ස්වයංක්‍රීය යන්ත්‍ර (machines) මගින් පැණි වද විවර කරයි.",
-        "paragraphReference": "Paragraph D"
+        id: 'c1-t2-p2-q17',
+        type: 'summary',
+        question: 'After three weeks, the supers can be taken to a warehouse where (17) .......... are used to remove the wax',
+        correctAnswer: 'machines',
+        evidence:
+          'In the extracting room, the frames are lifted out and lowered into an “uncapper” where rotating blades shave away the wax... The uncapped frames are put in a carousel...',
+        explanation:
+          'Mechanical devices (machines: the uncapper and the whirling stainless-steel carousel) remove the wax and spin out the honey.',
+        explanationSi:
+          'ඉටි ඉවත් කර මී පැණි නිස්සාරණය කිරීමට යන්ත්‍ර (machines) භාවිතා කෙරේ (ඡේදය 7).',
+        paragraphReference: 'Paragraph 7',
       },
       {
-        "id": "c1-t2-p2-q18",
-        "type": "summary",
-        "question": "Centrifugal extractors rapidly spin honey out of the wax __________.",
-        "correctAnswer": "combs",
-        "explanation": "Extractors fling honey out of the combs.",
-        "explanationSi": "කැරකෙන වදවලින් (combs) පැණි ඉවතට විසිවේ.",
-        "paragraphReference": "Paragraph D"
+        id: 'c1-t2-p2-q18',
+        type: 'summary',
+        question: 'and extract the honey from the (18) .......... .',
+        correctAnswer: 'combs',
+        evidence:
+          'A switch is flipped and the frames begin to whirl at 300 revolutions per minute; centrifugal force throws the honey out of the combs.',
+        explanation:
+          'Centrifugal force in the spinning carousel extracts the honey from the combs.',
+        explanationSi:
+          'කේන්ද්‍රාපසාරී බලය මගින් මී වදවලින් (combs) පැණි ඉවත් කරනු ලැබේ (ඡේදය 7).',
+        paragraphReference: 'Paragraph 7',
       },
       {
-        "id": "c1-t2-p2-q19",
-        "type": "summary",
-        "question": "In late spring, beekeepers multiply colonies by choosing to __________ strong double hives.",
-        "correctAnswer": "split",
-        "explanation": "Healthy double hives are split into two separate boxes.",
-        "explanationSi": "පෙට්ටි දෙකකට වෙන් කිරීම (split) මගින් ගහනය වැඩි කරයි.",
-        "paragraphReference": "Paragraph E"
+        id: 'c1-t2-p2-q19',
+        type: 'summary',
+        question: 'Good double hives are (19) .......... and re-queened and the beekeeper transports them to their summer base.',
+        correctAnswer: 'split',
+        evidence:
+          'To create new colonies, a healthy double hive, teeming with bees, can be separated into two boxes.',
+        explanation:
+          'Healthy double hives are separated into two boxes (split) and given a young mated queen.',
+        explanationSi:
+          'නිරෝගී ද්විත්ව මී වද දෙකට බෙදා (split) නව රැජිනන් යොදනු ලැබේ (ඡේදය 8).',
+        paragraphReference: 'Paragraph 8',
       },
       {
-        "id": "c1-t2-p2-q20",
-        "type": "summary",
-        "question": "Hive Diagram label 20: Bees build honey storage in hexagonal __________.",
-        "correctAnswer": "cells",
-        "explanation": "Honey is stored in hexagonal wax cells / comb.",
-        "explanationSi": "පැණි තැන්පත් කරන්නේ ෂඩාස්‍රාකාර කුටිවලය (cells // comb).",
-        "paragraphReference": "Paragraph F"
+        id: 'c1-t2-p2-q20',
+        type: 'summary',
+        question: 'Diagram Label 20: Frames of .......... (inside the top supers)',
+        correctAnswer: 'empty comb // comb',
+        evidence:
+          'These temporary hive extensions contain frames of empty comb for the bees to fill with honey.',
+        explanation:
+          'Paragraph 6 explains that the supers stacked on top contain frames of empty comb.',
+        explanationSi:
+          'ඉහළින් තබන supers පෙට්ටි තුළ හිස් මී වද රාමු (empty comb) අඩංගු වේ (ඡේදය 6).',
+        paragraphReference: 'Paragraph 6',
       },
       {
-        "id": "c1-t2-p2-q21",
-        "type": "summary",
-        "question": "Hive Diagram label 21: Hexagonal wax comb is supported inside removable wooden __________.",
-        "correctAnswer": "frames",
-        "explanation": "Combs hang inside removable wooden frames.",
-        "explanationSi": "ලී රාමු (frames) තුළ වද රඳවා ඇත.",
-        "paragraphReference": "Paragraph F"
+        id: 'c1-t2-p2-q21',
+        type: 'summary',
+        question: 'Diagram Label 21: .......... (inserted between the supers and the bottom chamber)',
+        correctAnswer: 'screen',
+        evidence:
+          'To prevent the queen from crawling up to the top and laying eggs, a screen can be inserted between the brood chamber and the supers.',
+        explanation:
+          'A screen is placed between the lower brood chamber and the upper supers to keep the queen below.',
+        explanationSi:
+          'රැජින ඉහළට යාම වැළැක්වීමට brood chamber සහ supers අතර දැලක් (screen) යොදනු ලැබේ (ඡේදය 6).',
+        paragraphReference: 'Paragraph 6',
       },
       {
-        "id": "c1-t2-p2-q22",
-        "type": "summary",
-        "question": "Hive Diagram label 22: The queen is kept below by a wire mesh __________.",
-        "correctAnswer": "screen",
-        "explanation": "The queen excluder wire screen stops the queen moving up.",
-        "explanationSi": "රැජිණ ඉහළට යාම වැළැක්වීමට දැල් තිරයක් (screen) යොදා ඇත.",
-        "paragraphReference": "Paragraph F"
+        id: 'c1-t2-p2-q22',
+        type: 'summary',
+        question: 'Diagram Label 22: .......... (lower box where the queen lays eggs and bees store food)',
+        correctAnswer: 'brood chamber',
+        evidence:
+          'In the brood chamber below, the bees will stash honey to eat later.',
+        explanation:
+          'The bottom chamber of the hive is called the brood chamber.',
+        explanationSi:
+          'මී වදයේ පහළ කොටස හඳුන්වන්නේ brood chamber ලෙසයි (ඡේදය 6).',
+        paragraphReference: 'Paragraph 6',
       },
       {
-        "id": "c1-t2-p2-q23",
-        "type": "summary",
-        "question": "Hive Diagram label 23: Lower chamber where queen lays eggs is the __________.",
-        "correctAnswer": "brood chamber",
-        "explanation": "Deep bottom chamber is the brood chamber.",
-        "explanationSi": "බිත්තර දමන පහළ කොටස brood chamber ලෙස හැඳින්වේ.",
-        "paragraphReference": "Paragraph F"
+        id: 'c1-t2-p2-q23',
+        type: 'summary',
+        question: 'Diagram Label 23: .......... (bottom opening of the hive)',
+        correctAnswer: 'narrow entrance // entrance',
+        evidence:
+          'Just in case some are still lively, bees can be pacified with a few puffs of smoke blown into each hive’s narrow entrance.',
+        explanation:
+          'At the base of each hive is the narrow entrance through which bees enter and smoke can be puffed.',
+        explanationSi:
+          'මී වදයේ පහළ ඇති පටු පිවිසුම narrow entrance ලෙස හැඳින්වේ (ඡේදය 5).',
+        paragraphReference: 'Paragraph 5',
       },
       {
-        "id": "c1-t2-p2-q24",
-        "type": "TFNG",
-        "question": "Migratory beekeepers make more income from beeswax than from honey sales.",
-        "options": [
-          "YES",
-          "NO",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "NOT GIVEN",
-        "explanation": "The text mentions honey and pollination fees, but does not compare beeswax income.",
-        "explanationSi": "ඉටි අලෙවියෙන් වැඩි ආදායමක් ලබන්නේද යන්න සඳහන් නොවේ.",
-        "paragraphReference": "Paragraph A"
+        id: 'c1-t2-p2-q24',
+        type: 'TFNG',
+        question: 'The Egyptians keep bees on the banks of the Nile.',
+        options: ['YES', 'NO', 'NOT GIVEN'],
+        correctAnswer: 'NOT GIVEN',
+        evidence:
+          'The ancient Egyptians moved clay hives, probably on rafts, down the Nile to follow the bloom and nectar flow as it moved toward Cairo.',
+        explanation:
+          'The passage only mentions that ancient Egyptians moved clay hives on rafts down the Nile; it gives no information on whether Egyptians today keep bees on the banks of the Nile.',
+        explanationSi:
+          'පැරණි ඊජිප්තු ජාතිකයන් නයිල් ගඟ දිගේ පාරුවලින් මී වද ගෙන ගිය බව පමණක් සඳහන් වන අතර, වර්තමානයේ ගං ඉවුරේ මීමැසි පාලනය කරන බවක් සඳහන් නොවේ (NOT GIVEN).',
+        paragraphReference: 'Paragraph 3',
       },
       {
-        "id": "c1-t2-p2-q25",
-        "type": "TFNG",
-        "question": "Transporting bees in bright daylight results in losing foraging bees.",
-        "options": [
-          "YES",
-          "NO",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "YES",
-        "explanation": "Moving during the day leaves foraging bees stranded in fields.",
-        "explanationSi": "දවල් කාලයේ ගෙන ගියහොත් මීමැස්සන් අතරමං වේ.",
-        "paragraphReference": "Paragraph C"
+        id: 'c1-t2-p2-q25',
+        type: 'TFNG',
+        question: 'First attempts at migratory beekeeping in America were unsuccessful.',
+        options: ['YES', 'NO', 'NOT GIVEN'],
+        correctAnswer: 'YES',
+        evidence:
+          'In the 1880s North American beekeepers experimented with the same idea, moving bees on barges along the Mississippi and on waterways in Florida, but their lighter, wooden hives kept falling into the water. Other keepers tried the railroad and horse-drawn wagons, but that didn’t prove practical.',
+        explanation:
+          'Early 1880s North American experiments with barges, railroads, and horse-drawn wagons failed until trucks and roads improved in the 1920s.',
+        explanationSi:
+          'ඇමරිකාවේ සංක්‍රමණික මීමැසි පාලනය සඳහා ගත් මුල් උත්සාහයන් අසාර්ථක වූ බව 3 වන ඡේදයේ පැහැදිලිව දැක්වේ (YES).',
+        paragraphReference: 'Paragraph 3',
       },
       {
-        "id": "c1-t2-p2-q26",
-        "type": "TFNG",
-        "question": "Smoke prevents bees from communicating danger to each other.",
-        "options": [
-          "YES",
-          "NO",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "YES",
-        "explanation": "Cool smoke masks alarm pheromones and pacifies bees.",
-        "explanationSi": "දුම් මගින් අනතුරු හැඟවීමේ සංඥා වසන් කර මීමැස්සන් සන්සුන් කරයි.",
-        "paragraphReference": "Paragraph C"
+        id: 'c1-t2-p2-q26',
+        type: 'TFNG',
+        question: 'Bees keep honey for themselves in the bottom of the hive.',
+        options: ['YES', 'NO', 'NOT GIVEN'],
+        correctAnswer: 'YES',
+        evidence:
+          'In the brood chamber below, the bees will stash honey to eat later.',
+        explanation:
+          'Paragraph 6 explicitly confirms that in the brood chamber below (the bottom of the hive), the bees stash honey to eat later.',
+        explanationSi:
+          'මී වදයේ පහළ කොටසේ (brood chamber below) මීමැස්සන් තමන්ගේ පරිභෝජනය සඳහා මී පැණි තැන්පත් කර ගන්නා බව සඳහන් වේ (YES).',
+        paragraphReference: 'Paragraph 6',
       },
       {
-        "id": "c1-t2-p2-q27",
-        "type": "TFNG",
-        "question": "The queen bee is allowed to lay eggs in the top honey supers.",
-        "options": [
-          "YES",
-          "NO",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "NO",
-        "explanation": "The queen excluder screen strictly prevents queen entering honey supers.",
-        "explanationSi": "රැජිණට ඉහළ කොටසේ බිත්තර දැමීමට ඉඩ නොදේ (NO).",
-        "paragraphReference": "Paragraph F"
-      }
-    ]
+        id: 'c1-t2-p2-q27',
+        type: 'TFNG',
+        question: 'The honey is spun to make it liquid.',
+        options: ['YES', 'NO', 'NOT GIVEN'],
+        correctAnswer: 'NO',
+        evidence:
+          'A switch is flipped and the frames begin to whirl at 300 revolutions per minute; centrifugal force throws the honey out of the combs.',
+        explanation:
+          'The frames are spun so that centrifugal force throws the honey out of the combs, NOT to make the honey liquid.',
+        explanationSi:
+          'මී වද කරකවනු ලබන්නේ කේන්ද්‍රාපසාරී බලයෙන් මී පැණි වදවලින් ඉවතට ගැනීමට මිස එය දියරයක් බවට පත් කිරීමට නොවේ (NO).',
+        paragraphReference: 'Paragraph 7',
+      },
+    ],
   },
+
+  /* ------------------------------------------------------------------- */
+  /* PASSAGE 3: TOURISM (Questions 28-41)                                */
+  /* ------------------------------------------------------------------- */
   {
-    "id": "c1-t2-pass3",
-    "cambridgeSource": "Cambridge IELTS 1, Test 2 - Reading Passage 3",
-    "title": "Tourism - The Tourist Gaze",
-    "paragraphs": [
+    id: 'c1-t2-pass3',
+    cambridgeSource: 'Cambridge IELTS 1, Test 2 - Reading Passage 3',
+    title: 'TOURISM',
+    paragraphs: [
       {
-        "label": "Paragraph A",
-        "text": "Tourism is a quintessential leisure activity of modern societies. People journey away from their habitual place of residence to experience landscapes, historic monuments, and recreational pursuits."
+        label: 'Paragraph A',
+        text: 'Tourism, holidaymaking and travel are these days more significant social phenomena than most commentators have considered. On the face of it there could not be a more trivial subject for a book. And indeed since social scientists have had considerable difficulty explaining weightier topics such as work or politics it might be thought that they would have great difficulties in accounting for more trivial phenomena such as holidaymaking. However there are interesting parallels with the study of deviance. This involves the investigation of bizarre and idiosyncratic social practices which happen to be defined as deviant in some societies but not necessarily in others. The assumption is that the investigation of deviance can reveal interesting and significant aspects of normal societies. It could be said that a similar analysis can be applied to tourism.',
       },
       {
-        "label": "Paragraph B",
-        "text": "Sociologist John Urry argues that tourism is not a universal human instinct, but one manifestation of how work and leisure are organized as separate, strictly regulated spheres of social practice in modern industrial societies. The anticipation of tourism is continually constructed and sustained through non-tourist media practices, such as television travelogues, postcards, literature, and films."
+        label: 'Paragraph B',
+        text: 'Tourism is a leisure activity which presupposes its opposite namely regulated and organised work. It is one manifestation of how work and leisure are organised as separate and regulated spheres of social practice in modern societies. Indeed acting as a tourist is one of the defining characteristics of being “modern” and the popular concept of tourism is that it is organised within particular places and occurs for regularised periods of time. Tourist relationships arise from a movement of people to and their stay in various destinations. This necessarily involves some movement, that is the journey, and a period of stay in a new place or places. The journey and the stay are by definition outside the normal places of residence and work and are of a short term and temporary nature and there is a clear intention to return “home” within a relatively short period of time.',
       },
       {
-        "label": "Paragraph C",
-        "text": "When tourists arrive at destinations, they direct their gaze onto distinctive visual features. The viewing of these tourist sites involves a much greater sensitivity to visual elements of landscape or townscape than is normally found in daily working life."
+        label: 'Paragraph C',
+        text: 'A substantial proportion of the population of modern societies engages in such tourist practices; new socialised forms of provision have developed in order to cope with the mass character of the gazes of tourists as opposed to the individual character of travel. Places are chosen to be visited and be gazed upon because there is an anticipation, especially through daydreaming and fantasy, of intense pleasures, either on a different scale or involving different senses from those customarily encountered. Such anticipation is constructed and sustained through a variety of non-tourist practices such as films, TV, literature, magazines, records and videos which construct and reinforce this daydreaming.',
       },
       {
-        "label": "Paragraph D",
-        "text": "Modern tourism takes diverse forms. While the romantic tourist seeks solitary contemplation of untamed nature, the mass tourist travels in organized guided groups and finds pleasure in inauthentic, contrived attractions and themed resorts."
+        label: 'Paragraph D',
+        text: 'Tourists tend to visit features of landscape and townscape which separate them off from everyday experience. Such aspects are viewed because they are taken to be in some sense out of the ordinary. The viewing of these tourist sights often involves different forms of social patterning with a much greater sensitivity to visual elements of landscape or townscape than is normally found in everyday life. People linger over these sights in a way that they would not normally do in their home environment and the vision is objectified or captured through photographs, postcards, films and so on which enable the memory to be endlessly reproduced and recaptured.',
       },
       {
-        "label": "Paragraph E",
-        "text": "Ultimately, host communities frequently adapt their traditions to satisfy the tourist gaze, staging cultural performances and commodifying their heritage to preserve local economic viability."
-      }
+        label: 'Paragraph E',
+        text: 'One of the earliest dissertations on the subject of tourism is Boorstin’s analysis of the “pseudo event” (1964) where he argues that contemporary Americans cannot experience “reality” directly, but thrive on “pseudo events”. Isolated from the host environment and the local people, the mass tourist travels in guided groups and finds pleasure in inauthentic contrived attractions, gullibly enjoying the “pseudo events” and disregarding the “real” world outside. Over time, the images generated of different tourist sights come to constitute a closed self-perpetuating system of illusions which provide the tourist with the basis for selecting and evaluating potential places to visit. Such visits are made, says Boorstin, within the “environmental bubble” of the familiar American style hotel which insulates the tourist from the strangeness of the host environment.',
+      },
+      {
+        label: 'Paragraph F',
+        text: 'To service the burgeoning tourist industry, an array of professionals has developed who attempt to reproduce ever-new objects for the tourist to look at. These objects or places are located in a complex and changing hierarchy. This depends upon the interplay between, on the one hand, competition between interests involved in the provision of such objects and, on the other hand, changing class, gender, and generational distinctions of taste within the potential population of visitors. It has been said that to be a tourist is one of the characteristics of the “modern experience”. Not to go away is like not possessing a car or a nice house. Travel is a marker of status in modern societies and is also thought to be necessary for good health. The role of the professional, therefore, is to cater for the needs and tastes of the tourists in accordance with their class and overall expectations.',
+      },
     ],
-    "questions": [
+    matchingContext: {
+      title: 'List of Headings (Questions 28–32)',
+      instruction:
+        'Choose the correct heading for each section from the list of headings below. Write the appropriate numbers (i–ix) in boxes 28–32 on your answer sheet. Paragraph D has been done for you as an example (ix).',
+      options: [
+        { code: 'i', text: 'The politics of tourism' },
+        { code: 'ii', text: 'The cost of tourism' },
+        { code: 'iii', text: 'Justifying the study of tourism' },
+        { code: 'iv', text: 'Tourism contrasted with travel' },
+        { code: 'v', text: 'The essence of modern tourism' },
+        { code: 'vi', text: 'Tourism versus leisure' },
+        { code: 'vii', text: 'The artificiality of modern tourism' },
+        { code: 'viii', text: 'The role of modern tour guides' },
+        { code: 'ix', text: 'Creating an alternative to the everyday experience (Example: Paragraph D)' },
+      ],
+    },
+    questions: [
       {
-        "id": "c1-t2-p3-q28",
-        "type": "headings",
-        "question": "Heading for Paragraph A: (Choose i - viii)",
-        "options": [
-          "i: The mass tourist",
-          "ii: Environmental damage",
-          "iii: The leisure context of tourism",
-          "iv: Developing visual sensitivity",
-          "v: Separation of work and leisure",
-          "vi: Hotel construction",
-          "vii: Diverse travel styles",
-          "viii: Cultural commodification"
+        id: 'c1-t2-p3-q28',
+        type: 'headings',
+        question: 'Paragraph A',
+        options: [
+          'i: The politics of tourism',
+          'ii: The cost of tourism',
+          'iii: Justifying the study of tourism',
+          'iv: Tourism contrasted with travel',
+          'v: The essence of modern tourism',
+          'vi: Tourism versus leisure',
+          'vii: The artificiality of modern tourism',
+          'viii: The role of modern tour guides',
+          'ix: Creating an alternative to the everyday experience',
         ],
-        "correctAnswer": "iii",
-        "explanation": "Paragraph A establishes the leisure context of tourism.",
-        "explanationSi": "ඡේදය A සංචාරක ව්‍යාපාරයේ විවේකමය පසුබිම (iii) විග්‍රහ කරයි.",
-        "paragraphReference": "Paragraph A"
+        correctAnswer: 'iii',
+        evidence:
+          'On the face of it there could not be a more trivial subject for a book... However there are interesting parallels with the study of deviance... It could be said that a similar analysis can be applied to tourism.',
+        explanation:
+          'Paragraph A explains why tourism—despite appearing trivial at first glance—deserves serious sociological study, just like the study of deviance.',
+        explanationSi:
+          'සංචාරක ව්‍යාපාරය බැලූ බැල්මට සුළු කරුණක් ලෙස පෙනුනද එය අධ්‍යයනය කිරීමේ වැදගත්කම A ඡේදයෙන් සාධාරණීකරණය කරයි (iii).',
+        paragraphReference: 'Paragraph A',
       },
       {
-        "id": "c1-t2-p3-q29",
-        "type": "headings",
-        "question": "Heading for Paragraph B: (Choose i - viii)",
-        "options": [
-          "i: The mass tourist",
-          "ii: Environmental damage",
-          "iii: The leisure context of tourism",
-          "iv: Developing visual sensitivity",
-          "v: Separation of work and leisure",
-          "vi: Hotel construction",
-          "vii: Diverse travel styles",
-          "viii: Cultural commodification"
+        id: 'c1-t2-p3-q29',
+        type: 'headings',
+        question: 'Paragraph B',
+        options: [
+          'i: The politics of tourism',
+          'ii: The cost of tourism',
+          'iii: Justifying the study of tourism',
+          'iv: Tourism contrasted with travel',
+          'v: The essence of modern tourism',
+          'vi: Tourism versus leisure',
+          'vii: The artificiality of modern tourism',
+          'viii: The role of modern tour guides',
+          'ix: Creating an alternative to the everyday experience',
         ],
-        "correctAnswer": "v",
-        "explanation": "Paragraph B explains work and leisure as separate regulated spheres.",
-        "explanationSi": "වැඩ සහ විවේකය වෙන්වීම (v) ඡේදය B හි කේන්ද්‍රයයි.",
-        "paragraphReference": "Paragraph B"
+        correctAnswer: 'v',
+        evidence:
+          'Indeed acting as a tourist is one of the defining characteristics of being “modern” and the popular concept of tourism is that it is organised within particular places and occurs for regularised periods of time.',
+        explanation:
+          'Paragraph B defines the fundamental nature and core characteristics (the essence) of modern tourism: separation from regulated work, movement to destinations, and temporary stay before returning home.',
+        explanationSi:
+          'නූතන සංචාරක ව්‍යාපාරයේ මූලික ස්වභාවය සහ ලක්ෂණ B ඡේදයෙන් විස්තර කරයි (v - The essence of modern tourism).',
+        paragraphReference: 'Paragraph B',
       },
       {
-        "id": "c1-t2-p3-q30",
-        "type": "headings",
-        "question": "Heading for Paragraph C: (Choose i - viii)",
-        "options": [
-          "i: The mass tourist",
-          "ii: Environmental damage",
-          "iii: The leisure context of tourism",
-          "iv: Developing visual sensitivity",
-          "v: Separation of work and leisure",
-          "vi: Hotel construction",
-          "vii: Diverse travel styles",
-          "viii: Cultural commodification"
+        id: 'c1-t2-p3-q30',
+        type: 'headings',
+        question: 'Paragraph C',
+        options: [
+          'i: The politics of tourism',
+          'ii: The cost of tourism',
+          'iii: Justifying the study of tourism',
+          'iv: Tourism contrasted with travel',
+          'v: The essence of modern tourism',
+          'vi: Tourism versus leisure',
+          'vii: The artificiality of modern tourism',
+          'viii: The role of modern tour guides',
+          'ix: Creating an alternative to the everyday experience',
         ],
-        "correctAnswer": "iv",
-        "explanation": "Paragraph C discusses the visual gaze and sensitivity.",
-        "explanationSi": "දෘශ්‍ය සංවේදීතාව (iv) ඡේදය C මගින් පැහැදිලි කරයි.",
-        "paragraphReference": "Paragraph C"
+        correctAnswer: 'iv',
+        evidence:
+          '...new socialised forms of provision have developed in order to cope with the mass character of the gazes of tourists as opposed to the individual character of travel.',
+        explanation:
+          'Paragraph C contrasts the mass, socially organized character of modern tourism with the individual character of travel.',
+        explanationSi:
+          'සංචාරක ව්‍යාපාරයේ (tourism) සාමූහික ස්වභාවය සහ පුද්ගලික ගමන් බිමන් (travel) අතර වෙනස C ඡේදයෙන් දක්වයි (iv).',
+        paragraphReference: 'Paragraph C',
       },
       {
-        "id": "c1-t2-p3-q31",
-        "type": "headings",
-        "question": "Heading for Paragraph D: (Choose i - viii)",
-        "options": [
-          "i: The mass tourist",
-          "ii: Environmental damage",
-          "iii: The leisure context of tourism",
-          "iv: Developing visual sensitivity",
-          "v: Separation of work and leisure",
-          "vi: Hotel construction",
-          "vii: Diverse travel styles",
-          "viii: Cultural commodification"
+        id: 'c1-t2-p3-q31',
+        type: 'headings',
+        question: 'Paragraph E',
+        options: [
+          'i: The politics of tourism',
+          'ii: The cost of tourism',
+          'iii: Justifying the study of tourism',
+          'iv: Tourism contrasted with travel',
+          'v: The essence of modern tourism',
+          'vi: Tourism versus leisure',
+          'vii: The artificiality of modern tourism',
+          'viii: The role of modern tour guides',
+          'ix: Creating an alternative to the everyday experience',
         ],
-        "correctAnswer": "vii",
-        "explanation": "Paragraph D contrasts romantic solitary travel with group mass tourism.",
-        "explanationSi": "විවිධ සංචාරක රටා (vii) ඡේදය D හි විස්තර කෙරේ.",
-        "paragraphReference": "Paragraph D"
+        correctAnswer: 'vii',
+        evidence:
+          'One of the earliest dissertations on the subject of tourism is Boorstin’s analysis of the “pseudo event” (1964)... finds pleasure in inauthentic contrived attractions, gullibly enjoying the “pseudo events”...',
+        explanation:
+          'Paragraph E discusses Boorstin’s critique of "pseudo events", inauthentic contrived attractions, and illusions—the artificiality of modern tourism.',
+        explanationSi:
+          'නූතන සංචාරක ව්‍යාපාරයේ කෘත්‍රිම බව ("pseudo events" / inauthentic contrived attractions) E ඡේදයෙන් විස්තර කෙරේ (vii).',
+        paragraphReference: 'Paragraph E',
       },
       {
-        "id": "c1-t2-p3-q32",
-        "type": "headings",
-        "question": "Heading for Paragraph E: (Choose i - viii)",
-        "options": [
-          "i: The mass tourist",
-          "ii: Environmental damage",
-          "iii: The leisure context of tourism",
-          "iv: Developing visual sensitivity",
-          "v: Separation of work and leisure",
-          "vi: Hotel construction",
-          "vii: Diverse travel styles",
-          "viii: Cultural commodification"
+        id: 'c1-t2-p3-q32',
+        type: 'headings',
+        question: 'Paragraph F',
+        options: [
+          'i: The politics of tourism',
+          'ii: The cost of tourism',
+          'iii: Justifying the study of tourism',
+          'iv: Tourism contrasted with travel',
+          'v: The essence of modern tourism',
+          'vi: Tourism versus leisure',
+          'vii: The artificiality of modern tourism',
+          'viii: The role of modern tour guides',
+          'ix: Creating an alternative to the everyday experience',
         ],
-        "correctAnswer": "viii",
-        "explanation": "Paragraph E explores commodification of culture for tourist expectations.",
-        "explanationSi": "සංස්කෘතිය වෙළඳ භාණ්ඩයක් වීම (viii) ඡේදය E හි දක්වයි.",
-        "paragraphReference": "Paragraph E"
+        correctAnswer: 'i',
+        evidence:
+          'These objects or places are located in a complex and changing hierarchy. This depends upon the interplay between, on the one hand, competition between interests involved in the provision of such objects and, on the other hand, changing class, gender, and generational distinctions of taste... Travel is a marker of status in modern societies...',
+        explanation:
+          'Paragraph F examines competing commercial interests, social hierarchy, status, class, gender, and generational power dynamics—the politics of tourism.',
+        explanationSi:
+          'සමාජ පන්තිය, තත්ත්වය (status) සහ විවිධ අවශ්‍යතා අතර තරඟකාරීත්වය හෙවත් සංචාරක ව්‍යාපාරයේ දේශපාලනය F ඡේදයෙන් විස්තර කරයි (i).',
+        paragraphReference: 'Paragraph F',
       },
       {
-        "id": "c1-t2-p3-q33",
-        "type": "TFNG",
-        "question": "John Urry claims that international travel has existed in the identical format across all human eras.",
-        "options": [
-          "YES",
-          "NO",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "NO",
-        "explanation": "Urry argues modern tourism is specifically tied to industrial separation of work and leisure.",
-        "explanationSi": "සංචාරක ව්‍යාපාරය සෑම යුගයකම එකම ආකාරයෙන් පැවති බව ඔහු ප්‍රතික්ෂේප කරයි (NO).",
-        "paragraphReference": "Paragraph B"
+        id: 'c1-t2-p3-q33',
+        type: 'TFNG',
+        question: 'Tourism is a trivial subject.',
+        options: ['YES', 'NO', 'NOT GIVEN'],
+        correctAnswer: 'NO',
+        evidence:
+          'Tourism, holidaymaking and travel are these days more significant social phenomena than most commentators have considered. On the face of it there could not be a more trivial subject for a book.',
+        explanation:
+          'Although on the surface it might seem trivial, the writer explicitly states that tourism is a much more significant social phenomenon than commentators have considered.',
+        explanationSi:
+          'සංචාරක ව්‍යාපාරය සුළු හෝ නොවැදගත් විෂයයක් නොව ඉතා වැදගත් සමාජ සංසිද්ධියක් බව කතුවරයා පවසයි (NO).',
+        paragraphReference: 'Paragraph A',
       },
       {
-        "id": "c1-t2-p3-q34",
-        "type": "TFNG",
-        "question": "Film and television shape prospective tourists’ expectations before they depart on holiday.",
-        "options": [
-          "YES",
-          "NO",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "YES",
-        "explanation": "Anticipation is constructed through TV, films, and literature.",
-        "explanationSi": "රූපවාහිනිය සහ චිත්‍රපට මගින් සංචාරක අපේක්ෂාවන් කලින්ම ගොඩනංවයි (YES).",
-        "paragraphReference": "Paragraph B"
+        id: 'c1-t2-p3-q34',
+        type: 'TFNG',
+        question: 'An analysis of deviance can act as a model for the analysis of tourism.',
+        options: ['YES', 'NO', 'NOT GIVEN'],
+        correctAnswer: 'YES',
+        evidence:
+          'However there are interesting parallels with the study of deviance... The assumption is that the investigation of deviance can reveal interesting and significant aspects of normal societies. It could be said that a similar analysis can be applied to tourism.',
+        explanation:
+          'Paragraph A directly states that a similar analysis to the study of deviance can be applied to tourism.',
+        explanationSi:
+          'අපගමනය (deviance) පිළිබඳ විශ්ලේෂණය සංචාරක ව්‍යාපාරය විශ්ලේෂණය කිරීමටද ආදර්ශයක් ලෙස යොදාගත හැකි බව කතුවරයා පවසයි (YES).',
+        paragraphReference: 'Paragraph A',
       },
       {
-        "id": "c1-t2-p3-q35",
-        "type": "TFNG",
-        "question": "Tourists spend more money on souvenirs than on hotel accommodation.",
-        "options": [
-          "YES",
-          "NO",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "NOT GIVEN",
-        "explanation": "No expenditure comparison between souvenirs and lodging is provided.",
-        "explanationSi": "සිහිවටන සහ නවාතැන් වියදම් සංසන්දනය කර නොමැත.",
-        "paragraphReference": "Paragraph D"
+        id: 'c1-t2-p3-q35',
+        type: 'TFNG',
+        question: 'Tourists usually choose to travel overseas.',
+        options: ['YES', 'NO', 'NOT GIVEN'],
+        correctAnswer: 'NOT GIVEN',
+        evidence:
+          'The journey and the stay are by definition outside the normal places of residence and work...',
+        explanation:
+          'The passage mentions traveling outside normal places of residence and work, but never states whether tourists usually travel overseas or domestically.',
+        explanationSi:
+          'සංචාරකයන් බොහෝ විට විදේශගත වීමට තෝරා ගන්නා බවක් ඡේදයේ සඳහන් නොවේ (NOT GIVEN).',
+        paragraphReference: 'Paragraph B',
       },
       {
-        "id": "c1-t2-p3-q36",
-        "type": "TFNG",
-        "question": "Tourists observe vacation scenery with greater visual scrutiny than they do during daily commuting.",
-        "options": [
-          "YES",
-          "NO",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "YES",
-        "explanation": "Involves much greater sensitivity to visual elements than daily life.",
-        "explanationSi": "එදිනෙදා ජීවිතයට වඩා ගැඹුරු දෘශ්‍ය අවධානයකින් සංචාරකයෝ පරිසරය නරඹති (YES).",
-        "paragraphReference": "Paragraph C"
+        id: 'c1-t2-p3-q36',
+        type: 'TFNG',
+        question: 'Tourists focus more on places they visit than those at home.',
+        options: ['YES', 'NO', 'NOT GIVEN'],
+        correctAnswer: 'YES',
+        evidence:
+          'The viewing of these tourist sights often involves different forms of social patterning with a much greater sensitivity to visual elements of landscape or townscape than is normally found in everyday life. People linger over these sights in a way that they would not normally do in their home environment...',
+        explanation:
+          'Paragraph D confirms that tourists view sights with much greater visual sensitivity and linger over them in ways they would not do in their home environment.',
+        explanationSi:
+          'සංචාරකයන් තම නිවස අවට පරිසරයට වඩා තමන් සංචාරය කරන ස්ථාන කෙරෙහි වැඩි අවධානයක් යොමු කරන බව D ඡේදයේ දැක්වේ (YES).',
+        paragraphReference: 'Paragraph D',
       },
       {
-        "id": "c1-t2-p3-q37",
-        "type": "TFNG",
-        "question": "Mass tourists invariably express deep regret when visiting artificial resorts.",
-        "options": [
-          "YES",
-          "NO",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "NOT GIVEN",
-        "explanation": "The text notes they find pleasure in contrived attractions; regret is not mentioned.",
-        "explanationSi": "කෘතිම ස්ථාන නැරඹීමෙන් පසු පසුතැවෙන බවක් සඳහන් නොවේ.",
-        "paragraphReference": "Paragraph D"
+        id: 'c1-t2-p3-q37',
+        type: 'TFNG',
+        question: 'Tour operators try to cheat tourists.',
+        options: ['YES', 'NO', 'NOT GIVEN'],
+        correctAnswer: 'NOT GIVEN',
+        evidence:
+          'To service the burgeoning tourist industry, an array of professionals has developed who attempt to reproduce ever-new objects for the tourist to look at.',
+        explanation:
+          'The writer mentions tourism professionals catering to tourists’ tastes and reproducing objects to look at, but never claims that tour operators try to cheat tourists.',
+        explanationSi:
+          'සංචාරක නියෝජිතයන් සංචාරකයන් රැවටීමට උත්සාහ කරන බවක් කතුවරයා පවසා නැත (NOT GIVEN).',
+        paragraphReference: 'Paragraph F',
       },
       {
-        "id": "c1-t2-p3-q38",
-        "type": "mcq",
-        "question": "Modern tourism is described by sociologists as: (Match phrase A-H)",
-        "options": [
-          "A: An ancient universal drive",
-          "B: Sustained through non-tourist media practices such as film and TV",
-          "C: Banned in socialist societies",
-          "D: A manifestation of how work and leisure are organized as separate spheres",
-          "E: Solely about sunbathing",
-          "F: Requiring heightened visual appreciation of landscape and townscape",
-          "G: Cheaper than remaining at home",
-          "H: Often characterized by group travel to contrived, inauthentic attractions"
+        id: 'c1-t2-p3-q38',
+        type: 'mcq',
+        question: 'Our concept of tourism arises from ...',
+        options: [
+          'A: local people and their environment.',
+          'B: the expectations of tourists.',
+          'C: the phenomena of holidaymaking.',
+          'D: the distinction we make between work and leisure.',
+          'E: the individual character of travel.',
+          'F: places seen in everyday life.',
+          'G: photographs which recapture our holidays.',
+          'H: sights designed specially for tourists.',
         ],
-        "correctAnswer": "D",
-        "explanation": "Urry: manifestation of work and leisure organized as separate spheres.",
-        "explanationSi": "වැඩ සහ විවේකය වෙන වෙනම සංවිධානය වීමේ ප්‍රතිඵලයකි (D).",
-        "paragraphReference": "Paragraph B"
+        correctAnswer: 'D',
+        evidence:
+          'Tourism is a leisure activity which presupposes its opposite namely regulated and organised work. It is one manifestation of how work and leisure are organised as separate and regulated spheres of social practice in modern societies.',
+        explanation:
+          'Paragraph B explains that our concept of tourism stems from the division between regulated work and leisure.',
+        explanationSi:
+          'සංචාරක ව්‍යාපාරය පිළිබඳ අපගේ සංකල්පය පැන නගින්නේ රැකියාව සහ විවේකය අතර අප ඇති කරගන්නා වෙනස (D) මගිනි (ඡේදය B).',
+        paragraphReference: 'Paragraph B',
       },
       {
-        "id": "c1-t2-p3-q39",
-        "type": "mcq",
-        "question": "The mental anticipation of holidays is: (Match phrase A-H)",
-        "options": [
-          "A: An ancient universal drive",
-          "B: Sustained through non-tourist media practices such as film and TV",
-          "C: Banned in socialist societies",
-          "D: A manifestation of how work and leisure are organized as separate spheres",
-          "E: Solely about sunbathing",
-          "F: Requiring heightened visual appreciation of landscape and townscape",
-          "G: Cheaper than remaining at home",
-          "H: Often characterized by group travel to contrived, inauthentic attractions"
+        id: 'c1-t2-p3-q39',
+        type: 'mcq',
+        question: 'The media can be used to enhance ...',
+        options: [
+          'A: local people and their environment.',
+          'B: the expectations of tourists.',
+          'C: the phenomena of holidaymaking.',
+          'D: the distinction we make between work and leisure.',
+          'E: the individual character of travel.',
+          'F: places seen in everyday life.',
+          'G: photographs which recapture our holidays.',
+          'H: sights designed specially for tourists.',
         ],
-        "correctAnswer": "B",
-        "explanation": "Constructed and sustained through non-tourist media practices like film and TV.",
-        "explanationSi": "චිත්‍රපට සහ රූපවාහිනිය මගින් පවත්වාගෙන යනු ලබයි (B).",
-        "paragraphReference": "Paragraph B"
+        correctAnswer: 'B',
+        evidence:
+          'Places are chosen to be visited and be gazed upon because there is an anticipation, especially through daydreaming and fantasy, of intense pleasures... Such anticipation is constructed and sustained through a variety of non-tourist practices such as films, TV, literature, magazines, records and videos...',
+        explanation:
+          'Paragraph C states that media (films, TV, literature, magazines, videos) construct and sustain tourists’ anticipation and expectations.',
+        explanationSi:
+          'සංචාරකයන්ගේ බලාපොරොත්තු (B - the expectations of tourists) ඉහළ නැංවීමට මාධ්‍ය (චිත්‍රපට, රූපවාහිනිය, සඟරා) භාවිතා කළ හැක (ඡේදය C).',
+        paragraphReference: 'Paragraph C',
       },
       {
-        "id": "c1-t2-p3-q40",
-        "type": "mcq",
-        "question": "The viewing of holiday destinations involves: (Match phrase A-H)",
-        "options": [
-          "A: An ancient universal drive",
-          "B: Sustained through non-tourist media practices such as film and TV",
-          "C: Banned in socialist societies",
-          "D: A manifestation of how work and leisure are organized as separate spheres",
-          "E: Solely about sunbathing",
-          "F: Requiring heightened visual appreciation of landscape and townscape",
-          "G: Cheaper than remaining at home",
-          "H: Often characterized by group travel to contrived, inauthentic attractions"
+        id: 'c1-t2-p3-q40',
+        type: 'mcq',
+        question: 'People view tourist landscapes in a different way from ...',
+        options: [
+          'A: local people and their environment.',
+          'B: the expectations of tourists.',
+          'C: the phenomena of holidaymaking.',
+          'D: the distinction we make between work and leisure.',
+          'E: the individual character of travel.',
+          'F: places seen in everyday life.',
+          'G: photographs which recapture our holidays.',
+          'H: sights designed specially for tourists.',
         ],
-        "correctAnswer": "F",
-        "explanation": "Involves greater sensitivity to visual elements of landscape/townscape.",
-        "explanationSi": "දර්ශන පිළිබඳ වැඩි දෘශ්‍ය සංවේදීතාවක් අවශ්‍ය වේ (F).",
-        "paragraphReference": "Paragraph C"
+        correctAnswer: 'F',
+        evidence:
+          'Tourists tend to visit features of landscape and townscape which separate them off from everyday experience... with a much greater sensitivity to visual elements of landscape or townscape than is normally found in everyday life.',
+        explanation:
+          'Paragraph D shows that people gaze at tourist landscapes with much greater visual sensitivity than places seen in everyday life.',
+        explanationSi:
+          'එදිනෙදා ජීවිතයේදී දකින ස්ථානවලට (F - places seen in everyday life) වඩා වෙනස් ආකාරයකින් මිනිසුන් සංචාරක භූ දර්ශන දෙස බලයි (ඡේදය D).',
+        paragraphReference: 'Paragraph D',
       },
       {
-        "id": "c1-t2-p3-q41",
-        "type": "mcq",
-        "question": "Mass tourism today is: (Match phrase A-H)",
-        "options": [
-          "A: An ancient universal drive",
-          "B: Sustained through non-tourist media practices such as film and TV",
-          "C: Banned in socialist societies",
-          "D: A manifestation of how work and leisure are organized as separate spheres",
-          "E: Solely about sunbathing",
-          "F: Requiring heightened visual appreciation of landscape and townscape",
-          "G: Cheaper than remaining at home",
-          "H: Often characterized by group travel to contrived, inauthentic attractions"
+        id: 'c1-t2-p3-q41',
+        type: 'mcq',
+        question: 'Group tours encourage participants to look at ...',
+        options: [
+          'A: local people and their environment.',
+          'B: the expectations of tourists.',
+          'C: the phenomena of holidaymaking.',
+          'D: the distinction we make between work and leisure.',
+          'E: the individual character of travel.',
+          'F: places seen in everyday life.',
+          'G: photographs which recapture our holidays.',
+          'H: sights designed specially for tourists.',
         ],
-        "correctAnswer": "H",
-        "explanation": "Mass tourist travels in guided groups and finds pleasure in contrived attractions.",
-        "explanationSi": "සමූහ සංචාරකයින් කෘතිම නිර්මාණ නැරඹීමට ප්‍රිය කරති (H).",
-        "paragraphReference": "Paragraph D"
-      }
-    ]
+        correctAnswer: 'H',
+        evidence:
+          'Isolated from the host environment and the local people, the mass tourist travels in guided groups and finds pleasure in inauthentic contrived attractions, gullibly enjoying the “pseudo events”...',
+        explanation:
+          'Paragraph E explains that guided group tours direct tourists toward contrived attractions ("pseudo events") specially designed for tourists.',
+        explanationSi:
+          'කණ්ඩායම් සංචාර මගින් සංචාරකයන් සඳහාම විශේෂයෙන් නිර්මාණය කරන ලද කෘත්‍රිම ආකර්ෂණයන් (H - sights designed specially for tourists) නැරඹීමට පොළඹවයි (ඡේදය E).',
+        paragraphReference: 'Paragraph E',
+      },
+    ],
   },
-  {
-    "id": "c1-t3-pass1",
-    "cambridgeSource": "Cambridge IELTS 1, Test 3 - Reading Passage 1",
-    "title": "Spoken corpus comes to life",
-    "paragraphs": [
-      {
-        "label": "Paragraph A",
-        "text": "The compilation of the British National Corpus of spoken English represents a milestone in lexicography. For decades, English dictionaries and grammar books were almost exclusively derived from written literary sources. However, written English works in a very different way to spoken English."
-      },
-      {
-        "label": "Paragraph B",
-        "text": "To capture the real language of everyday conversation, researchers recruited hundreds of ordinary people across Britain, equipping them with portable audio cassette recorders. Participants taped their routine dialogues with family, colleagues, shop assistants, and friends."
-      },
-      {
-        "label": "Paragraph C",
-        "text": "This newly transcribed ten-million-word spoken database has formed the core of the Longman Language Activator. This has been the basis—along with the publisher’s existing written corpus—for an unprecedented, scientifically accurate analysis of modern colloquial speech."
-      },
-      {
-        "label": "Paragraph D",
-        "text": "In the resulting reference works, headwords are followed by related phrases, accompanied by their precise contextual meanings and grammatical forms. The corpus highlights words that are frequent in speech but virtually absent from formal prose."
-      },
-      {
-        "label": "Paragraph E",
-        "text": "Crucially, the corpus reveals how spoken communication operates in real time. It reveals the communicative power of the pauses and noises we use to play for time, convey emotion, doubt, and irony—features formerly dismissed as errors."
-      },
-      {
-        "label": "Paragraph F",
-        "text": "By examining real oral patterns, linguists are rewriting the rules of pedagogy, helping learners communicate with authentic natural fluency rather than reciting archaic textbook formulations."
-      }
-    ],
-    "questions": [
-      {
-        "id": "c1-t3-p1-q1",
-        "type": "headings",
-        "question": "Heading for Paragraph A: (Choose i - x)",
-        "options": [
-          "i: Recording equipment",
-          "ii: Audio recording method",
-          "iii: Selling dictionaries",
-          "iv: Semantic breakdown of phrases",
-          "v: Archaic grammar",
-          "vi: Grammar based on written language",
-          "vii: Silent speakers",
-          "viii: Combining speech with written texts",
-          "ix: Fresh guidance for language learners",
-          "x: Everyday speech features"
-        ],
-        "correctAnswer": "vi",
-        "explanation": "Paragraph A discusses historical reliance on written language for grammar.",
-        "explanationSi": "සාම්ප්‍රදායිකව ව්‍යාකරණ ලිඛිත භාෂාව මත පදනම් වූ බව (vi) පෙන්වා දෙයි.",
-        "paragraphReference": "Paragraph A"
-      },
-      {
-        "id": "c1-t3-p1-q2",
-        "type": "headings",
-        "question": "Heading for Paragraph B: (Choose i - x)",
-        "options": [
-          "i: Recording equipment",
-          "ii: Audio recording method",
-          "iii: Selling dictionaries",
-          "iv: Semantic breakdown of phrases",
-          "v: Archaic grammar",
-          "vi: Grammar based on written language",
-          "vii: Silent speakers",
-          "viii: Combining speech with written texts",
-          "ix: Fresh guidance for language learners",
-          "x: Everyday speech features"
-        ],
-        "correctAnswer": "ii",
-        "explanation": "Paragraph B explains recruiting volunteers with cassette recorders.",
-        "explanationSi": "ශ්‍රව්‍ය පටිගත කිරීමේ ක්‍රමවේදය (ii) ඡේදය B හි විස්තර කරයි.",
-        "paragraphReference": "Paragraph B"
-      },
-      {
-        "id": "c1-t3-p1-q3",
-        "type": "headings",
-        "question": "Heading for Paragraph C: (Choose i - x)",
-        "options": [
-          "i: Recording equipment",
-          "ii: Audio recording method",
-          "iii: Selling dictionaries",
-          "iv: Semantic breakdown of phrases",
-          "v: Archaic grammar",
-          "vi: Grammar based on written language",
-          "vii: Silent speakers",
-          "viii: Combining speech with written texts",
-          "ix: Fresh guidance for language learners",
-          "x: Everyday speech features"
-        ],
-        "correctAnswer": "viii",
-        "explanation": "Paragraph C details combining the spoken database with existing written corpus.",
-        "explanationSi": "කථන සහ ලිඛිත දත්ත සමුදායන් ඒකාබද්ධ කිරීම (viii) මෙහි දැක්වේ.",
-        "paragraphReference": "Paragraph C"
-      },
-      {
-        "id": "c1-t3-p1-q4",
-        "type": "headings",
-        "question": "Heading for Paragraph D: (Choose i - x)",
-        "options": [
-          "i: Recording equipment",
-          "ii: Audio recording method",
-          "iii: Selling dictionaries",
-          "iv: Semantic breakdown of phrases",
-          "v: Archaic grammar",
-          "vi: Grammar based on written language",
-          "vii: Silent speakers",
-          "viii: Combining speech with written texts",
-          "ix: Fresh guidance for language learners",
-          "x: Everyday speech features"
-        ],
-        "correctAnswer": "iv",
-        "explanation": "Paragraph D focuses on related phrases, meanings and forms.",
-        "explanationSi": "අර්ථ සහ ව්‍යාකරණ රටා වර්ගීකරණය (iv) ඡේදය D හි අඩංගුය.",
-        "paragraphReference": "Paragraph D"
-      },
-      {
-        "id": "c1-t3-p1-q5",
-        "type": "headings",
-        "question": "Heading for Paragraph E: (Choose i - x)",
-        "options": [
-          "i: Recording equipment",
-          "ii: Audio recording method",
-          "iii: Selling dictionaries",
-          "iv: Semantic breakdown of phrases",
-          "v: Archaic grammar",
-          "vi: Grammar based on written language",
-          "vii: Silent speakers",
-          "viii: Combining speech with written texts",
-          "ix: Fresh guidance for language learners",
-          "x: Everyday speech features"
-        ],
-        "correctAnswer": "x",
-        "explanation": "Paragraph E discusses noises, pauses, and everyday spoken features.",
-        "explanationSi": "දෛනික කථනයේ ලක්ෂණ සහ විරාමයන් (x) ඡේදය E හි විස්තර වේ.",
-        "paragraphReference": "Paragraph E"
-      },
-      {
-        "id": "c1-t3-p1-q6",
-        "type": "headings",
-        "question": "Heading for Paragraph F: (Choose i - x)",
-        "options": [
-          "i: Recording equipment",
-          "ii: Audio recording method",
-          "iii: Selling dictionaries",
-          "iv: Semantic breakdown of phrases",
-          "v: Archaic grammar",
-          "vi: Grammar based on written language",
-          "vii: Silent speakers",
-          "viii: Combining speech with written texts",
-          "ix: Fresh guidance for language learners",
-          "x: Everyday speech features"
-        ],
-        "correctAnswer": "ix",
-        "explanation": "Paragraph F explains how these findings provide fresh guidance for learners.",
-        "explanationSi": "භාෂා ඉගෙනුම ලබන්නන් සඳහා නව මඟපෙන්වීමක් (ix) ලබාදීම.",
-        "paragraphReference": "Paragraph F"
-      },
-      {
-        "id": "c1-t3-p1-q7",
-        "type": "summary",
-        "question": "Along with spoken recordings, the Language Activator incorporated an __________ written corpus.",
-        "correctAnswer": "existing",
-        "explanation": "Paragraph C states: along with the company’s existing written corpus.",
-        "explanationSi": "දැනටමත් පැවති (existing) ලිඛිත දත්ත සමුදාය ද යොදාගන්නා ලදී.",
-        "paragraphReference": "Paragraph C"
-      },
-      {
-        "id": "c1-t3-p1-q8",
-        "type": "summary",
-        "question": "In the dictionary entries, keywords are organized and followed by __________.",
-        "correctAnswer": "related phrases",
-        "explanation": "Paragraph D states keywords are followed by related phrases.",
-        "explanationSi": "මූලික වචන ආශ්‍රිත වාක්‍යාංශ (related phrases) මගින් විස්තර කෙරේ.",
-        "paragraphReference": "Paragraph D"
-      },
-      {
-        "id": "c1-t3-p1-q9",
-        "type": "summary",
-        "question": "Phrases are categorized according to their contextual __________ and grammatical usage.",
-        "correctAnswer": "meanings",
-        "explanation": "Paragraph D categorizes entries by meanings and grammatical forms.",
-        "explanationSi": "අර්ථයන් (meanings // forms) අනුව වර්ග කර ඇත.",
-        "paragraphReference": "Paragraph D"
-      },
-      {
-        "id": "c1-t3-p1-q10",
-        "type": "summary",
-        "question": "The project proved that written English behaves very differently from __________ English.",
-        "correctAnswer": "spoken",
-        "explanation": "Paragraph A confirms written English works differently to spoken / oral English.",
-        "explanationSi": "ලිඛිත භාෂාව කථන (spoken // oral) භාෂාවට වඩා හාත්පසින්ම වෙනස්ය.",
-        "paragraphReference": "Paragraph A"
-      },
-      {
-        "id": "c1-t3-p1-q11",
-        "type": "summary",
-        "question": "The research illuminated the expressive importance of conversational pauses and __________.",
-        "correctAnswer": "noises",
-        "explanation": "Paragraph E notes the power of noises and pauses.",
-        "explanationSi": "කථනයේදී ඇතිවන විරාම සහ ශබ්ද (noises // pauses) වැදගත් කාර්යයක් ඉටුකරයි.",
-        "paragraphReference": "Paragraph E"
-      },
-      {
-        "id": "c1-t3-p1-q12",
-        "type": "mcq",
-        "question": "The overall purpose of the writer in this passage is to:",
-        "options": [
-          "A: Complain about bad English grammar",
-          "B: Describe how an innovative spoken database is revolutionizing English lexicography",
-          "C: Sell tape recorders to students",
-          "D: Argue that writing is superior to speech"
-        ],
-        "correctAnswer": "B",
-        "explanation": "The passage highlights how the spoken corpus revolutionizes lexicography (Option B).",
-        "explanationSi": "කථන දත්ත සමුදායක් මගින් ශබ්දකෝෂ සම්පාදනය විප්ලවීය ලෙස වෙනස් කළ ආකාරය දැක්වීම (B).",
-        "paragraphReference": "Paragraph A-F"
-      }
-    ]
-  },
-  {
-    "id": "c1-t3-pass2",
-    "cambridgeSource": "Cambridge IELTS 1, Test 3 - Reading Passage 2",
-    "title": "Hobbits happy as homes go underground",
-    "paragraphs": [
-      {
-        "label": "Paragraph A",
-        "text": "Subterranean living is not just the preserve of Tolkien’s Hobbits. Across Europe and North America, a growing architectural movement is promoting underground earth-sheltered homes as an eco-friendly housing alternative."
-      },
-      {
-        "label": "Paragraph B",
-        "text": "The natural insulating properties of earth provide exceptional energy efficiency. Because soil temperature fluctuates only slightly throughout the year, earth-sheltered homes remain cool in summer and warm in winter, slashing domestic heating bills by up to 80%."
-      },
-      {
-        "label": "Paragraph C",
-        "text": "Furthermore, underground buildings blend unobtrusively into countryside landscapes, preserving green belts and protecting natural scenic vistas from urban sprawl."
-      },
-      {
-        "label": "Paragraph D",
-        "text": "In Japan and Switzerland, major underground infrastructure has proved remarkably resilient against earthquakes, tornadoes, and severe storms."
-      },
-      {
-        "label": "Paragraph E",
-        "text": "A notable Dutch earth-sheltered housing development was greeted with undisguised relief by South Limburg planners who sought to halt suburban encroachment."
-      },
-      {
-        "label": "Paragraph F",
-        "text": "However, in Europe the primary obstacle has been conservative local authorities and commercial developers who prefer to ensure quick sales with conventional mass-produced housing."
-      },
-      {
-        "label": "Paragraph G",
-        "text": "Ingenious innovations continue. Architect Hurkmans hit upon the idea of constructing houses directly inside motorway noise embankments, simultaneously solving housing shortages and acoustic pollution."
-      },
-      {
-        "label": "Paragraph H",
-        "text": "In Ivrea, Italy, the Olivetti corporate centre constructed an underground residential complex that forms a hotel and retreat for Olivetti employees. Yet psychological adaptation varies; not everyone adapts so well to living beneath ground without conventional exterior windows."
-      },
-      {
-        "label": "Paragraph I",
-        "text": "In Australia’s outback opal-mining town of Coober Pedy, over 70% of residents dwell underground. One local resident explained that their spacious subterranean home evolved accidentally when he excavated a cool room for his bakery business into a hillside."
-      }
-    ],
-    "questions": [
-      {
-        "id": "c1-t3-p2-q13",
-        "type": "headings",
-        "question": "Heading for Paragraph A: (Choose i - xi)",
-        "options": [
-          "i: Protection from earthquakes",
-          "ii: Low costs of construction",
-          "iii: Corporate retreat and psychology",
-          "iv: Australian underground bakery",
-          "v: Preserving scenic landscapes",
-          "vi: Tolkien’s literature",
-          "vii: Noise embankment houses",
-          "viii: Thermal efficiency of earth",
-          "ix: Lack of interest from developers",
-          "x: High heating bills",
-          "xi: Beyond hobbits - modern underground housing"
-        ],
-        "correctAnswer": "xi",
-        "explanation": "Paragraph A introduces modern underground dwellings beyond fantasy.",
-        "explanationSi": "නූතන භූගත නිවාස පිළිබඳ හැඳින්වීම (xi).",
-        "paragraphReference": "Paragraph A"
-      },
-      {
-        "id": "c1-t3-p2-q14",
-        "type": "headings",
-        "question": "Heading for Paragraph B: (Choose i - xi)",
-        "options": [
-          "i: Protection from earthquakes",
-          "ii: Low costs of construction",
-          "iii: Corporate retreat and psychology",
-          "iv: Australian underground bakery",
-          "v: Preserving scenic landscapes",
-          "vi: Tolkien’s literature",
-          "vii: Noise embankment houses",
-          "viii: Thermal efficiency of earth",
-          "ix: Lack of interest from developers",
-          "x: High heating bills",
-          "xi: Beyond hobbits - modern underground housing"
-        ],
-        "correctAnswer": "viii",
-        "explanation": "Paragraph B explains the thermal insulation of soil.",
-        "explanationSi": "පසේ තාප පරිවරණ ගුණය (viii) විස්තර කරයි.",
-        "paragraphReference": "Paragraph B"
-      },
-      {
-        "id": "c1-t3-p2-q15",
-        "type": "headings",
-        "question": "Heading for Paragraph C: (Choose i - xi)",
-        "options": [
-          "i: Protection from earthquakes",
-          "ii: Low costs of construction",
-          "iii: Corporate retreat and psychology",
-          "iv: Australian underground bakery",
-          "v: Preserving scenic landscapes",
-          "vi: Tolkien’s literature",
-          "vii: Noise embankment houses",
-          "viii: Thermal efficiency of earth",
-          "ix: Lack of interest from developers",
-          "x: High heating bills",
-          "xi: Beyond hobbits - modern underground housing"
-        ],
-        "correctAnswer": "v",
-        "explanation": "Paragraph C discusses preserving green belts and scenery.",
-        "explanationSi": "ස්වාභාවික භූමි දර්ශන ආරක්ෂා කිරීම (v).",
-        "paragraphReference": "Paragraph C"
-      },
-      {
-        "id": "c1-t3-p2-q16",
-        "type": "headings",
-        "question": "Heading for Paragraph D: (Choose i - xi)",
-        "options": [
-          "i: Protection from earthquakes",
-          "ii: Low costs of construction",
-          "iii: Corporate retreat and psychology",
-          "iv: Australian underground bakery",
-          "v: Preserving scenic landscapes",
-          "vi: Tolkien’s literature",
-          "vii: Noise embankment houses",
-          "viii: Thermal efficiency of earth",
-          "ix: Lack of interest from developers",
-          "x: High heating bills",
-          "xi: Beyond hobbits - modern underground housing"
-        ],
-        "correctAnswer": "i",
-        "explanation": "Paragraph D highlights structural resilience against earthquakes and storms.",
-        "explanationSi": "භූමිකම්පාවලින් ආරක්ෂාව (i) පිළිබඳව දක්වයි.",
-        "paragraphReference": "Paragraph D"
-      },
-      {
-        "id": "c1-t3-p2-q17",
-        "type": "headings",
-        "question": "Heading for Paragraph F: (Choose i - xi)",
-        "options": [
-          "i: Protection from earthquakes",
-          "ii: Low costs of construction",
-          "iii: Corporate retreat and psychology",
-          "iv: Australian underground bakery",
-          "v: Preserving scenic landscapes",
-          "vi: Tolkien’s literature",
-          "vii: Noise embankment houses",
-          "viii: Thermal efficiency of earth",
-          "ix: Conservative developers and authorities",
-          "x: High heating bills",
-          "xi: Beyond hobbits - modern underground housing"
-        ],
-        "correctAnswer": "ix",
-        "explanation": "Paragraph F describes conservative developers preferring conventional housing.",
-        "explanationSi": "සම්ප්‍රදායික ගොඩනැගිලි සමාගම්වල අකමැත්ත (ix).",
-        "paragraphReference": "Paragraph F"
-      },
-      {
-        "id": "c1-t3-p2-q18",
-        "type": "headings",
-        "question": "Heading for Paragraph G: (Choose i - xi)",
-        "options": [
-          "i: Protection from earthquakes",
-          "ii: Low costs of construction",
-          "iii: Corporate retreat and psychology",
-          "iv: Australian underground bakery",
-          "v: Preserving scenic landscapes",
-          "vi: Tolkien’s literature",
-          "vii: Houses inside motorway noise embankments",
-          "viii: Thermal efficiency of earth",
-          "ix: Conservative developers and authorities",
-          "x: High heating bills",
-          "xi: Beyond hobbits - modern underground housing"
-        ],
-        "correctAnswer": "vii",
-        "explanation": "Paragraph G details building homes inside highway noise barriers.",
-        "explanationSi": "අධිවේගී මාර්ග බැමි තුළ නිවාස තැනීම (vii).",
-        "paragraphReference": "Paragraph G"
-      },
-      {
-        "id": "c1-t3-p2-q19",
-        "type": "headings",
-        "question": "Heading for Paragraph H: (Choose i - xi)",
-        "options": [
-          "i: Protection from earthquakes",
-          "ii: Low costs of construction",
-          "iii: Corporate facilities and psychological adjustment",
-          "iv: Australian underground bakery",
-          "v: Preserving scenic landscapes",
-          "vi: Tolkien’s literature",
-          "vii: Houses inside motorway noise embankments",
-          "viii: Thermal efficiency of earth",
-          "ix: Conservative developers and authorities",
-          "x: High heating bills",
-          "xi: Beyond hobbits - modern underground housing"
-        ],
-        "correctAnswer": "iii",
-        "explanation": "Paragraph H explores the Olivetti corporate facility and human adjustment.",
-        "explanationSi": "ආයතනික පහසුකම් සහ මානසික අනුකූලතාව (iii).",
-        "paragraphReference": "Paragraph H"
-      },
-      {
-        "id": "c1-t3-p2-q20",
-        "type": "headings",
-        "question": "Heading for Paragraph I: (Choose i - xi)",
-        "options": [
-          "i: Protection from earthquakes",
-          "ii: Low costs of construction",
-          "iii: Corporate facilities and psychological adjustment",
-          "iv: Coober Pedy and home created from a bakery cool room",
-          "v: Preserving scenic landscapes",
-          "vi: Tolkien’s literature",
-          "vii: Houses inside motorway noise embankments",
-          "viii: Thermal efficiency of earth",
-          "ix: Conservative developers and authorities",
-          "x: High heating bills",
-          "xi: Beyond hobbits - modern underground housing"
-        ],
-        "correctAnswer": "iv",
-        "explanation": "Paragraph I details Coober Pedy and the bakery cool room home.",
-        "explanationSi": "කුබර් පීඩි සහ බේකරි සිසිල් කාමරයකින් බිහිවූ නිවස (iv).",
-        "paragraphReference": "Paragraph I"
-      },
-      {
-        "id": "c1-t3-p2-q21",
-        "type": "summary",
-        "question": "European developers prefer mass-produced houses because they __________.",
-        "correctAnswer": "sell quickly",
-        "explanation": "Developers prefer conventional housing to ensure quick sales (sell quickly).",
-        "explanationSi": "ඉක්මනින් අලෙවි කරගත හැකි නිසා (sell quickly) සාම්ප්‍රදායික නිවාස තෝරාගනී.",
-        "paragraphReference": "Paragraph F"
-      },
-      {
-        "id": "c1-t3-p2-q22",
-        "type": "summary",
-        "question": "The Dutch underground project was welcomed enthusiastically by __________.",
-        "correctAnswer": "South Limburg planners",
-        "explanation": "Greeted with undisguised relief by South Limburg planners.",
-        "explanationSi": "South Limburg සැලසුම්කරුවන් විසින් උණුසුම්ව පිළිගන්නා ලදී.",
-        "paragraphReference": "Paragraph E"
-      },
-      {
-        "id": "c1-t3-p2-q23",
-        "type": "summary",
-        "question": "Architect Hurkmans solved acoustic problems by placing homes inside motorway __________.",
-        "correctAnswer": "noise embankments",
-        "explanation": "Constructed directly inside motorway noise embankments.",
-        "explanationSi": "ශබ්ද බාධක බැමි (noise embankments) තුළ නිවාස ඉදිකරන ලදී.",
-        "paragraphReference": "Paragraph G"
-      },
-      {
-        "id": "c1-t3-p2-q24",
-        "type": "summary",
-        "question": "In Ivrea, Italy, an underground residential complex was built for __________.",
-        "correctAnswer": "Olivetti employees",
-        "explanation": "The Olivetti complex accommodates Olivetti employees.",
-        "explanationSi": "Olivetti සේවකයන් සඳහා (Olivetti employees) හෝටලයක් තනන ලදී.",
-        "paragraphReference": "Paragraph H"
-      },
-      {
-        "id": "c1-t3-p2-q25",
-        "type": "summary",
-        "question": "A key psychological concern is that not all residents comfortably __________ windowless subterranean spaces.",
-        "correctAnswer": "adapt to",
-        "explanation": "Not everyone adapts so well to subterranean living.",
-        "explanationSi": "භූගත ජීවිතයට හුරුවීම (adapt to) සැමටම පහසු නැත.",
-        "paragraphReference": "Paragraph H"
-      },
-      {
-        "id": "c1-t3-p2-q26",
-        "type": "summary",
-        "question": "In Coober Pedy, an underground home originated when a resident excavated a cool room for __________.",
-        "correctAnswer": "his bakery business",
-        "explanation": "Dug a cool room for his bakery business in a hill.",
-        "explanationSi": "බේකරි ව්‍යාපාරය (his bakery business) සඳහා හෑරූ සිසිල් කාමරයකින් නිවස බිහිවිය.",
-        "paragraphReference": "Paragraph I"
-      }
-    ]
-  },
-  {
-    "id": "c1-t3-pass3",
-    "cambridgeSource": "Cambridge IELTS 1, Test 3 - Reading Passage 3",
-    "title": "A workaholic economy",
-    "paragraphs": [
-      {
-        "label": "Paragraph A",
-        "text": "Throughout the first half of the 20th century, social theorists predicted that technological automation would usher in a golden era of leisure, with work weeks shrinking to twenty hours or less."
-      },
-      {
-        "label": "Paragraph B",
-        "text": "However, in the United States and Britain, working hours have increased noticeably since 1970. The average American now works an additional 163 hours per year compared to 1969—the equivalent of an extra month of full-time labour. Simultaneously, real wages have stagnated since that year, forcing households to work multiple jobs to sustain their living standards."
-      },
-      {
-        "label": "Paragraph C",
-        "text": "Furthermore, the current economic recovery has gained notoriety for its \"jobless\" nature. Rather than hiring new staff, corporations compel their existing workforce to work overtime. Juliet Schor, author of The Overworked American, cites compelling studies that demonstrate increased productivity for part-time workers, yet management remains dogmatically committed to demanding long, exhausting hours."
-      },
-      {
-        "label": "Paragraph D",
-        "text": "This workaholic culture exacts a devastating toll on civic society. Parents lack time to participate in community institutions, volunteerism has eroded, and epidemic rates of stress-related illnesses plague white-collar workers. Economists advocate for statutory four-day work weeks, flexible job sharing, and sabbatical leave to redistribute employment and revitalize community vitality."
-      }
-    ],
-    "questions": [
-      {
-        "id": "c1-t3-p3-q27",
-        "type": "TFNG",
-        "question": "Employees in the United States work significantly fewer hours today than they did in 1970.",
-        "options": [
-          "YES",
-          "NO",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "NO",
-        "explanation": "Paragraph B explicitly states working hours have increased noticeably since 1970.",
-        "explanationSi": "1970 සිට වැඩ කරන පැය ගණන වැඩි වී ඇති බව (NO) පැහැදිලි කරයි.",
-        "paragraphReference": "Paragraph B"
-      },
-      {
-        "id": "c1-t3-p3-q28",
-        "type": "TFNG",
-        "question": "British workers take longer annual holidays than their American counterparts.",
-        "options": [
-          "YES",
-          "NO",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "NOT GIVEN",
-        "explanation": "The text mentions both countries but does not compare holiday durations.",
-        "explanationSi": "නිවාඩු දින සංඛ්‍යාව සංසන්දනය කර නොමැත.",
-        "paragraphReference": "Paragraph B"
-      },
-      {
-        "id": "c1-t3-p3-q29",
-        "type": "TFNG",
-        "question": "Real wages in the United States have stagnated since approximately 1970.",
-        "options": [
-          "YES",
-          "NO",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "YES",
-        "explanation": "Paragraph B confirms real wages have stagnated since 1970.",
-        "explanationSi": "සැබෑ වැටුප් 1970 සිට එක තැන පල්වී ඇත (YES).",
-        "paragraphReference": "Paragraph B"
-      },
-      {
-        "id": "c1-t3-p3-q30",
-        "type": "TFNG",
-        "question": "Recent economic recoveries have created millions of high-paying manufacturing jobs.",
-        "options": [
-          "YES",
-          "NO",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "NO",
-        "explanation": "Paragraph C describes the recovery as notorious for its \"jobless\" nature.",
-        "explanationSi": "ආර්ථික ප්‍රකෘතිමත් වීම රැකියා රහිත එකක් (jobless) වී ඇත (NO).",
-        "paragraphReference": "Paragraph C"
-      },
-      {
-        "id": "c1-t3-p3-q31",
-        "type": "TFNG",
-        "question": "Research proves that part-time employees frequently display higher productivity levels than full-time staff.",
-        "options": [
-          "YES",
-          "NO",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "YES",
-        "explanation": "Paragraph C cites studies demonstrating increased productivity for part-time workers.",
-        "explanationSi": "අර්ධකාලීන සේවකයන්ගේ ඵලදායිතාව ඉහළ බව සනාථ කරයි (YES).",
-        "paragraphReference": "Paragraph C"
-      },
-      {
-        "id": "c1-t3-p3-q32",
-        "type": "TFNG",
-        "question": "Juliet Schor was awarded a national medal for her economic research.",
-        "options": [
-          "YES",
-          "NO",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "NOT GIVEN",
-        "explanation": "Her book is cited, but no medal or award is mentioned.",
-        "explanationSi": "ඇයට පදක්කමක් ලැබුණේද යන්න සඳහන් නොවේ.",
-        "paragraphReference": "Paragraph C"
-      },
-      {
-        "id": "c1-t3-p3-q33",
-        "type": "mcq",
-        "question": "Juliet Schor attributes the reluctance of companies to hire part-time workers to:",
-        "options": [
-          "A: High pension costs",
-          "B: Lack of office space",
-          "C: Dogmatic management attitudes favoring long hours over flexibility",
-          "D: Trade union strikes"
-        ],
-        "correctAnswer": "C",
-        "explanation": "Management remains dogmatically committed to long hours (Option C).",
-        "explanationSi": "දිගු වේලාවක් වැඩ ගැනීමට කළමනාකාරිත්වය දක්වන දැඩි ආකල්පය (C).",
-        "paragraphReference": "Paragraph C"
-      },
-      {
-        "id": "c1-t3-p3-q34",
-        "type": "mcq",
-        "question": "What is the most alarming societal consequence of the overworked culture?",
-        "options": [
-          "A: Erosion of volunteerism and deterioration of community life",
-          "B: Shortage of motorcars",
-          "C: Overcrowded libraries",
-          "D: Decreased consumption of luxury goods"
-        ],
-        "correctAnswer": "A",
-        "explanation": "Paragraph D notes parents lack community time and volunteerism has eroded (Option A).",
-        "explanationSi": "ස්වේච්ඡා සේවය සහ සමාජීය බැඳීම් බිඳවැටීම (A).",
-        "paragraphReference": "Paragraph D"
-      },
-      {
-        "id": "c1-t3-p3-q35",
-        "type": "mcq",
-        "question": "Negative societal effects of overworking (Select Factor 1):",
-        "options": [
-          "A: Rise in obesity",
-          "B: Decline in participation in civic and community groups",
-          "C: Lower tax revenue",
-          "D: Epidemic rates of stress-related illnesses",
-          "E: Early retirement",
-          "F: High levels of marital breakdown and family stress",
-          "G: Diminished domestic leisure and personal satisfaction"
-        ],
-        "correctAnswer": "B",
-        "explanation": "Factor B: Decline in community participation and volunteerism.",
-        "explanationSi": "සමාජ කණ්ඩායම්වලට සහභාගීවීම අඩුවීම (Factor B).",
-        "paragraphReference": "Paragraph D"
-      },
-      {
-        "id": "c1-t3-p3-q36",
-        "type": "mcq",
-        "question": "Negative societal effects of overworking (Select Factor 2):",
-        "options": [
-          "A: Rise in obesity",
-          "B: Decline in participation in civic and community groups",
-          "C: Lower tax revenue",
-          "D: Epidemic rates of stress-related illnesses",
-          "E: Early retirement",
-          "F: High levels of marital breakdown and family stress",
-          "G: Diminished domestic leisure and personal satisfaction"
-        ],
-        "correctAnswer": "D",
-        "explanation": "Factor D: Epidemic rates of stress-related physical and mental illnesses.",
-        "explanationSi": "මානසික ආතතිය හා බැඳුණු රෝගාබාධ (Factor D).",
-        "paragraphReference": "Paragraph D"
-      },
-      {
-        "id": "c1-t3-p3-q37",
-        "type": "mcq",
-        "question": "Negative societal effects of overworking (Select Factor 3):",
-        "options": [
-          "A: Rise in obesity",
-          "B: Decline in participation in civic and community groups",
-          "C: Lower tax revenue",
-          "D: Epidemic rates of stress-related illnesses",
-          "E: Early retirement",
-          "F: High levels of marital breakdown and family stress",
-          "G: Diminished domestic leisure and personal satisfaction"
-        ],
-        "correctAnswer": "F",
-        "explanation": "Factor F: Disruption of family cohesion and domestic stress.",
-        "explanationSi": "පවුල් ජීවිතයේ ආතතිය සහ බිඳවැටීම (Factor F).",
-        "paragraphReference": "Paragraph D"
-      },
-      {
-        "id": "c1-t3-p3-q38",
-        "type": "mcq",
-        "question": "Negative societal effects of overworking (Select Factor 4):",
-        "options": [
-          "A: Rise in obesity",
-          "B: Decline in participation in civic and community groups",
-          "C: Lower tax revenue",
-          "D: Epidemic rates of stress-related illnesses",
-          "E: Early retirement",
-          "F: High levels of marital breakdown and family stress",
-          "G: Diminished domestic leisure and personal satisfaction"
-        ],
-        "correctAnswer": "G",
-        "explanation": "Factor G: Severe reduction in personal leisure and quality of life.",
-        "explanationSi": "පුද්ගලික විවේකය අහිමි වීම (Factor G).",
-        "paragraphReference": "Paragraph D"
-      }
-    ]
-  },
-  {
-    "id": "c1-t4-pass1",
-    "cambridgeSource": "Cambridge IELTS 1, Test 4 - Reading Passage 1",
-    "title": "Glass: Capturing the Dance of Light",
-    "paragraphs": [
-      {
-        "label": "Paragraph A",
-        "text": "Glass is an extraordinary material. Chemically an amorphous solid, it possesses the structural rigidity of a crystal with the random molecular disorder of a liquid. For millennia, artisans heated silica sand, soda ash and limestone to shape ornamental goblets and stained glass windows."
-      },
-      {
-        "label": "Paragraph B",
-        "text": "On the horizon lies a revolutionary era for glass. The surge in fibre-optic telecommunications has proven that ultra-pure silica glass strands can transmit terabytes of laser-encoded information across continents. Physicists anticipate optical computing where light pulses through glass chips hundreds of times faster than electrons traversing copper."
-      },
-      {
-        "label": "Paragraph C",
-        "text": "Simultaneously, the studio glass movement has witnessed an unprecedented commercial boom. Studio artists command record auction prices for abstract glass sculptures that capture and refract ambient light."
-      },
-      {
-        "label": "Paragraph D",
-        "text": "In 1920, the invention of the Corning ribbon machine transformed glass manufacturing forever. Molten glass pours continuously from a furnace through rollers, forming a glowing ribbon of molten glass traveling along a moving belt of steel. Blowheads drop down, injecting compressed air to inflate the glass into revolving lightbulb moulds. The machine produces over 2,000 lightbulb casings every minute, fulfilling soaring global demand."
-      },
-      {
-        "label": "Paragraph E",
-        "text": "Glass owes its extraordinary malleability to its absence of a sharp melting point. As molten glass cools, its viscosity increases gradually over a wide temperature range, giving glassmakers ample working time to blow, cast, roll, or press the material into intricate shapes."
-      },
-      {
-        "label": "Paragraph F",
-        "text": "Architects envision a sparkling future where smart architectural glass dynamically adjusts opacity in response to sunlight, reducing building cooling loads and transforming skyscrapers into shimmering, energy-neutral towers."
-      }
-    ],
-    "questions": [
-      {
-        "id": "c1-t4-p1-q1",
-        "type": "headings",
-        "question": "Heading for Paragraph B: (Choose i - ix)",
-        "options": [
-          "i: Growth in artist studio trade",
-          "ii: Stained glass history",
-          "iii: Why glass is easy to shape",
-          "iv: High cost of silica",
-          "v: Environmental glass disposal",
-          "vi: Future architectural uses of glass",
-          "vii: Window cleaning",
-          "viii: Exciting innovations in fibre optics",
-          "ix: The impact of automated bulb machinery in 1920"
-        ],
-        "correctAnswer": "viii",
-        "explanation": "Paragraph B focuses on future fibre optics and optical computing.",
-        "explanationSi": "ෆයිබර් ඔප්ටික්ස් සහ අනාගත දෘශ්‍ය තාක්ෂණය (viii) විස්තර කරයි.",
-        "paragraphReference": "Paragraph B"
-      },
-      {
-        "id": "c1-t4-p1-q2",
-        "type": "headings",
-        "question": "Heading for Paragraph C: (Choose i - ix)",
-        "options": [
-          "i: Growth in artist studio trade",
-          "ii: Stained glass history",
-          "iii: Why glass is easy to shape",
-          "iv: High cost of silica",
-          "v: Environmental glass disposal",
-          "vi: Future architectural uses of glass",
-          "vii: Window cleaning",
-          "viii: Exciting innovations in fibre optics",
-          "ix: The impact of automated bulb machinery in 1920"
-        ],
-        "correctAnswer": "i",
-        "explanation": "Paragraph C discusses the commercial boom in studio glass artistry.",
-        "explanationSi": "වීදුරු කලාකරුවන්ගේ වෙළඳපොල වර්ධනය (i) විස්තර වේ.",
-        "paragraphReference": "Paragraph C"
-      },
-      {
-        "id": "c1-t4-p1-q3",
-        "type": "headings",
-        "question": "Heading for Paragraph D: (Choose i - ix)",
-        "options": [
-          "i: Growth in artist studio trade",
-          "ii: Stained glass history",
-          "iii: Why glass is easy to shape",
-          "iv: High cost of silica",
-          "v: Environmental glass disposal",
-          "vi: Future architectural uses of glass",
-          "vii: Window cleaning",
-          "viii: Exciting innovations in fibre optics",
-          "ix: The impact of automated bulb machinery in 1920"
-        ],
-        "correctAnswer": "ix",
-        "explanation": "Paragraph D highlights the 1920 ribbon machine for lightbulbs.",
-        "explanationSi": "1920 දී ස්වයංක්‍රීය විදුලි බුබුළු යන්ත්‍රයේ බලපෑම (ix).",
-        "paragraphReference": "Paragraph D"
-      },
-      {
-        "id": "c1-t4-p1-q4",
-        "type": "headings",
-        "question": "Heading for Paragraph E: (Choose i - ix)",
-        "options": [
-          "i: Growth in artist studio trade",
-          "ii: Stained glass history",
-          "iii: Why glass is easy to shape",
-          "iv: High cost of silica",
-          "v: Environmental glass disposal",
-          "vi: Future architectural uses of glass",
-          "vii: Window cleaning",
-          "viii: Exciting innovations in fibre optics",
-          "ix: The impact of automated bulb machinery in 1920"
-        ],
-        "correctAnswer": "iii",
-        "explanation": "Paragraph E explains gradual viscosity change making glass easy to shape.",
-        "explanationSi": "වීදුරු පහසුවෙන් හැඩගැස්වීමට හැකි වීමට හේතු (iii).",
-        "paragraphReference": "Paragraph E"
-      },
-      {
-        "id": "c1-t4-p1-q5",
-        "type": "headings",
-        "question": "Heading for Paragraph F: (Choose i - ix)",
-        "options": [
-          "i: Growth in artist studio trade",
-          "ii: Stained glass history",
-          "iii: Why glass is easy to shape",
-          "iv: High cost of silica",
-          "v: Environmental glass disposal",
-          "vi: Future architectural uses of glass",
-          "vii: Window cleaning",
-          "viii: Exciting innovations in fibre optics",
-          "ix: The impact of automated bulb machinery in 1920"
-        ],
-        "correctAnswer": "vi",
-        "explanation": "Paragraph F envisions smart glass in future architecture and skyscrapers.",
-        "explanationSi": "අනාගත ගොඩනැගිලි නිර්මාණයේදී වීදුරු භාවිතය (vi).",
-        "paragraphReference": "Paragraph F"
-      },
-      {
-        "id": "c1-t4-p1-q6",
-        "type": "summary",
-        "question": "Corning Machine Diagram (6): Stream issuing from furnace: a ribbon of __________.",
-        "correctAnswer": "molten glass",
-        "explanation": "A glowing ribbon of molten glass pours from furnace.",
-        "explanationSi": "උණු කළ වීදුරු පටියක් (molten glass // ribbon of glass) ගලා එයි.",
-        "paragraphReference": "Paragraph D"
-      },
-      {
-        "id": "c1-t4-p1-q7",
-        "type": "summary",
-        "question": "Corning Machine Diagram (7): The glass travels forward along a moving __________.",
-        "correctAnswer": "belt of steel",
-        "explanation": "Travels along a moving belt of steel.",
-        "explanationSi": "වානේ පටියක් (belt of steel // moving belt) මතින් ඉදිරියට යයි.",
-        "paragraphReference": "Paragraph D"
-      },
-      {
-        "id": "c1-t4-p1-q8",
-        "type": "summary",
-        "question": "Corning Machine Diagram (8): Air inflates bulbs into rotating __________.",
-        "correctAnswer": "moulds",
-        "explanation": "Blowheads inflate glass into revolving moulds (lightbulb moulds).",
-        "explanationSi": "කැරකෙන අච්චු (moulds) තුළට පිඹිනු ලැබේ.",
-        "paragraphReference": "Paragraph D"
-      },
-      {
-        "id": "c1-t4-p1-q9",
-        "type": "mcq",
-        "question": "Glass application: Transmitting high-speed laser telecommunications: (Category A: High technology / Category B: Historical tradition / Category C: Fine arts)",
-        "options": [
-          "A: High technology application",
-          "B: Historical craft tradition",
-          "C: Studio fine arts"
-        ],
-        "correctAnswer": "A",
-        "explanation": "Fibre-optic laser transmission is high technology (Category A).",
-        "explanationSi": "අධිතාක්ෂණික භාවිතයකි (Category A).",
-        "paragraphReference": "Paragraph B"
-      },
-      {
-        "id": "c1-t4-p1-q10",
-        "type": "mcq",
-        "question": "Glass application: Medieval cathedral stained windows: (Category A: High technology / Category B: Historical tradition / Category C: Fine arts)",
-        "options": [
-          "A: High technology application",
-          "B: Historical craft tradition",
-          "C: Studio fine arts"
-        ],
-        "correctAnswer": "B",
-        "explanation": "Medieval cathedral stained glass is historical craft (Category B).",
-        "explanationSi": "ඓතිහාසික සාම්ප්‍රදායික භාවිතයකි (Category B).",
-        "paragraphReference": "Paragraph A"
-      },
-      {
-        "id": "c1-t4-p1-q11",
-        "type": "mcq",
-        "question": "Glass application: Dynamic smart glass regulating building thermal climate: (Category A: High technology / Category B: Historical tradition / Category C: Fine arts)",
-        "options": [
-          "A: High technology application",
-          "B: Historical craft tradition",
-          "C: Studio fine arts"
-        ],
-        "correctAnswer": "A",
-        "explanation": "Smart electrochromic glass is high technology (Category A).",
-        "explanationSi": "ස්මාර්ට් වීදුරු යනු අධිතාක්ෂණික භාවිතයකි (Category A).",
-        "paragraphReference": "Paragraph F"
-      },
-      {
-        "id": "c1-t4-p1-q12",
-        "type": "mcq",
-        "question": "Glass application: Sculptural gallery exhibits capturing refracted light: (Category A: High technology / Category B: Historical tradition / Category C: Fine arts)",
-        "options": [
-          "A: High technology application",
-          "B: Historical craft tradition",
-          "C: Studio fine arts"
-        ],
-        "correctAnswer": "C",
-        "explanation": "Refracting sculptures represent studio fine arts (Category C).",
-        "explanationSi": "ලලිත කලා නිර්මාණයකි (Category C).",
-        "paragraphReference": "Paragraph C"
-      },
-      {
-        "id": "c1-t4-p1-q13",
-        "type": "mcq",
-        "question": "Glass application: Optical computer processors operating at the speed of light: (Category A: High technology / Category B: Historical tradition / Category C: Fine arts)",
-        "options": [
-          "A: High technology application",
-          "B: Historical craft tradition",
-          "C: Studio fine arts"
-        ],
-        "correctAnswer": "A",
-        "explanation": "Optical computing is high technology (Category A).",
-        "explanationSi": "අධිතාක්ෂණික භාවිතයකි (Category A).",
-        "paragraphReference": "Paragraph B"
-      }
-    ]
-  },
-  {
-    "id": "c1-t4-pass2",
-    "cambridgeSource": "Cambridge IELTS 1, Test 4 - Reading Passage 2",
-    "title": "Why some women cross the finish line ahead of men",
-    "paragraphs": [
-      {
-        "label": "Paragraph A",
-        "text": "Why are women breaking into executive boardrooms at an unprecedented pace? Across the corporate landscape, traditional male hegemony in senior management is facing transformative disruption as female leaders demonstrate superior collaborative leadership."
-      },
-      {
-        "label": "Paragraph B",
-        "text": "Management researcher Andrew Crisp notes that women frequently possess higher emotional intelligence, fostering inclusive team cultures that thrive in knowledge-based economies."
-      },
-      {
-        "label": "Paragraph C",
-        "text": "Dr Sarah Sears highlights that corporate restructuring has played a double-edged role. While flatter hierarchies eliminate layers of middle management, de-layering has in some firms halted traditional promotional ladders for women."
-      },
-      {
-        "label": "Paragraph D",
-        "text": "Nevertheless, this year’s national corporate governance survey revealed a doubling of the number of women serving as non-executive directors on major public company boards."
-      },
-      {
-        "label": "Paragraph E",
-        "text": "Demographic trends indicate that the percentage of female university graduates entering professional disciplines—accounting, law, and engineering—is steadily escalating, creating a vast pool of exceptional talent."
-      },
-      {
-        "label": "Paragraph F",
-        "text": "Consultant Mark Matthews argues that companies with gender-diverse boards consistently outperform monocultural competitors in shareholder return and return on equity."
-      },
-      {
-        "label": "Paragraph G",
-        "text": "Ultimately, Sears emphasizes that true structural parity will remain elusive until there is a profound belief among employers where they actively value diverse leadership philosophies rather than enforcing conformity to masculine executive stereotypes."
-      }
-    ],
-    "questions": [
-      {
-        "id": "c1-t4-p2-q14",
-        "type": "mcq",
-        "question": "Which paragraph discusses the demographic rise in female university graduates entering professions?",
-        "options": [
-          "A",
-          "B",
-          "C",
-          "D",
-          "E",
-          "F",
-          "G"
-        ],
-        "correctAnswer": "E",
-        "explanation": "Paragraph E discusses demographic trends and female graduates.",
-        "explanationSi": "කාන්තා උපාධිධාරිනියන්ගේ වර්ධනය ඡේදය E හි සාකච්ඡා කෙරේ.",
-        "paragraphReference": "Paragraph E"
-      },
-      {
-        "id": "c1-t4-p2-q15",
-        "type": "mcq",
-        "question": "Which paragraph argues that true parity requires employers to genuinely value leadership diversity?",
-        "options": [
-          "A",
-          "B",
-          "C",
-          "D",
-          "E",
-          "F",
-          "G"
-        ],
-        "correctAnswer": "G",
-        "explanation": "Paragraph G focuses on employers valuing difference.",
-        "explanationSi": "සේවා යෝජකයන් විවිධත්වය අගය කළ යුතු බව ඡේදය G හි සඳහන් වේ.",
-        "paragraphReference": "Paragraph G"
-      },
-      {
-        "id": "c1-t4-p2-q16",
-        "type": "mcq",
-        "question": "Which paragraph introduces the disruption of traditional male hegemony in management?",
-        "options": [
-          "A",
-          "B",
-          "C",
-          "D",
-          "E",
-          "F",
-          "G"
-        ],
-        "correctAnswer": "A",
-        "explanation": "Paragraph A introduces traditional male dominance being disrupted.",
-        "explanationSi": "සාම්ප්‍රදායික පිරිමි ආධිපත්‍යය බිඳවැටීම ඡේදය A හි හඳුන්වා දෙයි.",
-        "paragraphReference": "Paragraph A"
-      },
-      {
-        "id": "c1-t4-p2-q17",
-        "type": "mcq",
-        "question": "Which paragraph discusses the negative impact of organizational de-layering on female promotion?",
-        "options": [
-          "A",
-          "B",
-          "C",
-          "D",
-          "E",
-          "F",
-          "G"
-        ],
-        "correctAnswer": "C",
-        "explanation": "Paragraph C details de-layering halting progress.",
-        "explanationSi": "ආයතනික ප්‍රතිව්‍යුහගතකරණයේ බලපෑම ඡේදය C හි දක්වයි.",
-        "paragraphReference": "Paragraph C"
-      },
-      {
-        "id": "c1-t4-p2-q18",
-        "type": "mcq",
-        "question": "Which paragraph cites evidence that gender-diverse companies achieve superior financial returns?",
-        "options": [
-          "A",
-          "B",
-          "C",
-          "D",
-          "E",
-          "F",
-          "G"
-        ],
-        "correctAnswer": "F",
-        "explanation": "Paragraph F highlights higher shareholder return in diverse firms.",
-        "explanationSi": "ස්ත්‍රී පුරුෂ විවිධත්වය සහිත සමාගම් වැඩි ලාභ ලබන බව ඡේදය F හි දැක්වේ.",
-        "paragraphReference": "Paragraph F"
-      },
-      {
-        "id": "c1-t4-p2-q19",
-        "type": "mcq",
-        "question": "Which paragraph documents statistical survey findings on women serving as non-executive directors?",
-        "options": [
-          "A",
-          "B",
-          "C",
-          "D",
-          "E",
-          "F",
-          "G"
-        ],
-        "correctAnswer": "D",
-        "explanation": "Paragraph D cites the survey showing doubling of women directors.",
-        "explanationSi": "කාන්තා අධ්‍යක්ෂකවරුන් දෙගුණ වීම ඡේදය D හි විස්තර කෙරේ.",
-        "paragraphReference": "Paragraph D"
-      },
-      {
-        "id": "c1-t4-p2-q20",
-        "type": "mcq",
-        "question": "Which expert claims emotional intelligence in women fosters collaborative teamwork? (A: Andrew Crisp / S: Sarah Sears / M: Mark Matthews)",
-        "options": [
-          "A: Andrew Crisp",
-          "S: Sarah Sears",
-          "M: Mark Matthews"
-        ],
-        "correctAnswer": "A",
-        "explanation": "Andrew Crisp discusses emotional intelligence and team cultures.",
-        "explanationSi": "හැඟීම්බර බුද්ධිය (emotional intelligence) පිළිබඳව Andrew Crisp (A) සඳහන් කරයි.",
-        "paragraphReference": "Paragraph B"
-      },
-      {
-        "id": "c1-t4-p2-q21",
-        "type": "mcq",
-        "question": "Which expert warned that removing intermediate management levels hindered women’s advancement? (A: Andrew Crisp / S: Sarah Sears / M: Mark Matthews)",
-        "options": [
-          "A: Andrew Crisp",
-          "S: Sarah Sears",
-          "M: Mark Matthews"
-        ],
-        "correctAnswer": "S",
-        "explanation": "Sarah Sears warned that de-layering halted promotional ladders.",
-        "explanationSi": "මැද ස්ථර ඉවත් කිරීම කාන්තාවන්ට බාධාවක් වූ බව Sarah Sears (S) පෙන්වා දුන්නාය.",
-        "paragraphReference": "Paragraph C"
-      },
-      {
-        "id": "c1-t4-p2-q22",
-        "type": "mcq",
-        "question": "Which expert proved that companies with female board members generate higher returns on equity? (A: Andrew Crisp / S: Sarah Sears / M: Mark Matthews)",
-        "options": [
-          "A: Andrew Crisp",
-          "S: Sarah Sears",
-          "M: Mark Matthews"
-        ],
-        "correctAnswer": "M",
-        "explanation": "Mark Matthews proved financial outperformance.",
-        "explanationSi": "කාන්තා නායකත්වය ආයතනික ලාභ වැඩි කරන බව Mark Matthews (M) සනාථ කළේය.",
-        "paragraphReference": "Paragraph F"
-      },
-      {
-        "id": "c1-t4-p2-q23",
-        "type": "mcq",
-        "question": "Which expert stated that workplace progress is contingent on employers celebrating diverse viewpoints? (A: Andrew Crisp / S: Sarah Sears / M: Mark Matthews)",
-        "options": [
-          "A: Andrew Crisp",
-          "S: Sarah Sears",
-          "M: Mark Matthews"
-        ],
-        "correctAnswer": "S",
-        "explanation": "Sarah Sears emphasized changing employer mindset.",
-        "explanationSi": "සේවා යෝජකයන් ආකල්ප වෙනස් කරගත යුතු බව Sarah Sears (S) පවසයි.",
-        "paragraphReference": "Paragraph G"
-      },
-      {
-        "id": "c1-t4-p2-q24",
-        "type": "summary",
-        "question": "What specific statistical change in female non-executive directors was revealed in this year’s survey?",
-        "correctAnswer": "doubled",
-        "explanation": "The survey showed a doubling (it has doubled) of women directors.",
-        "explanationSi": "කාන්තා අධ්‍යක්ෂකවරුන්ගේ සංඛ්‍යාව දෙගුණ වී ඇත (doubled // doubling).",
-        "paragraphReference": "Paragraph D"
-      },
-      {
-        "id": "c1-t4-p2-q25",
-        "type": "summary",
-        "question": "What corporate structural process inadvertently halted promotional progression for female managers?",
-        "correctAnswer": "de-layering",
-        "explanation": "Sears noted de-layering halted progress.",
-        "explanationSi": "මැද කළමනාකාරීත්වය ඉවත් කිරීම (de-layering) බාධාවක් විය.",
-        "paragraphReference": "Paragraph C"
-      },
-      {
-        "id": "c1-t4-p2-q26",
-        "type": "summary",
-        "question": "What macro-level factor explains the rising proportion of qualified women entering professions?",
-        "correctAnswer": "demographic trends",
-        "explanation": "Demographic trends show increasing numbers entering employment.",
-        "explanationSi": "ජන විකාශන ප්‍රවණතා (demographic trends) මගින් මෙය පැහැදිලි කරයි.",
-        "paragraphReference": "Paragraph E"
-      },
-      {
-        "id": "c1-t4-p2-q27",
-        "type": "summary",
-        "question": "Who must fundamentally change their attitudes before genuine equality in corporate leadership is achieved?",
-        "correctAnswer": "employers",
-        "explanation": "Until there is a belief among employers, nothing will change.",
-        "explanationSi": "සේවා යෝජකයන් (employers) තම ආකල්ප වෙනස් කළ යුතුය.",
-        "paragraphReference": "Paragraph G"
-      }
-    ]
-  },
-  {
-    "id": "c1-t4-pass3",
-    "cambridgeSource": "Cambridge IELTS 1, Test 4 - Reading Passage 3",
-    "title": "Population viability analysis (PVA)",
-    "paragraphs": [
-      {
-        "label": "Part A",
-        "text": "Conservation biologists employ Population Viability Analysis (PVA) to estimate the likelihood that an endangered wildlife population will avoid extinction over a specified timeframe. Extinction is rarely caused by a single deterministic catastrophe; rather, it is driven by complex stochastic interactions."
-      },
-      {
-        "label": "Part B - Paragraph A",
-        "text": "Natural reproduction in wild populations is inherently haphazard. Survival of offspring is largely a matter of chance; individual breeding success fluctuates markedly from year to year depending on maternal nutrition, predator density, and disease."
-      },
-      {
-        "label": "Part B - Paragraph B",
-        "text": "Small, fragmented populations are vulnerable to severe demographic skew. If an endangered group suffers an unequal sex ratio—for instance, producing predominantly male offspring over consecutive generations—effective reproductive capacity plummets towards zero."
-      },
-      {
-        "label": "Part B - Paragraph C",
-        "text": "Environmental instability further imperils small populations. In Australia, cyclical extremes of wildfire, catastrophic flooding, and prolonged multi-year droughts can annihilate an entire isolated colony overnight."
-      },
-      {
-        "label": "Part B - Paragraph D",
-        "text": "Genetic fitness dictates long-term survival. Isolated inbred populations experience reduced genetic diversity, lowering disease resistance and compromising the animal’s capacity to adapt to changing climatic conditions."
-      },
-      {
-        "label": "Part C",
-        "text": "In southeastern Australia, researchers applied PVA to the vulnerable Leadbeater’s possum. The computer model revealed that if commercial timber clear-felling and logging occurs within old-growth eucalyptus forests, the possum population will not survive, regardless of legal hunting bans. The species’ survival is inextricably dependent upon maintaining contiguous nesting hollows across its natural geographic distribution."
-      }
-    ],
-    "questions": [
-      {
-        "id": "c1-t4-p3-q28",
-        "type": "TFNG",
-        "question": "PVA calculates the probability of an animal population surviving extinction over time.",
-        "options": [
-          "YES",
-          "NO",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "YES",
-        "explanation": "Part A states PVA estimates the likelihood of avoiding extinction.",
-        "explanationSi": "ගහනයක් වඳවී නොගොස් පැවතීමේ සම්භාවිතාව PVA මගින් ගණනය කරයි (YES).",
-        "paragraphReference": "Part A"
-      },
-      {
-        "id": "c1-t4-p3-q29",
-        "type": "TFNG",
-        "question": "Extinction in the wild is almost always caused by a single isolated event.",
-        "options": [
-          "YES",
-          "NO",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "NO",
-        "explanation": "Part A notes extinction is rarely caused by a single deterministic catastrophe.",
-        "explanationSi": "වඳවීම තනි සිදුවීමක් නිසා සිදුවන්නේ කලාතුරකිනි (NO).",
-        "paragraphReference": "Part A"
-      },
-      {
-        "id": "c1-t4-p3-q30",
-        "type": "TFNG",
-        "question": "PVA software was originally invented by timber logging corporations.",
-        "options": [
-          "YES",
-          "NO",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "NO",
-        "explanation": "Developed by conservation biologists, not logging corporations.",
-        "explanationSi": "මෙය නිර්මාණය කළේ වනජීවී විද්‍යාඥයින් මිස දැව සමාගම් නොවේ (NO).",
-        "paragraphReference": "Part A"
-      },
-      {
-        "id": "c1-t4-p3-q31",
-        "type": "TFNG",
-        "question": "Leadbeater’s possums breed more successfully in captivity than in the wild.",
-        "options": [
-          "YES",
-          "NO",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "NOT GIVEN",
-        "explanation": "No comparison of captive vs wild breeding success for this possum is provided.",
-        "explanationSi": "කූඩු තුළ සහ වනයේ අභිජනනය සංසන්දනය කර නොමැත.",
-        "paragraphReference": "Part C"
-      },
-      {
-        "id": "c1-t4-p3-q32",
-        "type": "headings",
-        "question": "Process described in Part B - Paragraph A: (Choose i - vi)",
-        "options": [
-          "i: Adaptation and avoiding extinction",
-          "ii: Environmental fluctuations (fire, flood, drought)",
-          "iii: Small or unequal sex ratio problems",
-          "iv: Human poaching",
-          "v: Disease epidemics",
-          "vi: The fluctuation in reproduction rates"
-        ],
-        "correctAnswer": "vi",
-        "explanation": "Covers the haphazard nature and fluctuation in reproduction rates.",
-        "explanationSi": "ප්‍රජනන අනුපාතිකයේ උච්චාවචනයන් (vi).",
-        "paragraphReference": "Part B - Paragraph A"
-      },
-      {
-        "id": "c1-t4-p3-q33",
-        "type": "headings",
-        "question": "Process described in Part B - Paragraph B: (Choose i - vi)",
-        "options": [
-          "i: Adaptation and avoiding extinction",
-          "ii: Environmental fluctuations (fire, flood, drought)",
-          "iii: Small or unequal sex ratio problems",
-          "iv: Human poaching",
-          "v: Disease epidemics",
-          "vi: The fluctuation in reproduction rates"
-        ],
-        "correctAnswer": "iii",
-        "explanation": "Addresses unequal numbers of one sex / skewed sex ratios.",
-        "explanationSi": "ස්ත්‍රී පුරුෂ අනුපාතයේ අසමතුලිතතාව (iii).",
-        "paragraphReference": "Part B - Paragraph B"
-      },
-      {
-        "id": "c1-t4-p3-q34",
-        "type": "headings",
-        "question": "Process described in Part B - Paragraph D: (Choose i - vi)",
-        "options": [
-          "i: Adaptation and avoiding extinction",
-          "ii: Environmental fluctuations (fire, flood, drought)",
-          "iii: Small or unequal sex ratio problems",
-          "iv: Human poaching",
-          "v: Disease epidemics",
-          "vi: The fluctuation in reproduction rates"
-        ],
-        "correctAnswer": "i",
-        "explanation": "Addresses genetic adaptation capacity and avoiding extinction.",
-        "explanationSi": "පරිසරයට අනුගතවීම සහ වඳවීම වැළැක්වීම (i).",
-        "paragraphReference": "Part B - Paragraph D"
-      },
-      {
-        "id": "c1-t4-p3-q35",
-        "type": "headings",
-        "question": "Process described in Part B - Paragraph C: (Choose i - vi)",
-        "options": [
-          "i: Adaptation and avoiding extinction",
-          "ii: Environmental fluctuations (fire, flood, drought)",
-          "iii: Small or unequal sex ratio problems",
-          "iv: Human poaching",
-          "v: Disease epidemics",
-          "vi: The fluctuation in reproduction rates"
-        ],
-        "correctAnswer": "ii",
-        "explanation": "Describes fluctuating environmental conditions (fire, flood, drought).",
-        "explanationSi": "පාරිසරික විපත් (ගිනි, ගංවතුර, නියඟය) (ii).",
-        "paragraphReference": "Part B - Paragraph C"
-      },
-      {
-        "id": "c1-t4-p3-q36",
-        "type": "summary",
-        "question": "If timber felling continues in the forest, the possum population __________.",
-        "correctAnswer": "will not survive",
-        "explanation": "Part C warns the population will not survive (or could become extinct).",
-        "explanationSi": "ගහනය නොනැසී පැවතිය නොහැක (will not survive // become extinct).",
-        "paragraphReference": "Part C"
-      },
-      {
-        "id": "c1-t4-p3-q37",
-        "type": "summary",
-        "question": "Survival depends on preserving nesting hollows across the species’ natural __________.",
-        "correctAnswer": "distribution",
-        "explanation": "Must preserve contiguous hollows across its natural distribution / locality.",
-        "explanationSi": "ස්වාභාවික ව්‍යාප්තිය (distribution // locality) පුරා බෙහෙවින් රඳා පවතී.",
-        "paragraphReference": "Part C"
-      },
-      {
-        "id": "c1-t4-p3-q38",
-        "type": "summary",
-        "question": "The PVA model showed possum numbers crash whenever commercial __________ in its habitat.",
-        "correctAnswer": "logging takes place",
-        "explanation": "Population collapses if commercial logging takes place / occurs.",
-        "explanationSi": "වාණිජ දැව කැපීම සිදුවුවහොත් (logging takes place) සතුන් වඳවී යනු ඇත.",
-        "paragraphReference": "Part C"
-      },
-      {
-        "id": "c1-t4-p3-q39",
-        "type": "mcq",
-        "question": "What is the main conclusion of the passage regarding Population Viability Analysis?",
-        "options": [
-          "A: It proves logging is beneficial",
-          "B: It provides essential predictive modeling to assess extinction risks and guide forest conservation policy",
-          "C: It is too inaccurate for government use",
-          "D: Possums should be relocated to zoos"
-        ],
-        "correctAnswer": "B",
-        "explanation": "PVA offers crucial scientific modeling for wildlife management (Option B).",
-        "explanationSi": "වඳවීමේ අවදානම් තක්සේරු කර ප්‍රතිපත්ති සැකසීමට PVA අත්‍යවශ්‍ය වේ (B).",
-        "paragraphReference": "Part A-C"
-      }
-    ]
-  },
-  {
-    "id": "c1-gt-pass1",
-    "cambridgeSource": "Cambridge IELTS 1, General Training - Section 1",
-    "title": "Moulinex Iron & Cambridge Coach Services",
-    "paragraphs": [
-      {
-        "label": "Instructions for Moulinex Iron",
-        "text": "Important Safety & Operating Advice: Always fill the iron with distilled water to prevent furring up from hard water. Never fill directly from the tap if you reside in a hard-water area. Before ironing delicate fabrics, check the garment care label to adjust the thermostat dial to the correct fabric setting. If water drips from the soleplate while steam ironing, turn up the temperature dial to generate sufficient steam pressure. Regularly empty the reservoir after each ironing session."
-      },
-      {
-        "label": "Cambridge Coach Services",
-        "text": "Seat Allocation: Requests for particular front seats can be made on most coach breaks when booking. Tickets: Air or boat tickets may have to be retained by your driver or courier and issued to you at the relevant departure terminal. Special Diets: If you require a special vegetarian or medical diet, you must inform us at the time of booking. Accommodation: Rooms with private facilities incur the supplementary charge shown in the price panel. Entertainment: Evening entertainment could be withdrawn if there is a lack of demand. Luggage: In addition to one medium suitcase, a small holdall can also be taken on board the coach."
-      }
-    ],
-    "questions": [
-      {
-        "id": "c1-gt-p1-q1",
-        "type": "mcq",
-        "question": "Which picture shows how to fill the water reservoir correctly? (Picture A-E)",
-        "options": [
-          "A",
-          "B",
-          "C",
-          "D",
-          "E"
-        ],
-        "correctAnswer": "D",
-        "explanation": "Picture D shows proper filling angle with measuring cup.",
-        "explanationSi": "ජලය පිරවීමේ නිවැරදි ක්‍රමය පින්තූරය D මගින් දක්වයි.",
-        "paragraphReference": "Instructions"
-      },
-      {
-        "id": "c1-gt-p1-q2",
-        "type": "mcq",
-        "question": "Which picture illustrates adjusting the temperature thermostat dial? (Picture A-E)",
-        "options": [
-          "A",
-          "B",
-          "C",
-          "D",
-          "E"
-        ],
-        "correctAnswer": "A",
-        "explanation": "Picture A illustrates the temperature control dial.",
-        "explanationSi": "උෂ්ණත්ව පාලකය සකස් කිරීම පින්තූරය A මගින් දක්වයි.",
-        "paragraphReference": "Instructions"
-      },
-      {
-        "id": "c1-gt-p1-q3",
-        "type": "mcq",
-        "question": "Which picture indicates the steam boost button operation? (Picture A-E)",
-        "options": [
-          "A",
-          "B",
-          "C",
-          "D",
-          "E"
-        ],
-        "correctAnswer": "C",
-        "explanation": "Picture C indicates the steam boost button.",
-        "explanationSi": "වාෂ්ප බොත්තම පින්තූරය C මගින් පෙන්වයි.",
-        "paragraphReference": "Instructions"
-      },
-      {
-        "id": "c1-gt-p1-q4",
-        "type": "mcq",
-        "question": "Which picture shows emptying residual water into the sink? (Picture A-E)",
-        "options": [
-          "A",
-          "B",
-          "C",
-          "D",
-          "E"
-        ],
-        "correctAnswer": "E",
-        "explanation": "Picture E shows emptying residual water.",
-        "explanationSi": "ඉතිරි ජලය ඉවත් කිරීම පින්තූරය E මගින් පෙන්වයි.",
-        "paragraphReference": "Instructions"
-      },
-      {
-        "id": "c1-gt-p1-q5",
-        "type": "summary",
-        "question": "What liquid should be used to fill the iron in hard water areas?",
-        "correctAnswer": "distilled water",
-        "explanation": "Must use distilled water to prevent furring up.",
-        "explanationSi": "ආසවනය කළ ජලය (distilled water) භාවිතා කළ යුතුය.",
-        "paragraphReference": "Instructions"
-      },
-      {
-        "id": "c1-gt-p1-q6",
-        "type": "summary",
-        "question": "What should you check on the garment care label before setting the temperature?",
-        "correctAnswer": "type of fabric",
-        "explanation": "Check the type of fabric / garment label.",
-        "explanationSi": "රෙදි වර්ගය (type of fabric) පරීක්ෂා කළ යුතුය.",
-        "paragraphReference": "Instructions"
-      },
-      {
-        "id": "c1-gt-p1-q7",
-        "type": "summary",
-        "question": "If water drips from the soleplate during steam ironing, what must you do?",
-        "correctAnswer": "turn up temperature",
-        "explanation": "Turn up / increase temperature dial to make steam.",
-        "explanationSi": "උෂ්ණත්වය වැඩි කළ යුතුය (turn up temperature).",
-        "paragraphReference": "Instructions"
-      },
-      {
-        "id": "c1-gt-p1-q8",
-        "type": "summary",
-        "question": "What problem occurs inside the iron if tap water is repeatedly used in hard water districts?",
-        "correctAnswer": "calcium deposits",
-        "explanation": "Furring up / calcium deposits accumulate.",
-        "explanationSi": "හුණු තැන්පත් වීම (calcium deposits // furring up) සිදුවේ.",
-        "paragraphReference": "Instructions"
-      },
-      {
-        "id": "c1-gt-p1-q9",
-        "type": "mcq",
-        "question": "If you want to sit near the front of the coach, you must:",
-        "options": [
-          "A: Arrive early at the station",
-          "B: Pay extra to the driver",
-          "C: Request your seat when booking the break",
-          "D: Travel without luggage"
-        ],
-        "correctAnswer": "C",
-        "explanation": "Requests for particular seats can be made when booking (Option C).",
-        "explanationSi": "ආසන වෙන් කර ගැනීමේදී ඉල්ලීමක් කළ යුතුය (C).",
-        "paragraphReference": "Coach Services"
-      },
-      {
-        "id": "c1-gt-p1-q10",
-        "type": "mcq",
-        "question": "Connecting ferry or flight tickets will be:",
-        "options": [
-          "A: Posted to your home",
-          "B: Bought by the passenger directly",
-          "C: Valid for three months",
-          "D: Retained by driver and issued at departure point"
-        ],
-        "correctAnswer": "D",
-        "explanation": "Retained by driver/courier and issued at relevant point (Option D).",
-        "explanationSi": "රියදුරු විසින් රඳවාගෙන අදාළ ස්ථානයේදී ලබාදෙයි (D).",
-        "paragraphReference": "Coach Services"
-      },
-      {
-        "id": "c1-gt-p1-q11",
-        "type": "mcq",
-        "question": "Passengers requiring a special medical or vegetarian diet must notify the company:",
-        "options": [
-          "A: On the morning of travel",
-          "B: At the hotel dining room",
-          "C: At the time of original booking",
-          "D: In writing to the chef"
-        ],
-        "correctAnswer": "C",
-        "explanation": "Must inform company at the time of booking (Option C).",
-        "explanationSi": "වෙන්කරවා ගන්නා අවස්ථාවේදීම දැනුම් දිය යුතුය (C).",
-        "paragraphReference": "Coach Services"
-      },
-      {
-        "id": "c1-gt-p1-q12",
-        "type": "mcq",
-        "question": "Hotel bedrooms with private en-suite facilities:",
-        "options": [
-          "A: Require a supplementary charge shown in the price panel",
-          "B: Are free of charge",
-          "C: Are only available on weekends",
-          "D: Have no heating"
-        ],
-        "correctAnswer": "A",
-        "explanation": "Supplementary charge shown in price panel will be added (Option A).",
-        "explanationSi": "අමතර ගාස්තුවක් අය කරනු ලැබේ (A).",
-        "paragraphReference": "Coach Services"
-      },
-      {
-        "id": "c1-gt-p1-q13",
-        "type": "mcq",
-        "question": "Scheduled evening entertainment at the hotel may be cancelled if:",
-        "options": [
-          "A: The weather is rainy",
-          "B: There is insufficient customer demand",
-          "C: Performers fall ill",
-          "D: The coach arrives late"
-        ],
-        "correctAnswer": "B",
-        "explanation": "Entertainment could be withdrawn if there is a lack of demand (Option B).",
-        "explanationSi": "ඉල්ලුම ප්‍රමාණවත් නොවුවහොත් අවලංගු විය හැක (B).",
-        "paragraphReference": "Coach Services"
-      },
-      {
-        "id": "c1-gt-p1-q14",
-        "type": "mcq",
-        "question": "What luggage can a passenger carry inside the coach cabin?",
-        "options": [
-          "A: Two heavy suitcases",
-          "B: A small personal holdall",
-          "C: Bicycle",
-          "D: Skis"
-        ],
-        "correctAnswer": "B",
-        "explanation": "A small holdall can be taken on board the coach (Option B).",
-        "explanationSi": "කුඩා අත්බෑගයක් (holdall - B) රැගෙන යා හැක.",
-        "paragraphReference": "Coach Services"
-      }
-    ]
-  },
-  {
-    "id": "c1-gt-pass2",
-    "cambridgeSource": "Cambridge IELTS 1, General Training - Section 2",
-    "title": "International Students House - Clubs & Services",
-    "paragraphs": [
-      {
-        "label": "Accommodation",
-        "text": "International Students House (ISH) offers safe, affordable accommodation in central London. Long and short stays welcomed for overseas students attending recognized academic programmes."
-      },
-      {
-        "label": "Membership & Clubs",
-        "text": "You can join the ISH Club for up to one year at a time. The club organises regular social activities, including: Film Society (Club A) showing international indie films; Debate Society (Club B) discussing global politics; Outdoor Expedition Club (Club C) planning weekend country hikes; Table Tennis & Chess Club (Club D); Music & Jazz Jam Society (Club E); and the Dance & Theatre Workshop (Club F)."
-      },
-      {
-        "label": "Support Services",
-        "text": "Thanks to the support of STA Travel, International Students House now provides the services of a full-time International Students Adviser. The club will also be offering reduced accommodation rates for students wishing to spend a few days in London over Christmas."
-      }
-    ],
-    "questions": [
-      {
-        "id": "c1-gt-p2-q15",
-        "type": "mcq",
-        "question": "Which club should you join if you enjoy performing musical improvisation and jazz? (Club A-F)",
-        "options": [
-          "Club A",
-          "Club B",
-          "Club C",
-          "Club D",
-          "Club E",
-          "Club F"
-        ],
-        "correctAnswer": "E",
-        "explanation": "Club E is the Music & Jazz Jam Society.",
-        "explanationSi": "සංගීත ක්‍රියාකාරකම් සඳහා Club E සුදුසුය.",
-        "paragraphReference": "Membership"
-      },
-      {
-        "id": "c1-gt-p2-q16",
-        "type": "mcq",
-        "question": "Which club should you join if you want to play indoor board games and ping-pong? (Club A-F)",
-        "options": [
-          "Club A",
-          "Club B",
-          "Club C",
-          "Club D",
-          "Club E",
-          "Club F"
-        ],
-        "correctAnswer": "D",
-        "explanation": "Club D is the Table Tennis & Chess Club.",
-        "explanationSi": "මේස පන්දු සහ චෙස් සඳහා Club D වේ.",
-        "paragraphReference": "Membership"
-      },
-      {
-        "id": "c1-gt-p2-q17",
-        "type": "mcq",
-        "question": "Which club is ideal for students who love watching foreign art cinema? (Club A-F)",
-        "options": [
-          "Club A",
-          "Club B",
-          "Club C",
-          "Club D",
-          "Club E",
-          "Club F"
-        ],
-        "correctAnswer": "A",
-        "explanation": "Club A is the Film Society.",
-        "explanationSi": "චිත්‍රපට නැරඹීම සඳහා Club A වේ.",
-        "paragraphReference": "Membership"
-      },
-      {
-        "id": "c1-gt-p2-q18",
-        "type": "mcq",
-        "question": "Which club provides rehearsal facilities for instrumental musicians? (Club A-F)",
-        "options": [
-          "Club A",
-          "Club B",
-          "Club C",
-          "Club D",
-          "Club E",
-          "Club F"
-        ],
-        "correctAnswer": "E",
-        "explanation": "Club E provides jazz and music facilities.",
-        "explanationSi": "සංගීත පුහුණුවීම් සඳහා Club E වේ.",
-        "paragraphReference": "Membership"
-      },
-      {
-        "id": "c1-gt-p2-q19",
-        "type": "mcq",
-        "question": "Which club screens cinematic retrospectives every weekend? (Club A-F)",
-        "options": [
-          "Club A",
-          "Club B",
-          "Club C",
-          "Club D",
-          "Club E",
-          "Club F"
-        ],
-        "correctAnswer": "A",
-        "explanation": "Club A screens international films.",
-        "explanationSi": "සිනමා දර්ශන සඳහා Club A වේ.",
-        "paragraphReference": "Membership"
-      },
-      {
-        "id": "c1-gt-p2-q20",
-        "type": "mcq",
-        "question": "Which club organizes formal competitive parliamentary debates? (Club A-F)",
-        "options": [
-          "Club A",
-          "Club B",
-          "Club C",
-          "Club D",
-          "Club E",
-          "Club F"
-        ],
-        "correctAnswer": "B",
-        "explanation": "Club B is the Debate Society.",
-        "explanationSi": "වාද විවාද සඳහා Club B වේ.",
-        "paragraphReference": "Membership"
-      },
-      {
-        "id": "c1-gt-p2-q21",
-        "type": "mcq",
-        "question": "Which club organizes acting rehearsals and stage productions? (Club A-F)",
-        "options": [
-          "Club A",
-          "Club B",
-          "Club C",
-          "Club D",
-          "Club E",
-          "Club F"
-        ],
-        "correctAnswer": "F",
-        "explanation": "Club F is the Dance & Theatre Workshop.",
-        "explanationSi": "නාට්‍ය හා රංගනය සඳහා Club F වේ.",
-        "paragraphReference": "Membership"
-      },
-      {
-        "id": "c1-gt-p2-q22",
-        "type": "TFNG",
-        "question": "Students are permitted to book short accommodation stays at International Students House.",
-        "options": [
-          "TRUE",
-          "FALSE",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "TRUE",
-        "explanation": "Accommodation section explicitly states \"long and short stays welcomed\".",
-        "explanationSi": "කෙටි නවාතැන් ලබාගත හැක (TRUE).",
-        "paragraphReference": "Accommodation"
-      },
-      {
-        "id": "c1-gt-p2-q23",
-        "type": "TFNG",
-        "question": "Club membership at ISH can be purchased for a period of up to three years at once.",
-        "options": [
-          "TRUE",
-          "FALSE",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "FALSE",
-        "explanation": "Text states: \"for up to one year at a time\" (not three years).",
-        "explanationSi": "සාමාජිකත්වය ගත හැක්කේ වසරක් දක්වා පමණි (FALSE).",
-        "paragraphReference": "Membership"
-      },
-      {
-        "id": "c1-gt-p2-q24",
-        "type": "TFNG",
-        "question": "The ISH cafeteria serves hot meals twenty-four hours a day.",
-        "options": [
-          "TRUE",
-          "FALSE",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "NOT GIVEN",
-        "explanation": "Cafeteria opening hours are not mentioned in the excerpt.",
-        "explanationSi": "ආපනශාලාවේ වේලාවන් සඳහන් නොවේ (NOT GIVEN).",
-        "paragraphReference": "Membership"
-      },
-      {
-        "id": "c1-gt-p2-q25",
-        "type": "TFNG",
-        "question": "Members of the ISH Club are eligible to take part in weekend social outings.",
-        "options": [
-          "TRUE",
-          "FALSE",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "TRUE",
-        "explanation": "The club organizes regular social activities and outings.",
-        "explanationSi": "සති අන්ත චාරිකාවලට සහභාගී විය හැක (TRUE).",
-        "paragraphReference": "Membership"
-      },
-      {
-        "id": "c1-gt-p2-q26",
-        "type": "TFNG",
-        "question": "STA Travel sponsors an International Students Adviser based at ISH.",
-        "options": [
-          "TRUE",
-          "FALSE",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "TRUE",
-        "explanation": "Text confirms STA Travel supports a full-time International Students Adviser.",
-        "explanationSi": "ශිෂ්‍ය උපදේශකවරයෙකුට අනුග්‍රහය දක්වයි (TRUE).",
-        "paragraphReference": "Support Services"
-      },
-      {
-        "id": "c1-gt-p2-q27",
-        "type": "TFNG",
-        "question": "The International Students Adviser helps students find permanent jobs in the UK.",
-        "options": [
-          "TRUE",
-          "FALSE",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "NOT GIVEN",
-        "explanation": "The text mentions the adviser but not job placement assistance.",
-        "explanationSi": "රැකියා සොයාදීම පිළිබඳව සඳහන් නොවේ (NOT GIVEN).",
-        "paragraphReference": "Support Services"
-      },
-      {
-        "id": "c1-gt-p2-q28",
-        "type": "TFNG",
-        "question": "Students from Commonwealth nations receive free accommodation during winter term.",
-        "options": [
-          "TRUE",
-          "FALSE",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "NOT GIVEN",
-        "explanation": "No special free housing for Commonwealth students is stated.",
-        "explanationSi": "පොදුරාජ්‍ය මණ්ඩලීය සිසුන්ට නොමිලේ නවාතැන් දීමක් ගැන සඳහන් නොවේ (NOT GIVEN).",
-        "paragraphReference": "Support Services"
-      },
-      {
-        "id": "c1-gt-p2-q29",
-        "type": "TFNG",
-        "question": "Accommodation rates at ISH are increased over the Christmas vacation period.",
-        "options": [
-          "TRUE",
-          "FALSE",
-          "NOT GIVEN"
-        ],
-        "correctAnswer": "FALSE",
-        "explanation": "The club offers \"reduced accommodation rates\" over Christmas (not increased).",
-        "explanationSi": "නත්තල් සමයේ මිල අඩු කරනු ලැබේ (FALSE).",
-        "paragraphReference": "Support Services"
-      }
-    ]
-  },
-  {
-    "id": "c1-gt-pass3",
-    "cambridgeSource": "Cambridge IELTS 1, General Training - Section 3",
-    "title": "Paper Recycling Technology",
-    "paragraphs": [
-      {
-        "label": "Paragraph 1",
-        "text": "Paper is one of the world’s most versatile commodities. Unlike petroleum-derived plastics or mined aluminium, paper comes from a sustainable resource: cultivated timber trees that are constantly replanted. Furthermore, discarded paper is biodegradable, posing little long-term hazard to landfills."
-      },
-      {
-        "label": "Paragraph 2",
-        "text": "Recycling paper conserves valuable resources. Half of all manufactured paper utilizes recycled post-consumer waste, while the rest comes directly from virgin fibre harvested from managed forests."
-      },
-      {
-        "label": "Paragraph 3",
-        "text": "However, collected waste paper must be meticulously sorted from contaminants like adhesive tape, food grease, and plastic laminates. Governments worldwide have actively supported municipal collection and kerbside sorting schemes."
-      },
-      {
-        "label": "Paragraph 4",
-        "text": "Recent technological advances have made de-inking substantially cleaner. In the industrial recycling mill, paper collected from offices and households is delivered to sorting plants. After sorting, the paper is repulped in warm water with enzymes to dissolve inks. Flotation chemical baths de-ink the fibers, creating a bright pulp. Finally, the clean cellulose is refined into paper reels for newsprint and packaging. Consumers must recognize that recycling involves accepting minor variations in paper quality."
-      }
-    ],
-    "questions": [
-      {
-        "id": "c1-gt-p3-q30",
-        "type": "summary",
-        "question": "Unlike non-renewable materials, paper is manufactured from a __________ resource.",
-        "correctAnswer": "sustainable",
-        "explanation": "Paper comes from a sustainable (or replaceable) timber resource.",
-        "explanationSi": "තිරසාර (sustainable // replaceable) සම්පතකින් නිපදවයි.",
-        "paragraphReference": "Paragraph 1"
-      },
-      {
-        "id": "c1-gt-p3-q31",
-        "type": "summary",
-        "question": "Discarded paper breaks down naturally in soil because it is completely __________.",
-        "correctAnswer": "biodegradable",
-        "explanation": "Paper is biodegradable.",
-        "explanationSi": "ස්වාභාවිකව දිරාපත් වන (biodegradable) ද්‍රව්‍යයකි.",
-        "paragraphReference": "Paragraph 1"
-      },
-      {
-        "id": "c1-gt-p3-q32",
-        "type": "summary",
-        "question": "Half of paper comes from recycled scrap; the remainder is supplied as __________ from forests.",
-        "correctAnswer": "virgin fibre",
-        "explanation": "Remainder comes from virgin fibre (or virgin pulp).",
-        "explanationSi": "ඉතිරි කොටස නොඉඳුල් තන්තු (virgin fibre) වලින් සපයයි.",
-        "paragraphReference": "Paragraph 2"
-      },
-      {
-        "id": "c1-gt-p3-q33",
-        "type": "summary",
-        "question": "Waste paper must be separated from foreign non-paper __________ before repulping.",
-        "correctAnswer": "contaminants",
-        "explanation": "Sorted from contaminants like tape and plastic.",
-        "explanationSi": "අපද්‍රව්‍ය (contaminants) ඉවත් කළ යුතුය.",
-        "paragraphReference": "Paragraph 3"
-      },
-      {
-        "id": "c1-gt-p3-q34",
-        "type": "summary",
-        "question": "Municipal collection programs have been actively promoted and funded by __________.",
-        "correctAnswer": "governments",
-        "explanation": "Encouraged by governments worldwide.",
-        "explanationSi": "රජයයන් (governments) මගින් දිරිගන්වනු ලැබේ.",
-        "paragraphReference": "Paragraph 3"
-      },
-      {
-        "id": "c1-gt-p3-q35",
-        "type": "summary",
-        "question": "Ink removal has been made cleaner due to major technological __________.",
-        "correctAnswer": "advances",
-        "explanation": "Due to technological advances in de-inking.",
-        "explanationSi": "තාක්ෂණික දියුණුව (advances) මගින් තීන්ත ඉවත් කිරීම පහසු කර ඇත.",
-        "paragraphReference": "Paragraph 4"
-      },
-      {
-        "id": "c1-gt-p3-q36",
-        "type": "summary",
-        "question": "Consumers must be willing to accept slight variations in the finished paper’s __________.",
-        "correctAnswer": "quality",
-        "explanation": "Accept a change in paper quality.",
-        "explanationSi": "කඩදාසියේ ගුණාත්මකභාවයේ (quality) වෙනස්කම් පිළිගත යුතුය.",
-        "paragraphReference": "Paragraph 4"
-      },
-      {
-        "id": "c1-gt-p3-q37",
-        "type": "summary",
-        "question": "Flow Chart Step 1: Waste paper is primarily collected from homes and __________.",
-        "correctAnswer": "offices",
-        "explanation": "Collected from offices and homes.",
-        "explanationSi": "කාර්යාලවලින් (offices) සහ නිවෙස්වලින් එකතු කරයි.",
-        "paragraphReference": "Paragraph 4"
-      },
-      {
-        "id": "c1-gt-p3-q38",
-        "type": "summary",
-        "question": "Flow Chart Step 2: Paper arrives at the depot and is thoroughly __________.",
-        "correctAnswer": "sorted",
-        "explanation": "Paper is delivered and sorted.",
-        "explanationSi": "කඩදාසි වර්ග කරනු ලැබේ (sorted).",
-        "paragraphReference": "Paragraph 4"
-      },
-      {
-        "id": "c1-gt-p3-q39",
-        "type": "summary",
-        "question": "Flow Chart Step 3: Paper is mixed with warm water and __________ in large vats.",
-        "correctAnswer": "repulped",
-        "explanation": "Paper is repulped in warm water.",
-        "explanationSi": "නැවත පල්ප බවට (repulped) පත් කරයි.",
-        "paragraphReference": "Paragraph 4"
-      },
-      {
-        "id": "c1-gt-p3-q40",
-        "type": "summary",
-        "question": "Flow Chart Step 4: Flotation baths are used to __________ the cellulose fibres.",
-        "correctAnswer": "de-ink",
-        "explanation": "Used to de-ink / remove ink from the fibres.",
-        "explanationSi": "තීන්ත ඉවත් කිරීම (de-ink // remove ink) සිදුකරයි.",
-        "paragraphReference": "Paragraph 4"
-      },
-      {
-        "id": "c1-gt-p3-q41",
-        "type": "summary",
-        "question": "Flow Chart Step 5: Cleaned pulp is mechanically __________ into new paper reels.",
-        "correctAnswer": "refined",
-        "explanation": "Clean pulp is refined into new paper.",
-        "explanationSi": "පිරිපහදු කර (refined) නව කඩදාසි සාදයි.",
-        "paragraphReference": "Paragraph 4"
-      }
-    ]
-  }
 ];

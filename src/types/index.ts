@@ -26,6 +26,10 @@ export interface Word {
     correct: string;
     explanation: string;
   };
+  v1?: string;
+  v2?: string;
+  v3?: string;
+  verbPattern?: string;
 }
 
 export interface Challenge {

@@ -48,13 +48,13 @@ export const NAV_CATEGORIES: NavCategory[] = [
     items: [
       {
         id: 'cambridge',
-        label: 'Cambridge Library',
-        shortLabel: 'Library',
-        badge: 'Books 1–18',
-        badgeClass: 'bg-indigo-100 text-indigo-700',
+        label: 'IELTS Practice',
+        shortLabel: 'Practice',
+        badge: '21–1',
+        badgeClass: 'bg-red-100 text-red-700',
         icon: Library,
-        iconColor: 'text-indigo-600',
-        description: 'Past papers & full test archive',
+        iconColor: 'text-red-600',
+        description: 'Cambridge IELTS 21–1 books, tests & modules',
       },
       {
         id: 'listening',

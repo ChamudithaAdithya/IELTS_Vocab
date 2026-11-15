@@ -520,11 +520,11 @@ const SpeakingTutorViewInner: React.FC<SpeakingTutorViewProps> = ({
       if (apiKey) {
         try {
           report = await evaluateSpokenTurnWithGemini(
+            apiKey,
+            model,
             activeQuestion,
             textToEvaluate,
             selectedTopic,
-            apiKey,
-            model,
             recordSeconds
           );
         } catch {
@@ -549,9 +549,8 @@ const SpeakingTutorViewInner: React.FC<SpeakingTutorViewProps> = ({
 
       const candidateTurn: SpeakingTurn = {
         id: `turn-${Date.now()}`,
-        speaker: 'candidate',
-        question: activeQuestion,
-        transcript: textToEvaluate,
+        role: 'candidate',
+        text: textToEvaluate,
         timestamp: Date.now(),
         audioDurationSec: recordSeconds,
         report

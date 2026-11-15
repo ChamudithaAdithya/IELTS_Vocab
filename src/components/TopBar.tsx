@@ -1,10 +1,10 @@
 import React from 'react';
-import { 
-  Menu, 
-  Search, 
-  Volume2, 
-  Languages, 
-  Target, 
+import {
+  Menu,
+  Search,
+  Volume2,
+  Languages,
+  Target,
   Sparkles,
   BookOpen
 } from 'lucide-react';
@@ -12,6 +12,7 @@ import { AppTab, NAV_CATEGORIES } from '../data/navigation';
 
 interface TopBarProps {
   currentTab: AppTab;
+  onSelectTab?: (tab: AppTab) => void;
   onOpenMobileMenu: () => void;
   showSinhala: boolean;
   setShowSinhala: (val: boolean | ((prev: boolean) => boolean)) => void;
@@ -21,6 +22,7 @@ interface TopBarProps {
 
 export const TopBar: React.FC<TopBarProps> = ({
   currentTab,
+  onSelectTab,
   onOpenMobileMenu,
   showSinhala,
   setShowSinhala,
@@ -28,11 +30,15 @@ export const TopBar: React.FC<TopBarProps> = ({
   onOpenSearch,
 }) => {
   // Find current tab details
-  let currentCategory = 'Cambridge Exam Hub';
-  let currentItem = {
-    label: 'Cambridge Library',
-    badge: 'Books 1–18',
-    iconColor: 'text-indigo-600',
+  let currentCategory = 'Cambridge Real Exams';
+  let currentItem: {
+    label: string;
+    badge?: string;
+    iconColor: string;
+  } = {
+    label: 'IELTS Practice',
+    badge: '21–1',
+    iconColor: 'text-red-600',
   };
 
   for (const cat of NAV_CATEGORIES) {
@@ -97,11 +103,10 @@ export const TopBar: React.FC<TopBarProps> = ({
             <button
               type="button"
               onClick={() => setShowSinhala(prev => !prev)}
-              className={`px-2.5 py-1.5 rounded-xl text-xs font-semibold border transition-all flex items-center gap-1.5 cursor-pointer ${
-                showSinhala
-                  ? 'bg-indigo-50 text-indigo-900 border-indigo-200 hover:bg-indigo-100'
-                  : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-              }`}
+              className={`px-2.5 py-1.5 rounded-xl text-xs font-semibold border transition-all flex items-center gap-1.5 cursor-pointer ${showSinhala
+                ? 'bg-indigo-50 text-indigo-900 border-indigo-200 hover:bg-indigo-100'
+                : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                }`}
               title="Toggle Sinhala translations across all modules"
             >
               <Languages className={`w-3.5 h-3.5 ${showSinhala ? 'text-indigo-600' : 'text-slate-400'}`} />

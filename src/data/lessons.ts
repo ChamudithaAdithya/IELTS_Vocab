@@ -1,5 +1,7 @@
 import { Lesson } from '../types';
 import { IMPORTED_ACADEMIC_LESSON } from './importedVocabulary';
+import { LESSON_10_MAPUNGUBWE } from './lesson10Mapungubwe';
+import { LESSON_11_TENSES } from './lesson11TensesIrregularVerbs';
 
 export const LESSONS: Lesson[] = [
   {
@@ -2711,7 +2713,9 @@ export const LESSONS: Lesson[] = [
       ]
     }
   },
-  IMPORTED_ACADEMIC_LESSON
+  IMPORTED_ACADEMIC_LESSON,
+  LESSON_10_MAPUNGUBWE,
+  LESSON_11_TENSES
 ];
 
 // Flat list of all words for quick lookup & dictionary
