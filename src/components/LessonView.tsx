@@ -459,15 +459,15 @@ export const LessonView: React.FC<LessonViewProps> = ({
               {/* Example Sentences */}
               {word.exampleSentences.length > 0 && (() => {
                 const isExpanded = !!expandedWordExamples[word.id];
-                const displayedSentences = isExpanded || word.exampleSentences.length <= 3 
+                const displayedSentences = isExpanded || word.exampleSentences.length <= 5 
                   ? word.exampleSentences 
-                  : word.exampleSentences.slice(0, 3);
+                  : word.exampleSentences.slice(0, 5);
 
                 return (
                   <div className="space-y-2 text-sm">
                     <div className="flex items-center justify-between">
                       <span className="font-semibold text-slate-900 block">Example Sentences:</span>
-                      {word.exampleSentences.length > 3 && (
+                      {word.exampleSentences.length > 5 && (
                         <button
                           type="button"
                           onClick={() => setExpandedWordExamples(prev => ({ ...prev, [word.id]: !prev[word.id] }))}

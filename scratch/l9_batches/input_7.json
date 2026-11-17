@@ -1,0 +1,2102 @@
+[
+  {
+    "index": 700,
+    "key": "recover",
+    "pos": "verb",
+    "def": "Return to a normal state of health, mind, or economic strength after an illness, injury, or setback.",
+    "siDef": "යථා තත්ත්වයට පත් වීම / සුවය ලැබීම / නැවත අත්කර ගැනීම",
+    "collocations": [
+      [
+        "Recover from a recession",
+        "ආර්ථික අවපාතයකින් යථා තත්ත්වයට පත් වීම"
+      ],
+      [
+        "Fully recover",
+        "පූර්ණ සුවය ලැබීම / සම්පූර්ණයෙන්ම යථා තත්ත්වයට පත් වීම"
+      ],
+      [
+        "Recover lost revenue",
+        "අහිමි වූ ආදායම නැවත උපයා ගැනීම"
+      ]
+    ]
+  },
+  {
+    "index": 701,
+    "key": "passive",
+    "pos": "adjective",
+    "def": "Accepting or allowing what happens or what others do, without active response or resistance.",
+    "siDef": "නිෂ්ක්‍රීය / ක්‍රියාකාරී දායකත්වයක් නොදක්වන",
+    "collocations": [
+      [
+        "Passive consumption",
+        "නිෂ්ක්‍රීය පරිභෝජනය"
+      ],
+      [
+        "Take a passive role",
+        "නිෂ්ක්‍රීය භූමිකාවක් නිරූපණය කිරීම"
+      ],
+      [
+        "Passive learning",
+        "නිෂ්ක්‍රීය ඉගෙනීම"
+      ]
+    ]
+  },
+  {
+    "index": 702,
+    "key": "scope",
+    "pos": "noun",
+    "def": "The extent of the area or subject matter that something deals with or to which it is relevant; the opportunity or possibility to do something.",
+    "siDef": "විෂය පථය / පරාසය / ඉඩකඩ",
+    "collocations": [
+      [
+        "Broaden the scope",
+        "විෂය පථය පුළුල් කිරීම"
+      ],
+      [
+        "Beyond the scope of",
+        "විෂය පථයෙන් ඔබ්බට ගිය"
+      ],
+      [
+        "Scope for improvement",
+        "වැඩිදියුණු කිරීමට ඇති ඉඩකඩ"
+      ]
+    ]
+  },
+  {
+    "index": 703,
+    "key": "have insights into",
+    "pos": "phrase",
+    "def": "Possess a deep, accurate, and intuitive understanding of a complex person, situation, or subject.",
+    "siDef": "පිළිබඳ ගැඹුරු අවබෝධයක් තිබීම / තීක්ෂණ දැක්මක් තිබීම",
+    "collocations": [
+      [
+        "Have valuable insights into",
+        "පිළිබඳ වටිනා අවබෝධයක් තිබීම"
+      ],
+      [
+        "Gain deep insights into",
+        "පිළිබඳ ගැඹුරු අවබෝධයක් ලබා ගැනීම"
+      ],
+      [
+        "Provide fresh insights into",
+        "පිළිබඳ නව අවබෝධයක් ලබා දීම"
+      ]
+    ]
+  },
+  {
+    "index": 704,
+    "key": "communicate",
+    "pos": "verb",
+    "def": "Share or exchange information, news, ideas, or feelings with others.",
+    "siDef": "සන්නිවේදනය කිරීම / අදහස් හුවමාරු කර ගැනීම",
+    "collocations": [
+      [
+        "Communicate effectively",
+        "ඵලදායී ලෙස සන්නිවේදනය කිරීම"
+      ],
+      [
+        "Communicate with peers",
+        "සමවයසේ මිතුරන් සමඟ සන්නිවේදනය කිරීම"
+      ],
+      [
+        "Clearly communicate ideas",
+        "අදහස් පැහැදිලිව සන්නිවේදනය කිරීම"
+      ]
+    ]
+  },
+  {
+    "index": 705,
+    "key": "an entity",
+    "pos": "noun",
+    "def": "A thing with distinct and independent existence, such as an organisation, business, or political body.",
+    "siDef": "ස්වාධීන ආයතනය / ඒකකය / පැවැත්ම",
+    "collocations": [
+      [
+        "Separate legal entity",
+        "වෙනම නෛතික ආයතනයක් / ඒකකයක්"
+      ],
+      [
+        "Commercial entities",
+        "වාණිජ ආයතන"
+      ],
+      [
+        "Function as a single entity",
+        "තනි ඒකකයක් ලෙස ක්‍රියාත්මක වීම"
+      ]
+    ]
+  },
+  {
+    "index": 706,
+    "key": "flexible",
+    "pos": "adjective",
+    "def": "Able to be easily modified to respond to altered circumstances; willing to change or compromise.",
+    "siDef": "නම්‍යශීලී / පහසුවෙන් වෙනස් කළ හැකි",
+    "collocations": [
+      [
+        "Flexible working arrangements",
+        "නම්‍යශීලී සේවා ක්‍රමවේද"
+      ],
+      [
+        "Adopt a flexible approach",
+        "නම්‍යශීලී ප්‍රවේශයක් අනුගමනය කිරීම"
+      ],
+      [
+        "Flexible schedule",
+        "නම්‍යශීලී කාලසටහන"
+      ]
+    ]
+  },
+  {
+    "index": 707,
+    "key": "inhibit",
+    "pos": "verb",
+    "def": "Hinder, restrain, or prevent an action, process, or person from functioning freely.",
+    "siDef": "අඩාල කිරීම / බාධා පැමිණවීම / වළක්වාලීම",
+    "collocations": [
+      [
+        "Inhibit economic growth",
+        "ආර්ථික වර්ධනය අඩාල කිරීම"
+      ],
+      [
+        "Inhibit creativity",
+        "නිර්මාණශීලීත්වයට බාධා පැමිණවීම"
+      ],
+      [
+        "Severely inhibit",
+        "දැඩි ලෙස අඩාල කිරීම"
+      ]
+    ]
+  },
+  {
+    "index": 708,
+    "key": "inspect",
+    "pos": "verb",
+    "def": "Look at someone or something closely, typically to assess their condition or to discover any shortcomings.",
+    "siDef": "පරීක්ෂා කිරීම / විමර්ශනය කිරීම",
+    "collocations": [
+      [
+        "Regularly inspect",
+        "නිතිපතා පරීක්ෂා කිරීම"
+      ],
+      [
+        "Inspect safety standards",
+        "ආරක්ෂක ප්‍රමිතීන් පරීක්ෂා කිරීම"
+      ],
+      [
+        "Closely inspect",
+        "සමීපව පරීක්ෂා කිරීම"
+      ]
+    ]
+  },
+  {
+    "index": 709,
+    "key": "an agenda",
+    "pos": "noun",
+    "def": "A list of items to be discussed at a formal meeting; an underlying plan or set of priorities pursued by an individual or group.",
+    "siDef": "න්‍යාය පත්‍රය / ප්‍රමුඛතා ලැයිස්තුව / යටි අරමුණ",
+    "collocations": [
+      [
+        "High on the political agenda",
+        "දේශපාලන න්‍යාය පත්‍රයේ ඉහළින්ම ඇති"
+      ],
+      [
+        "Set the agenda",
+        "න්‍යාය පත්‍රය සකස් කිරීම / ප්‍රමුඛතා තීරණය කිරීම"
+      ],
+      [
+        "Hidden agenda",
+        "සැඟවුණු න්‍යාය පත්‍රය / යටි අරමුණ"
+      ]
+    ]
+  },
+  {
+    "index": 710,
+    "key": "integral",
+    "pos": "adjective",
+    "def": "Necessary to make a whole complete; essential or fundamental.",
+    "siDef": "අත්‍යවශ්‍ය / වෙන් කළ නොහැකි / මූලික",
+    "collocations": [
+      [
+        "An integral part of",
+        "හි වෙන් කළ නොහැකි අත්‍යවශ්‍ය කොටසක්"
+      ],
+      [
+        "Integral to success",
+        "සාර්ථකත්වය සඳහා අත්‍යවශ්‍ය"
+      ],
+      [
+        "Play an integral role",
+        "අත්‍යවශ්‍ය කාර්යභාරයක් ඉටු කිරීම"
+      ]
+    ]
+  },
+  {
+    "index": 711,
+    "key": "a sequence",
+    "pos": "noun",
+    "def": "A particular order in which related events, movements, or things follow each other.",
+    "siDef": "අනුපිළිවෙළ / සිදුවීම් දාමය",
+    "collocations": [
+      [
+        "Chronological sequence",
+        "කාලානුරූපී අනුපිළිවෙළ"
+      ],
+      [
+        "A sequence of events",
+        "සිදුවීම් දාමයක්"
+      ],
+      [
+        "In a logical sequence",
+        "තාර්කික අනුපිළිවෙළකට"
+      ]
+    ]
+  },
+  {
+    "index": 712,
+    "key": "deviate from",
+    "pos": "phrase",
+    "def": "Depart or diverge from an established course, norm, rule, or standard.",
+    "siDef": "සම්මතයෙන් බැහැර වීම / වෙනතකට යොමු වීම",
+    "collocations": [
+      [
+        "Deviate from the norm",
+        "සම්මතයෙන් බැහැර වීම"
+      ],
+      [
+        "Deviate from the original plan",
+        "මුල් සැලැස්මෙන් බැහැර වීම"
+      ],
+      [
+        "Rarely deviate from",
+        "කලාතුරකින් බැහැර වීම"
+      ]
+    ]
+  },
+  {
+    "index": 713,
+    "key": "revise",
+    "pos": "verb",
+    "def": "Re-examine and make alterations to written material, laws, or estimates; in British English, reread work done previously to prepare for an exam.",
+    "siDef": "සංශෝධනය කිරීම / විභාගයක් සඳහා නැවත පාඩම් බැලීම",
+    "collocations": [
+      [
+        "Revise existing laws",
+        "පවතින නීති සංශෝධනය කිරීම"
+      ],
+      [
+        "Revise economic forecasts",
+        "ආර්ථික පුරෝකථන සංශෝධනය කිරීම"
+      ],
+      [
+        "Revise for examinations",
+        "විභාග සඳහා පුනරීක්ෂණය කිරීම"
+      ]
+    ]
+  },
+  {
+    "index": 714,
+    "key": "misinformation",
+    "pos": "noun",
+    "def": "False or inaccurate information, especially that which is spread unintentionally or deliberately on media platforms.",
+    "siDef": "සාවද්‍ය තොරතුරු / වැරදි තොරතුරු",
+    "collocations": [
+      [
+        "Spread of misinformation",
+        "සාවද්‍ය තොරතුරු ව්‍යාප්ත වීම"
+      ],
+      [
+        "Combat misinformation",
+        "සාවද්‍ය තොරතුරු පිටුදැකීම"
+      ],
+      [
+        "Medical misinformation",
+        "වෛද්‍යමය සාවද්‍ය තොරතුරු"
+      ]
+    ]
+  },
+  {
+    "index": 715,
+    "key": "articulate",
+    "pos": "verb",
+    "def": "Express an idea or feeling fluently, coherently, and clearly; (as an adjective) having or showing the ability to speak fluently.",
+    "siDef": "පැහැදිලිව සහ ව්‍යක්ත ලෙස අදහස් ප්‍රකාශ කිරීම / ව්‍යක්ත",
+    "collocations": [
+      [
+        "Clearly articulate",
+        "පැහැදිලිව ප්‍රකාශ කිරීම"
+      ],
+      [
+        "Articulate a vision",
+        "දැක්මක් ව්‍යක්ත ලෙස ඉදිරිපත් කිරීම"
+      ],
+      [
+        "Articulate speaker",
+        "ව්‍යක්ත කථිකයා"
+      ]
+    ]
+  },
+  {
+    "index": 716,
+    "key": "an interval",
+    "pos": "noun",
+    "def": "An intervening time or space; a pause or break between parts of an activity or periods of time.",
+    "siDef": "කාල පරතරය / විರಾಮය / අතරමැදි කාලය",
+    "collocations": [
+      [
+        "At regular intervals",
+        "නිශ්චිත කාල පරතරයන්හිදී"
+      ],
+      [
+        "Brief interval",
+        "කෙටි විරාමයක් / කෙටි කාල පරතරයක්"
+      ],
+      [
+        "Time interval between",
+        "අතර පවතින කාල පරතරය"
+      ]
+    ]
+  },
+  {
+    "index": 717,
+    "key": "negate",
+    "pos": "verb",
+    "def": "Make ineffective; nullify or cancel out the positive impact of something.",
+    "siDef": "නිෂ්ප්‍රභ කිරීම / අවලංගු කිරීම / බලරහිත කිරීම",
+    "collocations": [
+      [
+        "Negate the benefits of",
+        "හි ප්‍රතිලාභ නිෂ්ප්‍රභ කිරීම"
+      ],
+      [
+        "Completely negate",
+        "සම්පූර්ණයෙන්ම නිෂ්ප්‍රභ කිරීම"
+      ],
+      [
+        "Negate the positive impact",
+        "ධනාත්මක බලපෑම බලරහිත කිරීම"
+      ]
+    ]
+  },
+  {
+    "index": 718,
+    "key": "liberal",
+    "pos": "adjective",
+    "def": "Willing to respect or accept behaviour or opinions different from one's own; open to new ideas; (in education) relating to broad general knowledge.",
+    "siDef": "ලිබරල් / නිදහස් මතධාරී / විවෘත මනසකින් යුත්",
+    "collocations": [
+      [
+        "Liberal arts education",
+        "පුළුල් ශාස්ත්‍රීය අධ්‍යාපනය"
+      ],
+      [
+        "Liberal attitudes towards",
+        "කෙරෙහි පවතින විවෘත/නිදහස් ආකල්ප"
+      ],
+      [
+        "Adopt liberal policies",
+        "ලිබරල් ප්‍රතිපත්ති අනුගමනය කිරීම"
+      ]
+    ]
+  },
+  {
+    "index": 719,
+    "key": "the revenue",
+    "pos": "noun",
+    "def": "Income, especially when of a company or organisation and of a substantial nature, or money raised by a government through taxation.",
+    "siDef": "ආදායම / රාජ්‍ය හෝ ආයතනික ආදායම",
+    "collocations": [
+      [
+        "Generate revenue",
+        "ආදායම් උත්පාදනය කිරීම"
+      ],
+      [
+        "Tax revenue",
+        "බදු ආදායම"
+      ],
+      [
+        "Boost annual revenue",
+        "වාර්ෂික ආදායම ඉහළ නැංවීම"
+      ]
+    ]
+  },
+  {
+    "index": 720,
+    "key": "supplement with",
+    "pos": "phrase",
+    "def": "Add an extra element or amount to something in order to improve, complete, or enhance it.",
+    "siDef": "මගින් අඩුව පිරිමසා ගැනීම / අතිරේකව එක් කිරීම",
+    "collocations": [
+      [
+        "Supplement income with",
+        "ආදායමට අතිරේකව යමක් එක් කර ගැනීම"
+      ],
+      [
+        "Supplement classroom learning with",
+        "පන්ති කාමර ඉගෙනුම ප්‍රායෝගික අත්දැකීම්වලින් පෝෂණය කිරීම"
+      ],
+      [
+        "Supplement a diet with",
+        "ආහාර වේලකට අතිරේක පෝෂක එක් කිරීම"
+      ]
+    ]
+  },
+  {
+    "index": 721,
+    "key": "undergo",
+    "pos": "verb",
+    "def": "Experience or be subjected to something, typically a significant change, examination, or challenging treatment.",
+    "siDef": "භාජනය වීම / ලක් වීම / අත්විඳීම",
+    "collocations": [
+      [
+        "Undergo a profound transformation",
+        "ගැඹුරු පරිවර්තනයකට භාජනය වීම"
+      ],
+      [
+        "Undergo rigorous training",
+        "දැඩි පුහුණුවකට භාජනය වීම"
+      ],
+      [
+        "Undergo medical treatment",
+        "වෛද්‍ය ප්‍රතිකාරවලට ලක් වීම"
+      ]
+    ]
+  },
+  {
+    "index": 722,
+    "key": "a vehicle",
+    "pos": "noun",
+    "def": "A machine such as a car, bus, or lorry used for transporting people or goods; figuratively, a medium for expressing ideas or achieving a goal.",
+    "siDef": "වාහනය / රථය / (අදහසක් ප්‍රකාශ කිරීමේ) මාධ්‍යය",
+    "collocations": [
+      [
+        "Electric vehicles",
+        "විද්‍යුත් වාහන"
+      ],
+      [
+        "A vehicle for social change",
+        "සමාජ වෙනසක් ඇති කිරීමේ මාධ්‍යයක්"
+      ],
+      [
+        "Commercial vehicles",
+        "වාණිජ වාහන"
+      ]
+    ]
+  },
+  {
+    "index": 723,
+    "key": "trigger",
+    "pos": "verb",
+    "def": "Cause a particular event or situation to happen or exist, especially a sudden reaction or chain of events.",
+    "siDef": "ආරම්භ කිරීම / පණ ගැන්වීම / ක්ෂණිකව ඇති කිරීම",
+    "collocations": [
+      [
+        "Trigger a chain reaction",
+        "දාම ප්‍රතික්‍රියාවක් ආරම්භ කිරීම"
+      ],
+      [
+        "Trigger a fierce debate",
+        "දැඩි විවාදයක් ඇති කිරීම"
+      ],
+      [
+        "Trigger an economic crisis",
+        "ආර්ථික අර්බුදයක් ඇති කිරීම"
+      ]
+    ]
+  },
+  {
+    "index": 724,
+    "key": "overlap",
+    "pos": "verb",
+    "def": "Extend over so as to cover partly; have parts, responsibilities, or time periods in common with something else.",
+    "siDef": "අතිපිහිත වීම / එකිනෙක මත වැටීම / පොදු ලක්ෂණ තිබීම",
+    "collocations": [
+      [
+        "Overlap significantly",
+        "සැලකිය යුතු ලෙස එකිනෙක හා සමපාත වීම"
+      ],
+      [
+        "An overlap between",
+        "අතර පවතින පොදු සමානකම / අතිපිහිත වීම"
+      ],
+      [
+        "Overlapping responsibilities",
+        "එකිනෙක මත වැටෙන වගකීම්"
+      ]
+    ]
+  },
+  {
+    "index": 725,
+    "key": "refine",
+    "pos": "verb",
+    "def": "Improve an idea, method, system, or skill by making small, precise changes; remove impurities from a substance.",
+    "siDef": "වැඩිදියුණු කිරීම / සියුම් ලෙස සකස් කිරීම / පිරිපහදු කිරීම",
+    "collocations": [
+      [
+        "Refine existing methods",
+        "පවතින ක්‍රමවේද තවදුරටත් වැඩිදියුණු කිරීම"
+      ],
+      [
+        "Refine one's skills",
+        "තම කුසලතා ඔප්නංවා ගැනීම"
+      ],
+      [
+        "Continuously refine",
+        "අඛණ්ඩව වැඩිදියුණු කිරීම"
+      ]
+    ]
+  },
+  {
+    "index": 726,
+    "key": "a version",
+    "pos": "noun",
+    "def": "A particular form of something differing in certain respects from an earlier form or other forms of the same type of thing.",
+    "siDef": "අනුවාදය / සංස්කරණය / ස්වරූපය",
+    "collocations": [
+      [
+        "Updated version of",
+        "හි යාවත්කාලීන කරන ලද සංස්කරණය"
+      ],
+      [
+        "Simplified version",
+        "සරල කරන ලද ස්වරූපය"
+      ],
+      [
+        "Modified version",
+        "වෙනස් කරන ලද අනුවාදය"
+      ]
+    ]
+  },
+  {
+    "index": 727,
+    "key": "the volume",
+    "pos": "noun",
+    "def": "The amount or quantity of something, especially when large; the amount of space that a substance or object occupies, or loudness of sound.",
+    "siDef": "ප්‍රමාණය / පරිමාව / ශබ්දයේ ප්‍රමාණය",
+    "collocations": [
+      [
+        "Sheer volume of",
+        "අතිවිශාල ප්‍රමාණය"
+      ],
+      [
+        "Volume of traffic",
+        "රථවාහන ප්‍රමාණය"
+      ],
+      [
+        "Growing volume of waste",
+        "ඉහළ යන අපද්‍රව්‍ය පරිමාව"
+      ]
+    ]
+  },
+  {
+    "index": 728,
+    "key": "indulge in",
+    "pos": "phrase",
+    "def": "Allow oneself to enjoy the pleasure of something, especially something that may be excessive, expensive, or unhealthy.",
+    "siDef": "සතුටු වීම සඳහා (යමකට) යොමු වීම / ගිලී සිටීම",
+    "collocations": [
+      [
+        "Indulge in impulse buying",
+        "ක්ෂණික පෙළඹවීම මත භාණ්ඩ මිලදී ගැනීමට යොමු වීම"
+      ],
+      [
+        "Indulge in unhealthy habits",
+        "සෞඛ්‍යයට අහිතකර පුරුදුවලට යොමු වීම"
+      ],
+      [
+        "Occasionally indulge in",
+        "ඉඳහිට සතුට පිණිස යමකට යොමු වීම"
+      ]
+    ]
+  },
+  {
+    "index": 729,
+    "key": "reminiscent of",
+    "pos": "phrase",
+    "def": "Tending to remind one of something; suggesting something by resemblance.",
+    "siDef": "සිහිගන්වන / සිහියට නංවන",
+    "collocations": [
+      [
+        "Strongly reminiscent of",
+        "ප්‍රබල ලෙස සිහිගන්වන"
+      ],
+      [
+        "Architecture reminiscent of",
+        "සිහිගන්වන ගෘහ නිර්මාණ ශිල්පය"
+      ],
+      [
+        "In a manner reminiscent of",
+        "සිහිගන්වන ආකාරයෙන්"
+      ]
+    ]
+  },
+  {
+    "index": 730,
+    "key": "burgeoning",
+    "pos": "adjective",
+    "def": "Beginning to grow or increase rapidly; flourishing.",
+    "siDef": "ශීඝ්‍රයෙන් වර්ධනය වන / වේගයෙන් දියුණු වන",
+    "collocations": [
+      [
+        "Burgeoning population",
+        "ශීඝ්‍රයෙන් වර්ධනය වන ජනගහනය"
+      ],
+      [
+        "Burgeoning middle class",
+        "වේගයෙන් පුළුල් වන මධ්‍යම පන්තිය"
+      ],
+      [
+        "Burgeoning demand for",
+        "සඳහා ශීඝ්‍රයෙන් ඉහළ යන ඉල්ලුම"
+      ]
+    ]
+  },
+  {
+    "index": 731,
+    "key": "an array",
+    "pos": "noun",
+    "def": "An impressive display or wide range of a particular type of thing.",
+    "siDef": "විශාල පරාසයක් / විවිධාකාර එකතුවක්",
+    "collocations": [
+      [
+        "A wide array of",
+        "පුළුල් පරාසයක විහිදුණු"
+      ],
+      [
+        "A vast array of options",
+        "විකල්පයන් රාශියක්"
+      ],
+      [
+        "A bewildering array of",
+        "සිතාගත නොහැකි තරම් විවිධ වූ"
+      ]
+    ]
+  },
+  {
+    "index": 732,
+    "key": "prior",
+    "pos": "adjective",
+    "def": "Existing or coming before in time, order, or importance.",
+    "siDef": "පෙර පැවති / කලින් සිදු වූ / මූලික",
+    "collocations": [
+      [
+        "Prior experience",
+        "පෙර පළපුරුද්ද"
+      ],
+      [
+        "Prior to implementation",
+        "ක්‍රියාත්මක කිරීමට පෙරාතුව"
+      ],
+      [
+        "Without prior notice",
+        "පූර්ව දැනුම්දීමකින් තොරව"
+      ]
+    ]
+  },
+  {
+    "index": 733,
+    "key": "a mode",
+    "pos": "noun",
+    "def": "A way or manner in which something occurs or is experienced, expressed, or done.",
+    "siDef": "ක්‍රමය / ආකාරය / මාදිලිය",
+    "collocations": [
+      [
+        "Modes of transport",
+        "ප්‍රවාහන ක්‍රම"
+      ],
+      [
+        "Primary mode of communication",
+        "ප්‍රධාන සන්නිවේදන මාධ්‍යය"
+      ],
+      [
+        "Flexible mode of study",
+        "නම්‍යශීලී අධ්‍යයන ක්‍රමවේදය"
+      ]
+    ]
+  },
+  {
+    "index": 734,
+    "key": "extensive",
+    "pos": "adjective",
+    "def": "Covering or affecting a large area; large in amount, scale, or scope.",
+    "siDef": "පුළුල් / විශාල පරාසයක පැතිරුණු / විස්තීර්ණ",
+    "collocations": [
+      [
+        "Conduct extensive research",
+        "පුළුල් පර්යේෂණ සිදු කිරීම"
+      ],
+      [
+        "Cause extensive damage",
+        "විශාල හානියක් සිදු කිරීම"
+      ],
+      [
+        "Extensive experience in",
+        "පිළිබඳ පුළුල් පළපුරුද්ද"
+      ]
+    ]
+  },
+  {
+    "index": 735,
+    "key": "alienate",
+    "pos": "verb",
+    "def": "Make someone feel isolated, estranged, or no longer supportive of a group, society, or institution.",
+    "siDef": "හුදකලා කිරීම / දුරස්ථ කිරීම / කලකිරවීම",
+    "collocations": [
+      [
+        "Feel alienated from society",
+        "සමාජයෙන් හුදකලා වී ඇති බවක් දැනීම"
+      ],
+      [
+        "Alienate loyal customers",
+        "විශ්වාසවන්ත පාරිභෝගිකයින් දුරස් කර ගැනීම"
+      ],
+      [
+        "Alienate young people",
+        "තරුණ පිරිස සමාජයෙන් දුරස්ථ කිරීම"
+      ]
+    ]
+  },
+  {
+    "index": 736,
+    "key": "desolate",
+    "pos": "adjective",
+    "def": "(Of a place) deserted of people and in a state of bleak and dismal emptiness; feeling utter misery and loneliness.",
+    "siDef": "ජනශූන්‍ය / පාළුවට ගිය / දැඩි ලෙස හුදකලා වූ",
+    "collocations": [
+      [
+        "Desolate landscape",
+        "පාළුවට ගිය භූ දර්ශනය"
+      ],
+      [
+        "Bleak and desolate",
+        "ශුෂ්ක සහ ජනශූන්‍ය"
+      ],
+      [
+        "Leave the region desolate",
+        "ප්‍රදේශය මුළුමනින්ම පාළු බවට පත් කිරීම"
+      ]
+    ]
+  },
+  {
+    "index": 737,
+    "key": "a notion",
+    "pos": "noun",
+    "def": "A conception of or belief about something; an idea or opinion.",
+    "siDef": "මතය / අදහස / සංකල්පය",
+    "collocations": [
+      [
+        "Challenge the notion that",
+        "යන මතය අභියෝගයට ලක් කිරීම"
+      ],
+      [
+        "Preconceived notions",
+        "කලින් ඇති කරගත් මතවාද"
+      ],
+      [
+        "Reject the notion of",
+        "පිළිබඳ අදහස ප්‍රතික්ෂේප කිරීම"
+      ]
+    ]
+  },
+  {
+    "index": 738,
+    "key": "thrilling",
+    "pos": "adjective",
+    "def": "Causing excitement and pleasure; exhilarating.",
+    "siDef": "උද්වේගකර / ඉතාමත් ප්‍රබෝධමත් කරවන / ත්‍රාසජනක",
+    "collocations": [
+      [
+        "Thrilling experience",
+        "උද්වේගකර අත්දැකීම"
+      ],
+      [
+        "Thrilling spectacle",
+        "චමත්කාරජනක හා උද්වේගකර දසුන"
+      ],
+      [
+        "Thrilling conclusion",
+        "උද්වේගකර අවසානය"
+      ]
+    ]
+  },
+  {
+    "index": 739,
+    "key": "potent",
+    "pos": "adjective",
+    "def": "Having great power, influence, or effect.",
+    "siDef": "ප්‍රබල / බලගතු / ඉතා ක්‍රියාකාරී",
+    "collocations": [
+      [
+        "Potent symbol of",
+        "හි ප්‍රබල සංකේතයක්"
+      ],
+      [
+        "Potent greenhouse gas",
+        "ප්‍රබල හරිතාගාර වායුවක්"
+      ],
+      [
+        "Potent force for change",
+        "වෙනසක් ඇති කරන ප්‍රබල බලවේගයක්"
+      ]
+    ]
+  },
+  {
+    "index": 740,
+    "key": "tempted to",
+    "pos": "phrase",
+    "def": "Having an urge or inclination to do something, even if it may be unwise, short-sighted, or wrong.",
+    "siDef": "(යමක් කිරීමට) පෙළඹීමක් ඇති වීම / ආශාවක් ඇති වීම",
+    "collocations": [
+      [
+        "Be tempted to cut corners",
+        "පහසු හා ප්‍රමිතියෙන් අඩු ක්‍රම අනුගමනය කිරීමට පෙළඹීම"
+      ],
+      [
+        "Feel tempted to abandon",
+        "අත්හැර දැමීමට පෙළඹීමක් ඇති වීම"
+      ],
+      [
+        "Easily tempted to",
+        "පහසුවෙන්ම පෙළඹෙන"
+      ]
+    ]
+  },
+  {
+    "index": 741,
+    "key": "overtake",
+    "pos": "verb",
+    "def": "Catch up with and pass another vehicle or person travelling in the same direction; become greater or more successful than something else.",
+    "siDef": "පසුකර යාම / අභිබවා යාම",
+    "collocations": [
+      [
+        "Overtake competitors",
+        "තරගකරුවන් අභිබවා යාම"
+      ],
+      [
+        "Overtake traditional methods",
+        "සාම්ප්‍රදායික ක්‍රම අභිබවා යාම"
+      ],
+      [
+        "Rapidly overtake",
+        "ශීඝ්‍රයෙන් පසුකර යාම"
+      ]
+    ]
+  },
+  {
+    "index": 742,
+    "key": "innocent",
+    "pos": "adjective",
+    "def": "Not guilty of a crime or offence; not responsible for or directly involved in an event yet suffering its consequences.",
+    "siDef": "නිර්දෝෂී / අහිංසක / වරදකට සම්බන්ධ නැති",
+    "collocations": [
+      [
+        "Presumed innocent until proven guilty",
+        "වරදකරු බව ඔප්පු වන තුරු නිර්දෝෂී යැයි සැලකීම"
+      ],
+      [
+        "Innocent civilians",
+        "අහිංසක සිවිල් වැසියන්"
+      ],
+      [
+        "Innocent of the charges",
+        "චෝදනාවලින් නිර්දෝෂී"
+      ]
+    ]
+  },
+  {
+    "index": 743,
+    "key": "incremental",
+    "pos": "adjective",
+    "def": "Relating to or denoting an increase or addition, especially one of a series of small, gradual stages on a fixed scale.",
+    "siDef": "ක්‍රමානුකූලව සිදුවන / පියවරෙන් පියවර සිදුවන (වර්ධනය හෝ වෙනස)",
+    "collocations": [
+      [
+        "Incremental changes",
+        "ක්‍රමක්‍රමයෙන් සිදුවන කුඩා වෙනස්කම්"
+      ],
+      [
+        "Incremental progress",
+        "පියවරෙන් පියවර ලබන ප්‍රගතිය"
+      ],
+      [
+        "Incremental improvements",
+        "ක්‍රමානුකූල වැඩිදියුණු කිරීම්"
+      ]
+    ]
+  },
+  {
+    "index": 744,
+    "key": "qualify for",
+    "pos": "phrase",
+    "def": "Be entitled to a particular benefit or privilege by fulfilling a necessary condition; reach the standard required to enter a competition.",
+    "siDef": "සඳහා සුදුසුකම් ලැබීම / හිමිකම් ලැබීම",
+    "collocations": [
+      [
+        "Qualify for financial aid",
+        "මූල්‍ය ආධාර සඳහා සුදුසුකම් ලැබීම"
+      ],
+      [
+        "Qualify for a scholarship",
+        "ශිෂ්‍යත්වයක් සඳහා සුදුසුකම් ලැබීම"
+      ],
+      [
+        "Qualify for state benefits",
+        "රජයේ සහනාධාර සඳහා හිමිකම් ලැබීම"
+      ]
+    ]
+  },
+  {
+    "index": 745,
+    "key": "hesitate",
+    "pos": "verb",
+    "def": "Pause in indecision before saying or doing something; be reluctant to do something.",
+    "siDef": "පැකිළීම / දෙගිඩියාවෙන් පසුවීම",
+    "collocations": [
+      [
+        "Hesitate to seek help",
+        "උපකාර පැතීමට පැකිළීම"
+      ],
+      [
+        "Hesitate to invest",
+        "ආයෝජනය කිරීමට පසුබට වීම"
+      ],
+      [
+        "Without hesitation",
+        "කිසිදු පැකිළීමකින් තොරව"
+      ]
+    ]
+  },
+  {
+    "index": 746,
+    "key": "exponential",
+    "pos": "adjective",
+    "def": "(Of an increase) becoming more and more rapid at an accelerating rate.",
+    "siDef": "ඝාතීය / අතිශය වේගවත් (වර්ධනය)",
+    "collocations": [
+      [
+        "Exponential growth",
+        "අතිශය වේගවත් (ඝාතීය) වර්ධනය"
+      ],
+      [
+        "Exponential increase in",
+        "හි අතිශය ශීඝ්‍ර ඉහළ යාම"
+      ],
+      [
+        "Grow at an exponential rate",
+        "අතිශය වේගවත් අනුපාතයකින් වර්ධනය වීම"
+      ]
+    ]
+  },
+  {
+    "index": 747,
+    "key": "alongside",
+    "pos": "adverb",
+    "def": "Close to the side of; next to; together and in cooperation with.",
+    "siDef": "සමඟ එක්ව / ඊට සමගාමීව / පසෙකින්",
+    "collocations": [
+      [
+        "Work alongside",
+        "සමඟ එක්ව වැඩ කිරීම"
+      ],
+      [
+        "Exist alongside",
+        "සමගාමීව පැවතීම"
+      ],
+      [
+        "Develop alongside",
+        "සමගාමීව වර්ධනය වීම"
+      ]
+    ]
+  },
+  {
+    "index": 748,
+    "key": "venture to",
+    "pos": "phrase",
+    "def": "Dare to do something or go somewhere that may be dangerous or unpleasant; politely dare to express an opinion.",
+    "siDef": "අවදානමක් ගෙන යමක් කිරීමට නිර්භීත වීම / (මතයක්) ඉදිරිපත් කිරීමට ඉදිරිපත් වීම",
+    "collocations": [
+      [
+        "Venture to suggest",
+        "යෝජනා කිරීමට ඉදිරිපත් වීම"
+      ],
+      [
+        "Venture to remote regions",
+        "දුෂ්කර කලාප වෙත ගමන් කිරීමට නිර්භීත වීම"
+      ],
+      [
+        "Few would venture to argue",
+        "තර්ක කිරීමට ඉදිරිපත් වන්නේ අතළොස්සකි"
+      ]
+    ]
+  },
+  {
+    "index": 749,
+    "key": "in the interim",
+    "pos": "phrase",
+    "def": "In the intervening period of time; meanwhile, before a permanent solution or final event occurs.",
+    "siDef": "මේ අතරවාරයේදී / අන්තර් කාලසීමාව තුළ",
+    "collocations": [
+      [
+        "In the interim, authorities should",
+        "මේ අතරවාරයේදී බලධාරීන් විසින් කළ යුතු"
+      ],
+      [
+        "Serve in the interim",
+        "අන්තර් කාලසීමාව තුළ ක්‍රියාත්මක වීම"
+      ],
+      [
+        "Provide relief in the interim",
+        "අතරමැදි කාලය තුළ සහන සැලසීම"
+      ]
+    ]
+  },
+  {
+    "index": 750,
+    "key": "downplay",
+    "pos": "verb",
+    "def": "Make something appear less important, severe, or significant than it really is.",
+    "siDef": "වැදගත්කම හෝ බරපතළකම අඩු කර පෙන්වීම / සුළු කොට දැක්වීම",
+    "collocations": [
+      [
+        "Downplay the risks",
+        "අවදානම් අඩු කර පෙන්වීම"
+      ],
+      [
+        "Downplay the significance of",
+        "හි වැදගත්කම සුළු කොට දැක්වීම"
+      ],
+      [
+        "Attempt to downplay",
+        "බරපතළකම අඩු කර පෙන්වීමට උත්සාහ කිරීම"
+      ]
+    ]
+  },
+  {
+    "index": 751,
+    "key": "advisable to",
+    "pos": "phrase",
+    "def": "Sensible, prudent, and to be recommended as a course of action in order to avoid problems.",
+    "siDef": "(යමක් කිරීම) නුවණට හුරු වීම / යෝග්‍ය වීම / නිර්දේශ කළ හැකි වීම",
+    "collocations": [
+      [
+        "It is advisable to",
+        "කිරීම නුවණට හුරුය"
+      ],
+      [
+        "Highly advisable to",
+        "කිරීම ඉතාමත් යෝග්‍ය වේ"
+      ],
+      [
+        "Deem it advisable to",
+        "කිරීම සුදුසු යැයි සැලකීම"
+      ]
+    ]
+  },
+  {
+    "index": 752,
+    "key": "virtually",
+    "pos": "adverb",
+    "def": "Nearly; almost completely; or by means of computer software and the internet rather than in physical reality.",
+    "siDef": "සම්පූර්ණයෙන්ම පාහේ / බොහෝ දුරට / අන්තර්ජාල තාක්ෂණය හරහා (අතථ්‍ය ලෙස)",
+    "collocations": [
+      [
+        "Virtually impossible",
+        "කළ නොහැකි තරම්"
+      ],
+      [
+        "Virtually identical",
+        "සම්පූර්ණයෙන්ම පාහේ සමාන"
+      ],
+      [
+        "Collaborate virtually",
+        "අන්තර්ජාල තාක්ෂණය හරහා සහයෝගයෙන් කටයුතු කිරීම"
+      ]
+    ]
+  },
+  {
+    "index": 753,
+    "key": "notify",
+    "pos": "verb",
+    "def": "Inform someone of something, typically in a formal or official manner.",
+    "siDef": "දැනුම් දීම / නිල වශයෙන් දැන්වීම",
+    "collocations": [
+      [
+        "Notify the relevant authorities",
+        "අදාළ බලධාරීන්ට දැනුම් දීම"
+      ],
+      [
+        "Promptly notify",
+        "වහාම දැනුම් දීම"
+      ],
+      [
+        "Notify customers in advance",
+        "පාරිභෝගිකයින්ට කල්තියා දැනුම් දීම"
+      ]
+    ]
+  },
+  {
+    "index": 754,
+    "key": "function",
+    "pos": "verb",
+    "def": "Work or operate in a proper or particular way; (as a noun) an activity or purpose natural to or intended for a person or thing.",
+    "siDef": "ක්‍රියාත්මක වීම / කාර්යය / කාර්යභාරය",
+    "collocations": [
+      [
+        "Function effectively",
+        "ඵලදායී ලෙස ක්‍රියාත්මක වීම"
+      ],
+      [
+        "Perform a vital function",
+        "අත්‍යවශ්‍ය කාර්යභාරයක් ඉටු කිරීම"
+      ],
+      [
+        "Function as a catalyst",
+        "උත්ප්‍රේරකයක් ලෙස ක්‍රියා කිරීම"
+      ]
+    ]
+  },
+  {
+    "index": 755,
+    "key": "the gender",
+    "pos": "noun",
+    "def": "The state of being male or female, especially when considered with reference to social and cultural differences rather than biological ones.",
+    "siDef": "ස්ත්‍රී පුරුෂ භාවය / ලිංගිකත්වය",
+    "collocations": [
+      [
+        "Gender equality",
+        "ස්ත්‍රී පුරුෂ සමානාත්මතාවය"
+      ],
+      [
+        "The gender pay gap",
+        "ස්ත්‍රී පුරුෂ වැටුප් පරතරය"
+      ],
+      [
+        "Gender stereotypes",
+        "ස්ත්‍රී පුරුෂ භාවය පිළිබඳ සම්මත රාමු"
+      ]
+    ]
+  },
+  {
+    "index": 756,
+    "key": "confuse with",
+    "pos": "phrase",
+    "def": "Mistake one person or thing for another; fail to distinguish between two distinct concepts.",
+    "siDef": "(තවත් දෙයක් සමඟ) පටලවා ගැනීම / වරදවා වටහා ගැනීම",
+    "collocations": [
+      [
+        "Should not be confused with",
+        "සමඟ පටලවා නොගත යුතුය"
+      ],
+      [
+        "Easily confused with",
+        "පහසුවෙන්ම පටලවා ගත හැකි"
+      ],
+      [
+        "Confuse correlation with causation",
+        "සහසම්බන්ධය හේතුඵල සම්බන්ධය සමඟ පටලවා ගැනීම"
+      ]
+    ]
+  },
+  {
+    "index": 757,
+    "key": "dismantle",
+    "pos": "verb",
+    "def": "Take a machine or structure to pieces; gradually abolish or break down an organisation, system, or barrier.",
+    "siDef": "ගලවා ඉවත් කිරීම / ක්‍රමයෙන් බිඳ දැමීම / අහෝසි කිරීම",
+    "collocations": [
+      [
+        "Dismantle trade barriers",
+        "වෙළඳ බාධක ඉවත් කිරීම"
+      ],
+      [
+        "Gradually dismantle",
+        "ක්‍රමානුකූලව බිඳ දැමීම / ගලවා ඉවත් කිරීම"
+      ],
+      [
+        "Dismantle outdated structures",
+        "යල් පැන ගිය ව්‍යුහයන් බිඳ දැමීම"
+      ]
+    ]
+  },
+  {
+    "index": 758,
+    "key": "support",
+    "pos": "verb",
+    "def": "Give assistance to, especially financially; approve of and encourage an idea or policy; provide evidence to prove a claim.",
+    "siDef": "සහාය දැක්වීම / අනුබල දීම / (සාක්ෂි මගින්) තහවුරු කිරීම",
+    "collocations": [
+      [
+        "Wholeheartedly support",
+        "මුළු හදවතින්ම සහාය දැක්වීම"
+      ],
+      [
+        "Empirical evidence supports",
+        "ප්‍රායෝගික සාක්ෂි මගින් තහවුරු කිරීම"
+      ],
+      [
+        "Support a growing population",
+        "වර්ධනය වන ජනගහනයක් නඩත්තු කිරීම"
+      ]
+    ]
+  },
+  {
+    "index": 759,
+    "key": "the guidance",
+    "pos": "noun",
+    "def": "Advice or information aimed at resolving a problem or difficulty, especially as given by someone in authority or with expertise.",
+    "siDef": "මඟපෙන්වීම / උපදේශනය",
+    "collocations": [
+      [
+        "Under the guidance of",
+        "ගේ මඟපෙන්වීම යටතේ"
+      ],
+      [
+        "Career guidance",
+        "වෘත්තීය මඟපෙන්වීම"
+      ],
+      [
+        "Parental guidance",
+        "දෙමාපිය මඟපෙන්වීම"
+      ]
+    ]
+  },
+  {
+    "index": 760,
+    "key": "ridicule",
+    "pos": "verb",
+    "def": "Subject someone or something to contemptuous and dismissive language or behaviour; mock.",
+    "siDef": "සමච්චලයට ලක් කිරීම / උපහාසයට ලක් කිරීම",
+    "collocations": [
+      [
+        "Subject to public ridicule",
+        "මහජන සමච්චලයට ලක් කිරීම"
+      ],
+      [
+        "Openly ridicule",
+        "ප්‍රසිද්ධියේ උපහාසයට ලක් කිරීම"
+      ],
+      [
+        "Fear of ridicule",
+        "සමච්චලයට ලක් වේ යැයි පවතින බිය"
+      ]
+    ]
+  },
+  {
+    "index": 761,
+    "key": "presumably",
+    "pos": "adverb",
+    "def": "Used to convey that what is asserted is very likely though not known for certain; by reasonable assumption.",
+    "siDef": "බොහෝ විට / අනුමාන වශයෙන් / සිතිය හැකි පරිදි",
+    "collocations": [
+      [
+        "Presumably due to",
+        "බොහෝ විට හේතුවෙන්"
+      ],
+      [
+        "Presumably intended to",
+        "අනුමාන වශයෙන් අදහස් කරන ලද"
+      ],
+      [
+        "Presumably because",
+        "බොහෝ විට එයට හේතුව වන්නේ"
+      ]
+    ]
+  },
+  {
+    "index": 762,
+    "key": "frustrate",
+    "pos": "verb",
+    "def": "Cause someone to feel upset or annoyed as a result of being unable to change or achieve something; prevent a plan or attempted action from progressing.",
+    "siDef": "කලකිරීමට පත් කිරීම / (සැලැස්මක් හෝ උත්සාහයක්) ව්‍යර්ථ කිරීම",
+    "collocations": [
+      [
+        "Frustrate efforts to",
+        "කිරීමට දරන උත්සාහයන් ව්‍යර්ථ කිරීම"
+      ],
+      [
+        "Deeply frustrate",
+        "දැඩි ලෙස කලකිරීමට පත් කිරීම"
+      ],
+      [
+        "Frustrate ambitions",
+        "අභිලාෂයන් බිඳ දැමීම"
+      ]
+    ]
+  },
+  {
+    "index": 763,
+    "key": "testify",
+    "pos": "verb",
+    "def": "Give evidence as a witness in a law court; serve as evidence or proof that something exists or is the case.",
+    "siDef": "සාක්ෂි දීම / සාක්ෂි දැරීම (තහවුරු කිරීම)",
+    "collocations": [
+      [
+        "Testify in court",
+        "අධිකරණයේ සාක්ෂි දීම"
+      ],
+      [
+        "Testify to the success of",
+        "හි සාර්ථකත්වයට සාක්ෂි දැරීම"
+      ],
+      [
+        "Expert witnesses testify",
+        "විශේෂඥ සාක්ෂිකරුවන් සාක්ෂි ලබා දීම"
+      ]
+    ]
+  },
+  {
+    "index": 764,
+    "key": "glimpse",
+    "pos": "noun",
+    "def": "A momentary or partial view; a brief insight or experience of something.",
+    "siDef": "ක්ෂණික දසුන / කෙටි අවබෝධය (හෝ අත්දැකීම)",
+    "collocations": [
+      [
+        "Provide a glimpse into",
+        "පිළිබඳ කෙටි දසුනක් / අවබෝධයක් ලබා දීම"
+      ],
+      [
+        "Catch a glimpse of",
+        "ක්ෂණිකව දැක ගැනීම"
+      ],
+      [
+        "A rare glimpse of",
+        "දුර්ලභ දසුනක්"
+      ]
+    ]
+  },
+  {
+    "index": 765,
+    "key": "erode",
+    "pos": "verb",
+    "def": "(Of wind, water, or other natural agents) gradually wear away soil, rock, or land; gradually destroy or diminish confidence, rights, or values.",
+    "siDef": "ඛාදනය වීම (හෝ කිරීම) / ක්‍රමක්‍රමයෙන් පිරිහී යාම",
+    "collocations": [
+      [
+        "Erode public trust",
+        "මහජන විශ්වාසය පළුදු කිරීම / පිරිහීමට ලක් කිරීම"
+      ],
+      [
+        "Erode purchasing power",
+        "මිලදී ගැනීමේ හැකියාව ක්ෂය කිරීම"
+      ],
+      [
+        "Erode fertile topsoil",
+        "සාරවත් මතුපිට පස ඛාදනය කිරීම"
+      ]
+    ]
+  },
+  {
+    "index": 766,
+    "key": "construct",
+    "pos": "verb",
+    "def": "Build or make something, typically a building, road, or machine; form an idea, argument, or theory by bringing together various elements.",
+    "siDef": "ඉදිකිරීම / ගොඩනැගීම (ගොඩනැගිල්ලක් හෝ තර්කයක්)",
+    "collocations": [
+      [
+        "Construct infrastructure",
+        "යටිතල පහසුකම් ඉදිකිරීම"
+      ],
+      [
+        "Construct a coherent argument",
+        "තාර්කික තර්කයක් ගොඩනැගීම"
+      ],
+      [
+        "Newly constructed",
+        "අලුතින් ඉදිකරන ලද"
+      ]
+    ]
+  },
+  {
+    "index": 767,
+    "key": "legally",
+    "pos": "adverb",
+    "def": "In a way that conforms to or is permitted by the law; in terms of the law.",
+    "siDef": "නීත්‍යානුකූලව / නීතියට අනුව",
+    "collocations": [
+      [
+        "Legally binding agreement",
+        "නීත්‍යානුකූලව බැඳී පවතින ගිවිසුම"
+      ],
+      [
+        "Legally required to",
+        "නීතියෙන් බැඳී සිටින"
+      ],
+      [
+        "Legally permissible",
+        "නීතියෙන් අවසර ලත්"
+      ]
+    ]
+  },
+  {
+    "index": 768,
+    "key": "subservient to",
+    "pos": "phrase",
+    "def": "Prepared to obey others unquestioningly; treated as less important than or secondary to another purpose or interest.",
+    "siDef": "(යමකට) යටත් වූ / දෙවැනි තැනට පත් වූ / අවනත වූ",
+    "collocations": [
+      [
+        "Subservient to economic interests",
+        "ආර්ථික අවශ්‍යතාවලට යටත් වූ / දෙවැනි වූ"
+      ],
+      [
+        "Remain subservient to",
+        "යටත්ව පැවතීම"
+      ],
+      [
+        "Play a subservient role",
+        "දෙවැනි පෙළේ භූමිකාවක් නිරූපණය කිරීම"
+      ]
+    ]
+  },
+  {
+    "index": 769,
+    "key": "whereby",
+    "pos": "adverb",
+    "def": "By which; according to which (used to introduce a clause describing a system, process, or agreement).",
+    "siDef": "ඒ මගින් / යම් ක්‍රමවේදයකට අනුව",
+    "collocations": [
+      [
+        "A system whereby",
+        "ක්‍රියාත්මක වන ක්‍රමවේදයක්"
+      ],
+      [
+        "An arrangement whereby",
+        "ඒ මගින් සිදු කෙරෙන වැඩපිළිවෙළක්"
+      ],
+      [
+        "A process whereby",
+        "සිදුවන ක්‍රියාවලියක්"
+      ]
+    ]
+  },
+  {
+    "index": 770,
+    "key": "inflict on",
+    "pos": "phrase",
+    "def": "Cause something unpleasant, painful, or damaging to be suffered by someone or something.",
+    "siDef": "(හානියක් හෝ පීඩාවක්) එල්ල කිරීම / සිදු කිරීම / පැමිණවීම",
+    "collocations": [
+      [
+        "Inflict severe damage on",
+        "මත දැඩි හානියක් සිදු කිරීම"
+      ],
+      [
+        "Inflict unnecessary suffering on",
+        "හට අනවශ්‍ය පීඩාවක් පැමිණවීම"
+      ],
+      [
+        "Inflict heavy losses on",
+        "වෙත දැඩි පාඩු සිදු කිරීම"
+      ]
+    ]
+  },
+  {
+    "index": 771,
+    "key": "deliberately",
+    "pos": "adverb",
+    "def": "Consciously and intentionally; on purpose.",
+    "siDef": "හිතාමතාම / සැලසුම් සහගතව / ඕනෑකමින්ම",
+    "collocations": [
+      [
+        "Deliberately mislead",
+        "හිතාමතාම නොමඟ යැවීම"
+      ],
+      [
+        "Deliberately designed to",
+        "සැලසුම් සහගතව නිර්මාණය කරන ලද"
+      ],
+      [
+        "Act deliberately",
+        "ඕනෑකමින්ම ක්‍රියා කිරීම"
+      ]
+    ]
+  },
+  {
+    "index": 772,
+    "key": "deposit",
+    "pos": "verb",
+    "def": "Put or set down something in a specific place; pay a sum of money into a bank account or as an initial security payment.",
+    "siDef": "තැන්පත් කිරීම (මුදල් හෝ ද්‍රව්‍ය) / තැන්පතු මුදල",
+    "collocations": [
+      [
+        "Pay a security deposit",
+        "ආරක්ෂක තැන්පතු මුදලක් ගෙවීම"
+      ],
+      [
+        "Deposit waste in landfills",
+        "කසළ රඳවනවල අපද්‍රව්‍ය තැන්පත් කිරීම"
+      ],
+      [
+        "Deposit sediment",
+        "රොන්මඩ තැන්පත් කිරීම"
+      ]
+    ]
+  },
+  {
+    "index": 773,
+    "key": "outspoken",
+    "pos": "adjective",
+    "def": "Frank in stating one's opinions, especially if they are critical or controversial.",
+    "siDef": "ඍජුව අදහස් ප්‍රකාශ කරන / නොබියව විවේචනය කරන",
+    "collocations": [
+      [
+        "Outspoken critic of",
+        "හි ඍජු විවේචකයෙකු"
+      ],
+      [
+        "Outspoken advocate for",
+        "වෙනුවෙන් නොබියව පෙනී සිටින්නෙකු"
+      ],
+      [
+        "Remain outspoken about",
+        "පිළිබඳව ඍජුව අදහස් ප්‍රකාශ කිරීම"
+      ]
+    ]
+  },
+  {
+    "index": 774,
+    "key": "vacant",
+    "pos": "adjective",
+    "def": "(Of premises or land) having no fixtures, furniture, or inhabitants; empty; (of a job or position) not filled.",
+    "siDef": "හිස්ව පවතින / පුරප්පාඩු වූ / භාවිතයට නොගත්",
+    "collocations": [
+      [
+        "Vacant commercial properties",
+        "හිස්ව පවතින වාණිජ ගොඩනැගිලි"
+      ],
+      [
+        "Fill vacant positions",
+        "පුරප්පාඩු වී ඇති තනතුරු පිරවීම"
+      ],
+      [
+        "Vacant urban land",
+        "භාවිතයට නොගත් හිස් නාගරික ඉඩම්"
+      ]
+    ]
+  },
+  {
+    "index": 775,
+    "key": "travel",
+    "pos": "verb",
+    "def": "Make a journey, typically of some length; move or be communicated from one place to another.",
+    "siDef": "සංචාරය කිරීම / ගමන් කිරීම / ගමන් බිමන්",
+    "collocations": [
+      [
+        "International air travel",
+        "ජාත්‍යන්තර ගුවන් ගමන්"
+      ],
+      [
+        "Travel extensively",
+        "පුළුල් ලෙස සංචාරය කිරීම"
+      ],
+      [
+        "Business travel",
+        "ව්‍යාපාරික ගමන් බිමන්"
+      ]
+    ]
+  },
+  {
+    "index": 776,
+    "key": "the magnitude",
+    "pos": "noun",
+    "def": "The great size, scale, or extent of something; the degree of importance or impact.",
+    "siDef": "විශාලත්වය / ප්‍රබලත්වය / බරපතළකම",
+    "collocations": [
+      [
+        "The sheer magnitude of",
+        "හි අතිවිශාල පරිමාණය / බරපතළකම"
+      ],
+      [
+        "Comprehend the magnitude",
+        "බරපතළකම වටහා ගැනීම"
+      ],
+      [
+        "Of unprecedented magnitude",
+        "පෙර නොවූ විරූ තරම් විශාලත්වයකින් යුත්"
+      ]
+    ]
+  },
+  {
+    "index": 777,
+    "key": "deceptive",
+    "pos": "adjective",
+    "def": "Giving an appearance or impression different from the true one; misleading.",
+    "siDef": "රැවටිලිකාර / නොමඟ යවන සුලු",
+    "collocations": [
+      [
+        "Deceptive advertising",
+        "රැවටිලිකාර වෙළඳ දැන්වීම්කරණය"
+      ],
+      [
+        "Appearances can be deceptive",
+        "බාහිර පෙනුම රැවටිලිකාර විය හැක"
+      ],
+      [
+        "Deceptive practices",
+        "නොමඟ යවන සුලු ක්‍රියාමාර්ග"
+      ]
+    ]
+  },
+  {
+    "index": 778,
+    "key": "underestimate",
+    "pos": "verb",
+    "def": "Estimate something to be smaller, cheaper, or less important, capable, or severe than it really is.",
+    "siDef": "අවතක්සේරු කිරීම / සැබෑ ප්‍රමාණයට හෝ වැදගත්කමට වඩා අඩුවෙන් තක්සේරු කිරීම",
+    "collocations": [
+      [
+        "Should not be underestimated",
+        "අවතක්සේරු නොකළ යුතුය"
+      ],
+      [
+        "Underestimate the cost of",
+        "හි පිරිවැය අඩුවෙන් තක්සේරු කිරීම"
+      ],
+      [
+        "Grossly underestimate",
+        "බරපතළ ලෙස අවතක්සේරු කිරීම"
+      ]
+    ]
+  },
+  {
+    "index": 779,
+    "key": "take for granted",
+    "pos": "idiom",
+    "def": "Fail to properly appreciate someone or something because of overfamiliarity; assume that something is true without questioning it.",
+    "siDef": "අගය නොකර සාමාන්‍ය දෙයක් ලෙස සැලකීම / ප්‍රශ්න කිරීමකින් තොරව පිළිගැනීම",
+    "collocations": [
+      [
+        "Take clean water for granted",
+        "පිරිසිදු ජලයේ වටිනාකම අමතක කර සාමාන්‍ය දෙයක් ලෙස සැලකීම"
+      ],
+      [
+        "Take it for granted that",
+        "යන්න නිතැතින්ම සිදුවන්නක් ලෙස සැලකීම"
+      ],
+      [
+        "Often taken for granted",
+        "බොහෝ විට නිසි අගය කිරීමකට ලක් නොවන"
+      ]
+    ]
+  },
+  {
+    "index": 780,
+    "key": "immune",
+    "pos": "adjective",
+    "def": "Protected or exempt, especially from an infectious disease or from an undesirable force, criticism, or economic effect.",
+    "siDef": "ප්‍රතිශක්තියක් සහිත / බලපෑමෙන් නිදහස් (ඔරොත්තු දෙන)",
+    "collocations": [
+      [
+        "Strengthen the immune system",
+        "ප්‍රතිශක්තිකරණ පද්ධතිය ශක්තිමත් කිරීම"
+      ],
+      [
+        "Immune to economic shocks",
+        "ආර්ථික කම්පනවල බලපෑමට හසු නොවන"
+      ],
+      [
+        "Immune from prosecution",
+        "නඩු පැවරීමෙන් නිදහස්"
+      ]
+    ]
+  },
+  {
+    "index": 781,
+    "key": "promising",
+    "pos": "adjective",
+    "def": "Showing signs of future success; likely to turn out well.",
+    "siDef": "අනාගත සාර්ථකත්වයේ ලකුණු පෙන්වන / බලාපොරොත්තු තැබිය හැකි",
+    "collocations": [
+      [
+        "A promising alternative",
+        "බලාපොරොත්තු තැබිය හැකි විකල්පයක්"
+      ],
+      [
+        "Yield promising results",
+        "සුබවාදී ප්‍රතිඵල ලබා දීම"
+      ],
+      [
+        "Promising career",
+        "දීප්තිමත් වෘත්තීය අනාගතයක්"
+      ]
+    ]
+  },
+  {
+    "index": 782,
+    "key": "worship",
+    "pos": "verb",
+    "def": "Show reverence and adoration for a deity; figuratively, admire or idolise someone or something excessively.",
+    "siDef": "වන්දනාමාන කිරීම / ඇදහීම / අන්ධ භක්තියෙන් ගරු කිරීම",
+    "collocations": [
+      [
+        "Places of worship",
+        "ආගමික සිද්ධස්ථාන / වන්දනාමාන කරන ස්ථාන"
+      ],
+      [
+        "Celebrity worship",
+        "ජනප්‍රිය චරිත අන්ධ ලෙස ඇදහීම"
+      ],
+      [
+        "Freedom of worship",
+        "ආගම ඇදහීමේ නිදහස"
+      ]
+    ]
+  },
+  {
+    "index": 783,
+    "key": "reason that",
+    "pos": "phrase",
+    "def": "Think, understand, and form judgements by a process of logic; argue or conclude logically that something is true.",
+    "siDef": "තාර්කිකව නිගමනය කිරීම / තර්ක කිරීම",
+    "collocations": [
+      [
+        "Economists reason that",
+        "ආර්ථික විද්‍යාඥයින් තාර්කිකව පෙන්වා දෙන්නේ"
+      ],
+      [
+        "Proponents reason that",
+        "යෝජකයින් තර්ක කරන්නේ"
+      ],
+      [
+        "Logically reason that",
+        "තාර්කිකව නිගමනය කිරීම"
+      ]
+    ]
+  },
+  {
+    "index": 784,
+    "key": "an ultimatum",
+    "pos": "noun",
+    "def": "A final demand or statement of terms, the rejection of which will result in retaliation or a breakdown in relations.",
+    "siDef": "අවසන් නිවේදනය / අවසාන කොන්දේසිය",
+    "collocations": [
+      [
+        "Issue an ultimatum",
+        "අවසන් නිවේදනයක් නිකුත් කිරීම"
+      ],
+      [
+        "Face an ultimatum",
+        "අවසාන කොන්දේසියකට මුහුණ දීම"
+      ],
+      [
+        "Reject the ultimatum",
+        "අවසන් නිවේදනය ප්‍රතික්ෂේප කිරීම"
+      ]
+    ]
+  },
+  {
+    "index": 785,
+    "key": "bewilder",
+    "pos": "verb",
+    "def": "Cause someone to become perplexed and confused.",
+    "siDef": "ව්‍යාකූලත්වයට පත් කිරීම / මවිත කරවමින් අන්දමන්ද කිරීම",
+    "collocations": [
+      [
+        "Leave consumers bewildered",
+        "පාරිභෝගිකයින් ව්‍යාකූලත්වයට පත් කිරීම"
+      ],
+      [
+        "Bewildered by the complexity",
+        "සංකීර්ණත්වය නිසා අන්දමන්ද වීම"
+      ],
+      [
+        "A bewildering variety of",
+        "සිතාගත නොහැකි තරම් විවිධ වූ"
+      ]
+    ]
+  },
+  {
+    "index": 786,
+    "key": "from the outset",
+    "pos": "phrase",
+    "def": "From the very beginning of an event, process, or undertaking.",
+    "siDef": "ආරම්භයේ පටන්ම / මුල සිටම",
+    "collocations": [
+      [
+        "Clear from the outset",
+        "ආරම්භයේ පටන්ම පැහැදිලි වීම"
+      ],
+      [
+        "Establish from the outset",
+        "මුල සිටම ස්ථාපිත කිරීම"
+      ],
+      [
+        "Flawed from the outset",
+        "ආරම්භයේ සිටම දෝෂ සහිත වූ"
+      ]
+    ]
+  },
+  {
+    "index": 787,
+    "key": "cooperate about",
+    "pos": "phrase",
+    "def": "Work jointly towards the same end or discuss and coordinate actions regarding a shared issue.",
+    "siDef": "(යම් කරුණක් සම්බන්ධයෙන්) සහයෝගයෙන් කටයුතු කිරීම",
+    "collocations": [
+      [
+        "Cooperate about shared challenges",
+        "පොදු අභියෝග සම්බන්ධයෙන් සහයෝගයෙන් කටයුතු කිරීම"
+      ],
+      [
+        "Willing to cooperate about",
+        "සම්බන්ධයෙන් සහයෝගය දැක්වීමට කැමති"
+      ],
+      [
+        "Closely cooperate about",
+        "සම්බන්ධයෙන් සමීපව සහයෝගයෙන් ක්‍රියා කිරීම"
+      ]
+    ]
+  },
+  {
+    "index": 788,
+    "key": "fare well",
+    "pos": "phrase",
+    "def": "Perform, progress, or succeed in a specified situation or over a particular period.",
+    "siDef": "සාර්ථකව මුහුණ දීම / හොඳින් කටයුතු කිරීම / සාර්ථක වීම",
+    "collocations": [
+      [
+        "Fare well in examinations",
+        "විභාගවලදී හොඳින් දස්කම් දැක්වීම"
+      ],
+      [
+        "Fare better than",
+        "වඩා සාර්ථකව මුහුණ දීම"
+      ],
+      [
+        "Fare poorly during a crisis",
+        "අර්බුදයක් අතරතුර පසුබෑමකට ලක් වීම"
+      ]
+    ]
+  },
+  {
+    "index": 789,
+    "key": "enthusiastic about",
+    "pos": "phrase",
+    "def": "Having or showing intense and eager enjoyment, interest, or approval regarding something.",
+    "siDef": "(යමක් පිළිබඳව) දැඩි උද්‍යෝගයකින් පසුවීම / මහත් උනන්දුවක් දැක්වීම",
+    "collocations": [
+      [
+        "Highly enthusiastic about",
+        "පිළිබඳව ඉතාමත් උද්‍යෝගිමත්"
+      ],
+      [
+        "Remain enthusiastic about",
+        "පිළිබඳව අඛණ්ඩ උද්‍යෝගයකින් පසුවීම"
+      ],
+      [
+        "Less enthusiastic about",
+        "පිළිබඳව අඩු උනන්දුවක් දක්වන"
+      ]
+    ]
+  },
+  {
+    "index": 790,
+    "key": "remain",
+    "pos": "verb",
+    "def": "Continue to possess a particular quality or fulfil a particular role; stay in the same place or condition.",
+    "siDef": "තවදුරටත් (එම තත්ත්වයේම) පැවතීම / ඉතිරි වීම",
+    "collocations": [
+      [
+        "Remain largely unchanged",
+        "බොහෝ දුරට නොවෙනස්ව පැවතීම"
+      ],
+      [
+        "Remain a contentious issue",
+        "තවදුරටත් මතභේදාත්මක කරුණක් ලෙස පැවතීම"
+      ],
+      [
+        "Remain competitive",
+        "තරගකාරී මට්ටමේ රැඳී සිටීම"
+      ]
+    ]
+  },
+  {
+    "index": 791,
+    "key": "dispense with",
+    "pos": "phrase",
+    "def": "Manage without or get rid of something that is no longer needed or wanted.",
+    "siDef": "(තවදුරටත් අවශ්‍ය නොවන දෙයක්) ඉවත් කිරීම / බැහැර කිරීම / නොමැතිව කටයුතු කිරීම",
+    "collocations": [
+      [
+        "Dispense with traditional methods",
+        "සාම්ප්‍රදායික ක්‍රමවේද බැහැර කිරීම"
+      ],
+      [
+        "Dispense with physical cash",
+        "භෞතික මුදල් නෝට්ටු භාවිතයෙන් ඉවත් වීම"
+      ],
+      [
+        "Altogether dispense with",
+        "සම්පූර්ණයෙන්ම ඉවත් කර දැමීම"
+      ]
+    ]
+  },
+  {
+    "index": 792,
+    "key": "significant",
+    "pos": "adjective",
+    "def": "Sufficiently great or important to be worthy of attention; noteworthy.",
+    "siDef": "සැලකිය යුතු / වැදගත් / කැපී පෙනෙන",
+    "collocations": [
+      [
+        "A significant proportion of",
+        "හි සැලකිය යුතු ප්‍රතිශතයක්"
+      ],
+      [
+        "Play a significant role in",
+        "හිලා වැදගත් කාර්යභාරයක් ඉටු කිරීම"
+      ],
+      [
+        "Statistically significant",
+        "සංඛ්‍යානමය වශයෙන් කැපී පෙනෙන"
+      ]
+    ]
+  },
+  {
+    "index": 793,
+    "key": "a mission",
+    "pos": "noun",
+    "def": "An important assignment carried out for political, religious, or scientific purposes, especially space exploration; an organisation's core purpose.",
+    "siDef": "මෙහෙවර / විශේෂ කාර්යය (හෝ අභ්‍යවකාශ ගමන)",
+    "collocations": [
+      [
+        "Unmanned space mission",
+        "මිනිසුන් රහිත අභ්‍යවකාශ මෙහෙයුම"
+      ],
+      [
+        "Accomplish a mission",
+        "මෙහෙවරක් සාර්ථකව ඉටු කිරීම"
+      ],
+      [
+        "Core mission of education",
+        "අධ්‍යාපනයේ මූලික මෙහෙවර"
+      ]
+    ]
+  },
+  {
+    "index": 794,
+    "key": "insofar as",
+    "pos": "phrase",
+    "def": "To the extent or degree that.",
+    "siDef": "යම් තාක් දුරට / අදාළ වන ප්‍රමාණයට",
+    "collocations": [
+      [
+        "Useful insofar as",
+        "යම් තාක් දුරට පමණක් ප්‍රයෝජනවත් වන"
+      ],
+      [
+        "Justified insofar as",
+        "සාධාරණීකරණය කළ හැකි ප්‍රමාණයට"
+      ],
+      [
+        "Insofar as it affects",
+        "එය බලපාන තාක් දුරට"
+      ]
+    ]
+  },
+  {
+    "index": 795,
+    "key": "at the expense of",
+    "pos": "phrase",
+    "def": "So as to cause harm to or neglect of someone or something else while pursuing another goal.",
+    "siDef": "(තවත් වැදගත් දෙයක්) කැප කරමින් / පරදුවට තබමින් / හානි කරමින්",
+    "collocations": [
+      [
+        "At the expense of the environment",
+        "පරිසරය පරදුවට තබමින් / පරිසරයට හානි කරමින්"
+      ],
+      [
+        "Pursue profit at the expense of",
+        "කැප කරමින් ලාභය හඹා යාම"
+      ],
+      [
+        "At the expense of mental health",
+        "මානසික සෞඛ්‍යය පරදුවට තබමින්"
+      ]
+    ]
+  },
+  {
+    "index": 796,
+    "key": "notorious",
+    "pos": "adjective",
+    "def": "Famous or well known, typically for some bad quality, deed, or unfavourable characteristic.",
+    "siDef": "කුප්‍රකට / නරක නමක් දිනාගත්",
+    "collocations": [
+      [
+        "Notorious for traffic congestion",
+        "රථවාහන තදබදය සම්බන්ධයෙන් කුප්‍රකට"
+      ],
+      [
+        "Notorious example of",
+        "පිළිබඳ කුප්‍රකට උදාහරණයක්"
+      ],
+      [
+        "Become notorious for",
+        "සම්බන්ධයෙන් නරක නමක් දිනා ගැනීම"
+      ]
+    ]
+  },
+  {
+    "index": 797,
+    "key": "attract",
+    "pos": "verb",
+    "def": "Cause to come to a place or participate in a venture by offering something of interest, favourable conditions, or opportunities.",
+    "siDef": "ආකර්ෂණය කර ගැනීම / ඇද බැඳ ගැනීම",
+    "collocations": [
+      [
+        "Attract foreign investment",
+        "විදේශ ආයෝජන ආකර්ෂණය කර ගැනීම"
+      ],
+      [
+        "Attract skilled professionals",
+        "දක්ෂ වෘත්තිකයන් ආකර්ෂණය කර ගැනීම"
+      ],
+      [
+        "Attract widespread attention",
+        "පුළුල් අවධානයක් දිනා ගැනීම"
+      ]
+    ]
+  },
+  {
+    "index": 798,
+    "key": "mainstream",
+    "pos": "adjective",
+    "def": "Considered normal, conventional, and accepted or used by the majority of people.",
+    "siDef": "ප්‍රධාන ධාරාවේ / බහුතරයක් පිළිගත් / සම්මත",
+    "collocations": [
+      [
+        "Mainstream media",
+        "ප්‍රධාන ධාරාවේ මාධ්‍ය"
+      ],
+      [
+        "Mainstream education",
+        "ප්‍රධාන ධාරාවේ (සාමාන්‍ය) අධ්‍යාපනය"
+      ],
+      [
+        "Enter the mainstream",
+        "ප්‍රධාන ධාරාවට එක් වීම"
+      ]
+    ]
+  },
+  {
+    "index": 799,
+    "key": "envious",
+    "pos": "adjective",
+    "def": "Feeling or showing a desire to have a quality, possession, or other desirable thing that belongs to someone else.",
+    "siDef": "ඊර්ෂ්‍යා සහගත / අන් සතු දෙයක් පිළිබඳ ආශාවෙන් හා ඊර්ෂ්‍යාවෙන් පෙළෙන",
+    "collocations": [
+      [
+        "Envious of others' success",
+        "අන් අයගේ සාර්ථකත්වය පිළිබඳව ඊර්ෂ්‍යා සහගත වූ"
+      ],
+      [
+        "Grow envious of",
+        "කෙරෙහි ඊර්ෂ්‍යාවක් ඇති වීම"
+      ],
+      [
+        "Make viewers envious",
+        "නරඹන්නන් තුළ ඊර්ෂ්‍යාවක් ඇති කිරීම"
+      ]
+    ]
+  }
+]

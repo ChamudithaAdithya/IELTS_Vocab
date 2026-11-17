@@ -107,7 +107,7 @@ function getInitialTab(): AppTab {
       return hash;
     }
   }
-  return 'cambridge';
+  return 'lessons';
 }
 
 function MainApp() {
@@ -158,7 +158,12 @@ function MainApp() {
 
     try {
       const url = new URL(window.location.href);
-      if (url.searchParams.get('tab') !== currentTab) {
+      if (currentTab === 'lessons') {
+        if (url.searchParams.has('tab')) {
+          url.searchParams.delete('tab');
+          window.history.pushState({ tab: 'lessons' }, '', url.toString());
+        }
+      } else if (url.searchParams.get('tab') !== currentTab) {
         url.searchParams.set('tab', currentTab);
         window.history.pushState({ tab: currentTab }, '', url.toString());
       }
@@ -174,6 +179,8 @@ function MainApp() {
       const tabParam = params.get('tab') as AppTab | null;
       if (tabParam && VALID_TABS.includes(tabParam)) {
         setCurrentTab(tabParam);
+      } else {
+        setCurrentTab('lessons');
       }
     };
     window.addEventListener('popstate', handlePopState);
