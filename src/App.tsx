@@ -3,6 +3,7 @@ import { Sidebar, AppTab } from './components/Sidebar';
 import { TopBar } from './components/TopBar';
 import { WritingTutorView } from './components/WritingTutorView';
 import { SpeakingTutorView } from './components/tutor/SpeakingTutorView';
+import { SpeakingBuddyView } from './components/buddy/SpeakingBuddyView';
 import { ReadingTutorView } from './components/tutor/ReadingTutorView';
 import { ListeningTutorView } from './components/tutor/ListeningTutorView';
 import { AnalyticsView } from './components/tutor/AnalyticsView';
@@ -88,6 +89,7 @@ const VALID_TABS: AppTab[] = [
   'reading', 
   'tutor', 
   'speaking', 
+  'buddy',
   'wordbank', 
   'flashcards', 
   'quiz', 
@@ -132,10 +134,14 @@ function MainApp() {
   const [selectedWritingPromptId, setSelectedWritingPromptId] = useState<string | undefined>(undefined);
   const [selectedSpeakingTopicId, setSelectedSpeakingTopicId] = useState<string | undefined>(undefined);
   const [cambridgeResetKey, setCambridgeResetKey] = useState<number>(0);
+  const [previousTabBeforeBuddy, setPreviousTabBeforeBuddy] = useState<AppTab>('speaking');
 
   const handleSelectNavTab = (tab: AppTab) => {
     if (tab === 'cambridge' && currentTab === 'cambridge') {
       setCambridgeResetKey((prev) => prev + 1);
+    }
+    if (tab === 'buddy' && currentTab !== 'buddy') {
+      setPreviousTabBeforeBuddy(currentTab);
     }
     setCurrentTab(tab);
   };
@@ -148,6 +154,7 @@ function MainApp() {
       reading: 'Reading Tests | Cambridge IELTS Master',
       tutor: 'Writing Tutor AI | Cambridge IELTS Master',
       speaking: 'Speaking Tutor | Cambridge IELTS Master',
+      buddy: 'AI Speaking Buddy (Lingo Buddy) | Cambridge IELTS Master',
       wordbank: 'Word Bank & Academic Dictionary | Cambridge IELTS Master',
       flashcards: 'Vocabulary Flashcards Lab | Cambridge IELTS Master',
       quiz: 'Vocabulary Quizzes & Tests | Cambridge IELTS Master',
@@ -290,7 +297,10 @@ function MainApp() {
 
   const selectedLesson = LESSONS.find(l => l.id === selectedLessonId) || LESSONS[0];
   const isStandalonePracticePage =
-    currentTab === 'cambridge' || currentTab === 'reading' || currentTab === 'listening';
+    currentTab === 'cambridge' ||
+    currentTab === 'reading' ||
+    currentTab === 'listening' ||
+    currentTab === 'buddy';
 
   return (
     <div className="min-h-screen bg-[#fafafa] text-slate-900 flex font-sans">
@@ -375,6 +385,13 @@ function MainApp() {
               showSinhala={showSinhala} 
               initialTopicId={selectedSpeakingTopicId}
               onBackToHub={() => setCurrentTab('cambridge')}
+            />
+          )}
+
+          {currentTab === 'buddy' && (
+            <SpeakingBuddyView
+              showSinhala={showSinhala}
+              onBack={() => setCurrentTab(previousTabBeforeBuddy === 'buddy' ? 'speaking' : previousTabBeforeBuddy)}
             />
           )}
 
@@ -467,6 +484,7 @@ function MainApp() {
                 <button type="button" onClick={() => setCurrentTab('reading')} className="hover:text-indigo-600 cursor-pointer">Reading Tests</button>
                 <button type="button" onClick={() => setCurrentTab('tutor')} className="hover:text-indigo-600 cursor-pointer">Writing AI</button>
                 <button type="button" onClick={() => setCurrentTab('speaking')} className="hover:text-indigo-600 cursor-pointer">Speaking Tutor</button>
+                <button type="button" onClick={() => setCurrentTab('buddy')} className="hover:text-violet-600 font-bold cursor-pointer">AI Speaking Buddy</button>
                 <span className="text-slate-300">|</span>
                 <button type="button" onClick={() => setCurrentTab('lessons')} className="hover:text-indigo-600 cursor-pointer">Topic Lessons</button>
                 <button type="button" onClick={() => setCurrentTab('wordbank')} className="hover:text-indigo-600 cursor-pointer">Word Bank</button>

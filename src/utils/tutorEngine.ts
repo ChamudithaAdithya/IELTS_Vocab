@@ -39,9 +39,10 @@ const normalise = (text: string) => text.replace(/\s+/g, ' ').trim();
  * Accepts either an array of criterion bands [TR, CC, LR, GRA] or a pre-computed average.
  */
 export const roundIeltsBand = (scores: number | number[]): number => {
-  const avg = Array.isArray(scores)
-    ? (scores.length === 0 ? 0 : scores.reduce((a, b) => a + b, 0) / scores.length)
-    : scores;
+  const validScores = Array.isArray(scores)
+    ? scores.filter(s => typeof s === 'number' && !isNaN(s))
+    : (typeof scores === 'number' && !isNaN(scores) ? [scores] : [6.0]);
+  const avg = validScores.length === 0 ? 6.0 : validScores.reduce((a, b) => a + b, 0) / validScores.length;
   const floor = Math.floor(avg);
   const frac = avg - floor;
   if (frac < 0.25) return floor;
@@ -49,7 +50,10 @@ export const roundIeltsBand = (scores: number | number[]): number => {
   return floor + 1;
 };
 
-export const formatBand = (band: number) => band.toFixed(1);
+export const formatBand = (band?: number | null): string => {
+  if (typeof band !== 'number' || isNaN(band)) return '6.0';
+  return band.toFixed(1);
+};
 
 /* ------------------------------------------------------------------ */
 /* Band 8 Academic Upgrades & Diffing Engine                          */

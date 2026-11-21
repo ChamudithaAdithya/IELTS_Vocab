@@ -596,8 +596,11 @@ const SPOKEN_GRAMMAR_RULES: SpokenRule[] = [
 export function analyzeCandidateSpeechFluency(text: string, durationSec: number = 30): FluencyMetrics {
   const words = text.trim().split(/\s+/).filter(Boolean);
   const wordCount = words.length;
-  const effectiveSec = Math.max(durationSec, 5);
-  const wordsPerMinute = Math.round((wordCount / effectiveSec) * 60);
+  // If duration is 0 or unrecorded (e.g. typed input), estimate natural conversational duration based on ~130 WPM
+  const effectiveSec = durationSec > 0
+    ? Math.max(durationSec, 5)
+    : Math.max(15, Math.round(wordCount / 2.2));
+  const wordsPerMinute = effectiveSec > 0 ? Math.round((wordCount / effectiveSec) * 60) : 130;
 
   const hesitationMatches = text.match(/\b(um+|uh+|erm+|like|you know|sort of|kind of)\b/gi) || [];
   const fillerCount = hesitationMatches.length;
@@ -717,23 +720,23 @@ export function evaluateSpokenTurnLocally(
   const words = cleanSpoken.split(/\s+/).filter(Boolean);
   const wordCount = words.length;
 
-  // 1. Stage 2 Correction Pass: Scan for grammar slips & fillers
-  const issues: TutorIssue[] = [];
-  const markedSegments: EssaySegment[] = [];
-  let remainingText = cleanSpoken;
+  // 1. Stage 2 Correction Pass: Scan for grammar slips & fillers with exact positions
+  type IssueWithPos = TutorIssue & { startIndex: number };
+  const rawIssues: IssueWithPos[] = [];
 
-  let currentText = cleanSpoken;
   for (const rule of SPOKEN_GRAMMAR_RULES) {
-    const matches = Array.from(currentText.matchAll(rule.regex));
+    rule.regex.lastIndex = 0;
+    const matches = Array.from(cleanSpoken.matchAll(rule.regex));
     if (matches.length > 0) {
       for (const m of matches) {
         const originalSnippet = m[0];
+        rule.regex.lastIndex = 0;
         const correctedSnippet = typeof rule.replacement === 'function' 
           ? rule.replacement(m[0], ...(m.slice(1)))
           : m[0].replace(rule.regex, rule.replacement);
 
-        issues.push({
-          id: `${rule.id}-${issues.length}`,
+        rawIssues.push({
+          id: `${rule.id}-${rawIssues.length}`,
           title: rule.title,
           category: rule.category,
           severity: rule.severity,
@@ -744,40 +747,48 @@ export function evaluateSpokenTurnLocally(
           rule: rule.rule,
           lessonTopic: 'sentence-structure',
           occurrences: 1,
-          tag: rule.tag
+          tag: rule.tag,
+          startIndex: typeof m.index === 'number' ? m.index : 0
         });
       }
     }
   }
 
-  // Build Stage 2 marked speech segments
-  // Simple token-based or regex-based replacement
-  let stage2Marked: EssaySegment[] = [];
-  let cursor = 0;
-  // If issues found, map them into segments
-  if (issues.length === 0) {
-    stage2Marked = [{ type: 'text', text: cleanSpoken }];
-  } else {
-    // Construct marked segments by finding issues sequentially
-    let scanText = cleanSpoken;
-    for (const iss of issues) {
-      const idx = scanText.toLowerCase().indexOf(iss.original.toLowerCase());
-      if (idx !== -1) {
-        const before = scanText.slice(0, idx);
-        const match = scanText.slice(idx, idx + iss.original.length);
-        scanText = scanText.slice(idx + iss.original.length);
+  // Sort issues strictly by their starting index in the speech
+  rawIssues.sort((a, b) => a.startIndex - b.startIndex);
 
-        if (before) stage2Marked.push({ type: 'text', text: before });
-        if (iss.corrected.includes('(remove')) {
-          stage2Marked.push({ type: 'del', text: match, issueId: iss.id });
-        } else {
-          stage2Marked.push({ type: 'replace', text: match, to: iss.corrected, issueId: iss.id });
-        }
-      }
+  // Filter overlapping issues (keep first non-overlapping)
+  const issues: TutorIssue[] = [];
+  const filteredWithPos: IssueWithPos[] = [];
+  let lastEnd = -1;
+  for (const iss of rawIssues) {
+    if (iss.startIndex >= lastEnd) {
+      filteredWithPos.push(iss);
+      issues.push(iss);
+      lastEnd = iss.startIndex + iss.original.length;
     }
-    if (scanText) {
-      stage2Marked.push({ type: 'text', text: scanText });
+  }
+
+  // Build Stage 2 marked speech segments directly from sorted non-overlapping issues
+  let stage2Marked: EssaySegment[] = [];
+  let currentPos = 0;
+  for (const iss of filteredWithPos) {
+    if (iss.startIndex > currentPos) {
+      stage2Marked.push({ type: 'text', text: cleanSpoken.slice(currentPos, iss.startIndex) });
     }
+    const match = cleanSpoken.slice(iss.startIndex, iss.startIndex + iss.original.length);
+    if (iss.corrected.includes('(remove')) {
+      stage2Marked.push({ type: 'del', text: match, issueId: iss.id });
+    } else {
+      stage2Marked.push({ type: 'replace', text: match, to: iss.corrected, issueId: iss.id });
+    }
+    currentPos = iss.startIndex + iss.original.length;
+  }
+  if (currentPos < cleanSpoken.length) {
+    stage2Marked.push({ type: 'text', text: cleanSpoken.slice(currentPos) });
+  }
+  if (stage2Marked.length === 0) {
+    stage2Marked = [{ type: 'text', text: cleanSpoken }];
   }
 
   // 2. Score Calculations (FC, LR, GRA, PR)
@@ -881,12 +892,12 @@ export function evaluateSpokenTurnLocally(
       name: 'Pronunciation & Intonation',
       band: prBand,
       comment: hasContractions
-        ? 'Natural use of standard spoken contractions ("I\'ve", "it\'s") providing smooth cadence and sentence rhythm.'
-        : 'Speech is generally clear and intelligible, though could benefit from more rhythmic sentence stress and natural reductions.',
+        ? 'Natural rhythm and conversational cadence with standard spoken contractions ("I\'ve", "it\'s"). In Cambridge IELTS, international regional accents (British, South Asian, Australian, American) are completely acceptable as long as sounds, word stress, and thought groups are clear.'
+        : 'Speech is generally clear and intelligible across international regional accents, though rhythm can be enhanced with dynamic sentence stress, natural connected speech, and thought-group pausing.',
       commentSi: hasContractions
-        ? 'ස්වාභාවික උච්චාරණය සහ කථන රිද්මය මනාව පවත්වාගෙන යයි.'
-        : 'පැහැදිලි උච්චාරණයක් ඇතත්, ස්වාභාවික රිද්මය තවදුරටත් වර්ධනය කරගත හැක.',
-      toReach8: 'Practice contrastive stress to emphasize key evaluative words and employ natural connected speech (linking sounds between word boundaries).'
+        ? 'ස්වාභාවික උච්චාරණය සහ කථන රිද්මය මනාව පවත්වාගෙන යයි. ජාත්‍යන්තර උච්චාරණ විලාසයන් (British, South Asian ආදී) IELTS විභාගයේදී සම්පූර්ණයෙන්ම පිළිගනු ලැබේ.'
+        : 'පැහැදිලි උච්චාරණයක් ඇතත්, ස්වාභාවික රිද්මය සහ වාක්‍ය ආතතිය (sentence stress) තවදුරටත් වර්ධනය කරගත හැක.',
+      toReach8: 'Deploy rhythm and contrastive stress on key evaluative words; link words naturally without robotic word-by-word separation.'
     }
   ];
 
@@ -1024,9 +1035,10 @@ Respond strictly in valid JSON format matching this schema:
 }`;
 
   // Normalize model name (fallback to verified working Gemini models)
-  const candidateModel = (!model || model.includes('3.8') || model.includes('2.5')) 
-    ? 'gemini-1.5-flash' 
-    : model;
+  let candidateModel = (model || '').trim().replace(/^models\//, '');
+  if (!candidateModel || candidateModel.includes('3.8')) {
+    candidateModel = 'gemini-1.5-flash';
+  }
 
   try {
     const controller = new AbortController();
@@ -1184,6 +1196,98 @@ export function saveDiagnosticProgress(points: ProgressSessionPoint[]): void {
   }
 }
 
+/* ------------------------------------------------------------------ */
+/* Gemini Multimodal Audio-to-Text Transcription Fallback             */
+/* ------------------------------------------------------------------ */
+
+function blobToBase64(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const result = typeof reader.result === 'string' ? reader.result : '';
+      const commaIdx = result.indexOf(',');
+      resolve(commaIdx >= 0 ? result.slice(commaIdx + 1) : result);
+    };
+    reader.onerror = () => reject(reader.error || new Error('Failed to encode audio blob'));
+    reader.readAsDataURL(blob);
+  });
+}
+
+export async function transcribeAudioBlobWithGemini(
+  apiKey: string,
+  model: string,
+  audioBlob: Blob,
+  lang: string = 'en-GB'
+): Promise<string> {
+  if (!apiKey || !apiKey.trim()) {
+    throw new Error('Gemini API key is required for audio transcription fallback.');
+  }
+  if (!audioBlob || audioBlob.size === 0) {
+    throw new Error('No recorded audio available to transcribe.');
+  }
+
+  const base64Audio = await blobToBase64(audioBlob);
+  // Strip codec params (e.g. "audio/webm;codecs=opus" -> "audio/webm") for Gemini API compatibility
+  const rawMime = (audioBlob.type || 'audio/webm').split(';')[0].trim() || 'audio/webm';
+
+  let candidateModel = (model || '').trim().replace(/^models\//, '');
+  if (!candidateModel || candidateModel.includes('3.8')) {
+    candidateModel = 'gemini-2.0-flash';
+  }
+
+  const prompt = `Transcribe the spoken English audio verbatim for an IELTS Speaking test (${lang}).
+Rules:
+1. Output ONLY the exact spoken words — no commentary, no timestamps, no quotes around the whole text.
+2. Restore accurate natural punctuation (commas, periods, question marks ?, exclamation marks !) and sentence capitalization based on intonation and clause boundaries.
+3. Keep the speaker's exact grammar and word choices intact (do NOT silently fix grammatical mistakes, because the IELTS examiner needs to evaluate them).
+4. If the audio contains only silence or noise with no speech, return an empty string.`;
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
+
+  try {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(candidateModel)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      signal: controller.signal,
+      body: JSON.stringify({
+        contents: [
+          {
+            role: 'user',
+            parts: [
+              { text: prompt },
+              {
+                inlineData: {
+                  mimeType: rawMime,
+                  data: base64Audio
+                }
+              }
+            ]
+          }
+        ],
+        generationConfig: { temperature: 0.1 }
+      })
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      const errText = await response.text().catch(() => response.statusText);
+      throw new Error(`Gemini audio transcription error (${response.status}): ${errText.slice(0, 120)}`);
+    }
+
+    const data = await response.json();
+    const rawTranscript = (data?.candidates?.[0]?.content?.parts?.[0]?.text || '').trim();
+    if (!rawTranscript) return '';
+
+    return punctuateSpokenTranscript(rawTranscript);
+  } catch (err) {
+    clearTimeout(timeoutId);
+    throw err;
+  }
+}
+
 /**
  * Automatically restores punctuation, commas, sentence breaks, and capitalization
  * for raw spoken speech recognition transcripts.
@@ -1193,7 +1297,53 @@ export function punctuateSpokenTranscript(rawText: string): string {
 
   let text = rawText.trim().replace(/\s+/g, ' ');
 
-  // 1. Standalone pronoun 'I' and standard spoken contractions
+  // 1. Spoken verbal punctuation commands (Candidate says "period", "full stop", "comma", etc.)
+  // Temporarily protect legitimate noun uses of "period" (e.g. "period of time", "during that period", "study period")
+  const protectedPeriodPhrases: string[] = [];
+  text = text.replace(
+    /\b(?:(?:a|an|the|this|that|long|short|time|brief|extended|certain|entire|given|study|exam|trial|grace|notice|probation)\s+period|period\s+(?:of|in|for|over|between|from|after|before|during))\b/gi,
+    (match) => {
+      const placeholder = `___PROT_PERIOD_${protectedPeriodPhrases.length}___`;
+      protectedPeriodPhrases.push(match);
+      return placeholder;
+    }
+  );
+
+  text = text.replace(/\s*\bfull\s*stop\b\s*/gi, '. ');
+  text = text.replace(/\s*\bperiod\b\s*/gi, '. ');
+  text = text.replace(/\s*\bquestion\s*mark\b\s*/gi, '? ');
+  text = text.replace(/\s*\b(?:exclamation\s*mark|exclamation\s*point)\b\s*/gi, '! ');
+  text = text.replace(/([a-zA-Z0-9])\s+\bdot\b\s+([a-zA-Z0-9])/gi, '$1. $2');
+  text = text.replace(/\s*\bcomma\b\s*(?!separated|delimited)/gi, ', ');
+
+  // Restore protected period noun phrases
+  protectedPeriodPhrases.forEach((orig, idx) => {
+    text = text.replace(`___PROT_PERIOD_${idx}___`, orig);
+  });
+
+  // 1b. Common Speech-to-Text Acoustic Slips & Phonetic Correction Dictionary
+  // Resolves common browser STT homophone/misrecognition errors without penalizing learner
+  const phoneticCorrections: [RegExp, string][] = [
+    [/\bexplore\s+difference\s+cultures?\b/gi, 'explore different cultures'],
+    [/\bexplore\s+different\s+culture\b/gi, 'explore different cultures'],
+    [/\bstudy\s+along\b/gi, 'study alone'],
+    [/\bstudy\s+lonely\b/gi, 'study alone'],
+    [/\bin\s+my\s+pinian\b/gi, 'in my opinion'],
+    [/\bin\s+my\s+opinian\b/gi, 'in my opinion'],
+    [/\bfrom\s+my\s+prospective\b/gi, 'from my perspective'],
+    [/\bdouble\s+edge\s+sword\b/gi, 'double-edged sword'],
+    [/\ba\s+lot\s+off\b/gi, 'a lot of'],
+    [/\bcoz\b|\bcuz\b/gi, 'because'],
+    [/\btraveling\b/gi, 'travelling'],
+    [/\bfavorite\b/gi, 'favourite'],
+    [/\bcolor\b/gi, 'colour'],
+    [/\bcenter\b/gi, 'centre']
+  ];
+  for (const [pattern, repl] of phoneticCorrections) {
+    text = text.replace(pattern, repl);
+  }
+
+  // 2. Standalone pronoun 'I' and standard spoken contractions
   text = text.replace(/\bi\b/g, 'I');
   text = text.replace(/\bi'm\b/gi, "I'm");
   text = text.replace(/\bim\b/gi, "I'm");
@@ -1221,7 +1371,26 @@ export function punctuateSpokenTranscript(rawText: string): string {
   text = text.replace(/\btheres\b/gi, "there's");
   text = text.replace(/\blets\b/gi, "let's");
 
-  // 2. Discourse markers at beginning of speech or after pauses
+  // Non sentence enders (prepositions, conjunctions, copulas, and verb-modifying ADVERBS)
+  // Adverbs like 'sometimes', 'usually', 'often' MUST NEVER be split from following verbs
+  const nonSentenceEnders = new Set([
+    'and', 'but', 'or', 'so', 'because', 'since', 'as', 'if', 'when', 'while', 'although',
+    'though', 'that', 'which', 'who', 'whom', 'whose', 'where', 'why', 'how', 'whether',
+    'than', 'to', 'for', 'with', 'about', 'in', 'on', 'at', 'by', 'from', 'of', 'into',
+    'onto', 'through', 'between', 'before', 'after', 'until', 'unless', 'so that', 'even',
+    'is', 'are', 'was', 'were', 'am', 'be', 'been', 'being',
+    // Adverbs that modify verbs:
+    'sometimes', 'usually', 'often', 'always', 'rarely', 'seldom', 'never', 'already',
+    'actually', 'probably', 'definitely', 'certainly', 'mostly', 'mainly', 'simply',
+    'really', 'just', 'also', 'still', 'soon', 'currently', 'recently', 'first',
+    'initially', 'finally', 'eventually', 'generally', 'normally', 'typically',
+    'clearly', 'obviously', 'frankly', 'honestly', 'personally', 'fortunately', 'unfortunately'
+  ]);
+
+  // Conversational interjections that should take a comma rather than a full stop
+  const commaInterjections = new Set(['well', 'yes', 'no', 'yeah', 'oh', 'ok', 'okay', 'sure']);
+
+  // 3. Discourse markers at beginning of speech or after pauses
   const introMarkers = [
     'well to be honest',
     'to be honest',
@@ -1276,7 +1445,7 @@ export function punctuateSpokenTranscript(rawText: string): string {
     });
   }
 
-  // 3. Sentence-starting discourse markers inside run-on text -> turn into period + comma
+  // 4. Sentence-starting discourse markers inside run-on text -> turn into period + comma
   const sentenceStarters = [
     'however',
     'furthermore',
@@ -1294,53 +1463,78 @@ export function punctuateSpokenTranscript(rawText: string): string {
     'as a matter of fact',
     'generally speaking',
     'in conclusion',
-    'all in all'
+    'all in all',
+    'nowadays',
+    'first of all',
+    'to begin with'
   ];
 
   for (const starter of sentenceStarters) {
     const midRegex = new RegExp(`([a-zA-Z0-9])\\s+(${starter})\\s+`, 'gi');
-    text = text.replace(midRegex, (_m, prevChar, word) => {
+    text = text.replace(midRegex, (match, prevChar, word) => {
+      const prevWord = match.trim().split(/\s+/)[0];
+      if (nonSentenceEnders.has(prevWord.toLowerCase())) return match;
       const cap = word.charAt(0).toUpperCase() + word.slice(1);
       return `${prevChar}. ${cap}, `;
     });
   }
 
-  // 4. Contrasting coordinating conjunctions -> add comma before
+  // 5. Personal pronoun & demonstrative independent clause boundaries
+  const clauseOpeners = [
+    'I (?:am|was|will|have|had|do|did|would|could|can|think|believe|feel|prefer|usually|always|often|normally|really|personally|strongly|also|want|need|started|decided|used to|work|study|live|hope|enjoy|like|love)',
+    'my (?:father|mother|parents|family|brother|sister|hometown|country|city|school|university|teacher|job|career|hobby|dream|view|opinion|experience|routine|favorite|favourite|ambition|goal)',
+    'we (?:are|were|have|had|will|would|can|could|usually|always|often|normally|prefer|live|study|work|plan|decided)',
+    'he (?:is|was|will|has|had|does|did|works|lives|always|usually)',
+    'she (?:is|was|will|has|had|does|did|works|lives|always|usually)',
+    'they (?:are|were|will|have|had|do|did|always|usually|often)',
+    'it (?:is|was|will|has|had|seems|looks|sounds|feels|provides|offers|helps|became|becomes)',
+    'there (?:is|are|was|were|will be|have been|has been)',
+    'this (?:is|was|will|has|gives|provides|means|allows)',
+    '(?<!(?:what a|what an|how)[^.?!]*?)that (?:is|was|will|has|gives|provides|means)'
+  ].join('|');
+
+  const clauseRegex = new RegExp(`\\b([a-zA-Z0-9]+)\\s+(${clauseOpeners})\\b`, 'gi');
+  text = text.replace(clauseRegex, (match, prevWord, opener) => {
+    const lowerPrev = prevWord.toLowerCase();
+    if (nonSentenceEnders.has(lowerPrev)) {
+      return match;
+    }
+    if (commaInterjections.has(lowerPrev)) {
+      const capOpener = opener.charAt(0).toUpperCase() + opener.slice(1);
+      return `${prevWord}, ${capOpener}`;
+    }
+    const capOpener = opener.charAt(0).toUpperCase() + opener.slice(1);
+    return `${prevWord}. ${capOpener}`;
+  });
+
+  // 6. Contrasting coordinating conjunctions -> add comma before
   const contrasting = ['but', 'although', 'whereas', 'while', 'even though'];
   for (const c of contrasting) {
     const conjRegex = new RegExp(`([a-zA-Z0-9])\\s+(${c})\\s+`, 'gi');
     text = text.replace(conjRegex, (_m, prevChar, word) => `${prevChar}, ${word} `);
   }
 
-  // 5. Connectors starting a new thought/sentence
-  // e.g. "well and when I study with my friends..." -> "well. And when I study with my friends..."
+  // 7. Connectors starting a new thought/sentence
   text = text.replace(/([a-zA-Z0-9])\s+(and\s+when|and\s+if|and\s+also|and\s+then|so\s+basically|so\s+in\s+my\s+view)\s+/gi, (_m, prevChar, phrase) => {
     const cap = phrase.charAt(0).toUpperCase() + phrase.slice(1);
     return `${prevChar}. ${cap} `;
   });
 
-  // 5b. Subordinate causal clause with because before personal pronouns
+  // 7b. Subordinate causal clause with because before personal pronouns
   text = text.replace(/([a-zA-Z0-9])\s+because\s+(it|I|we|they|he|she|this|there)\b/gi, '$1, because $2');
 
-  // 5c. Relative clauses
+  // 7c. Relative clauses
   text = text.replace(/([a-zA-Z0-9])\s+(which\s+is\s+why|which\s+means|which\s+helps)\s+/gi, '$1, $2 ');
 
-  // 6. When / If dependent clauses -> add comma before main clause
+  // 8. When / If dependent clauses -> add comma before main clause
   text = text.replace(/\b(when|if|although|even if)\s+([^,.?!]{4,40}?)\s+(it is|it's|they are|there is|there are|we are|I usually|I always|we usually|we always|it will|we will|I can|we can)\b/gi, 
     (_m, condWord, condition, mainClause) => {
       return `${condWord} ${condition.trim()}, ${mainClause}`;
     }
   );
 
-  // 7. Detect independent clause transitions where candidate starts a new statement:
-  // e.g. "capital of Sri Lanka it is very crowded" -> "capital of Sri Lanka. It is very crowded"
-  const nonSentenceEnders = new Set([
-    'and', 'but', 'or', 'so', 'because', 'since', 'as', 'if', 'when', 'while', 'although',
-    'though', 'that', 'which', 'who', 'whom', 'whose', 'where', 'why', 'how', 'whether',
-    'than', 'to', 'for', 'with', 'about', 'in', 'on', 'at', 'by', 'from', 'of'
-  ]);
-
-  text = text.replace(/\b([a-zA-Z0-9]+)\s+(it is|it's|they are|there is|there are|this is|that is)\s+/gi, 
+  // 9. Detect independent clause transitions with third-person pronoun copulas
+  text = text.replace(/\b([a-zA-Z0-9]+)\s+(it is|it's|they are|there is|there are|this is)\s+/gi, 
     (match, prevWord, pronounVerb) => {
       if (nonSentenceEnders.has(prevWord.toLowerCase())) {
         return match;
@@ -1350,22 +1544,79 @@ export function punctuateSpokenTranscript(rawText: string): string {
     }
   );
 
-  // 8. Cleanup duplicate punctuation & spaces
+  // 9b. Tag questions at sentence end or before new sentence: e.g. ", isn't it?", ", don't you think?"
+  text = text.replace(/(?:,\s*|\s+)\b(isn't it|is not it|aren't they|are not they|don't you think|right)\s*([.?!]|$)/gi, ", $1? ");
+
+  // 10. Cleanup duplicate punctuation & spaces
   text = text.replace(/\s*,\s*,+/g, ',');
   text = text.replace(/\s*,\s*\./g, '.');
   text = text.replace(/\s*\.\s*,/g, '.');
+  text = text.replace(/\.{2,}/g, '.'); // eliminate repeated periods (e.g. '..' -> '.')
   text = text.replace(/\s*([,.?!])\s*/g, '$1 ');
   text = text.replace(/\s+/g, ' ').trim();
 
-  // 9. Capitalize the first letter of each sentence
-  text = text.replace(/(^|[.?!]\s+)([a-z])/g, (_m, prefix, letter) => `${prefix}${letter.toUpperCase()}`);
+  // 11. Sentence Classification Pass for ?, ! vs .
+  const sentenceDelimRegex = /([^.?!]+)([.?!]+|\s*$)/g;
+  const sentenceMatches: { content: string; origDelim: string }[] = [];
+  let sm: RegExpExecArray | null;
+  while ((sm = sentenceDelimRegex.exec(text)) !== null) {
+    const rawContent = sm[1].trim();
+    if (rawContent) {
+      sentenceMatches.push({
+        content: rawContent,
+        origDelim: sm[2].trim()
+      });
+    }
+  }
 
-  // 10. Capitalize first letter of string
+  if (sentenceMatches.length > 0) {
+    const formattedSentences = sentenceMatches.map((s) => {
+      let content = s.content;
+      content = content.charAt(0).toUpperCase() + content.slice(1);
+      content = content.replace(/\b(i)\b/g, 'I');
+
+      let delim = s.origDelim || '.';
+
+      // Question detection:
+      // Wh-inversion: Why do you..., What is..., Where can I..., How does it...
+      const isWhQuestion = /^(?:why|what|where|when|who|which|how|whose|whom)\s+(?:do|does|did|is|are|was|were|can|could|would|should|will|have|has|had)\b/i.test(content);
+      // Auxiliary inversion: Do you think..., Is it true..., Have you ever...
+      const isAuxQuestion = /^(?:do|does|did|is|are|was|were|have|has|had|can|could|would|should|will|may|might|must)\s+(?:you|we|they|he|she|it|people|there|this|that|anyone|everyone|someone|anybody|everybody)\b/i.test(content);
+      // Question tag at the end: ..., isn't it? / ..., don't you think?
+      const isTagQuestion = /,\s*(?:isn't it|don't you think|right|aren't they|doesn't it)\s*$/i.test(content);
+
+      // Exclamation detection:
+      // That's amazing! / What a wonderful experience! / How fantastic! / Wow! / Congratulations!
+      const isExclamation = /^(?:that's|thats)\s+(?:amazing|awesome|incredible|wonderful|fantastic|unbelievable|great|brilliant)\b/i.test(content) ||
+                            /^(?:what\s+an?\s+|how\s+)(?:amazing|awesome|incredible|wonderful|fantastic|beautiful|terrible|horrible|great|delightful|nice|lovely)\b/i.test(content) ||
+                            /^(?:congratulations|wow|oh\s+my\s+god|my\s+goodness)\b/i.test(content);
+
+      if (isWhQuestion || isAuxQuestion || isTagQuestion) {
+        delim = '?';
+      } else if (isExclamation) {
+        delim = '!';
+      } else if (!delim || delim === '') {
+        delim = '.';
+      }
+
+      return content + delim;
+    });
+
+    text = formattedSentences.join(' ');
+  }
+
+  // 12. Final Capitalizations
+  text = text.replace(/\b(i)\b/g, 'I');
+  text = text.replace(/\bi'm\b/g, "I'm");
+  text = text.replace(/\bi've\b/g, "I've");
+  text = text.replace(/\bi'll\b/g, "I'll");
+  text = text.replace(/\bi'd\b/g, "I'd");
+
   if (text.length > 0) {
     text = text.charAt(0).toUpperCase() + text.slice(1);
   }
 
-  // 11. End with a period if not present
+  // 13. End with terminal punctuation if missing
   if (text.length > 0 && !/[.?!]$/.test(text)) {
     text += '.';
   }

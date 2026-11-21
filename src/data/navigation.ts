@@ -5,6 +5,7 @@ import {
   BookOpen, 
   Sparkles, 
   Mic, 
+  MessageCircle,
   Layers, 
   Zap, 
   CheckSquare, 
@@ -18,6 +19,7 @@ export type AppTab =
   | 'reading' 
   | 'tutor' 
   | 'speaking' 
+  | 'buddy'
   | 'wordbank' 
   | 'flashcards' 
   | 'quiz' 
@@ -95,6 +97,16 @@ export const NAV_CATEGORIES: NavCategory[] = [
         icon: Mic,
         iconColor: 'text-rose-600',
         description: 'Diagnostic roadmap & mock interviews',
+      },
+      {
+        id: 'buddy',
+        label: 'AI Speaking Buddy',
+        shortLabel: 'AI Buddy',
+        badge: 'Lingo Buddy',
+        badgeClass: 'bg-violet-100 text-violet-700',
+        icon: MessageCircle,
+        iconColor: 'text-violet-600',
+        description: 'Friendly English companion with live voice chat',
       },
     ],
   },

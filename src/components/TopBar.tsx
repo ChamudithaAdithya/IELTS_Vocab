@@ -85,6 +85,23 @@ export const TopBar: React.FC<TopBarProps> = ({
 
           {/* Right: Quick Actions */}
           <div className="flex items-center gap-2 shrink-0">
+            {/* Quick AI Speaking Buddy Launcher */}
+            {onSelectTab && (
+              <button
+                type="button"
+                onClick={() => onSelectTab('buddy')}
+                className={`px-2.5 py-1.5 rounded-xl text-xs font-bold border transition-all flex items-center gap-1.5 cursor-pointer ${
+                  currentTab === 'buddy'
+                    ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white border-indigo-600 shadow-xs'
+                    : 'bg-violet-50 hover:bg-violet-100 text-violet-800 border-violet-200'
+                }`}
+                title="Open AI Speaking Buddy (Lingo Buddy) — talk with an AI English friend"
+              >
+                <Sparkles className={`w-3.5 h-3.5 ${currentTab === 'buddy' ? 'text-amber-300' : 'text-violet-600'}`} />
+                <span className="hidden sm:inline">AI Buddy</span>
+              </button>
+            )}
+
             {/* Quick Word Search Pill */}
             <button
               type="button"
