@@ -241,12 +241,82 @@ export function resolveVoice(customURI?: string): SpeechSynthesisVoice | null {
 
 let currentSpeechSessionId = 0;
 let currentAudioElement: HTMLAudioElement | null = null;
+let currentBlobUrl: string | null = null;
+let currentTtsAbortController: AbortController | null = null;
+let ttsAnalyserRaf: number | null = null;
+let ttsAudioCtx: AudioContext | null = null;
 let isCloudAudioCancelled = false;
+/** Module-level anchor prevents Chrome/Edge from garbage-collecting active utterances mid-speech! */
+let activeUtterances: SpeechSynthesisUtterance[] = [];
+let speechStartTimer: ReturnType<typeof setTimeout> | null = null;
+let speechCancelDelayTimer: ReturnType<typeof setTimeout> | null = null;
+let audioUnlocked = false;
+
+function cleanupTtsAnalyser(): void {
+  if (ttsAnalyserRaf !== null) {
+    cancelAnimationFrame(ttsAnalyserRaf);
+    ttsAnalyserRaf = null;
+  }
+  if (ttsAudioCtx && ttsAudioCtx.state !== 'closed') {
+    try { ttsAudioCtx.close(); } catch {}
+  }
+  ttsAudioCtx = null;
+}
+
+function clearSpeechTimers(): void {
+  if (speechStartTimer) {
+    clearTimeout(speechStartTimer);
+    speechStartTimer = null;
+  }
+  if (speechCancelDelayTimer) {
+    clearTimeout(speechCancelDelayTimer);
+    speechCancelDelayTimer = null;
+  }
+}
+
+/**
+ * Call inside a user gesture (Orb tap / Speak click / Send) to warm up Audio & SpeechSynthesis
+ * so subsequent async/hands-free AI replies are never silently blocked by browser autoplay policy.
+ */
+export function unlockAudioOutput(): void {
+  if (typeof window === 'undefined') return;
+  if (!audioUnlocked) {
+    audioUnlocked = true;
+    try {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      if (AudioCtx) {
+        const ctx = new AudioCtx();
+        if (ctx.state === 'suspended') {
+          ctx.resume().catch(() => {});
+        }
+        setTimeout(() => {
+          try { ctx.close(); } catch {}
+        }, 300);
+      }
+    } catch {}
+  }
+  if ('speechSynthesis' in window) {
+    try {
+      getBrowserVoices();
+      if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+      }
+    } catch {}
+  }
+}
 
 export function stopAllSpeech(): void {
   // Immediately invalidate any active or queued speech sessions
   currentSpeechSessionId++;
   isCloudAudioCancelled = true;
+  clearSpeechTimers();
+  cleanupTtsAnalyser();
+  activeUtterances = [];
+
+  if (currentTtsAbortController) {
+    try { currentTtsAbortController.abort(); } catch {}
+    currentTtsAbortController = null;
+  }
 
   if (currentAudioElement) {
     try {
@@ -254,6 +324,7 @@ export function stopAllSpeech(): void {
       currentAudioElement.onplay = null;
       currentAudioElement.onended = null;
       currentAudioElement.onerror = null;
+      currentAudioElement.onstalled = null;
       currentAudioElement.pause();
       currentAudioElement.currentTime = 0;
       currentAudioElement.src = '';
@@ -261,10 +332,15 @@ export function stopAllSpeech(): void {
     currentAudioElement = null;
   }
 
+  if (currentBlobUrl) {
+    try { URL.revokeObjectURL(currentBlobUrl); } catch {}
+    currentBlobUrl = null;
+  }
+
   if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
     try {
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.pause();
+      // NEVER call speechSynthesis.pause() here — in Chrome/Edge on Windows it leaves
+      // the speech queue stuck paused and causes subsequent speak() calls to play silently!
       window.speechSynthesis.cancel();
     } catch {}
   }
@@ -373,6 +449,9 @@ function playNaturalCloudSpeech(
 
     const audio = new Audio();
     // Do NOT set crossOrigin = 'anonymous' to avoid CORS restrictions on media playback
+    audio.volume = 1.0;
+    audio.muted = false;
+    audio.preload = 'auto';
     audio.src = url;
     currentAudioElement = audio;
 
@@ -380,17 +459,49 @@ function playNaturalCloudSpeech(
       audio.playbackRate = Math.max(0.7, Math.min(1.4, effectiveRate));
     }
 
+    let chunkStarted = false;
+    let fallbackTriggered = false;
+
+    const triggerBrowserFallback = () => {
+      if (fallbackTriggered || sessionId !== currentSpeechSessionId || isCloudAudioCancelled) {
+        return;
+      }
+      fallbackTriggered = true;
+      clearSpeechTimers();
+      try {
+        audio.onplay = null;
+        audio.onended = null;
+        audio.onerror = null;
+        audio.pause();
+        audio.src = '';
+      } catch {}
+      if (currentAudioElement === audio) currentAudioElement = null;
+      const remainingText = chunks.slice(currentChunkIdx - 1).join(' ');
+      playBrowserSpeech(remainingText, voiceURI, options);
+    };
+
+    // Watchdog: if Cloud /api/tts hangs or never starts playing within 3.2s, seamlessly switch to Browser Speech!
+    clearSpeechTimers();
+    speechStartTimer = setTimeout(() => {
+      if (!chunkStarted && sessionId === currentSpeechSessionId && !isCloudAudioCancelled) {
+        triggerBrowserFallback();
+      }
+    }, 3200);
+
     audio.onplay = () => {
       if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) {
         audio.pause();
         return;
       }
+      chunkStarted = true;
+      clearSpeechTimers();
       if (currentChunkIdx === 1) {
         options.onStart?.();
       }
     };
 
     audio.onended = () => {
+      clearSpeechTimers();
       audio.onplay = null;
       audio.onended = null;
       audio.onerror = null;
@@ -400,35 +511,36 @@ function playNaturalCloudSpeech(
     };
 
     audio.onerror = () => {
-      audio.onplay = null;
-      audio.onended = null;
-      audio.onerror = null;
-      // Do NOT fallback if speech was stopped or superseded
-      if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) {
-        return;
-      }
-      // Gracefully switch to browser neural speech with matching accent
-      const remainingText = chunks.slice(currentChunkIdx - 1).join(' ');
-      playBrowserSpeech(remainingText, voiceURI, options);
+      triggerBrowserFallback();
     };
 
     const playPromise = audio.play();
     if (playPromise !== undefined) {
       playPromise.catch((err) => {
-        // Do NOT fallback if speech was cancelled or interrupted
+        // Do NOT fallback if speech was explicitly cancelled or superseded
         if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) {
           return;
         }
         if (err && (err.name === 'AbortError' || err.message?.includes('interrupted') || err.message?.includes('pause'))) {
           return;
         }
-        const remainingText = chunks.slice(currentChunkIdx - 1).join(' ');
-        playBrowserSpeech(remainingText, voiceURI, options);
+        triggerBrowserFallback();
       });
     }
   };
 
   playChunk();
+}
+
+function resolveGuaranteedLocalVoice(): SpeechSynthesisVoice | null {
+  const voices = getBrowserVoices();
+  return (
+    voices.find(v => v.localService && v.lang.replace('_', '-').toLowerCase().startsWith('en-gb')) ||
+    voices.find(v => v.localService && v.lang.replace('_', '-').toLowerCase().startsWith('en-us')) ||
+    voices.find(v => v.localService && v.lang.toLowerCase().startsWith('en')) ||
+    voices.find(v => v.lang.toLowerCase().startsWith('en')) ||
+    null
+  );
 }
 
 function playBrowserSpeech(
@@ -440,7 +552,8 @@ function playBrowserSpeech(
     onStart?: () => void;
     onEnd?: () => void;
     onError?: (err: any) => void;
-  }
+  },
+  forceLocalOnly: boolean = false
 ): void {
   if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
     options.onError?.(new Error('Speech synthesis not supported'));
@@ -449,46 +562,124 @@ function playBrowserSpeech(
 
   const sessionId = ++currentSpeechSessionId;
   isCloudAudioCancelled = false;
+  clearSpeechTimers();
+  activeUtterances = [];
 
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.resume();
-
-  const storedSettings = loadVoiceSettings();
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.rate = options.rate ?? storedSettings.rate ?? 0.9;
-  utterance.pitch = options.pitch ?? storedSettings.pitch ?? 1.0;
-
-  const voice = resolveVoice(voiceURI || storedSettings.voiceURI);
-  if (voice) {
-    utterance.voice = voice;
-    utterance.lang = voice.lang;
-  } else {
-    utterance.lang = 'en-GB';
+  const chunks = splitIntoAudioChunks(text, 180);
+  if (chunks.length === 0) {
+    options.onEnd?.();
+    return;
   }
 
-  utterance.onstart = () => {
-    if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) {
-      window.speechSynthesis.cancel();
+  const storedSettings = loadVoiceSettings();
+  const effectiveRate = options.rate ?? storedSettings.rate ?? 0.94;
+  const effectivePitch = options.pitch ?? storedSettings.pitch ?? 1.0;
+
+  // Cancel any stale Chrome speech queue, then wait 50ms so Chrome's async cancel()
+  // NEVER silently swallows our new utterance!
+  try {
+    window.speechSynthesis.cancel();
+  } catch {}
+
+  let chunkIdx = 0;
+
+  const speakNextChunk = () => {
+    if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) return;
+    if (chunkIdx >= chunks.length) {
+      activeUtterances = [];
+      options.onEnd?.();
       return;
     }
-    options.onStart?.();
-  };
 
-  utterance.onend = () => {
-    if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) return;
-    options.onEnd?.();
-  };
+    const partText = chunks[chunkIdx++];
+    const utterance = new SpeechSynthesisUtterance(partText);
+    utterance.rate = effectiveRate;
+    utterance.pitch = effectivePitch;
+    utterance.volume = 1.0;
 
-  utterance.onerror = (e) => {
-    if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) return;
-    if (e.error !== 'canceled' && e.error !== 'interrupted') {
-      options.onError?.(e);
+    const chosenVoice = forceLocalOnly
+      ? resolveGuaranteedLocalVoice()
+      : resolveVoice(voiceURI || storedSettings.voiceURI);
+
+    if (chosenVoice) {
+      utterance.voice = chosenVoice;
+      utterance.lang = chosenVoice.lang;
     } else {
-      options.onEnd?.();
+      utterance.lang = 'en-GB';
+    }
+
+    // Anchor utterance in module array so Chrome NEVER garbage-collects it mid-sentence!
+    activeUtterances = [utterance];
+
+    let started = false;
+
+    // Watchdog: if a remote browser voice (e.g. Google UK) stalls silently for >2.6s,
+    // automatically retry with a guaranteed local OS voice so the user ALWAYS hears audio!
+    clearSpeechTimers();
+    speechStartTimer = setTimeout(() => {
+      if (!started && sessionId === currentSpeechSessionId && !isCloudAudioCancelled) {
+        if (!forceLocalOnly) {
+          const remaining = chunks.slice(chunkIdx - 1).join(' ');
+          playBrowserSpeech(remaining, voiceURI, options, true);
+        } else {
+          // Even local voice failed to start — cleanly exit Speaking state so orb never hangs!
+          activeUtterances = [];
+          try { window.speechSynthesis.cancel(); } catch {}
+          options.onError?.(new Error('Browser speech failed to start'));
+        }
+      }
+    }, 2600);
+
+    utterance.onstart = () => {
+      if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) {
+        try { window.speechSynthesis.cancel(); } catch {}
+        return;
+      }
+      started = true;
+      clearSpeechTimers();
+      if (chunkIdx === 1) {
+        options.onStart?.();
+      }
+    };
+
+    utterance.onend = () => {
+      clearSpeechTimers();
+      if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) return;
+      speakNextChunk();
+    };
+
+    utterance.onerror = (e) => {
+      clearSpeechTimers();
+      if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) return;
+      if (e.error === 'canceled' || e.error === 'interrupted') {
+        return;
+      }
+      // If a remote Google voice errored (e.g. synthesis-failed / network), retry with local OS voice!
+      if (!forceLocalOnly) {
+        const remaining = chunks.slice(chunkIdx - 1).join(' ');
+        playBrowserSpeech(remaining, voiceURI, options, true);
+        return;
+      }
+      activeUtterances = [];
+      options.onError?.(e);
+    };
+
+    try {
+      if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+      }
+      window.speechSynthesis.speak(utterance);
+    } catch (err) {
+      clearSpeechTimers();
+      options.onError?.(err);
     }
   };
 
-  window.speechSynthesis.speak(utterance);
+  speechCancelDelayTimer = setTimeout(() => {
+    if (sessionId === currentSpeechSessionId && !isCloudAudioCancelled) {
+      speakNextChunk();
+    }
+  }, 55);
 }
 
 export function playSpeech(
@@ -550,4 +741,416 @@ export function playPronunciation(
     onEnd: options.onEnd,
     onError: options.onError,
   });
+}
+
+/* ------------------------------------------------------------------ */
+/* Google AI Studio · Gemini 2.5 Native TTS ("Cheeky Sidekick" & more) */
+/* ------------------------------------------------------------------ */
+
+export type GeminiTtsVoiceName = 'Puck' | 'Zephyr' | 'Aoede' | 'Leda' | 'Fenrir' | 'Kore';
+export type GeminiStylePresetId =
+  | 'cheeky-sidekick'
+  | 'warm-friend'
+  | 'gentle-coach'
+  | 'calm-british';
+
+export interface BuddyVoiceConfig {
+  provider: 'gemini' | 'standard';
+  geminiVoice: GeminiTtsVoiceName;
+  stylePreset: GeminiStylePresetId;
+  rate: number;
+}
+
+export const GEMINI_TTS_VOICES: Array<{
+  id: GeminiTtsVoiceName;
+  label: string;
+  trait: string;
+}> = [
+  { id: 'Puck', label: 'Puck', trait: 'Upbeat & Playful' },
+  { id: 'Zephyr', label: 'Zephyr', trait: 'Bright & Lively' },
+  { id: 'Aoede', label: 'Aoede', trait: 'Breezy & Warm' },
+  { id: 'Leda', label: 'Leda', trait: 'Youthful & Friendly' },
+  { id: 'Fenrir', label: 'Fenrir', trait: 'Excitable & Energetic' },
+  { id: 'Kore', label: 'Kore', trait: 'Firm & Clear' }
+];
+
+export const GEMINI_STYLE_PRESETS: Array<{
+  id: GeminiStylePresetId;
+  label: string;
+  subtitle: string;
+  promptPrefix: string;
+}> = [
+  {
+    id: 'cheeky-sidekick',
+    label: 'Cheeky Sidekick',
+    subtitle: 'Bright & playful',
+    promptPrefix:
+      'Say the following in a bright, playful, cheeky sidekick tone with lively conversational warmth and natural rhythm:'
+  },
+  {
+    id: 'warm-friend',
+    label: 'Warm Friend',
+    subtitle: 'Casual & relaxed',
+    promptPrefix:
+      'Say the following in a warm, casual, relaxed tone like a close friend chatting naturally:'
+  },
+  {
+    id: 'gentle-coach',
+    label: 'Gentle Mentor',
+    subtitle: 'Clear & encouraging',
+    promptPrefix:
+      'Say the following in a clear, patient, encouraging tone like a supportive English companion:'
+  },
+  {
+    id: 'calm-british',
+    label: 'Crisp British',
+    subtitle: 'Natural UK cadence',
+    promptPrefix:
+      'Say the following in a natural, friendly, articulate British conversational tone:'
+  }
+];
+
+const BUDDY_VOICE_CONFIG_KEY = 'lingo_buddy_voice_config_v1';
+
+export const DEFAULT_BUDDY_VOICE_CONFIG: BuddyVoiceConfig = {
+  provider: 'gemini',
+  geminiVoice: 'Puck',
+  stylePreset: 'cheeky-sidekick',
+  rate: 1.0
+};
+
+export function loadBuddyVoiceConfig(): BuddyVoiceConfig {
+  if (typeof window === 'undefined') return DEFAULT_BUDDY_VOICE_CONFIG;
+  try {
+    const raw = localStorage.getItem(BUDDY_VOICE_CONFIG_KEY);
+    if (!raw) return DEFAULT_BUDDY_VOICE_CONFIG;
+    const parsed = JSON.parse(raw);
+    return {
+      provider: parsed.provider === 'standard' ? 'standard' : 'gemini',
+      geminiVoice: GEMINI_TTS_VOICES.some(v => v.id === parsed.geminiVoice)
+        ? parsed.geminiVoice
+        : DEFAULT_BUDDY_VOICE_CONFIG.geminiVoice,
+      stylePreset: GEMINI_STYLE_PRESETS.some(p => p.id === parsed.stylePreset)
+        ? parsed.stylePreset
+        : DEFAULT_BUDDY_VOICE_CONFIG.stylePreset,
+      rate:
+        typeof parsed.rate === 'number' && parsed.rate >= 0.75 && parsed.rate <= 1.3
+          ? parsed.rate
+          : 1.0
+    };
+  } catch {
+    return DEFAULT_BUDDY_VOICE_CONFIG;
+  }
+}
+
+export function saveBuddyVoiceConfig(config: BuddyVoiceConfig): void {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(BUDDY_VOICE_CONFIG_KEY, JSON.stringify(config));
+  } catch {}
+}
+
+/** In-memory LRU cache so "Listen again" replays Gemini TTS instantly in 0ms */
+const geminiTtsAudioCache = new Map<string, Blob>();
+const MAX_GEMINI_TTS_CACHE = 24;
+
+function base64ToUint8Array(base64: string): Uint8Array {
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return bytes;
+}
+
+/**
+ * Wrap raw signed 16-bit little-endian mono PCM (e.g., audio/L16;codec=pcm;rate=24000)
+ * in a standard 44-byte RIFF/WAVE header so any browser HTMLAudioElement plays it natively.
+ */
+function pcm16ToWavBlob(pcmBytes: Uint8Array, sampleRate: number = 24000): Blob {
+  const numChannels = 1;
+  const bitsPerSample = 16;
+  const byteRate = (sampleRate * numChannels * bitsPerSample) / 8;
+  const blockAlign = (numChannels * bitsPerSample) / 8;
+  const dataSize = pcmBytes.byteLength;
+
+  const buffer = new ArrayBuffer(44 + dataSize);
+  const view = new DataView(buffer);
+
+  const writeStr = (offset: number, s: string) => {
+    for (let i = 0; i < s.length; i++) {
+      view.setUint8(offset + i, s.charCodeAt(i));
+    }
+  };
+
+  writeStr(0, 'RIFF');
+  view.setUint32(4, 36 + dataSize, true);
+  writeStr(8, 'WAVE');
+  writeStr(12, 'fmt ');
+  view.setUint32(16, 16, true); // PCM format chunk size
+  view.setUint16(20, 1, true); // AudioFormat 1 = PCM
+  view.setUint16(22, numChannels, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, byteRate, true);
+  view.setUint16(32, blockAlign, true);
+  view.setUint16(34, bitsPerSample, true);
+  writeStr(36, 'data');
+  view.setUint32(40, dataSize, true);
+
+  new Uint8Array(buffer, 44).set(pcmBytes);
+  return new Blob([buffer], { type: 'audio/wav' });
+}
+
+function attachAudioWaveformAnalyser(
+  audio: HTMLAudioElement,
+  onAudioLevel?: (level: number) => void
+): void {
+  if (!onAudioLevel || typeof window === 'undefined') return;
+  try {
+    const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+    if (!AudioCtx) return;
+    cleanupTtsAnalyser();
+    const ctx = new AudioCtx();
+    if (ctx.state === 'suspended') {
+      ctx.resume().catch(() => {});
+    }
+    const source = ctx.createMediaElementSource(audio);
+    const analyser = ctx.createAnalyser();
+    analyser.fftSize = 256;
+    analyser.smoothingTimeConstant = 0.72;
+    source.connect(analyser);
+    analyser.connect(ctx.destination);
+    ttsAudioCtx = ctx;
+
+    const data = new Uint8Array(analyser.frequencyBinCount);
+    const tick = () => {
+      if (!ttsAudioCtx || currentAudioElement !== audio) return;
+      analyser.getByteFrequencyData(data);
+      let sum = 0;
+      for (let i = 0; i < data.length; i++) sum += data[i];
+      const avg = sum / data.length;
+      const normalized = Math.min(100, Math.round(avg * 1.45));
+      onAudioLevel(normalized);
+      ttsAnalyserRaf = requestAnimationFrame(tick);
+    };
+    ttsAnalyserRaf = requestAnimationFrame(tick);
+  } catch {
+    // Non-fatal: audio still plays cleanly even if Web Audio graph is unavailable
+  }
+}
+
+export async function playGeminiTtsSpeech(
+  text: string,
+  options: {
+    apiKey: string;
+    voiceName?: GeminiTtsVoiceName;
+    stylePreset?: GeminiStylePresetId;
+    rate?: number;
+    onStart?: () => void;
+    onEnd?: () => void;
+    onError?: (err: any) => void;
+    onFallback?: (reason: string) => void;
+    onAudioLevel?: (level: number) => void;
+  }
+): Promise<void> {
+  stopAllSpeech();
+
+  const cleanText = text.replace(/[*_#`~[\]]/g, '').trim();
+  if (!cleanText) {
+    options.onEnd?.();
+    return;
+  }
+
+  const trimmedKey = (options.apiKey || '').trim();
+  const voiceName: GeminiTtsVoiceName = options.voiceName || 'Puck';
+  const presetId: GeminiStylePresetId = options.stylePreset || 'cheeky-sidekick';
+  const preset =
+    GEMINI_STYLE_PRESETS.find(p => p.id === presetId) || GEMINI_STYLE_PRESETS[0];
+  const effectiveRate = Math.max(0.75, Math.min(1.3, options.rate ?? 1.0));
+
+  const fallbackToStandard = (reason: string) => {
+    options.onFallback?.(reason);
+    playSpeech(cleanText, {
+      rate: effectiveRate,
+      onStart: options.onStart,
+      onEnd: options.onEnd,
+      onError: options.onError
+    });
+  };
+
+  if (!trimmedKey) {
+    fallbackToStandard('Connect a Gemini API key in Audio Settings to use Cheeky Sidekick voice.');
+    return;
+  }
+
+  const sessionId = ++currentSpeechSessionId;
+  isCloudAudioCancelled = false;
+
+  const cacheKey = `${voiceName}|${presetId}|${cleanText}`;
+  let audioBlob = geminiTtsAudioCache.get(cacheKey) || null;
+
+  if (!audioBlob) {
+    const controller = new AbortController();
+    currentTtsAbortController = controller;
+    const timeoutId = setTimeout(() => controller.abort(), 11000);
+
+    try {
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${encodeURIComponent(
+        trimmedKey
+      )}`;
+
+      const promptText = `${preset.promptPrefix}\n"${cleanText}"`;
+
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
+        body: JSON.stringify({
+          contents: [
+            {
+              role: 'user',
+              parts: [{ text: promptText }]
+            }
+          ],
+          generationConfig: {
+            responseModalities: ['AUDIO'],
+            speechConfig: {
+              voiceConfig: {
+                prebuiltVoiceConfig: {
+                  voiceName
+                }
+              }
+            }
+          }
+        })
+      });
+
+      clearTimeout(timeoutId);
+      if (currentTtsAbortController === controller) {
+        currentTtsAbortController = null;
+      }
+
+      if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) {
+        return;
+      }
+
+      if (!res.ok) {
+        const errBody = await res.text().catch(() => '');
+        const shortMsg =
+          res.status === 429
+            ? 'Gemini TTS quota reached — switched to standard voice.'
+            : res.status === 401 || res.status === 403
+            ? 'Gemini API key rejected for TTS — switched to standard voice.'
+            : `Gemini TTS unavailable (${res.status}) — switched to standard voice.`;
+        console.warn('[Gemini TTS]', res.status, errBody.slice(0, 200));
+        fallbackToStandard(shortMsg);
+        return;
+      }
+
+      const json = await res.json();
+      const parts = json?.candidates?.[0]?.content?.parts || [];
+      const inlineAudio = parts.find((p: any) => p?.inlineData?.data)?.inlineData;
+
+      if (!inlineAudio?.data) {
+        fallbackToStandard('Gemini TTS returned no audio — switched to standard voice.');
+        return;
+      }
+
+      const rawBytes = base64ToUint8Array(inlineAudio.data);
+      const mimeType: string = (inlineAudio.mimeType || 'audio/L16;codec=pcm;rate=24000').toLowerCase();
+
+      if (mimeType.includes('wav') || mimeType.includes('mpeg') || mimeType.includes('mp3') || mimeType.includes('ogg')) {
+        audioBlob = new Blob([rawBytes.buffer as ArrayBuffer], { type: inlineAudio.mimeType });
+      } else {
+        const rateMatch = mimeType.match(/rate=(\d+)/);
+        const sampleRate = rateMatch ? parseInt(rateMatch[1], 10) : 24000;
+        audioBlob = pcm16ToWavBlob(rawBytes, sampleRate || 24000);
+      }
+
+      // Store in LRU cache
+      if (geminiTtsAudioCache.size >= MAX_GEMINI_TTS_CACHE) {
+        const oldestKey = geminiTtsAudioCache.keys().next().value;
+        if (oldestKey) geminiTtsAudioCache.delete(oldestKey);
+      }
+      geminiTtsAudioCache.set(cacheKey, audioBlob);
+    } catch (err: any) {
+      clearTimeout(timeoutId);
+      if (currentTtsAbortController === controller) {
+        currentTtsAbortController = null;
+      }
+      if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) {
+        return;
+      }
+      const isTimeout = err?.name === 'AbortError';
+      fallbackToStandard(
+        isTimeout
+          ? 'Gemini TTS timed out — switched to standard voice.'
+          : 'Gemini TTS network error — switched to standard voice.'
+      );
+      return;
+    }
+  }
+
+  if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled || !audioBlob) {
+    return;
+  }
+
+  const blobUrl = URL.createObjectURL(audioBlob);
+  currentBlobUrl = blobUrl;
+
+  const audio = new Audio();
+  audio.volume = 1.0;
+  audio.muted = false;
+  audio.preload = 'auto';
+  audio.src = blobUrl;
+  audio.playbackRate = effectiveRate;
+  currentAudioElement = audio;
+
+  audio.onplay = () => {
+    if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) {
+      audio.pause();
+      return;
+    }
+    attachAudioWaveformAnalyser(audio, options.onAudioLevel);
+    options.onStart?.();
+  };
+
+  audio.onended = () => {
+    cleanupTtsAnalyser();
+    options.onAudioLevel?.(0);
+    if (currentBlobUrl === blobUrl) {
+      try { URL.revokeObjectURL(blobUrl); } catch {}
+      currentBlobUrl = null;
+    }
+    if (currentAudioElement === audio) {
+      currentAudioElement = null;
+    }
+    if (sessionId === currentSpeechSessionId && !isCloudAudioCancelled) {
+      options.onEnd?.();
+    }
+  };
+
+  audio.onerror = () => {
+    cleanupTtsAnalyser();
+    options.onAudioLevel?.(0);
+    if (currentBlobUrl === blobUrl) {
+      try { URL.revokeObjectURL(blobUrl); } catch {}
+      currentBlobUrl = null;
+    }
+    if (sessionId === currentSpeechSessionId && !isCloudAudioCancelled) {
+      fallbackToStandard('Audio playback error — switched to standard voice.');
+    }
+  };
+
+  try {
+    await audio.play();
+  } catch (err: any) {
+    if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) {
+      return;
+    }
+    if (err && (err.name === 'AbortError' || err.message?.includes('interrupted'))) {
+      return;
+    }
+    fallbackToStandard('Browser blocked audio autoplay — tap the orb or Listen again.');
+  }
 }

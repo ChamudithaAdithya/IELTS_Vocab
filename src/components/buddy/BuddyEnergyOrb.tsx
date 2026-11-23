@@ -29,9 +29,15 @@ interface StateMotionConfig {
   haloIntensity: number;
   magentaBoost: number;
   cyanBoost: number;
+  goldBoost: number;
+  emeraldBoost: number;
   errorTint: number;
+  wobbleAmp: number;
+  bounceAmp: number;
+  dimFactor: number;
 }
 
+/** Phase 5 — Complete 14-State Living Crystal-Galaxy Orb Motion & Aura Matrix */
 const STATE_MOTION: Record<BuddyOrbState, StateMotionConfig> = {
   idle: {
     ribbonSpeed: 0.011,
@@ -40,7 +46,12 @@ const STATE_MOTION: Record<BuddyOrbState, StateMotionConfig> = {
     haloIntensity: 0.75,
     magentaBoost: 1.0,
     cyanBoost: 1.0,
-    errorTint: 0
+    goldBoost: 0,
+    emeraldBoost: 0,
+    errorTint: 0,
+    wobbleAmp: 0,
+    bounceAmp: 0,
+    dimFactor: 1.0
   },
   listening: {
     ribbonSpeed: 0.024,
@@ -49,7 +60,12 @@ const STATE_MOTION: Record<BuddyOrbState, StateMotionConfig> = {
     haloIntensity: 1.15,
     magentaBoost: 0.95,
     cyanBoost: 1.35,
-    errorTint: 0
+    goldBoost: 0,
+    emeraldBoost: 0,
+    errorTint: 0,
+    wobbleAmp: 0,
+    bounceAmp: 0,
+    dimFactor: 1.0
   },
   transcribing: {
     ribbonSpeed: 0.036,
@@ -58,7 +74,12 @@ const STATE_MOTION: Record<BuddyOrbState, StateMotionConfig> = {
     haloIntensity: 1.05,
     magentaBoost: 1.2,
     cyanBoost: 1.25,
-    errorTint: 0
+    goldBoost: 0,
+    emeraldBoost: 0,
+    errorTint: 0,
+    wobbleAmp: 0,
+    bounceAmp: 0,
+    dimFactor: 1.0
   },
   understanding: {
     ribbonSpeed: 0.042,
@@ -67,16 +88,26 @@ const STATE_MOTION: Record<BuddyOrbState, StateMotionConfig> = {
     haloIntensity: 1.1,
     magentaBoost: 1.25,
     cyanBoost: 1.2,
-    errorTint: 0
+    goldBoost: 0,
+    emeraldBoost: 0,
+    errorTint: 0,
+    wobbleAmp: 0,
+    bounceAmp: 0,
+    dimFactor: 1.0
   },
   thinking: {
-    ribbonSpeed: 0.052,
-    starSpeed: 0.024,
-    waveBoost: 0.48,
-    haloIntensity: 1.2,
+    ribbonSpeed: 0.056,
+    starSpeed: 0.026,
+    waveBoost: 0.5,
+    haloIntensity: 1.22,
     magentaBoost: 1.35,
     cyanBoost: 1.15,
-    errorTint: 0
+    goldBoost: 0,
+    emeraldBoost: 0,
+    errorTint: 0,
+    wobbleAmp: 0,
+    bounceAmp: 0,
+    dimFactor: 1.0
   },
   speaking: {
     ribbonSpeed: 0.038,
@@ -85,16 +116,96 @@ const STATE_MOTION: Record<BuddyOrbState, StateMotionConfig> = {
     haloIntensity: 1.25,
     magentaBoost: 1.2,
     cyanBoost: 1.35,
-    errorTint: 0
+    goldBoost: 0,
+    emeraldBoost: 0,
+    errorTint: 0,
+    wobbleAmp: 0,
+    bounceAmp: 0,
+    dimFactor: 1.0
+  },
+  happy: {
+    ribbonSpeed: 0.028,
+    starSpeed: 0.014,
+    waveBoost: 0.32,
+    haloIntensity: 1.28,
+    magentaBoost: 1.55,
+    cyanBoost: 1.05,
+    goldBoost: 0.15,
+    emeraldBoost: 0,
+    errorTint: 0,
+    wobbleAmp: 0,
+    bounceAmp: 4.5,
+    dimFactor: 1.0
+  },
+  encouraging: {
+    ribbonSpeed: 0.032,
+    starSpeed: 0.02,
+    waveBoost: 0.38,
+    haloIntensity: 1.32,
+    magentaBoost: 1.05,
+    cyanBoost: 1.0,
+    goldBoost: 0.95,
+    emeraldBoost: 0.15,
+    errorTint: 0,
+    wobbleAmp: 0,
+    bounceAmp: 3.5,
+    dimFactor: 1.0
+  },
+  analyzing: {
+    ribbonSpeed: 0.022,
+    starSpeed: 0.012,
+    waveBoost: 0.24,
+    haloIntensity: 0.98,
+    magentaBoost: 0.9,
+    cyanBoost: 1.3,
+    goldBoost: 0,
+    emeraldBoost: 0.25,
+    errorTint: 0,
+    wobbleAmp: 0,
+    bounceAmp: 0,
+    dimFactor: 1.0
   },
   correcting: {
-    ribbonSpeed: 0.022,
-    starSpeed: 0.009,
-    waveBoost: 0.28,
-    haloIntensity: 1.0,
-    magentaBoost: 1.15,
-    cyanBoost: 1.25,
-    errorTint: 0
+    ribbonSpeed: 0.026,
+    starSpeed: 0.012,
+    waveBoost: 0.3,
+    haloIntensity: 1.12,
+    magentaBoost: 0.85,
+    cyanBoost: 1.35,
+    goldBoost: 0,
+    emeraldBoost: 0.85,
+    errorTint: 0,
+    wobbleAmp: 0,
+    bounceAmp: 0,
+    dimFactor: 1.0
+  },
+  deep_thinking: {
+    ribbonSpeed: 0.048,
+    starSpeed: 0.032,
+    waveBoost: 0.44,
+    haloIntensity: 1.2,
+    magentaBoost: 1.45,
+    cyanBoost: 1.35,
+    goldBoost: 0.2,
+    emeraldBoost: 0,
+    errorTint: 0,
+    wobbleAmp: 0,
+    bounceAmp: 0,
+    dimFactor: 1.0
+  },
+  confused: {
+    ribbonSpeed: 0.018,
+    starSpeed: 0.015,
+    waveBoost: 0.26,
+    haloIntensity: 0.92,
+    magentaBoost: 1.2,
+    cyanBoost: 0.8,
+    goldBoost: 0.35,
+    emeraldBoost: 0,
+    errorTint: 0.12,
+    wobbleAmp: 4.0,
+    bounceAmp: 0,
+    dimFactor: 1.0
   },
   error: {
     ribbonSpeed: 0.02,
@@ -103,16 +214,26 @@ const STATE_MOTION: Record<BuddyOrbState, StateMotionConfig> = {
     haloIntensity: 1.0,
     magentaBoost: 1.3,
     cyanBoost: 0.5,
-    errorTint: 0.75
+    goldBoost: 0,
+    emeraldBoost: 0,
+    errorTint: 0.82,
+    wobbleAmp: 2.0,
+    bounceAmp: 0,
+    dimFactor: 1.0
   },
   sleeping: {
     ribbonSpeed: 0.004,
     starSpeed: 0.0015,
     waveBoost: 0.05,
-    haloIntensity: 0.35,
-    magentaBoost: 0.6,
-    cyanBoost: 0.6,
-    errorTint: 0
+    haloIntensity: 0.32,
+    magentaBoost: 0.55,
+    cyanBoost: 0.55,
+    goldBoost: 0,
+    emeraldBoost: 0,
+    errorTint: 0,
+    wobbleAmp: 0,
+    bounceAmp: 0,
+    dimFactor: 0.58
   }
 };
 
@@ -179,7 +300,12 @@ export const BuddyEnergyOrb: React.FC<BuddyEnergyOrbProps> = ({
     let curHalo = STATE_MOTION.idle.haloIntensity;
     let curCyan = 1.0;
     let curMagenta = 1.0;
+    let curGold = 0;
+    let curEmerald = 0;
     let curError = 0;
+    let curWobble = 0;
+    let curBounce = 0;
+    let curDim = 1.0;
 
     // Helper: draw a lush translucent curved 3D silk ribbon sweeping diagonally across the sphere
     const drawSweepingRibbon = (
@@ -279,7 +405,12 @@ export const BuddyEnergyOrb: React.FC<BuddyEnergyOrbProps> = ({
       curHalo = lerp(curHalo, cfg.haloIntensity, 0.06);
       curCyan = lerp(curCyan, cfg.cyanBoost, 0.06);
       curMagenta = lerp(curMagenta, cfg.magentaBoost, 0.06);
+      curGold = lerp(curGold, cfg.goldBoost, 0.07);
+      curEmerald = lerp(curEmerald, cfg.emeraldBoost, 0.07);
       curError = lerp(curError, cfg.errorTint, 0.08);
+      curWobble = lerp(curWobble, cfg.wobbleAmp, 0.09);
+      curBounce = lerp(curBounce, cfg.bounceAmp, 0.08);
+      curDim = lerp(curDim, cfg.dimFactor, 0.05);
 
       // Smooth cursor parallax
       pointerRef.current.x = lerp(pointerRef.current.x, pointerRef.current.tx, 0.08);
@@ -297,10 +428,19 @@ export const BuddyEnergyOrb: React.FC<BuddyEnergyOrbProps> = ({
           0.32 +
           Math.abs(Math.sin(time * 2.8)) * 0.35 +
           Math.abs(Math.cos(time * 4.7)) * 0.18;
-      } else if (st === 'thinking' || st === 'understanding' || st === 'transcribing') {
+      } else if (
+        st === 'thinking' ||
+        st === 'understanding' ||
+        st === 'transcribing' ||
+        st === 'deep_thinking'
+      ) {
         targetAmp = 0.25 + Math.sin(time * 2.3) * 0.1;
+      } else if (st === 'happy' || st === 'encouraging') {
+        targetAmp = 0.28 + Math.sin(time * 3.1) * 0.08;
+      } else if (st === 'analyzing' || st === 'correcting') {
+        targetAmp = 0.18 + Math.sin(time * 2.0) * 0.06;
       } else if (st === 'sleeping') {
-        targetAmp = 0.02;
+        targetAmp = 0.02 + Math.sin(time * 0.6) * 0.02;
       } else {
         targetAmp = 0.09 + Math.sin(time * 1.1) * 0.04;
       }
@@ -308,12 +448,18 @@ export const BuddyEnergyOrb: React.FC<BuddyEnergyOrbProps> = ({
       smoothAmp = lerp(smoothAmp, targetAmp, 0.14);
       time += curRibbonSpeed * (1 + smoothAmp * 0.7);
 
-      const cx = size / 2;
-      const cy = size / 2;
+      // Subtle living state offsets: gentle happy lift bounce & brief confused irregular wobble
+      const wobbleX = curWobble > 0.05 ? Math.sin(time * 7.5) * curWobble * Math.cos(time * 3.1) : 0;
+      const bounceY = curBounce > 0.05 ? -Math.abs(Math.sin(time * 2.6)) * curBounce : 0;
+
+      const cx = size / 2 + wobbleX;
+      const cy = size / 2 + bounceY;
       // Subtle organic breath scale
       const R = size * 0.345 + smoothAmp * (size * 0.018);
 
       ctx.clearRect(0, 0, size, size);
+      ctx.save();
+      ctx.globalAlpha = curDim;
 
       // -------------------------------------------------------------
       // 1. OUTER LUMINOUS ATMOSPHERIC HALO (Electric Blue + Bottom Magenta)
@@ -350,8 +496,30 @@ export const BuddyEnergyOrb: React.FC<BuddyEnergyOrbProps> = ({
       ctx.arc(cx, cy, R * 1.38, 0, Math.PI * 2);
       ctx.fill();
 
-      // Subtle living sound-wave rings radiating softly outside glass when listening / speaking
-      if (st === 'listening' || st === 'speaking') {
+      // Phase 5 — Encouraging Golden Halo & Correcting Crisp Cyan-Green Aura
+      if (curGold > 0.03) {
+        const goldHalo = ctx.createRadialGradient(cx, cy, R * 0.55, cx, cy, R * 1.46);
+        goldHalo.addColorStop(0, `rgba(251, 191, 36, ${0.34 * curGold})`);
+        goldHalo.addColorStop(0.55, `rgba(245, 158, 11, ${0.14 * curGold})`);
+        goldHalo.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = goldHalo;
+        ctx.beginPath();
+        ctx.arc(cx, cy, R * 1.46, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      if (curEmerald > 0.03) {
+        const emHalo = ctx.createRadialGradient(cx, cy, R * 0.65, cx, cy, R * 1.42);
+        emHalo.addColorStop(0, `rgba(52, 211, 153, ${0.32 * curEmerald})`);
+        emHalo.addColorStop(0.55, `rgba(34, 211, 238, ${0.15 * curEmerald})`);
+        emHalo.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = emHalo;
+        ctx.beginPath();
+        ctx.arc(cx, cy, R * 1.42, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Subtle living sound-wave rings radiating outside glass (Listening / Speaking / Correcting)
+      if (st === 'listening' || st === 'speaking' || st === 'correcting') {
         for (let w = 0; w < 2; w++) {
           const p = (time * 0.48 + w * 0.5) % 1;
           const wr = R * (1.01 + p * 0.32);
@@ -359,6 +527,8 @@ export const BuddyEnergyOrb: React.FC<BuddyEnergyOrbProps> = ({
           ctx.strokeStyle =
             st === 'listening'
               ? `rgba(56, 189, 248, ${(1 - p) * (0.28 + smoothAmp * 0.3)})`
+              : st === 'correcting'
+              ? `rgba(52, 211, 153, ${(1 - p) * 0.38})`
               : `rgba(217, 70, 239, ${(1 - p) * (0.26 + smoothAmp * 0.28)})`;
           ctx.lineWidth = 1.4;
           ctx.beginPath();
@@ -366,6 +536,48 @@ export const BuddyEnergyOrb: React.FC<BuddyEnergyOrbProps> = ({
           ctx.stroke();
           ctx.restore();
         }
+      }
+
+      // Phase 5 — Synchronized Orbiting Rings (Understanding / Analyzing / Deep Thinking)
+      if (st === 'understanding' || st === 'analyzing' || st === 'deep_thinking') {
+        const ringCount = st === 'deep_thinking' ? 3 : 2;
+        for (let r = 0; r < ringCount; r++) {
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.rotate(time * (0.65 + r * 0.35) * (r % 2 === 0 ? 1 : -1) + r * 0.9);
+          ctx.strokeStyle =
+            st === 'analyzing'
+              ? `rgba(52, 211, 153, ${0.28 - r * 0.06})`
+              : st === 'deep_thinking'
+              ? `rgba(192, 132, 252, ${0.34 - r * 0.06})`
+              : `rgba(125, 211, 252, ${0.3 - r * 0.07})`;
+          ctx.lineWidth = st === 'analyzing' ? 1.1 : 1.35;
+          if (st === 'analyzing') {
+            ctx.setLineDash([6, 8]);
+          }
+          ctx.beginPath();
+          ctx.ellipse(0, 0, R * (1.14 + r * 0.07), R * (0.42 + r * 0.14), 0, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        }
+      }
+
+      // Phase 5 — Golden Sparkle Particles Orbiting Outer Rim during "Encouraging" ("Try Again" win!)
+      if (curGold > 0.2) {
+        ctx.save();
+        for (let g = 0; g < 12; g++) {
+          const ang = time * 1.1 + (g * Math.PI * 2) / 12;
+          const dist = R * (1.1 + 0.14 * Math.sin(time * 2.4 + g));
+          const gx = cx + Math.cos(ang) * dist;
+          const gy = cy + Math.sin(ang) * dist;
+          const tw = 0.4 + 0.6 * Math.sin(time * 4.5 + g * 1.7);
+          ctx.globalAlpha = tw * curGold;
+          ctx.fillStyle = g % 2 === 0 ? '#fde68a' : '#fbbf24';
+          ctx.beginPath();
+          ctx.arc(gx, gy, 1.8 + tw * 1.3, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
       }
 
       // -------------------------------------------------------------
@@ -648,6 +860,8 @@ export const BuddyEnergyOrb: React.FC<BuddyEnergyOrbProps> = ({
       ctx.beginPath();
       ctx.arc(cx, cy, R - 0.5, 0, Math.PI * 2);
       ctx.stroke();
+
+      ctx.restore(); // End global dimFactor save
 
       rafId = requestAnimationFrame(render);
     };

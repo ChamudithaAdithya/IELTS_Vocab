@@ -5,8 +5,7 @@ import {
   Volume2,
   Languages,
   Target,
-  Sparkles,
-  BookOpen
+  Sparkles
 } from 'lucide-react';
 import { AppTab, NAV_CATEGORIES } from '../data/navigation';
 
