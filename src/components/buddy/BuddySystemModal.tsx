@@ -159,20 +159,20 @@ export const BuddySystemModal: React.FC<BuddySystemModalProps> = ({
           {/* ========================================================= */}
           {tab === 'orb' && (
             <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
-              {/* Recessed Obsidian Jewel Chamber so the Living Crystal-Galaxy Orb glows vibrantly */}
-              <div className="md:col-span-5 flex flex-col items-center justify-center rounded-2xl bg-gradient-to-b from-[#060916] via-[#0B1228] to-[#060916] border border-slate-800 shadow-lg p-5 text-center space-y-3">
+              {/* Airy Glassmorphism Chamber so the Living Crystal Orb & Outer Energy Rings Shine */}
+              <div className="md:col-span-5 flex flex-col items-center justify-center rounded-2xl bg-gradient-to-b from-[#eaf2ff] via-[#f5f7ff] to-[#f2ecff] border border-indigo-200/80 shadow-inner p-5 text-center space-y-3">
                 <BuddyEnergyOrb
                   state={previewState}
                   audioLevelRef={previewAudioRef}
-                  size={220}
+                  size={232}
                 />
                 <div className="space-y-1">
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/[0.08] border border-white/[0.14] text-xs font-bold text-white">
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/90 border border-indigo-200/80 text-xs font-bold text-slate-900 shadow-2xs">
                     <span className={`w-2 h-2 rounded-full ${activeDesc.dotColor}`} />
                     <span>{activeDesc.label}</span>
                   </div>
-                  <p className="text-[11px] text-sky-200 font-medium">{activeDesc.visual}</p>
-                  <p className="text-[11px] text-slate-400">{activeDesc.meaning}</p>
+                  <p className="text-[11px] text-blue-700 font-semibold">{activeDesc.visual}</p>
+                  <p className="text-[11px] text-slate-600">{activeDesc.meaning}</p>
                 </div>
                 <button
                   type="button"
@@ -180,7 +180,7 @@ export const BuddySystemModal: React.FC<BuddySystemModalProps> = ({
                     onPreviewOrbState(previewState);
                     onClose();
                   }}
-                  className="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-semibold cursor-pointer shadow-sm"
+                  className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-[11px] font-semibold cursor-pointer shadow-sm"
                 >
                   Apply to Main Orb
                 </button>

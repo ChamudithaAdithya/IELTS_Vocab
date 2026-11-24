@@ -531,6 +531,71 @@ export function runAll13BuddyQaScenarios(): BuddyQaSuiteReport {
         }
         return `Preserved exact learner words intact: "${norm}".`;
       }
+    ),
+    runScenario(
+      24,
+      'Verbatim 3-mistake capture ("Yesterday I go to shopping and I buyed some clothes.")',
+      'Verbatim + Multi-Span Grammar',
+      () => {
+        const raw = 'Yesterday I go to shopping and I buyed some clothes.';
+        const norm = processBuddyTranscript(raw);
+        if (norm !== raw) {
+          throw new Error(`Transcript mutated before grammar check: "${norm}"`);
+        }
+        const res = analyzeBuddyGrammarLocally({ originalTranscript: norm, intensity: 'balanced' });
+        const expectedFixed = 'Yesterday I went shopping and I bought some clothes.';
+        if (res.mistakes.length < 3 || res.corrected_sentence !== expectedFixed) {
+          throw new Error(
+            `Expected 3 fixes -> "${expectedFixed}", got ${res.mistakes.length} fixes -> "${res.corrected_sentence}"`
+          );
+        }
+        return `Caught all 3 mistakes independently (go→went, to shopping→shopping, buyed→bought) → "${res.corrected_sentence}".`;
+      },
+      true
+    ),
+    runScenario(
+      25,
+      'Required verbatim irregular & SVA errors ("I buyed...", "She don\'t...", "I didn\'t went...")',
+      'Verbatim Grammar Detection',
+      () => {
+        const cases = [
+          { input: 'I buyed some clothes.', expected: 'I bought some clothes.' },
+          { input: 'Yesterday I go to shopping.', expected: 'Yesterday I went shopping.' },
+          { input: "She don't like coffee.", expected: "She doesn't like coffee." },
+          { input: "I didn't went there.", expected: "I didn't go there." },
+          { input: 'What you mean?', expected: 'What do you mean?' }
+        ];
+        for (const c of cases) {
+          const norm = processBuddyTranscript(c.input);
+          const res = analyzeBuddyGrammarLocally({ originalTranscript: norm, intensity: 'balanced' });
+          if (res.mistakes.length === 0 || res.corrected_sentence !== c.expected) {
+            throw new Error(`Failed on "${c.input}": got "${res.corrected_sentence}" (${res.mistakes.length} fixes)`);
+          }
+        }
+        return 'All 5 erroneous test sentences preserved verbatim and corrected accurately.';
+      }
+    ),
+    runScenario(
+      26,
+      'Zero false-positives on clean required sentences ("I have a car", "AI tool", "project")',
+      'Grammar Precision',
+      () => {
+        const cleanCases = [
+          'I have a car.',
+          'I have developed an AI tool.',
+          'I am working on my project.'
+        ];
+        for (const text of cleanCases) {
+          const res = analyzeBuddyGrammarLocally({ originalTranscript: text, intensity: 'detailed' });
+          const realErrors = res.mistakes.filter(
+            m => m.severity === 'GRAMMAR_ERROR' || m.severity === 'UNNATURAL'
+          );
+          if (realErrors.length > 0 || res.corrected_sentence !== text) {
+            throw new Error(`False positive on "${text}": ${realErrors.map(e => e.original).join(', ')}`);
+          }
+        }
+        return 'All 3 valid English sentences passed cleanly with 0 false positives.';
+      }
     )
   ];
 
@@ -544,8 +609,8 @@ export function runAll13BuddyQaScenarios(): BuddyQaSuiteReport {
   const byId = (id: number) => results.find(r => r.id === id)?.passed ?? false;
   const contextIds = [10, 12, 14, 15, 16, 17, 19, 20];
   const intentIds = [10, 14, 15, 16, 17, 19, 20, 21, 22];
-  const precisionIds = [8, 9, 13];
-  const recallIds = [1, 4, 7, 17, 18];
+  const precisionIds = [8, 9, 13, 26];
+  const recallIds = [1, 4, 7, 17, 18, 24, 25];
 
   const pct = (ids: number[]) =>
     Math.round((ids.filter(byId).length / Math.max(1, ids.length)) * 100);
@@ -605,7 +670,11 @@ export function buildImmutableAuditExport(params: {
         message_id: m.id,
         session_id: s.id,
         original_raw_transcript: m.originalRawTranscript || m.text,
-        edited_transcript: m.isEdited ? m.text : null,
+        finalized_verbatim_transcript: m.finalizedVerbatimTranscript || m.originalRawTranscript || m.text,
+        user_edited_transcript: m.userEditedTranscript || (m.isEdited ? m.text : null),
+        punctuation_normalized_transcript: m.punctuationNormalizedTranscript || m.text,
+        corrected_sentence: m.correctedSentence || m.analysis?.corrected_sentence || null,
+        grammar_mistakes_count: (m.grammarMistakes || m.analysis?.mistakes || []).length,
         is_immutable_preserved: Boolean(m.originalRawTranscript),
         uncertain_words: m.uncertainWords || [],
         stt_confidence: m.sttConfidence ?? null,

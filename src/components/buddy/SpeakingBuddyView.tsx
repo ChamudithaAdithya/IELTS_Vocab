@@ -87,22 +87,23 @@ import {
 } from '../../utils/buddyLearningStore';
 import { transcribeAudioBlobWithGemini } from '../../utils/speakingEngine';
 import {
+  preloadWhisperModel,
   transcribeBlobWithWhisper,
   type WhisperModelId,
   type WhisperProgressUpdate
 } from '../../utils/whisperClient';
 import {
-  GEMINI_STYLE_PRESETS,
-  GEMINI_TTS_VOICES,
+  createRealtimeTtsQueue,
+  FREE_NEURAL_VOICES,
   loadBuddyVoiceConfig,
-  playGeminiTtsSpeech,
+  playFreeNeuralSpeech,
   playSpeech,
   saveBuddyVoiceConfig,
   stopSpeech,
   unlockAudioOutput,
   type BuddyVoiceConfig,
-  type GeminiStylePresetId,
-  type GeminiTtsVoiceName
+  type FreeNeuralVoiceName,
+  type RealtimeTtsQueue
 } from '../../utils/speech';
 import { loadApiKey, loadModel } from '../../utils/tutorEngine';
 import { BuddyEnergyOrb } from './BuddyEnergyOrb';
@@ -196,29 +197,49 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
   useEffect(() => { learningAnalyticsRef.current = learningAnalytics; }, [learningAnalytics]);
 
   // Speech Engine & Accent (Zero-Conflict 3-Engine Architecture)
+  // Auto-migrates legacy Chrome Web Speech ("live-solo" + "en-IN") once so users immediately get
+  // 0%-autocorrect studio-grade accuracy (Gemini Verbatim WAV when API key is connected, or Whisper Small HD offline).
   const [speechEngine, setSpeechEngine] = useState<BuddySpeechEngine>(() => {
     try {
-      const saved = localStorage.getItem('ielts_speaking_stt_engine') as BuddySpeechEngine | null;
-      if (saved === 'whisper-local' || saved === 'live-solo' || saved === 'gemini-cloud') return saved;
-      return 'live-solo';
+      const hasKey = Boolean(loadApiKey());
+      const v2Choice = localStorage.getItem('lingo_buddy_stt_engine_v2') as BuddySpeechEngine | null;
+      if (v2Choice === 'gemini-cloud' || v2Choice === 'whisper-local' || v2Choice === 'live-solo') {
+        if (v2Choice === 'gemini-cloud' && !hasKey) return 'whisper-local';
+        return v2Choice;
+      }
+      const preferred: BuddySpeechEngine = hasKey ? 'gemini-cloud' : 'whisper-local';
+      localStorage.setItem('lingo_buddy_stt_engine_v2', preferred);
+      localStorage.setItem('ielts_speaking_stt_engine', preferred);
+      return preferred;
     } catch {
-      return 'live-solo';
+      return loadApiKey() ? 'gemini-cloud' : 'whisper-local';
     }
   });
   const [recognitionLang, setRecognitionLang] = useState<string>(() => {
     try {
-      return localStorage.getItem('ielts_speaking_accent') || 'en-IN';
+      const saved = localStorage.getItem('ielts_speaking_accent');
+      // Avoid Chrome's en-IN Hindi-word bleed default unless explicitly chosen under v2
+      const v2Accent = localStorage.getItem('lingo_buddy_accent_v2');
+      if (v2Accent) return v2Accent;
+      if (saved && saved !== 'en-IN') return saved;
+      return 'en-GB';
     } catch {
-      return 'en-IN';
+      return 'en-GB';
     }
   });
   const [whisperModel, setWhisperModel] = useState<WhisperModelId>(() => {
     try {
       const saved = localStorage.getItem('ielts_speaking_whisper_model') as WhisperModelId | null;
-      if (saved === 'onnx-community/whisper-base.en' || saved === 'onnx-community/whisper-tiny.en') return saved;
-      return 'onnx-community/whisper-base.en';
+      if (
+        saved === 'onnx-community/whisper-small.en' ||
+        saved === 'onnx-community/whisper-base.en' ||
+        saved === 'onnx-community/whisper-tiny.en'
+      ) {
+        return saved;
+      }
+      return 'onnx-community/whisper-small.en';
     } catch {
-      return 'onnx-community/whisper-base.en';
+      return 'onnx-community/whisper-small.en';
     }
   });
   const [selectedMicDeviceId, setSelectedMicDeviceId] = useState<string>(() => {
@@ -277,7 +298,9 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
   const [_lifecyclePhase, setLifecyclePhase] = useState<BuddyLifecyclePhase>('PHASE_01_IDLE');
   const [isListening, setIsListening] = useState<boolean>(false);
   const [isBuddySpeaking, setIsBuddySpeaking] = useState<boolean>(false);
+  const [liveFinalText, setLiveFinalText] = useState<string>('');
   const [liveInterimText, setLiveInterimText] = useState<string>('');
+  const [streamingBuddyMsgId, setStreamingBuddyMsgId] = useState<string | null>(null);
   const [typedInput, setTypedInput] = useState<string>('');
   const [statusNotice, setStatusNotice] = useState<string | null>(null);
   const [whisperProgress, setWhisperProgress] = useState<WhisperProgressUpdate | null>(null);
@@ -333,7 +356,14 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     const el = chatScrollRef.current;
     if (!el) return;
     el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
-  }, [activeSession?.messages.length, liveInterimText]);
+  }, [activeSession?.messages.length, liveInterimText, streamingBuddyMsgId]);
+
+  // Pre-warm Whisper AI silently in the background when selected so transcription is near-instant!
+  useEffect(() => {
+    if (speechEngine === 'whisper-local') {
+      preloadWhisperModel(whisperModel).catch(() => {});
+    }
+  }, [speechEngine, whisperModel]);
 
   useEffect(() => {
     if (showKeyboardInput) {
@@ -400,6 +430,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     setIsBuddySpeaking(false);
     isListeningRef.current = false;
     setIsListening(false);
+    setLiveFinalText('');
     setLiveInterimText('');
     cleanupMediaCapture();
   };
@@ -419,7 +450,6 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     stopSpeech();
     const pCfg = getPersonalityConfig(personalityRef.current);
     const vCfg = buddyVoiceConfigRef.current;
-    const activeKey = (apiKey || loadApiKey() || '').trim();
     setIsBuddySpeaking(true);
     setOrbState('speaking');
     setLifecyclePhase('PHASE_06_SPEAKING');
@@ -433,12 +463,12 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
       audioLevelRef.current = 0;
       setIsBuddySpeaking(false);
       setLifecyclePhase('PHASE_07_SAVED');
-      if (autoResumeAfter && continuousModeRef.current && speechEngineRef.current === 'live-solo') {
+      if (autoResumeAfter && continuousModeRef.current) {
         setTimeout(() => {
           if (!isListeningRef.current) {
-            startListeningTurn();
+            void startListeningTurn();
           }
-        }, 350);
+        }, 650);
       } else {
         setOrbState('idle');
       }
@@ -450,21 +480,16 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
       setOrbState('idle');
     };
 
-    if (vCfg.provider === 'gemini' && activeKey) {
-      playGeminiTtsSpeech(text, {
-        apiKey: activeKey,
-        voiceName: vCfg.geminiVoice,
-        stylePreset: vCfg.stylePreset,
+    if (vCfg.provider !== 'standard') {
+      playFreeNeuralSpeech(text, {
+        voice: vCfg.freeNeuralVoice,
         rate: vCfg.rate,
         onAudioLevel: (lvl) => {
           audioLevelRef.current = lvl;
         },
         onStart: handleSpeechStart,
         onEnd: handleSpeechEnd,
-        onError: handleSpeechError,
-        onFallback: (reason) => {
-          setStatusNotice(reason);
-        }
+        onError: handleSpeechError
       });
       return;
     }
@@ -526,7 +551,13 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                 ...s,
                 messages: s.messages.map(m =>
                   m.id === params.messageId
-                    ? { ...m, analysis, isAnalyzing: false }
+                    ? {
+                        ...m,
+                        analysis,
+                        correctedSentence: analysis.corrected_sentence,
+                        grammarMistakes: analysis.mistakes,
+                        isAnalyzing: false
+                      }
                     : m
                 )
               }
@@ -661,6 +692,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
   const processFinalizedUserTurn = async (params: {
     rawTranscript: string;
     engine: BuddySpeechEngine | 'typed';
+    recordedAudioUrl?: string;
     uncertainWords?: string[];
     sttConfidence?: number;
     durationSec?: number;
@@ -684,6 +716,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
       sessionId: targetSessionId,
       rawTranscript: cleanRaw,
       engine: params.engine,
+      recordedAudioUrl: params.recordedAudioUrl,
       uncertainWords: params.uncertainWords,
       sttConfidence: params.sttConfidence,
       durationSec: params.durationSec,
@@ -696,6 +729,9 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
       timestamp: packet.timestamp,
       text: packet.analysisTranscript,
       originalRawTranscript: packet.rawTranscript,
+      finalizedVerbatimTranscript: packet.finalizedVerbatimTranscript,
+      punctuationNormalizedTranscript: packet.punctuationNormalizedTranscript,
+      recordedAudioUrl: packet.recordedAudioUrl,
       isEdited: false,
       uncertainWords: packet.uncertainWords,
       sttConfidence: packet.sttConfidence,
@@ -709,17 +745,68 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
       ? packet.analysisTranscript.slice(0, 36) + (packet.analysisTranscript.length > 36 ? '...' : '')
       : activeSessionRef.current.title;
 
-    // Session-locked state mutation (never mutates a different session if user switched tabs!)
+    const buddyPlaceholderId = `msg-buddy-${packet.timestamp + 1}`;
+    const buddyPlaceholderMsg: BuddyMessage = {
+      id: buddyPlaceholderId,
+      role: 'buddy',
+      timestamp: packet.timestamp + 1,
+      text: '',
+      responseSource: apiKey || loadApiKey() ? 'gemini' : 'local'
+    };
+
+    // Session-locked state mutation — show User message + instant Buddy streaming bubble in 0ms!
     setSessions(prev =>
       prev.map(s =>
         s.id === packet.sessionId
-          ? { ...s, title: derivedTitle, updatedAt: packet.timestamp, messages: [...s.messages, userMsg] }
+          ? {
+              ...s,
+              title: derivedTitle,
+              updatedAt: packet.timestamp,
+              messages: [...s.messages, userMsg, buddyPlaceholderMsg]
+            }
           : s
       )
     );
+    setStreamingBuddyMsgId(buddyPlaceholderId);
 
     setOrbState(packet.coherence.quality === 'unclear' ? 'confused' : 'thinking');
     setLifecyclePhase('PHASE_05_RESPONDING');
+
+    // Create a real-time pipelined TTS queue so Sentence 1 starts speaking aloud while Sentence 2 streams!
+    let ttsQueue: RealtimeTtsQueue | null = null;
+    let enqueuedSentenceCount = 0;
+
+    if (voiceOutputEnabledRef.current && activeSessionRef.current?.id === packet.sessionId) {
+      ttsQueue = createRealtimeTtsQueue({
+        voiceConfig: buddyVoiceConfigRef.current,
+        onAudioLevel: (lvl) => {
+          audioLevelRef.current = lvl;
+        },
+        onFirstStart: () => {
+          setIsBuddySpeaking(true);
+          setOrbState('speaking');
+          setLifecyclePhase('PHASE_06_SPEAKING');
+        },
+        onAllEnd: () => {
+          audioLevelRef.current = 0;
+          setIsBuddySpeaking(false);
+          setLifecyclePhase('PHASE_07_SAVED');
+          if (
+            params.autoResumeAfter &&
+            continuousModeRef.current &&
+            activeSessionRef.current?.id === packet.sessionId
+          ) {
+            setTimeout(() => {
+              if (!isListeningRef.current) {
+                void startListeningTurn();
+              }
+            }, 650);
+          } else {
+            setOrbState('idle');
+          }
+        }
+      });
+    }
 
     await orchestrateBuddyTurn({
       packet,
@@ -734,33 +821,68 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
         onMemoryUpdated: (nextMem) => {
           setBuddyMemory(nextMem);
         },
-        onFriendReplyReady: (friendResult, pkt) => {
-          const buddyMsg: BuddyMessage = {
-            id: `msg-buddy-${Date.now()}`,
-            role: 'buddy',
-            timestamp: Date.now(),
-            text: friendResult.reply,
-            responseSource: friendResult.source
-          };
-
-          // Strictly locked to pkt.sessionId so switching chats mid-request NEVER leaks a stale reply!
+        onFriendPartialReply: (partialText, pkt) => {
           setSessions(prev =>
             prev.map(s =>
               s.id === pkt.sessionId
-                ? { ...s, updatedAt: Date.now(), messages: [...s.messages, buddyMsg] }
+                ? {
+                    ...s,
+                    messages: s.messages.map(m =>
+                      m.id === buddyPlaceholderId ? { ...m, text: partialText } : m
+                    )
+                  }
+                : s
+            )
+          );
+        },
+        onFriendSentenceReady: (sentence, pkt) => {
+          if (ttsQueue && activeSessionRef.current?.id === pkt.sessionId) {
+            enqueuedSentenceCount += 1;
+            ttsQueue.enqueue(sentence);
+          }
+        },
+        onFriendReplyReady: (friendResult, pkt) => {
+          setStreamingBuddyMsgId(curr => (curr === buddyPlaceholderId ? null : curr));
+
+          // Finalize the streamed Buddy bubble cleanly (never duplicates messages!)
+          setSessions(prev =>
+            prev.map(s =>
+              s.id === pkt.sessionId
+                ? {
+                    ...s,
+                    updatedAt: Date.now(),
+                    messages: s.messages.map(m =>
+                      m.id === buddyPlaceholderId
+                        ? { ...m, text: friendResult.reply, responseSource: friendResult.source }
+                        : m
+                    )
+                  }
                 : s
             )
           );
 
           if (activeSessionRef.current?.id === pkt.sessionId) {
-            speakBuddyMessage(friendResult.reply, Boolean(params.autoResumeAfter));
+            if (ttsQueue) {
+              if (enqueuedSentenceCount === 0 && friendResult.reply.trim()) {
+                ttsQueue.enqueue(friendResult.reply);
+              }
+              ttsQueue.markStreamDone();
+            } else if (!voiceOutputEnabledRef.current) {
+              setOrbState('idle');
+              setLifecyclePhase('PHASE_07_SAVED');
+              if (params.autoResumeAfter && continuousModeRef.current) {
+                setTimeout(() => {
+                  if (!isListeningRef.current) void startListeningTurn();
+                }, 350);
+              }
+            }
           }
         },
         onGrammarAnalysisReady: (analysis, updatedAnalytics, updatedLib, pkt) => {
           setLearningAnalytics(updatedAnalytics);
           setGrammarLibrary(updatedLib);
 
-          // Strictly locked to pkt.sessionId + pkt.messageId!
+          // Strictly locked to pkt.sessionId + pkt.messageId! Never overwrites originalRawTranscript/text!
           setSessions(prev =>
             prev.map(s =>
               s.id === pkt.sessionId
@@ -768,7 +890,13 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                     ...s,
                     messages: s.messages.map(m =>
                       m.id === pkt.messageId
-                        ? { ...m, analysis, isAnalyzing: false }
+                        ? {
+                            ...m,
+                            analysis,
+                            correctedSentence: analysis.corrected_sentence,
+                            grammarMistakes: analysis.mistakes,
+                            isAnalyzing: false
+                          }
                         : m
                     )
                   }
@@ -796,11 +924,11 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     });
   };
 
-  const startListeningTurn = async () => {
+  const startListeningTurn = async (initialNotice?: string) => {
     // Clean Barge-In: immediately cancel AI voice playback
     stopSpeech();
     setIsBuddySpeaking(false);
-    setStatusNotice(null);
+    setStatusNotice(initialNotice || null);
     setWhisperProgress(null);
 
     if (speechEngineRef.current === 'gemini-cloud' && !(apiKey || loadApiKey())) {
@@ -817,6 +945,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     listenStartedAtRef.current = Date.now();
     isListeningRef.current = true;
     setIsListening(true);
+    setLiveFinalText('');
     setLiveInterimText('');
     setOrbState('listening');
     setLifecyclePhase('PHASE_02_LISTENING');
@@ -828,8 +957,14 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
       if (!SpeechRecognition) {
         isListeningRef.current = false;
         setIsListening(false);
-        setOrbState('error');
-        setStatusNotice('Live Browser Speech is unavailable in this browser. Open Audio Settings to switch to Whisper AI.');
+        speechEngineRef.current = 'whisper-local';
+        setSpeechEngine('whisper-local');
+        try { localStorage.setItem('ielts_speaking_stt_engine', 'whisper-local'); } catch {}
+        setTimeout(() => {
+          void startListeningTurn(
+            'Live browser speech is unavailable here — switched to Whisper AI (free & verbatim). Speak now, then click Stop & Send.'
+          );
+        }, 120);
         return;
       }
 
@@ -864,6 +999,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
             .replace(/\s+/g, ' ')
             .trim();
 
+          setLiveFinalText('');
           setLiveInterimText('');
           // Subtract the 2.2s VAD silence wait so WPM reflects actual speaking time!
           const rawElapsedSec = (Date.now() - listenStartedAtRef.current) / 1000;
@@ -931,7 +1067,8 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
           finalBufferRef.current = fin;
           interimBufferRef.current = inter;
           const preview = [fin.trim(), inter.trim()].filter(Boolean).join(' ');
-          setLiveInterimText(preview);
+          setLiveFinalText(fin.trim());
+          setLiveInterimText(inter.trim());
 
           audioLevelRef.current = 58;
           setTimeout(() => {
@@ -940,9 +1077,10 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
 
           if (vadPauseTimerRef.current) clearTimeout(vadPauseTimerRef.current);
           if (continuousModeRef.current && preview.length > 0) {
+            // Natural 2.1s pause window so learners can think mid-sentence without getting cut off
             vadPauseTimerRef.current = setTimeout(() => {
               commitLiveTurnNow();
-            }, 2200);
+            }, 2100);
           }
         };
 
@@ -954,10 +1092,30 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
             setOrbState('error');
             setStatusNotice('Microphone access was blocked. Allow microphone permission in your browser bar.');
           } else if (e.error === 'network') {
+            // Seamlessly auto-switch to Whisper AI (100% free, offline, strictly verbatim!) when browser speech cloud cannot connect
             isListeningRef.current = false;
             setIsListening(false);
-            setOrbState('error');
-            setStatusNotice('Browser speech service could not connect. Switch to Whisper AI in Audio Settings for free offline speech.');
+            if (vadPauseTimerRef.current) {
+              clearTimeout(vadPauseTimerRef.current);
+              vadPauseTimerRef.current = null;
+            }
+            if (recognitionRef.current) {
+              try {
+                recognitionRef.current.onresult = null;
+                recognitionRef.current.onerror = null;
+                recognitionRef.current.onend = null;
+                recognitionRef.current.abort();
+              } catch {}
+              recognitionRef.current = null;
+            }
+            speechEngineRef.current = 'whisper-local';
+            setSpeechEngine('whisper-local');
+            try { localStorage.setItem('ielts_speaking_stt_engine', 'whisper-local'); } catch {}
+            setTimeout(() => {
+              void startListeningTurn(
+                'Browser speech service could not connect — automatically switched to Whisper AI (free & verbatim). Speak now, then click Stop & Send!'
+              );
+            }, 140);
           } else if (e.error !== 'aborted') {
             setStatusNotice(`Speech recognition notice (${e.error}). Try Whisper AI in Audio Settings.`);
           }
@@ -990,12 +1148,13 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
       return;
     }
 
-    // Whisper Local / Gemini Cloud -> Single Clean Raw Audio Capture
+    // Whisper Local / Gemini Cloud -> Clean Studio-Filtered Audio Capture (Noise-Suppressed & Echo-Cancelled)
     try {
       const constraints: MediaTrackConstraints = {
-        echoCancellation: false,
-        noiseSuppression: false,
-        autoGainControl: true
+        echoCancellation: true,
+        noiseSuppression: true,
+        autoGainControl: true,
+        channelCount: 1
       };
       if (selectedMicDeviceIdRef.current) {
         constraints.deviceId = { exact: selectedMicDeviceIdRef.current };
@@ -1006,7 +1165,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
         stream = await navigator.mediaDevices.getUserMedia({ audio: constraints });
       } catch {
         stream = await navigator.mediaDevices.getUserMedia({
-          audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: true }
+          audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
         });
       }
 
@@ -1022,15 +1181,58 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
         const ctx = new AudioCtx();
         audioCtxRef.current = ctx;
         const analyser = ctx.createAnalyser();
-        analyser.fftSize = 64;
+        analyser.fftSize = 128;
         ctx.createMediaStreamSource(stream).connect(analyser);
         const buf = new Uint8Array(analyser.frequencyBinCount);
+        // Adaptive Noise-Floor Hands-Free VAD:
+        // 1. Calibrates room noise floor during first 350ms
+        // 2. Requires >= 320ms of real sustained speech before arming auto-send (blocks clicks/speaker echo!)
+        // 3. Waits 2.2s of silence before finalizing so learners can pause mid-sentence without cutoffs!
+        const vadStartMs = Date.now();
+        let lastFrameMs = vadStartMs;
+        let noiseSum = 0;
+        let noiseCount = 0;
+        let noiseFloor = 5;
+        let activeSpeechMs = 0;
+        let hasSpokenInTurn = false;
+        let silenceStartedAt = 0;
+
         const tick = () => {
           if (!isListeningRef.current) return;
           analyser.getByteFrequencyData(buf);
           let sum = 0;
           for (let i = 0; i < buf.length; i++) sum += buf[i];
-          audioLevelRef.current = Math.min(100, Math.round((sum / buf.length / 128) * 100));
+          const level = Math.min(100, Math.round((sum / buf.length / 128) * 100));
+          audioLevelRef.current = level;
+
+          const now = Date.now();
+          const dt = Math.min(80, Math.max(0, now - lastFrameMs));
+          lastFrameMs = now;
+
+          if (now - vadStartMs < 350 && !hasSpokenInTurn) {
+            noiseSum += level;
+            noiseCount += 1;
+            noiseFloor = Math.min(24, Math.round(noiseSum / Math.max(1, noiseCount)));
+          } else if (continuousModeRef.current) {
+            const speechThreshold = Math.max(13, noiseFloor + 8);
+            const silenceThreshold = Math.max(7, noiseFloor + 3);
+            if (level >= speechThreshold) {
+              activeSpeechMs += dt;
+              if (activeSpeechMs >= 320) {
+                hasSpokenInTurn = true;
+              }
+              silenceStartedAt = 0;
+            } else if (hasSpokenInTurn && level <= silenceThreshold) {
+              if (!silenceStartedAt) {
+                silenceStartedAt = now;
+              } else if (now - silenceStartedAt >= 2200) {
+                // User finished speaking cleanly — automatically stop & transcribe verbatim!
+                stopListeningAndSend();
+                return;
+              }
+            }
+          }
+
           rafRef.current = requestAnimationFrame(tick);
         };
         rafRef.current = requestAnimationFrame(tick);
@@ -1055,11 +1257,14 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
         }
 
         const durationSec = Math.max(1, Math.round((Date.now() - listenStartedAtRef.current) / 1000));
+        const recordedAudioUrl = URL.createObjectURL(blob);
         setOrbState('transcribing');
         setLifecyclePhase('PHASE_03_TRANSCRIBING');
 
         try {
           let transcribed = '';
+          let effectiveEngine: BuddySpeechEngine = speechEngineRef.current;
+
           if (speechEngineRef.current === 'whisper-local') {
             const res = await transcribeBlobWithWhisper(blob, {
               model: whisperModelRef.current,
@@ -1067,30 +1272,45 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
             });
             transcribed = res.text;
           } else {
-            transcribed = await transcribeAudioBlobWithGemini(
-              apiKey || loadApiKey(),
-              selectedModel || loadModel(),
-              blob,
-              recognitionLangRef.current
-            );
+            try {
+              transcribed = await transcribeAudioBlobWithGemini(
+                apiKey || loadApiKey(),
+                selectedModel || loadModel(),
+                blob,
+                recognitionLangRef.current
+              );
+            } catch (gemErr: any) {
+              // Seamless automatic fallback to offline Whisper Small HD on the exact same recording!
+              console.warn('Gemini audio STT failed; falling back to local Whisper HD:', gemErr);
+              effectiveEngine = 'whisper-local';
+              setStatusNotice('Gemini Audio temporarily unavailable — transcribed locally via Whisper HD.');
+              const res = await transcribeBlobWithWhisper(blob, {
+                model: whisperModelRef.current,
+                onProgress: (p) => setWhisperProgress(p)
+              });
+              transcribed = res.text;
+            }
           }
 
           setWhisperProgress(null);
 
           if (!transcribed || !transcribed.trim()) {
+            try { URL.revokeObjectURL(recordedAudioUrl); } catch {}
             setOrbState('idle');
             setLifecyclePhase('PHASE_01_IDLE');
-            setStatusNotice('No clear speech detected in that recording. Open Audio Settings to test your microphone.');
+            setStatusNotice('No clear speech detected in that clip — tap the orb or speak a little closer to your mic.');
             return;
           }
 
           await processFinalizedUserTurn({
             rawTranscript: transcribed,
-            engine: speechEngineRef.current,
+            engine: effectiveEngine,
+            recordedAudioUrl,
             durationSec,
-            autoResumeAfter: false
+            autoResumeAfter: continuousModeRef.current
           });
         } catch (err: any) {
+          try { URL.revokeObjectURL(recordedAudioUrl); } catch {}
           setWhisperProgress(null);
           setOrbState('error');
           setStatusNotice(err?.message || 'Transcription failed.');
@@ -1132,6 +1352,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
         .join(' ')
         .replace(/\s+/g, ' ')
         .trim();
+      setLiveFinalText('');
       setLiveInterimText('');
       const durationSec = Math.max(1, Math.round((Date.now() - listenStartedAtRef.current) / 1000));
       const avgConf =
@@ -1237,11 +1458,20 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     if (!clean) return;
     const formatted = processBuddyTranscript(clean);
     const targetSessionId = activeSessionRef.current.id;
+    // Never overwrite originalRawTranscript or finalizedVerbatimTranscript!
     updateActiveSession(sess => ({
       ...sess,
       messages: sess.messages.map(m =>
         m.id === msgId
-          ? { ...m, text: formatted, isEdited: true, uncertainWords: undefined, isAnalyzing: true }
+          ? {
+              ...m,
+              text: formatted,
+              userEditedTranscript: clean,
+              punctuationNormalizedTranscript: formatted,
+              isEdited: true,
+              uncertainWords: undefined,
+              isAnalyzing: true
+            }
           : m
       )
     }));
@@ -1260,12 +1490,18 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
   const handleSelectEngine = (eng: BuddySpeechEngine) => {
     setSpeechEngine(eng);
     setStatusNotice(null);
-    try { localStorage.setItem('ielts_speaking_stt_engine', eng); } catch { }
+    try {
+      localStorage.setItem('lingo_buddy_stt_engine_v2', eng);
+      localStorage.setItem('ielts_speaking_stt_engine', eng);
+    } catch { }
   };
 
   const handleSelectAccent = (lang: string) => {
     setRecognitionLang(lang);
-    try { localStorage.setItem('ielts_speaking_accent', lang); } catch { }
+    try {
+      localStorage.setItem('lingo_buddy_accent_v2', lang);
+      localStorage.setItem('ielts_speaking_accent', lang);
+    } catch { }
   };
 
   const latestBuddyMessage = [...(activeSession?.messages || [])]
@@ -1277,19 +1513,21 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
   const currentModeCfg = BUDDY_MODES.find(m => m.id === mode) || BUDDY_MODES[0];
 
   const engineLabel =
-    speechEngine === 'whisper-local'
-      ? 'Whisper AI'
-      : speechEngine === 'gemini-cloud'
-        ? 'Gemini Audio'
-        : `Live Voice · ${recognitionLang}`;
+    speechEngine === 'gemini-cloud'
+      ? 'Gemini Verbatim'
+      : speechEngine === 'whisper-local'
+        ? whisperModel === 'onnx-community/whisper-small.en'
+          ? 'Whisper Small HD'
+          : 'Whisper AI'
+        : `Browser Live · ${recognitionLang}`;
 
   const currentOrbDesc = getOrbStateDescriptor(orbState);
 
   const orbStatusSubtitle =
     orbState === 'listening'
-      ? speechEngine === 'live-solo'
-        ? 'Listening — pause naturally to send'
-        : 'Listening — tap orb when finished'
+      ? continuousMode
+        ? 'Listening — speak freely, pause ~2s to send or tap Stop'
+        : 'Listening — tap Stop & Send when finished'
       : orbState === 'transcribing'
         ? 'Converting voice to text...'
         : orbState === 'confused'
@@ -1315,25 +1553,25 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
   return (
     <div
       ref={pageContainerRef}
-      className="relative w-full min-h-screen lg:h-dvh lg:max-h-dvh lg:overflow-hidden overflow-x-hidden bg-[#F4F7FC] text-slate-900 font-sans flex flex-col"
+      className="relative w-full min-h-screen lg:h-dvh lg:max-h-dvh lg:overflow-hidden overflow-x-hidden bg-[#EEF3FD] text-slate-900 font-sans flex flex-col"
       style={{
         backgroundImage: `
-          radial-gradient(circle at 8% 12%, rgba(37, 99, 235, 0.08) 0%, transparent 38%),
-          radial-gradient(circle at 92% 14%, rgba(124, 58, 237, 0.07) 0%, transparent 36%),
-          radial-gradient(circle at 82% 88%, rgba(6, 182, 212, 0.07) 0%, transparent 38%),
-          radial-gradient(circle at 18% 88%, rgba(217, 70, 239, 0.05) 0%, transparent 34%),
-          linear-gradient(to right, rgba(37, 99, 235, 0.045) 1px, transparent 1px),
-          linear-gradient(to bottom, rgba(37, 99, 235, 0.045) 1px, transparent 1px)
+          radial-gradient(circle at 12% 16%, rgba(59, 130, 246, 0.14) 0%, transparent 42%),
+          radial-gradient(circle at 88% 14%, rgba(147, 51, 234, 0.12) 0%, transparent 40%),
+          radial-gradient(circle at 78% 88%, rgba(14, 165, 233, 0.11) 0%, transparent 40%),
+          radial-gradient(circle at 16% 86%, rgba(217, 70, 239, 0.10) 0%, transparent 38%),
+          linear-gradient(to right, rgba(99, 102, 241, 0.035) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(99, 102, 241, 0.035) 1px, transparent 1px)
         `,
-        backgroundSize: '100% 100%, 100% 100%, 100% 100%, 100% 100%, 28px 28px, 28px 28px'
+        backgroundSize: '100% 100%, 100% 100%, 100% 100%, 100% 100%, 32px 32px, 32px 32px'
       }}
     >
-      {/* Unified NexNodo-Inspired Three-Column Light SaaS Sanctuary (Viewport-Locked on Desktop) */}
+      {/* Unified Glassmorphism Three-Column Sanctuary (Viewport-Locked on Desktop) */}
       <div className="relative flex-1 flex flex-col min-h-0 w-full lg:overflow-hidden">
         {/* ------------------------------------------------------------- */}
-        {/* 1. CRISP LIGHT SAAS TOP HEADER                                */}
+        {/* 1. TRANSLUCENT FROSTED GLASS TOP HEADER                       */}
         {/* ------------------------------------------------------------- */}
-        <header className="shrink-0 sticky lg:static top-0 z-20 h-16 px-4 sm:px-6 border-b border-slate-200/90 flex items-center justify-between gap-3 bg-white/90 backdrop-blur-md shadow-[0_1px_2px_rgba(15,23,42,0.03)]">
+        <header className="shrink-0 sticky lg:static top-0 z-20 h-16 px-4 sm:px-6 border-b border-white/75 flex items-center justify-between gap-3 bg-white/72 backdrop-blur-xl shadow-[0_2px_16px_rgba(37,99,235,0.05)]">
           {/* Left: Back to Platform + History Drawer Trigger + Lingo Buddy Brand */}
           <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
             {onBack && (
@@ -1518,21 +1756,22 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
             <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
               <div className="space-y-1.5 md:col-span-2">
                 <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
-                  Speech Input Engine (Your Mic)
+                  Speech Input Engine (Your Mic · 0% Auto-Correction)
                 </span>
                 <div className="grid grid-cols-3 gap-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200/80">
                   <button
                     type="button"
                     disabled={isListening}
-                    onClick={() => handleSelectEngine('live-solo')}
+                    onClick={() => handleSelectEngine('gemini-cloud')}
                     className={`py-1.5 px-2 rounded-lg text-xs font-semibold transition-all cursor-pointer disabled:opacity-40 flex items-center justify-center gap-1 ${
-                      speechEngine === 'live-solo'
+                      speechEngine === 'gemini-cloud'
                         ? 'bg-blue-600 text-white shadow-xs'
                         : 'text-slate-600 hover:text-slate-900'
                     }`}
+                    title="Studio 16kHz WAV sent to Gemini Multimodal Audio — highest accuracy across all accents, 0% auto-correction"
                   >
-                    <Radio className="w-3 h-3" />
-                    <span>Live Voice</span>
+                    <Sparkles className="w-3 h-3" />
+                    <span>Gemini HD</span>
                   </button>
                   <button
                     type="button"
@@ -1543,41 +1782,60 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                         ? 'bg-blue-600 text-white shadow-xs'
                         : 'text-slate-600 hover:text-slate-900'
                     }`}
+                    title="100% Free Offline OpenAI Whisper neural model in your browser — 0% auto-correction"
                   >
                     <Cpu className="w-3 h-3" />
-                    <span>Whisper AI</span>
+                    <span>Whisper HD</span>
                   </button>
                   <button
                     type="button"
                     disabled={isListening}
-                    onClick={() => handleSelectEngine('gemini-cloud')}
+                    onClick={() => handleSelectEngine('live-solo')}
                     className={`py-1.5 px-2 rounded-lg text-xs font-semibold transition-all cursor-pointer disabled:opacity-40 flex items-center justify-center gap-1 ${
-                      speechEngine === 'gemini-cloud'
+                      speechEngine === 'live-solo'
                         ? 'bg-blue-600 text-white shadow-xs'
                         : 'text-slate-600 hover:text-slate-900'
                     }`}
+                    title="Chrome built-in live speech (instant captioning, but less accurate on accents and may mishear words)"
                   >
-                    <Sparkles className="w-3 h-3" />
-                    <span>Gemini</span>
+                    <Radio className="w-3 h-3" />
+                    <span>Browser Live</span>
                   </button>
                 </div>
               </div>
 
               <div className="space-y-1.5">
                 <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
-                  Accent Profile
+                  {speechEngine === 'whisper-local' ? 'Whisper Model Accuracy' : 'Accent Profile'}
                 </span>
-                <select
-                  value={recognitionLang}
-                  onChange={(e) => handleSelectAccent(e.target.value)}
-                  disabled={isListening}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-blue-500 cursor-pointer"
-                >
-                  <option value="en-IN">South Asian / Sri Lankan (en-IN)</option>
-                  <option value="en-GB">British English (en-GB)</option>
-                  <option value="en-US">American English (en-US)</option>
-                  <option value="en-AU">Australian English (en-AU)</option>
-                </select>
+                {speechEngine === 'whisper-local' ? (
+                  <select
+                    value={whisperModel}
+                    onChange={(e) => {
+                      const next = e.target.value as WhisperModelId;
+                      setWhisperModel(next);
+                      try { localStorage.setItem('ielts_speaking_whisper_model', next); } catch {}
+                    }}
+                    disabled={isListening}
+                    className="w-full bg-blue-50/70 border border-blue-200 rounded-xl px-3 py-2 text-xs font-semibold text-blue-900 focus:outline-none focus:border-blue-500 cursor-pointer"
+                  >
+                    <option value="onnx-community/whisper-small.en">Whisper Small HD (Best Accuracy)</option>
+                    <option value="onnx-community/whisper-base.en">Whisper Base (Balanced)</option>
+                    <option value="onnx-community/whisper-tiny.en">Whisper Tiny (Fastest)</option>
+                  </select>
+                ) : (
+                  <select
+                    value={recognitionLang}
+                    onChange={(e) => handleSelectAccent(e.target.value)}
+                    disabled={isListening}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-blue-500 cursor-pointer"
+                  >
+                    <option value="en-IN">South Asian / Sri Lankan (en-IN)</option>
+                    <option value="en-GB">British English (en-GB)</option>
+                    <option value="en-US">American English (en-US)</option>
+                    <option value="en-AU">Australian English (en-AU)</option>
+                  </select>
+                )}
               </div>
 
               <div className="flex items-center gap-2 flex-wrap">
@@ -1616,76 +1874,56 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
               </div>
             </div>
 
-            {/* Row 2: Google AI Studio Gemini TTS Voice Output ("Cheeky Sidekick" & Personas) */}
+            {/* Row 2: Primary Free Unlimited Neural HD Voice Output (Zero Quota!) */}
             <div className="max-w-6xl mx-auto pt-3 border-t border-slate-100 grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
               <div className="md:col-span-3 space-y-1.5">
                 <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
-                  Buddy Voice Output
+                  Buddy Voice Engine
                 </span>
                 <div className="grid grid-cols-2 gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200/80">
                   <button
                     type="button"
-                    onClick={() => updateBuddyVoiceConfig({ provider: 'gemini' })}
-                    className={`py-1.5 px-2 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center justify-center gap-1 ${
-                      buddyVoiceConfig.provider === 'gemini'
-                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-xs'
+                    onClick={() => updateBuddyVoiceConfig({ provider: 'neural-free' })}
+                    className={`py-1.5 px-2 rounded-lg text-[11px] font-semibold transition-all cursor-pointer ${
+                      buddyVoiceConfig.provider === 'neural-free'
+                        ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-xs'
                         : 'text-slate-600 hover:text-slate-900'
                     }`}
+                    title="100% Free Unlimited Neural HD Voices (no quota limit)"
                   >
-                    <Sparkles className="w-3 h-3" />
-                    <span>Gemini AI</span>
+                    Neural HD
                   </button>
                   <button
                     type="button"
                     onClick={() => updateBuddyVoiceConfig({ provider: 'standard' })}
-                    className={`py-1.5 px-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                    className={`py-1.5 px-2 rounded-lg text-[11px] font-semibold transition-all cursor-pointer ${
                       buddyVoiceConfig.provider === 'standard'
                         ? 'bg-slate-800 text-white shadow-xs'
                         : 'text-slate-600 hover:text-slate-900'
                     }`}
                   >
-                    Standard
+                    OS Voice
                   </button>
                 </div>
               </div>
 
-              <div className="md:col-span-3 space-y-1.5">
-                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
-                  AI Studio Style Preset
+              <div className="md:col-span-6 space-y-1.5">
+                <span className="text-[11px] font-bold text-emerald-700 uppercase tracking-wider block">
+                  {buddyVoiceConfig.provider === 'neural-free'
+                    ? 'Primary Neural Voice (Free & Unlimited)'
+                    : 'Browser / OS Standard Voice'}
                 </span>
                 <select
-                  value={buddyVoiceConfig.stylePreset}
-                  disabled={buddyVoiceConfig.provider !== 'gemini'}
+                  value={buddyVoiceConfig.freeNeuralVoice}
+                  disabled={buddyVoiceConfig.provider !== 'neural-free'}
                   onChange={(e) =>
                     updateBuddyVoiceConfig({
-                      stylePreset: e.target.value as GeminiStylePresetId
+                      freeNeuralVoice: e.target.value as FreeNeuralVoiceName
                     })
                   }
-                  className="w-full bg-purple-50/70 disabled:opacity-50 border border-purple-200 rounded-xl px-3 py-2 text-xs font-semibold text-purple-900 focus:outline-none focus:border-purple-500 cursor-pointer"
+                  className="w-full bg-emerald-50/70 disabled:opacity-50 border border-emerald-200 rounded-xl px-3 py-2 text-xs font-semibold text-emerald-900 focus:outline-none focus:border-emerald-500 cursor-pointer"
                 >
-                  {GEMINI_STYLE_PRESETS.map(p => (
-                    <option key={p.id} value={p.id}>
-                      {p.label} ({p.subtitle})
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="md:col-span-3 space-y-1.5">
-                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
-                  Gemini Voice
-                </span>
-                <select
-                  value={buddyVoiceConfig.geminiVoice}
-                  disabled={buddyVoiceConfig.provider !== 'gemini'}
-                  onChange={(e) =>
-                    updateBuddyVoiceConfig({
-                      geminiVoice: e.target.value as GeminiTtsVoiceName
-                    })
-                  }
-                  className="w-full bg-slate-50 disabled:opacity-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-blue-500 cursor-pointer"
-                >
-                  {GEMINI_TTS_VOICES.map(v => (
+                  {FREE_NEURAL_VOICES.map(v => (
                     <option key={v.id} value={v.id}>
                       {v.label} · {v.trait}
                     </option>
@@ -1715,10 +1953,6 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                   type="button"
                   onClick={() => {
                     unlockAudioOutput();
-                    if (buddyVoiceConfig.provider === 'gemini' && !(apiKey || loadApiKey())) {
-                      setIsApiModalOpen(true);
-                      return;
-                    }
                     speakBuddyMessage(
                       "Hey there! Ready to chat? Tell me what's been the highlight of your day so far!",
                       false
@@ -1728,7 +1962,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                   title="Hear Lingo Buddy speak with this voice"
                 >
                   <Volume2 className="w-3.5 h-3.5" />
-                  <span>{buddyVoiceConfig.provider === 'gemini' && !apiKey ? 'Add Key' : 'Preview'}</span>
+                  <span>Preview</span>
                 </button>
               </div>
             </div>
@@ -1778,28 +2012,29 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
             <div className="relative z-10 flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 lg:grid-rows-[minmax(0,1fr)] gap-4 p-3 sm:p-4 max-w-[1680px] w-full mx-auto lg:overflow-hidden">
               {/* ================================================================= */}
               {/* COLUMN 1 (LEFT): LIVING CRYSTAL ORB VOICE SANCTUARY (3/12 Cols)   */}
+              {/* Airy glassmorphism stage — Orb floats natively with energy rings  */}
               {/* ================================================================= */}
-              <section className="lg:col-span-4 xl:col-span-3 bg-white/95 backdrop-blur-sm rounded-3xl border border-slate-200/90 shadow-[0_2px_14px_rgba(15,23,42,0.04)] p-4 flex flex-col justify-between gap-3 lg:h-full lg:min-h-0 lg:overflow-hidden">
-                {/* Top Status & Provider Pills */}
+              <section className="lg:col-span-4 xl:col-span-3 bg-gradient-to-b from-white/82 via-[#f4f7ff]/82 to-[#f4efff]/82 backdrop-blur-xl rounded-3xl border border-white/85 ring-1 ring-indigo-200/45 shadow-[0_10px_32px_rgba(59,130,246,0.08)] p-4 flex flex-col justify-between gap-2.5 lg:h-full lg:min-h-0 lg:overflow-hidden">
+                {/* Friendly AI Presence Header & Voice Pills */}
                 <div className="shrink-0 flex flex-col items-center gap-1.5 text-center">
                   <div className="flex items-center gap-1.5 flex-wrap justify-center">
-                    <span className="px-2.5 py-1 rounded-full bg-slate-100 border border-slate-200/80 text-[11px] font-semibold text-slate-700">
-                      {currentModeCfg.label} · {currentPersonalityCfg.label}
+                    <span className="px-2.5 py-0.5 rounded-full bg-white/85 border border-indigo-200/70 text-[11px] font-bold text-indigo-800 shadow-2xs">
+                      {currentPersonalityCfg.emoji} {currentPersonalityCfg.label} · {currentModeCfg.label}
                     </span>
                     {apiKey ? (
-                      <span className="px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[11px] font-semibold flex items-center gap-1">
+                      <span className="px-2 py-0.5 rounded-full bg-emerald-50/90 border border-emerald-200 text-emerald-700 text-[10px] font-bold flex items-center gap-1">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                        <span>Gemini Live</span>
+                        <span>AI Live</span>
                       </span>
                     ) : (
                       <button
                         type="button"
                         onClick={() => setIsApiModalOpen(true)}
-                        className="px-2.5 py-1 rounded-full bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 text-[11px] font-semibold transition-colors cursor-pointer flex items-center gap-1.5"
-                        title="Connect a Gemini API key for unrestricted AI conversation & deep grammar"
+                        className="px-2.5 py-0.5 rounded-full bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 text-[10px] font-bold transition-colors cursor-pointer flex items-center gap-1"
+                        title="Connect a Gemini API key for Cheeky Sidekick voice & deep AI chat"
                       >
                         <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                        <span>Connect Gemini AI</span>
+                        <span>Connect AI</span>
                       </button>
                     )}
                   </div>
@@ -1808,25 +2043,40 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                     <button
                       type="button"
                       onClick={() => setIsAudioSettingsOpen(prev => !prev)}
-                      className="px-2.5 py-0.5 rounded-full bg-blue-50 hover:bg-blue-100/80 border border-blue-200/80 text-blue-700 text-[10px] font-semibold transition-colors cursor-pointer inline-flex items-center gap-1"
+                      className="px-2.5 py-0.5 rounded-full bg-white/80 hover:bg-blue-50 border border-blue-200/70 text-blue-700 text-[10px] font-semibold transition-colors cursor-pointer inline-flex items-center gap-1 shadow-2xs"
                       title="Change Buddy Voice & AI Studio Style"
                     >
                       <Volume2 className="w-3 h-3" />
                       <span>
-                        {buddyVoiceConfig.provider === 'gemini' && apiKey
-                          ? `${
-                              GEMINI_STYLE_PRESETS.find(p => p.id === buddyVoiceConfig.stylePreset)
-                                ?.label || 'Cheeky Sidekick'
-                            } · ${buddyVoiceConfig.geminiVoice}`
-                          : 'Standard Voice'}
+                        {buddyVoiceConfig.provider === 'standard'
+                          ? 'OS Standard Voice'
+                          : `Neural HD · ${
+                              FREE_NEURAL_VOICES.find(
+                                v => v.id === buddyVoiceConfig.freeNeuralVoice
+                              )?.label || 'Ava (US)'
+                            }`}
                       </span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setIsAudioSettingsOpen(prev => !prev)}
+                      className={`px-2.5 py-0.5 rounded-full border text-[10px] font-semibold transition-colors cursor-pointer inline-flex items-center gap-1 shadow-2xs ${
+                        speechEngine === 'live-solo'
+                          ? 'bg-amber-50/90 hover:bg-amber-100 border-amber-200 text-amber-800'
+                          : 'bg-emerald-50/90 hover:bg-emerald-100 border-emerald-200 text-emerald-700'
+                      }`}
+                      title="Active Speech-to-Text Engine (0% Auto-Correction) — click to switch"
+                    >
+                      <Mic className="w-3 h-3" />
+                      <span>Mic: {engineLabel}</span>
                     </button>
 
                     {buddyMemory.enabled && buddyMemory.items.length > 0 && (
                       <button
                         type="button"
                         onClick={() => setRightTab('hub')}
-                        className="px-2.5 py-0.5 rounded-full bg-purple-50 hover:bg-purple-100 border border-purple-200/80 text-purple-700 text-[10px] font-semibold transition-colors cursor-pointer"
+                        className="px-2.5 py-0.5 rounded-full bg-purple-50/90 hover:bg-purple-100 border border-purple-200/80 text-purple-700 text-[10px] font-semibold transition-colors cursor-pointer"
                       >
                         Remembers {buddyMemory.items.length}{' '}
                         {buddyMemory.items.length === 1 ? 'interest' : 'interests'}
@@ -1835,45 +2085,61 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                   </div>
                 </div>
 
-                {/* Obsidian Crystal Jewel Chamber — Keeps the Living Crystal-Galaxy Orb Radiant */}
-                <div className="flex-1 min-h-0 flex flex-col items-center justify-center text-center space-y-2.5">
-                  <div className="relative w-full max-w-[224px] xl:max-w-[244px] aspect-square rounded-3xl bg-gradient-to-b from-[#060916] via-[#0B1228] to-[#060916] border border-slate-800/80 shadow-[0_14px_34px_rgba(37,99,235,0.16)] flex items-center justify-center overflow-hidden shrink-0">
-                    <div
-                      className="pointer-events-none absolute inset-0 opacity-45"
-                      style={{
-                        background:
-                          orbState === 'speaking'
-                            ? 'radial-gradient(circle, rgba(56,189,248,0.28), rgba(217,70,239,0.22) 55%, transparent 75%)'
-                            : orbState === 'listening'
-                            ? 'radial-gradient(circle, rgba(14,165,233,0.3), rgba(99,102,241,0.2) 55%, transparent 75%)'
-                            : 'radial-gradient(circle, rgba(37,99,235,0.24), rgba(168,85,247,0.16) 60%, transparent 78%)'
-                      }}
-                    />
+                {/* Living Crystal Orb Centerpiece — Floating Directly on Airy Glass Surface */}
+                <div className="flex-1 min-h-0 flex flex-col items-center justify-center text-center space-y-2">
+                  <div className="relative flex items-center justify-center shrink-0">
                     <BuddyEnergyOrb
                       state={orbState}
                       audioLevelRef={audioLevelRef}
                       onClick={handleOrbOrMicClick}
-                      size={isFullscreen ? 236 : 210}
+                      size={isFullscreen ? 264 : 240}
                     />
                   </div>
 
-                  {/* Interactive 14-State Indicator Pill */}
-                  <button
-                    type="button"
-                    onClick={() => setIsSystemModalOpen(true)}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-200 text-[11px] font-semibold text-slate-700 transition-colors cursor-pointer"
-                    title="Open 14-State Living Orb Lab & QA Suite"
-                  >
-                    <span className={`w-2 h-2 rounded-full ${currentOrbDesc.dotColor}`} />
-                    <span>{currentOrbDesc.label}</span>
-                  </button>
+                  {/* Interactive State Pill + Animated Voice Sound Waves */}
+                  <div className="flex items-center justify-center gap-2 flex-wrap">
+                    <button
+                      type="button"
+                      onClick={() => setIsSystemModalOpen(true)}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-[11px] font-bold transition-all cursor-pointer shadow-2xs ${
+                        isListening
+                          ? 'bg-sky-50 border-sky-300 text-sky-800'
+                          : isBuddySpeaking
+                          ? 'bg-purple-50 border-purple-300 text-purple-800'
+                          : orbState === 'thinking' || orbState === 'understanding'
+                          ? 'bg-indigo-50 border-indigo-200 text-indigo-800'
+                          : 'bg-white/85 hover:bg-blue-50 border-slate-200/90 text-slate-700'
+                      }`}
+                      title="Open 14-State Living Orb Lab & QA Suite"
+                    >
+                      <span className={`w-2 h-2 rounded-full ${currentOrbDesc.dotColor} ${isListening || isBuddySpeaking ? 'animate-pulse' : ''}`} />
+                      <span>{currentOrbDesc.label}</span>
+                      {(isListening || isBuddySpeaking) && (
+                        <span className="inline-flex items-end gap-[2px] h-3 ml-0.5" aria-hidden="true">
+                          {[0, 1, 2, 3].map(bar => (
+                            <span
+                              key={bar}
+                              className={`w-[2.5px] rounded-full animate-pulse ${
+                                isListening ? 'bg-sky-500' : 'bg-purple-500'
+                              }`}
+                              style={{
+                                height: `${[55, 100, 70, 90][bar]}%`,
+                                animationDelay: `${bar * 120}ms`,
+                                animationDuration: '650ms'
+                              }}
+                            />
+                          ))}
+                        </span>
+                      )}
+                    </button>
+                  </div>
 
                   {/* Live Caption & Whisper Download Progress */}
-                  <div className="min-h-[60px] w-full flex flex-col items-center justify-center space-y-1.5 px-1">
+                  <div className="min-h-[54px] w-full flex flex-col items-center justify-center space-y-1 px-1">
                     {whisperProgress &&
                     (whisperProgress.status === 'loading' ||
                       whisperProgress.status === 'inferencing') ? (
-                      <div className="w-full px-3 py-2.5 rounded-2xl bg-blue-50 border border-blue-200 text-xs text-blue-800 space-y-1.5">
+                      <div className="w-full px-3 py-2 rounded-2xl bg-blue-50/90 border border-blue-200 text-xs text-blue-800 space-y-1.5">
                         <div className="flex items-center justify-between font-semibold">
                           <span className="truncate">{whisperProgress.message}</span>
                           {typeof whisperProgress.percent === 'number' && (
@@ -1889,24 +2155,34 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                           </div>
                         )}
                       </div>
-                    ) : isListening && liveInterimText ? (
-                      <p className="text-sm font-semibold text-blue-700 leading-relaxed animate-in fade-in duration-150">
-                        “{liveInterimText}
-                        <span className="inline-block w-0.5 h-4 bg-cyan-500 ml-1 align-middle animate-pulse" />”
-                      </p>
+                    ) : isListening && (liveFinalText || liveInterimText) ? (
+                      <div className="space-y-0.5 animate-in fade-in duration-150">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-sky-50 border border-sky-200 text-[9px] font-bold uppercase tracking-wider text-sky-700">
+                          <span className="w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse" />
+                          <span>Live Transcription · Provisional</span>
+                        </span>
+                        <p className="text-xs font-semibold text-slate-800 leading-relaxed line-clamp-2">
+                          “{liveFinalText}
+                          {liveFinalText && liveInterimText ? ' ' : ''}
+                          {liveInterimText && (
+                            <span className="text-blue-600 italic font-medium">{liveInterimText}</span>
+                          )}
+                          <span className="inline-block w-0.5 h-3.5 bg-sky-500 ml-1 align-middle animate-pulse" />”
+                        </p>
+                      </div>
                     ) : isBuddySpeaking && latestBuddyMessage ? (
-                      <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">
+                      <p className="text-xs text-slate-600 leading-relaxed line-clamp-2">
                         “{latestBuddyMessage.text}”
                       </p>
                     ) : (
                       <p className="text-xs font-semibold text-slate-700">
                         {hasUserMessages
-                          ? 'Ready when you are.'
-                          : 'Tap the orb or click Speak to start talking.'}
+                          ? 'I’m listening whenever you’re ready.'
+                          : 'Tap the crystal orb or microphone to talk.'}
                       </p>
                     )}
 
-                    <p className="text-[11px] font-medium text-slate-400">{orbStatusSubtitle}</p>
+                    <p className="text-[11px] font-medium text-slate-500">{orbStatusSubtitle}</p>
 
                     {showSinhala && !isListening && !hasUserMessages && (
                       <p className="text-[11px] text-indigo-600/90 font-sinhala">
@@ -1915,7 +2191,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                     )}
 
                     {statusNotice && (
-                      <div className="mt-1 px-3 py-2 rounded-xl bg-amber-50 border border-amber-200 text-[11px] text-amber-800 flex items-center gap-2 text-left">
+                      <div className="mt-1 px-3 py-1.5 rounded-xl bg-amber-50/95 border border-amber-200 text-[11px] text-amber-800 flex items-center gap-2 text-left">
                         <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
                         <span className="flex-1">{statusNotice}</span>
                         <button
@@ -1930,8 +2206,8 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                   </div>
                 </div>
 
-                {/* Crisp Cobalt Voice Controls Dock */}
-                <div className="shrink-0 pt-2 border-t border-slate-100">
+                {/* Primary Hero Voice Microphone Action Dock */}
+                <div className="shrink-0 pt-2.5 border-t border-indigo-100/80">
                   <div className="flex items-center justify-center gap-2.5">
                     <button
                       type="button"
@@ -1943,10 +2219,10 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                         }
                         setVoiceOutputEnabled(prev => !prev);
                       }}
-                      className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all cursor-pointer ${
+                      className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all cursor-pointer shadow-2xs ${
                         voiceOutputEnabled
-                          ? 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700'
-                          : 'bg-rose-50 border-rose-200 text-rose-600'
+                          ? 'bg-white/90 hover:bg-blue-50 border-indigo-100 text-slate-700'
+                          : 'bg-red-50 border-red-200 text-red-600'
                       }`}
                       title={voiceOutputEnabled ? 'Mute voice reply' : 'Unmute voice reply'}
                     >
@@ -1960,28 +2236,28 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                     <button
                       type="button"
                       onClick={handleOrbOrMicClick}
-                      className={`h-11 px-6 rounded-full text-sm font-bold transition-all flex items-center gap-2 cursor-pointer shadow-sm ${
+                      className={`relative h-12 px-7 rounded-full text-sm font-bold transition-all flex items-center gap-2.5 cursor-pointer ${
                         isListening
-                          ? 'bg-rose-600 hover:bg-rose-500 text-white ring-4 ring-rose-500/20'
+                          ? 'bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white shadow-[0_8px_24px_rgba(239,68,68,0.32)] ring-4 ring-red-500/20'
                           : isBuddySpeaking
-                          ? 'bg-amber-500 hover:bg-amber-400 text-white'
-                          : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-blue-600/20'
+                          ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white shadow-[0_8px_24px_rgba(147,51,234,0.28)] ring-4 ring-purple-500/15'
+                          : 'bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-white shadow-[0_8px_24px_rgba(59,130,246,0.3)] hover:scale-[1.02] active:scale-[0.98]'
                       }`}
                     >
                       {isListening ? (
                         <>
                           <MicOff className="w-4 h-4" />
-                          <span>{speechEngine === 'live-solo' ? 'Done' : 'Stop & Send'}</span>
+                          <span>{speechEngine === 'live-solo' ? 'Listening · Done' : 'Stop & Send'}</span>
                         </>
                       ) : isBuddySpeaking ? (
                         <>
                           <Mic className="w-4 h-4" />
-                          <span>Interrupt</span>
+                          <span>Speaking · Interrupt</span>
                         </>
                       ) : (
                         <>
                           <Mic className="w-4 h-4" />
-                          <span>Speak</span>
+                          <span>Speak to Buddy</span>
                         </>
                       )}
                     </button>
@@ -2018,20 +2294,30 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
 
               {/* ================================================================= */}
               {/* COLUMN 2 (CENTER): PURE FRIEND CONVERSATION STREAM (5/12 Cols)    */}
-              {/* Visually separate from grammar coaching so it feels like a friend */}
+              {/* Frosted glass chat zone visually separated from grammar coaching  */}
               {/* ================================================================= */}
-              <main className="lg:col-span-4 xl:col-span-5 bg-white/95 backdrop-blur-sm rounded-3xl border border-slate-200/90 shadow-[0_2px_14px_rgba(15,23,42,0.04)] flex flex-col h-[560px] lg:h-full lg:min-h-0 overflow-hidden">
-                {/* Clean Chat Column Header */}
-                <div className="shrink-0 px-5 py-3.5 border-b border-slate-100 flex items-center justify-between gap-2">
-                  <div className="min-w-0">
-                    <h2 className="text-sm font-bold text-slate-900 truncate">
-                      {activeSession?.title || "Today's conversation"}
-                    </h2>
-                    <p className="text-[11px] text-slate-500">
-                      Natural conversation · Coaching runs quietly on the right
-                    </p>
+              <main className="lg:col-span-4 xl:col-span-5 bg-white/78 backdrop-blur-xl rounded-3xl border border-white/85 ring-1 ring-blue-200/35 shadow-[0_10px_32px_rgba(37,99,235,0.06)] flex flex-col h-[560px] lg:h-full lg:min-h-0 overflow-hidden">
+                {/* Clean Chat Column Header with Friendly AI Presence */}
+                <div className="shrink-0 px-5 py-3.5 border-b border-indigo-100/70 bg-gradient-to-r from-white/70 via-blue-50/40 to-purple-50/40 flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <span
+                      className="w-8 h-8 rounded-full shrink-0 shadow-sm ring-2 ring-white/90"
+                      style={{
+                        background:
+                          'radial-gradient(circle at 35% 28%, #ffffff 0%, #38bdf8 28%, #2563eb 58%, #d946ef 100%)'
+                      }}
+                      aria-hidden="true"
+                    />
+                    <div className="min-w-0">
+                      <h2 className="text-sm font-bold text-slate-900 truncate">
+                        {activeSession?.title || "Today's conversation"}
+                      </h2>
+                      <p className="text-[11px] text-slate-500 truncate">
+                        Chatting with Lingo Buddy · Grammar coaching stays cleanly on the right
+                      </p>
+                    </div>
                   </div>
-                  <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 shrink-0">
+                  <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-white/85 border border-indigo-100 text-indigo-700 shrink-0 shadow-2xs">
                     {activeSession?.messages.length || 0} turns
                   </span>
                 </div>
@@ -2060,9 +2346,14 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                       >
                         <div className="flex items-center gap-1.5 px-1">
                           {!isUser && (
-                            <span className="w-4 h-4 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 inline-flex items-center justify-center">
-                              <Sparkles className="w-2.5 h-2.5 text-white" />
-                            </span>
+                            <span
+                              className="w-4 h-4 rounded-full shadow-2xs ring-1 ring-white inline-block shrink-0"
+                              style={{
+                                background:
+                                  'radial-gradient(circle at 35% 28%, #ffffff 0%, #38bdf8 30%, #2563eb 62%, #d946ef 100%)'
+                              }}
+                              aria-hidden="true"
+                            />
                           )}
                           <span className="text-[11px] font-semibold text-slate-500">
                             {isUser ? 'You' : 'Lingo Buddy'}
@@ -2107,8 +2398,19 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                                 </button>
                               </div>
                             </div>
+                          ) : !isUser && msg.id === streamingBuddyMsgId && !msg.text ? (
+                            <span className="inline-flex items-center gap-1.5 py-0.5 text-slate-400">
+                              <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-bounce" style={{ animationDelay: '0ms' }} />
+                              <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-bounce" style={{ animationDelay: '140ms' }} />
+                              <span className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-bounce" style={{ animationDelay: '280ms' }} />
+                            </span>
                           ) : (
-                            <p>{msg.text}</p>
+                            <p>
+                              {msg.text}
+                              {!isUser && msg.id === streamingBuddyMsgId && (
+                                <span className="inline-block w-1.5 h-4 bg-blue-500 ml-1 align-middle rounded-full animate-pulse" />
+                              )}
+                            </p>
                           )}
 
                           {/* Low-confidence STT guard inside bubble */}
@@ -2186,6 +2488,23 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                                   </button>
                                 ) : null}
 
+                                {msg.recordedAudioUrl && (
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      try {
+                                        stopSpeech();
+                                        const clip = new Audio(msg.recordedAudioUrl);
+                                        clip.play().catch(() => {});
+                                      } catch {}
+                                    }}
+                                    className="text-slate-400 hover:text-indigo-600 flex items-center gap-1 cursor-pointer opacity-75 sm:opacity-0 group-hover:opacity-100 transition-opacity"
+                                    title="Replay your original recorded audio to verify verbatim words"
+                                  >
+                                    <Volume2 className="w-3 h-3" />
+                                    <span>My voice</span>
+                                  </button>
+                                )}
                                 <button
                                   type="button"
                                   onClick={() => {
@@ -2270,6 +2589,126 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                   <div ref={chatEndRef} />
                 </div>
 
+                {/* Section 5 — Live 3-Stage Verbatim Speech -> Final Transcript -> Grammar Analysis Strip */}
+                {(() => {
+                  const latestUserTurn = [...(activeSession?.messages || [])]
+                    .reverse()
+                    .find(m => m.role === 'user');
+                  if (!isListening && orbState !== 'transcribing' && !latestUserTurn) return null;
+
+                  const latestErrors =
+                    latestUserTurn?.analysis?.mistakes.filter(
+                      m => m.severity === 'GRAMMAR_ERROR' || m.severity === 'UNNATURAL'
+                    ).length || 0;
+                  const isLatestUnclear = latestUserTurn?.analysis?.transcriptQuality === 'unclear';
+                  const liveTextPreview = [liveFinalText, liveInterimText].filter(Boolean).join(' ');
+
+                  return (
+                    <div className="shrink-0 px-4 py-2 border-t border-slate-100 bg-slate-50/90 text-[11px]">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        {/* Stage 1: Live Speech Detection */}
+                        <div className="rounded-xl bg-white border border-slate-200/80 px-2.5 py-1.5 min-w-0">
+                          <div className="flex items-center justify-between gap-1">
+                            <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400">
+                              1. Speech Capture
+                            </span>
+                            {isListening ? (
+                              <span className="text-[9px] font-bold text-cyan-700 bg-cyan-50 border border-cyan-200 px-1.5 rounded-full">
+                                Provisional
+                              </span>
+                            ) : orbState === 'transcribing' ? (
+                              <span className="text-[9px] font-bold text-blue-700 bg-blue-50 border border-blue-200 px-1.5 rounded-full animate-pulse">
+                                Transcribing
+                              </span>
+                            ) : (
+                              <span className="text-[9px] font-semibold text-slate-500">
+                                {latestUserTurn?.sttEngine === 'typed' ? 'Typed' : 'Captured'}
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-[11px] text-slate-700 truncate mt-0.5">
+                            {isListening
+                              ? liveTextPreview
+                                ? `“${liveTextPreview}”`
+                                : 'Listening to your voice...'
+                              : orbState === 'transcribing'
+                              ? 'Transcribing verbatim...'
+                              : `“${latestUserTurn?.originalRawTranscript || latestUserTurn?.text}”`}
+                          </p>
+                        </div>
+
+                        {/* Stage 2: Final Verbatim Transcript */}
+                        <div className="rounded-xl bg-white border border-slate-200/80 px-2.5 py-1.5 min-w-0">
+                          <div className="flex items-center justify-between gap-1">
+                            <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400">
+                              2. Final Verbatim
+                            </span>
+                            <span
+                              className={`text-[9px] font-bold px-1.5 rounded-full border ${
+                                isListening || orbState === 'transcribing'
+                                  ? 'bg-slate-50 text-slate-400 border-slate-200'
+                                  : latestUserTurn?.isEdited
+                                  ? 'bg-indigo-50 text-indigo-700 border-indigo-200'
+                                  : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                              }`}
+                            >
+                              {isListening || orbState === 'transcribing'
+                                ? 'Waiting'
+                                : latestUserTurn?.isEdited
+                                ? 'User Edited'
+                                : 'Finalized'}
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-slate-800 font-medium truncate mt-0.5">
+                            {isListening || orbState === 'transcribing'
+                              ? 'Waits for turn end (never grades partial words)'
+                              : `“${latestUserTurn?.finalizedVerbatimTranscript || latestUserTurn?.text}”`}
+                          </p>
+                        </div>
+
+                        {/* Stage 3: Independent Grammar Analysis */}
+                        <div className="rounded-xl bg-white border border-slate-200/80 px-2.5 py-1.5 min-w-0">
+                          <div className="flex items-center justify-between gap-1">
+                            <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400">
+                              3. Grammar Coach
+                            </span>
+                            <span
+                              className={`text-[9px] font-bold px-1.5 rounded-full border ${
+                                isListening || orbState === 'transcribing'
+                                  ? 'bg-slate-50 text-slate-400 border-slate-200'
+                                  : latestUserTurn?.isAnalyzing
+                                  ? 'bg-blue-50 text-blue-700 border-blue-200 animate-pulse'
+                                  : isLatestUnclear
+                                  ? 'bg-amber-50 text-amber-800 border-amber-200'
+                                  : latestErrors > 0
+                                  ? 'bg-rose-50 text-rose-700 border-rose-200'
+                                  : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                              }`}
+                            >
+                              {isListening || orbState === 'transcribing'
+                                ? 'Standby'
+                                : latestUserTurn?.isAnalyzing
+                                ? 'Analyzing'
+                                : 'Completed'}
+                            </span>
+                          </div>
+                          <p className="text-[11px] font-semibold truncate mt-0.5 text-slate-700">
+                            {isListening || orbState === 'transcribing'
+                              ? 'Will analyze finalized verbatim words'
+                              : latestUserTurn?.isAnalyzing
+                              ? 'Checking grammar & phrasing...'
+                              : isLatestUnclear
+                              ? 'Unclear capture — skipped grading'
+                              : latestErrors > 0
+                              ? `${latestErrors} ${latestErrors === 1 ? 'mistake' : 'mistakes'} identified`
+                              : '✓ Clean, natural English'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
+
                 {/* Always-Ready Clean SaaS Chat Composer */}
                 <div className="shrink-0 p-3.5 border-t border-slate-100 bg-slate-50/60">
                   <form
@@ -2298,10 +2737,11 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
 
               {/* ================================================================= */}
               {/* COLUMN 3 (RIGHT): DEDICATED COACHING & PROGRESS RAIL (4/12 Cols)  */}
+              {/* Distinct glassmorphism coaching panel (Red / Green / Purple)      */}
               {/* ================================================================= */}
-              <aside className="lg:col-span-4 xl:col-span-4 bg-white/95 backdrop-blur-sm rounded-3xl border border-slate-200/90 shadow-[0_2px_14px_rgba(15,23,42,0.04)] flex flex-col h-[520px] lg:h-full lg:min-h-0 overflow-hidden">
+              <aside className="lg:col-span-4 xl:col-span-4 bg-white/80 backdrop-blur-xl rounded-3xl border border-white/85 ring-1 ring-purple-200/40 shadow-[0_10px_32px_rgba(124,58,237,0.06)] flex flex-col h-[520px] lg:h-full lg:min-h-0 overflow-hidden">
                 {/* Segmented SaaS Rail Header: Live Feedback | Progress & Hub */}
-                <div className="shrink-0 px-4 py-3 border-b border-slate-100 flex items-center justify-between gap-2">
+                <div className="shrink-0 px-4 py-3 border-b border-indigo-100/70 bg-gradient-to-r from-white/75 via-purple-50/35 to-blue-50/35 flex items-center justify-between gap-2">
                   <div className="inline-flex items-center p-1 rounded-xl bg-slate-100 border border-slate-200/70">
                     <button
                       type="button"
@@ -2338,9 +2778,20 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                     </button>
                   </div>
 
-                  <span className="text-[11px] font-semibold text-slate-400 capitalize hidden sm:inline">
-                    {intensity}
-                  </span>
+                  <div className="hidden sm:flex items-center gap-2 text-[10px] font-semibold text-slate-500">
+                    <span className="inline-flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                      <span>Fix</span>
+                    </span>
+                    <span className="inline-flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                      <span>Clean</span>
+                    </span>
+                    <span className="inline-flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-purple-500" />
+                      <span>Natural</span>
+                    </span>
+                  </div>
                 </div>
 
                 {/* RIGHT TAB 1: Dedicated Live English Feedback Panel (Single Focused Turn + Compact Turn Switcher) */}
@@ -2708,6 +3159,9 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
         onKeyUpdated={(newKey, newModel) => {
           setApiKey(newKey);
           setSelectedModel(newModel);
+          if (newKey && speechEngineRef.current === 'live-solo') {
+            handleSelectEngine('gemini-cloud');
+          }
           setIsApiModalOpen(false);
         }}
       />

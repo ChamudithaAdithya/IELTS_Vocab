@@ -490,11 +490,14 @@ export const MicDiagnosticModal: React.FC<MicDiagnosticModalProps> = ({
                   onChange={(e) => onSelectWhisperModel(e.target.value as WhisperModelId)}
                   className="w-full text-xs font-semibold bg-white border border-slate-300 rounded-xl px-2.5 py-1.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 >
+                  <option value="onnx-community/whisper-small.en">
+                    Whisper Small HD (~244MB · Best Verbatim Accuracy)
+                  </option>
                   <option value="onnx-community/whisper-base.en">
-                    Whisper Base EN (~140MB · Highest Accuracy, Recommended)
+                    Whisper Base EN (~140MB · Balanced)
                   </option>
                   <option value="onnx-community/whisper-tiny.en">
-                    Whisper Tiny EN (~75MB · Faster 1st Download)
+                    Whisper Tiny EN (~75MB · Fastest 1st Download)
                   </option>
                 </select>
               </div>

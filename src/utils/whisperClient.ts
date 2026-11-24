@@ -35,7 +35,117 @@ export function isWhisperModelCachedInSession(model: WhisperModelId): boolean {
 }
 
 /**
- * Decodes any recorded browser Audio Blob (webm/ogg/mp4/wav) into a 16,000 Hz mono Float32Array,
+ * Conditions 16kHz mono PCM for maximum Whisper acoustic fidelity:
+ *  1. Rejects pure silence (prevents Whisper phantom hallucinations on dead air).
+ *  2. Trims excessive leading/trailing dead air while preserving a 240ms safety margin
+ *     so opening & ending consonants ("-ed", "-s", "t", "d") are never clipped.
+ *  3. Gently peak-normalizes voice amplitude to 0.88 so quiet mics decode accurately.
+ */
+function conditionVoicePcm16k(pcm: Float32Array): Float32Array {
+  if (pcm.length === 0) return pcm;
+
+  let peak = 0;
+  for (let i = 0; i < pcm.length; i++) {
+    const a = Math.abs(pcm[i]);
+    if (a > peak) peak = a;
+  }
+
+  // Pure silence / unplugged mic -> return empty so Whisper/Gemini never hallucinates words
+  if (peak < 0.01) {
+    return new Float32Array(0);
+  }
+
+  // Find speech boundaries using adaptive threshold (8% of peak, floored at 0.014)
+  const gate = Math.max(0.014, peak * 0.08);
+  let startIdx = 0;
+  while (startIdx < pcm.length && Math.abs(pcm[startIdx]) < gate) startIdx++;
+  let endIdx = pcm.length - 1;
+  while (endIdx > startIdx && Math.abs(pcm[endIdx]) < gate) endIdx--;
+
+  // Require at least 160ms (2,560 samples at 16kHz) of real active sound span
+  // to ignore single keyboard clicks, mic pops, or brief speaker echo tails
+  if (endIdx - startIdx < Math.round(TARGET_SAMPLE_RATE * 0.16)) {
+    return new Float32Array(0);
+  }
+
+  // Keep a generous 240ms (3,840 samples at 16kHz) pad around speech so final "-ed"/"-s" are intact
+  const padSamples = Math.round(TARGET_SAMPLE_RATE * 0.24);
+  const trimStart = Math.max(0, startIdx - padSamples);
+  const trimEnd = Math.min(pcm.length, endIdx + padSamples);
+
+  const sliced = pcm.subarray(trimStart, trimEnd);
+  const out = new Float32Array(sliced.length);
+  const gain = peak < 0.85 ? Math.min(6.0, 0.88 / peak) : 1.0;
+
+  for (let i = 0; i < sliced.length; i++) {
+    const v = sliced[i] * gain;
+    out[i] = v > 1 ? 1 : v < -1 ? -1 : v;
+  }
+  return out;
+}
+
+/**
+ * Encodes a conditioned 16kHz mono Float32Array into an uncompressed 16-bit PCM WAV Blob.
+ * Uncompressed 16kHz WAV gives Gemini Multimodal Audio maximum consonant fidelity
+ * (zero Opus compression smear on "-ed", "-s", "t", "d", "th") and trims dead air.
+ */
+export function encodePcm16kToWavBlob(pcm16k: Float32Array): Blob {
+  const numSamples = pcm16k.length;
+  const bytesPerSample = 2;
+  const dataByteLength = numSamples * bytesPerSample;
+  const buffer = new ArrayBuffer(44 + dataByteLength);
+  const view = new DataView(buffer);
+
+  const writeAscii = (offset: number, str: string) => {
+    for (let i = 0; i < str.length; i++) {
+      view.setUint8(offset + i, str.charCodeAt(i));
+    }
+  };
+
+  writeAscii(0, 'RIFF');
+  view.setUint32(4, 36 + dataByteLength, true);
+  writeAscii(8, 'WAVE');
+  writeAscii(12, 'fmt ');
+  view.setUint32(16, 16, true); // PCM chunk size
+  view.setUint16(20, 1, true); // PCM format
+  view.setUint16(22, 1, true); // Mono
+  view.setUint32(24, TARGET_SAMPLE_RATE, true); // 16000 Hz
+  view.setUint32(28, TARGET_SAMPLE_RATE * bytesPerSample, true); // Byte rate
+  view.setUint16(32, bytesPerSample, true); // Block align
+  view.setUint16(34, 16, true); // 16-bit
+  writeAscii(36, 'data');
+  view.setUint32(40, dataByteLength, true);
+
+  let offset = 44;
+  for (let i = 0; i < numSamples; i++) {
+    const s = Math.max(-1, Math.min(1, pcm16k[i]));
+    view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+    offset += 2;
+  }
+
+  return new Blob([buffer], { type: 'audio/wav' });
+}
+
+/**
+ * Converts a raw recorded browser Audio Blob into a studio-conditioned 16kHz mono WAV Blob
+ * (silence-gated, trimmed with 240ms consonant pad, peak-normalized).
+ * Returns null if the recording contains only silence / clicks (preventing phantom STT turns).
+ */
+export async function prepareStudioWavFromBlob(
+  blob: Blob
+): Promise<{ wavBlob: Blob; durationSec: number } | null> {
+  const pcm16k = await decodeAudioBlobTo16kHzMono(blob);
+  if (!pcm16k || pcm16k.length < Math.round(TARGET_SAMPLE_RATE * 0.18)) {
+    return null;
+  }
+  return {
+    wavBlob: encodePcm16kToWavBlob(pcm16k),
+    durationSec: Number((pcm16k.length / TARGET_SAMPLE_RATE).toFixed(2))
+  };
+}
+
+/**
+ * Decodes any recorded browser Audio Blob (webm/ogg/mp4/wav) into a conditioned 16,000 Hz mono Float32Array,
  * which is the exact waveform format required by OpenAI Whisper.
  */
 export async function decodeAudioBlobTo16kHzMono(blob: Blob): Promise<Float32Array> {
@@ -67,13 +177,13 @@ export async function decodeAudioBlobTo16kHzMono(blob: Blob): Promise<Float32Arr
     source.connect(offlineCtx.destination);
     source.start(0);
     const rendered = await offlineCtx.startRendering();
-    return new Float32Array(rendered.getChannelData(0));
+    return conditionVoicePcm16k(new Float32Array(rendered.getChannelData(0)));
   }
 
   // Fallback linear resampling if OfflineAudioContext is unavailable
   const mono = decoded.getChannelData(0);
   if (decoded.sampleRate === TARGET_SAMPLE_RATE) {
-    return new Float32Array(mono);
+    return conditionVoicePcm16k(new Float32Array(mono));
   }
   const ratio = decoded.sampleRate / TARGET_SAMPLE_RATE;
   const out = new Float32Array(targetLength);
@@ -81,7 +191,7 @@ export async function decodeAudioBlobTo16kHzMono(blob: Blob): Promise<Float32Arr
     const srcIdx = Math.min(mono.length - 1, Math.floor(i * ratio));
     out[i] = mono[srcIdx];
   }
-  return out;
+  return conditionVoicePcm16k(out);
 }
 
 /**
@@ -103,6 +213,10 @@ export async function transcribeBlobWithWhisper(
   });
 
   const pcm16k = await decodeAudioBlobTo16kHzMono(blob);
+  if (!pcm16k || pcm16k.length < Math.round(TARGET_SAMPLE_RATE * 0.18)) {
+    onProgress?.({ status: 'complete', message: 'No speech detected in clip.' });
+    return { text: '', device: 'wasm' };
+  }
   const worker = getOrCreateWorker();
   const reqId = `whisper-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
 

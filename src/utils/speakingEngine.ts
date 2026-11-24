@@ -13,6 +13,7 @@ import type {
 import type { EssaySegment, MainProblem, TutorIssue } from '../types/tutor';
 import { roundIeltsBand, formatBand } from './tutorEngine';
 import { playSpeech, stopSpeech } from './speech';
+import { prepareStudioWavFromBlob } from './whisperClient';
 
 /* ------------------------------------------------------------------ */
 /* Random Spontaneous Conversation Topics                              */
@@ -1220,72 +1221,121 @@ export async function transcribeAudioBlobWithGemini(
   lang: string = 'en-GB'
 ): Promise<string> {
   if (!apiKey || !apiKey.trim()) {
-    throw new Error('Gemini API key is required for audio transcription fallback.');
+    throw new Error('Gemini API key is required for audio transcription.');
   }
   if (!audioBlob || audioBlob.size === 0) {
     throw new Error('No recorded audio available to transcribe.');
   }
 
-  const base64Audio = await blobToBase64(audioBlob);
-  // Strip codec params (e.g. "audio/webm;codecs=opus" -> "audio/webm") for Gemini API compatibility
-  const rawMime = (audioBlob.type || 'audio/webm').split(';')[0].trim() || 'audio/webm';
-
-  let candidateModel = (model || '').trim().replace(/^models\//, '');
-  if (!candidateModel || candidateModel.includes('3.8')) {
-    candidateModel = 'gemini-2.0-flash';
-  }
-
-  const prompt = `Transcribe the spoken English audio verbatim for an IELTS Speaking test (${lang}).
-Rules:
-1. Output ONLY the exact spoken words — no commentary, no timestamps, no quotes around the whole text.
-2. Restore accurate natural punctuation (commas, periods, question marks ?, exclamation marks !) and sentence capitalization based on intonation and clause boundaries.
-3. Keep the speaker's exact grammar and word choices intact (do NOT silently fix grammatical mistakes, because the IELTS examiner needs to evaluate them).
-4. If the audio contains only silence or noise with no speech, return an empty string.`;
-
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 15000);
-
+  // Condition raw browser audio into uncompressed, silence-trimmed, peak-normalized 16kHz mono WAV.
+  // This removes Opus compression smear on soft consonants ("-ed", "-s", "t", "d") and rejects dead air!
+  let uploadBlob: Blob = audioBlob;
+  let uploadMime = (audioBlob.type || 'audio/webm').split(';')[0].trim() || 'audio/webm';
   try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(candidateModel)}:generateContent?key=${encodeURIComponent(apiKey)}`;
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      signal: controller.signal,
-      body: JSON.stringify({
-        contents: [
-          {
-            role: 'user',
-            parts: [
-              { text: prompt },
-              {
-                inlineData: {
-                  mimeType: rawMime,
-                  data: base64Audio
-                }
-              }
-            ]
-          }
-        ],
-        generationConfig: { temperature: 0.1 }
-      })
-    });
-
-    clearTimeout(timeoutId);
-
-    if (!response.ok) {
-      const errText = await response.text().catch(() => response.statusText);
-      throw new Error(`Gemini audio transcription error (${response.status}): ${errText.slice(0, 120)}`);
+    const conditioned = await prepareStudioWavFromBlob(audioBlob);
+    if (!conditioned) {
+      // Pure silence or single click — return empty string cleanly (0 phantom hallucinations!)
+      return '';
     }
-
-    const data = await response.json();
-    const rawTranscript = (data?.candidates?.[0]?.content?.parts?.[0]?.text || '').trim();
-    if (!rawTranscript) return '';
-
-    return punctuateSpokenTranscript(rawTranscript);
-  } catch (err) {
-    clearTimeout(timeoutId);
-    throw err;
+    uploadBlob = conditioned.wavBlob;
+    uploadMime = 'audio/wav';
+  } catch {
+    // Fallback to original browser blob if Web Audio decoding fails on an exotic codec
   }
+
+  const base64Audio = await blobToBase64(uploadBlob);
+
+  let primaryModel = (model || '').trim().replace(/^models\//, '');
+  if (!primaryModel || primaryModel.includes('3.8')) {
+    primaryModel = 'gemini-2.5-flash';
+  }
+
+  const candidateModels = Array.from(
+    new Set([primaryModel, 'gemini-2.5-flash', 'gemini-2.0-flash'])
+  );
+
+  const prompt = `You are an ultra-accurate, STRICT 0%-AUTOCORRECT ENGLISH PHONETIC-VERBATIM acoustic transcriber (speaker accent hint: ${lang}, including South Asian / Sri Lankan / British / US English).
+ABSOLUTE RULES — 0% AUTO-CORRECTION ALLOWED:
+1. The speaker is practicing SPOKEN ENGLISH. Transcribe ONLY English words you genuinely hear in the audio. NEVER output Hindi/Indic noise words ("main hun", "ek", "amma", "kya") for unclear mumbles or background noise.
+2. Listen carefully to the exact acoustic sounds and transcribe EVERY word literally as spoken — including grammatical mistakes, missing words, extra words, repeated words, and non-standard verb forms.
+3. ZERO grammar correction, ZERO paraphrasing, ZERO word substitution:
+   - If the speaker says "I buyed some clothes", output EXACTLY "I buyed some clothes" (NEVER "bought").
+   - If the speaker says "I goed home", output EXACTLY "I goed home" (NEVER "went").
+   - If the speaker says "Yesterday I go to shopping", output EXACTLY "Yesterday I go to shopping" (NEVER "went" or removing "to").
+   - If the speaker says "She don't like coffee", output EXACTLY "She don't like coffee" (NEVER "doesn't").
+   - If the speaker says "I didn't went there", output EXACTLY "I didn't went there" (NEVER "go").
+   - If the speaker says "What you mean", output EXACTLY "What you mean" (NEVER insert "do").
+   - If the speaker says "I developed AI tool", output EXACTLY "I developed AI tool" (NEVER insert "an").
+   - If the speaker says "with a friends", output EXACTLY "with a friends" (NEVER delete "a").
+4. Even if a spoken word is non-standard English (like "buyed", "goed", "eated", "catched", "teached"), write that exact spoken form.
+5. Use basic sentence punctuation (. ? ,) matching the speaker's natural intonation ONLY, without changing, adding, or deleting ANY spoken word.
+6. Do NOT add commentary, labels, quotes, or timestamps. Output ONLY the raw spoken words.
+7. If the audio is silent, breathing, room noise, or unintelligible with no real spoken English, output an empty string.`;
+
+  let lastError: Error | null = null;
+
+  for (const candidateModel of candidateModels) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 16000);
+
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(candidateModel)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
+        body: JSON.stringify({
+          contents: [
+            {
+              role: 'user',
+              parts: [
+                { text: prompt },
+                {
+                  inlineData: {
+                    mimeType: uploadMime,
+                    data: base64Audio
+                  }
+                }
+              ]
+            }
+          ],
+          generationConfig: { temperature: 0.0 }
+        })
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        const errText = await response.text().catch(() => response.statusText);
+        lastError = new Error(
+          `Gemini audio transcription error (${response.status}): ${errText.slice(0, 120)}`
+        );
+        // Retry next fallback model on 400/404/429/503
+        if ([400, 404, 429, 500, 503].includes(response.status)) {
+          continue;
+        }
+        throw lastError;
+      }
+
+      const data = await response.json();
+      const rawTranscript = (data?.candidates?.[0]?.content?.parts?.[0]?.text || '')
+        .replace(/^["'“”`]+|["'“”`]+$/g, '')
+        .replace(/^\s*(?:transcript|output|spoken)\s*:\s*/i, '')
+        .trim();
+
+      if (!rawTranscript || /^\[?(?:silence|inaudible|no speech|blank_audio)\]?$/i.test(rawTranscript)) {
+        return '';
+      }
+
+      // Strictly return verbatim transcript — NEVER call destructive word-rewriting here!
+      return rawTranscript;
+    } catch (err: any) {
+      clearTimeout(timeoutId);
+      lastError = err instanceof Error ? err : new Error(String(err));
+    }
+  }
+
+  throw lastError || new Error('Gemini audio transcription failed.');
 }
 
 /**

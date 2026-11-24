@@ -1,6 +1,9 @@
 /// <reference lib="webworker" />
 
-export type WhisperModelId = 'onnx-community/whisper-base.en' | 'onnx-community/whisper-tiny.en';
+export type WhisperModelId =
+  | 'onnx-community/whisper-small.en'
+  | 'onnx-community/whisper-base.en'
+  | 'onnx-community/whisper-tiny.en';
 
 interface WorkerRequest {
   id: string;
@@ -139,12 +142,22 @@ self.addEventListener('message', async (event: MessageEvent<WorkerRequest>) => {
     const output = await transcriber(audio, {
       chunk_length_s: 30,
       stride_length_s: 5,
-      return_timestamps: false
+      return_timestamps: false,
+      // Deterministic verbatim decoding — prevents creative paraphrasing & hallucination loops
+      temperature: 0,
+      no_repeat_ngram_size: 3
     });
 
-    const rawText = Array.isArray(output)
-      ? output.map((o: any) => o?.text || '').join(' ').trim()
-      : String(output?.text || '').trim();
+    const rawText = (
+      Array.isArray(output)
+        ? output.map((o: any) => o?.text || '').join(' ')
+        : String(output?.text || '')
+    )
+      // Remove only non-speech Whisper bracketed sound tags ([BLANK_AUDIO], (music)), NEVER altering spoken words!
+      .replace(/\[(?:BLANK_AUDIO|SILENCE|MUSIC|APPLAUSE|LAUGHTER|INAUDIBLE|NOISE)[^\]]*\]/gi, '')
+      .replace(/\((?:music|applause|laughter|silence|inaudible|background noise)\)/gi, '')
+      .replace(/\s+/g, ' ')
+      .trim();
 
     self.postMessage({
       id,

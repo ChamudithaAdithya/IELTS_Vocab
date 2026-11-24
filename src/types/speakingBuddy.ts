@@ -308,14 +308,21 @@ export interface FinalizedTurnPacket {
   sessionId: string;
   messageId: string;
   timestamp: number;
-  /** Immutable raw capture from STT or keyboard */
+  /** 1. Immutable raw capture from STT or keyboard (NEVER overwritten) */
   rawTranscript: string;
-  /** Non-destructive punctuation/capitalization-only transcript (never substitutes words!) */
+  /** 2. Finalized verbatim recognized words before any punctuation normalization */
+  finalizedVerbatimTranscript: string;
+  /** 3. Non-destructive punctuation/capitalization-only transcript (never substitutes words!) */
   normalizedTranscript: string;
-  /** Optional user-edited override */
+  /** Alias matching strict 6-field data integrity contract */
+  punctuationNormalizedTranscript: string;
+  /** 4. Optional user-edited override (preserved separately from originalRawTranscript) */
   editedTranscript?: string;
+  userEditedTranscript?: string;
   /** Single canonical transcript consumed by BOTH Friend Engine & English Coach */
   analysisTranscript: string;
+  /** Optional session-scoped audio Blob URL so user can replay and verify exact spoken words */
+  recordedAudioUrl?: string;
   uncertainWords?: string[];
   sttConfidence?: number;
   sttEngine: BuddySpeechEngine | 'typed';
@@ -331,6 +338,7 @@ export interface BuddyTurnTrace {
   sessionId: string;
   timestamp: number;
   rawTranscript: string;
+  finalizedVerbatimTranscript?: string;
   normalizedTranscript: string;
   analysisTranscript: string;
   coherenceQuality: TranscriptQuality;
@@ -351,10 +359,22 @@ export interface BuddyMessage {
   id: string;
   role: 'user' | 'buddy';
   timestamp: number;
-  /** Processed, punctuated, or user-edited text shown in the conversation */
+  /** Display transcript shown in conversation (never overwritten with correctedSentence!) */
   text: string;
-  /** Immutable original STT transcript preserved for debugging & STT-vs-grammar separation */
+  /** 1. Immutable original STT transcript preserved for debugging & STT-vs-grammar separation */
   originalRawTranscript?: string;
+  /** 2. Finalized verbatim transcript before punctuation restoration */
+  finalizedVerbatimTranscript?: string;
+  /** 3. Separate user-edited transcript if the learner fixed a misheard word */
+  userEditedTranscript?: string;
+  /** 4. Non-destructive punctuation-normalized transcript (same words as verbatim/edited) */
+  punctuationNormalizedTranscript?: string;
+  /** 5. Grammar-corrected sentence stored separately — NEVER overwrites originalRawTranscript or text */
+  correctedSentence?: string;
+  /** 6. Structured grammar mistakes detected for this turn */
+  grammarMistakes?: BuddyMistake[];
+  /** Optional in-memory Blob URL of the user's recorded audio for verbatim verification */
+  recordedAudioUrl?: string;
   /** Whether the user manually corrected a misheard STT word */
   isEdited?: boolean;
   /** Words flagged as low-confidence by STT (never auto-penalized as grammar errors) */

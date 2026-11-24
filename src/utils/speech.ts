@@ -744,78 +744,41 @@ export function playPronunciation(
 }
 
 /* ------------------------------------------------------------------ */
-/* Google AI Studio · Gemini 2.5 Native TTS ("Cheeky Sidekick" & more) */
+/* Primary Voice Engine · Free Unlimited Edge Neural HD Voices         */
 /* ------------------------------------------------------------------ */
 
-export type GeminiTtsVoiceName = 'Puck' | 'Zephyr' | 'Aoede' | 'Leda' | 'Fenrir' | 'Kore';
-export type GeminiStylePresetId =
-  | 'cheeky-sidekick'
-  | 'warm-friend'
-  | 'gentle-coach'
-  | 'calm-british';
+export type FreeNeuralVoiceName =
+  | 'en-US-AvaMultilingualNeural'
+  | 'en-US-EmmaMultilingualNeural'
+  | 'en-US-AndrewMultilingualNeural'
+  | 'en-GB-SoniaNeural'
+  | 'en-GB-RyanNeural'
+  | 'en-AU-NatashaNeural';
 
 export interface BuddyVoiceConfig {
-  provider: 'gemini' | 'standard';
-  geminiVoice: GeminiTtsVoiceName;
-  stylePreset: GeminiStylePresetId;
+  provider: 'neural-free' | 'standard';
+  freeNeuralVoice: FreeNeuralVoiceName;
   rate: number;
 }
 
-export const GEMINI_TTS_VOICES: Array<{
-  id: GeminiTtsVoiceName;
+export const FREE_NEURAL_VOICES: Array<{
+  id: FreeNeuralVoiceName;
   label: string;
   trait: string;
 }> = [
-  { id: 'Puck', label: 'Puck', trait: 'Upbeat & Playful' },
-  { id: 'Zephyr', label: 'Zephyr', trait: 'Bright & Lively' },
-  { id: 'Aoede', label: 'Aoede', trait: 'Breezy & Warm' },
-  { id: 'Leda', label: 'Leda', trait: 'Youthful & Friendly' },
-  { id: 'Fenrir', label: 'Fenrir', trait: 'Excitable & Energetic' },
-  { id: 'Kore', label: 'Kore', trait: 'Firm & Clear' }
-];
-
-export const GEMINI_STYLE_PRESETS: Array<{
-  id: GeminiStylePresetId;
-  label: string;
-  subtitle: string;
-  promptPrefix: string;
-}> = [
-  {
-    id: 'cheeky-sidekick',
-    label: 'Cheeky Sidekick',
-    subtitle: 'Bright & playful',
-    promptPrefix:
-      'Say the following in a bright, playful, cheeky sidekick tone with lively conversational warmth and natural rhythm:'
-  },
-  {
-    id: 'warm-friend',
-    label: 'Warm Friend',
-    subtitle: 'Casual & relaxed',
-    promptPrefix:
-      'Say the following in a warm, casual, relaxed tone like a close friend chatting naturally:'
-  },
-  {
-    id: 'gentle-coach',
-    label: 'Gentle Mentor',
-    subtitle: 'Clear & encouraging',
-    promptPrefix:
-      'Say the following in a clear, patient, encouraging tone like a supportive English companion:'
-  },
-  {
-    id: 'calm-british',
-    label: 'Crisp British',
-    subtitle: 'Natural UK cadence',
-    promptPrefix:
-      'Say the following in a natural, friendly, articulate British conversational tone:'
-  }
+  { id: 'en-US-AvaMultilingualNeural', label: 'Ava (US)', trait: 'Bright & Friendly' },
+  { id: 'en-US-EmmaMultilingualNeural', label: 'Emma (US)', trait: 'Cheerful & Playful' },
+  { id: 'en-US-AndrewMultilingualNeural', label: 'Andrew (US)', trait: 'Warm & Casual' },
+  { id: 'en-GB-SoniaNeural', label: 'Sonia (UK)', trait: 'Natural British' },
+  { id: 'en-GB-RyanNeural', label: 'Ryan (UK)', trait: 'Friendly British' },
+  { id: 'en-AU-NatashaNeural', label: 'Natasha (AU)', trait: 'Upbeat Australian' }
 ];
 
 const BUDDY_VOICE_CONFIG_KEY = 'lingo_buddy_voice_config_v1';
 
 export const DEFAULT_BUDDY_VOICE_CONFIG: BuddyVoiceConfig = {
-  provider: 'gemini',
-  geminiVoice: 'Puck',
-  stylePreset: 'cheeky-sidekick',
+  provider: 'neural-free',
+  freeNeuralVoice: 'en-US-AvaMultilingualNeural',
   rate: 1.0
 };
 
@@ -826,13 +789,11 @@ export function loadBuddyVoiceConfig(): BuddyVoiceConfig {
     if (!raw) return DEFAULT_BUDDY_VOICE_CONFIG;
     const parsed = JSON.parse(raw);
     return {
-      provider: parsed.provider === 'standard' ? 'standard' : 'gemini',
-      geminiVoice: GEMINI_TTS_VOICES.some(v => v.id === parsed.geminiVoice)
-        ? parsed.geminiVoice
-        : DEFAULT_BUDDY_VOICE_CONFIG.geminiVoice,
-      stylePreset: GEMINI_STYLE_PRESETS.some(p => p.id === parsed.stylePreset)
-        ? parsed.stylePreset
-        : DEFAULT_BUDDY_VOICE_CONFIG.stylePreset,
+      // Automatically migrate any legacy 'gemini' setting to primary 'neural-free'
+      provider: parsed.provider === 'standard' ? 'standard' : 'neural-free',
+      freeNeuralVoice: FREE_NEURAL_VOICES.some(v => v.id === parsed.freeNeuralVoice)
+        ? parsed.freeNeuralVoice
+        : DEFAULT_BUDDY_VOICE_CONFIG.freeNeuralVoice,
       rate:
         typeof parsed.rate === 'number' && parsed.rate >= 0.75 && parsed.rate <= 1.3
           ? parsed.rate
@@ -850,56 +811,9 @@ export function saveBuddyVoiceConfig(config: BuddyVoiceConfig): void {
   } catch {}
 }
 
-/** In-memory LRU cache so "Listen again" replays Gemini TTS instantly in 0ms */
-const geminiTtsAudioCache = new Map<string, Blob>();
-const MAX_GEMINI_TTS_CACHE = 24;
-
-function base64ToUint8Array(base64: string): Uint8Array {
-  const binary = atob(base64);
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) {
-    bytes[i] = binary.charCodeAt(i);
-  }
-  return bytes;
-}
-
-/**
- * Wrap raw signed 16-bit little-endian mono PCM (e.g., audio/L16;codec=pcm;rate=24000)
- * in a standard 44-byte RIFF/WAVE header so any browser HTMLAudioElement plays it natively.
- */
-function pcm16ToWavBlob(pcmBytes: Uint8Array, sampleRate: number = 24000): Blob {
-  const numChannels = 1;
-  const bitsPerSample = 16;
-  const byteRate = (sampleRate * numChannels * bitsPerSample) / 8;
-  const blockAlign = (numChannels * bitsPerSample) / 8;
-  const dataSize = pcmBytes.byteLength;
-
-  const buffer = new ArrayBuffer(44 + dataSize);
-  const view = new DataView(buffer);
-
-  const writeStr = (offset: number, s: string) => {
-    for (let i = 0; i < s.length; i++) {
-      view.setUint8(offset + i, s.charCodeAt(i));
-    }
-  };
-
-  writeStr(0, 'RIFF');
-  view.setUint32(4, 36 + dataSize, true);
-  writeStr(8, 'WAVE');
-  writeStr(12, 'fmt ');
-  view.setUint32(16, 16, true); // PCM format chunk size
-  view.setUint16(20, 1, true); // AudioFormat 1 = PCM
-  view.setUint16(22, numChannels, true);
-  view.setUint32(24, sampleRate, true);
-  view.setUint32(28, byteRate, true);
-  view.setUint16(32, blockAlign, true);
-  view.setUint16(34, bitsPerSample, true);
-  writeStr(36, 'data');
-  view.setUint32(40, dataSize, true);
-
-  new Uint8Array(buffer, 44).set(pcmBytes);
-  return new Blob([buffer], { type: 'audio/wav' });
-}
+/** In-memory LRU cache so "Listen again" replays instantly in 0ms */
+const freeNeuralAudioCache = new Map<string, Blob>();
+const MAX_NEURAL_TTS_CACHE = 32;
 
 function attachAudioWaveformAnalyser(
   audio: HTMLAudioElement,
@@ -939,19 +853,20 @@ function attachAudioWaveformAnalyser(
   }
 }
 
-export async function playGeminiTtsSpeech(
+/**
+ * Play 100% Free Unlimited Microsoft Edge Neural HD Voices (Ava, Emma, Andrew, Sonia, Ryan, Natasha)
+ * with live Orb waveform sync & seamless Browser TTS fallback if `/api/neural-tts` is unavailable.
+ */
+export async function playFreeNeuralSpeech(
   text: string,
   options: {
-    apiKey: string;
-    voiceName?: GeminiTtsVoiceName;
-    stylePreset?: GeminiStylePresetId;
+    voice?: FreeNeuralVoiceName;
     rate?: number;
     onStart?: () => void;
     onEnd?: () => void;
     onError?: (err: any) => void;
-    onFallback?: (reason: string) => void;
     onAudioLevel?: (level: number) => void;
-  }
+  } = {}
 ): Promise<void> {
   stopAllSpeech();
 
@@ -961,15 +876,15 @@ export async function playGeminiTtsSpeech(
     return;
   }
 
-  const trimmedKey = (options.apiKey || '').trim();
-  const voiceName: GeminiTtsVoiceName = options.voiceName || 'Puck';
-  const presetId: GeminiStylePresetId = options.stylePreset || 'cheeky-sidekick';
-  const preset =
-    GEMINI_STYLE_PRESETS.find(p => p.id === presetId) || GEMINI_STYLE_PRESETS[0];
+  const voice: FreeNeuralVoiceName = options.voice || 'en-US-AvaMultilingualNeural';
   const effectiveRate = Math.max(0.75, Math.min(1.3, options.rate ?? 1.0));
+  const ratePctNum = Math.round((effectiveRate - 1.0) * 100);
+  const rateParam = `${ratePctNum >= 0 ? '+' : ''}${ratePctNum}%`;
 
-  const fallbackToStandard = (reason: string) => {
-    options.onFallback?.(reason);
+  const sessionId = ++currentSpeechSessionId;
+  isCloudAudioCancelled = false;
+
+  const fallbackToBrowser = () => {
     playSpeech(cleanText, {
       rate: effectiveRate,
       onStart: options.onStart,
@@ -978,122 +893,60 @@ export async function playGeminiTtsSpeech(
     });
   };
 
-  if (!trimmedKey) {
-    fallbackToStandard('Connect a Gemini API key in Audio Settings to use Cheeky Sidekick voice.');
-    return;
-  }
-
-  const sessionId = ++currentSpeechSessionId;
-  isCloudAudioCancelled = false;
-
-  const cacheKey = `${voiceName}|${presetId}|${cleanText}`;
-  let audioBlob = geminiTtsAudioCache.get(cacheKey) || null;
+  const cacheKey = `${voice}|${rateParam}|${cleanText}`;
+  let audioBlob = freeNeuralAudioCache.get(cacheKey) || null;
 
   if (!audioBlob) {
     const controller = new AbortController();
     currentTtsAbortController = controller;
-    const timeoutId = setTimeout(() => controller.abort(), 11000);
+    const timeoutId = setTimeout(() => controller.abort(), 9000);
 
     try {
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${encodeURIComponent(
-        trimmedKey
-      )}`;
+      let url = `/api/neural-tts?voice=${encodeURIComponent(voice)}&rate=${encodeURIComponent(
+        rateParam
+      )}&q=${encodeURIComponent(cleanText)}`;
+      if (typeof window !== 'undefined' && window.location.origin && window.location.origin !== 'null') {
+        url = `${window.location.origin}${url}`;
+      }
 
-      const promptText = `${preset.promptPrefix}\n"${cleanText}"`;
-
-      const res = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        signal: controller.signal,
-        body: JSON.stringify({
-          contents: [
-            {
-              role: 'user',
-              parts: [{ text: promptText }]
-            }
-          ],
-          generationConfig: {
-            responseModalities: ['AUDIO'],
-            speechConfig: {
-              voiceConfig: {
-                prebuiltVoiceConfig: {
-                  voiceName
-                }
-              }
-            }
-          }
-        })
-      });
-
+      const res = await fetch(url, { signal: controller.signal });
       clearTimeout(timeoutId);
-      if (currentTtsAbortController === controller) {
-        currentTtsAbortController = null;
-      }
+      if (currentTtsAbortController === controller) currentTtsAbortController = null;
 
-      if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) {
-        return;
-      }
-
+      if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) return;
       if (!res.ok) {
-        const errBody = await res.text().catch(() => '');
-        const shortMsg =
-          res.status === 429
-            ? 'Gemini TTS quota reached — switched to standard voice.'
-            : res.status === 401 || res.status === 403
-            ? 'Gemini API key rejected for TTS — switched to standard voice.'
-            : `Gemini TTS unavailable (${res.status}) — switched to standard voice.`;
-        console.warn('[Gemini TTS]', res.status, errBody.slice(0, 200));
-        fallbackToStandard(shortMsg);
+        fallbackToBrowser();
         return;
       }
 
-      const json = await res.json();
-      const parts = json?.candidates?.[0]?.content?.parts || [];
-      const inlineAudio = parts.find((p: any) => p?.inlineData?.data)?.inlineData;
-
-      if (!inlineAudio?.data) {
-        fallbackToStandard('Gemini TTS returned no audio — switched to standard voice.');
+      const contentType = (res.headers.get('content-type') || '').toLowerCase();
+      if (!contentType.includes('audio')) {
+        fallbackToBrowser();
         return;
       }
 
-      const rawBytes = base64ToUint8Array(inlineAudio.data);
-      const mimeType: string = (inlineAudio.mimeType || 'audio/L16;codec=pcm;rate=24000').toLowerCase();
-
-      if (mimeType.includes('wav') || mimeType.includes('mpeg') || mimeType.includes('mp3') || mimeType.includes('ogg')) {
-        audioBlob = new Blob([rawBytes.buffer as ArrayBuffer], { type: inlineAudio.mimeType });
-      } else {
-        const rateMatch = mimeType.match(/rate=(\d+)/);
-        const sampleRate = rateMatch ? parseInt(rateMatch[1], 10) : 24000;
-        audioBlob = pcm16ToWavBlob(rawBytes, sampleRate || 24000);
+      const blob = await res.blob();
+      if (!blob || blob.size < 256) {
+        fallbackToBrowser();
+        return;
       }
+      audioBlob = blob;
 
-      // Store in LRU cache
-      if (geminiTtsAudioCache.size >= MAX_GEMINI_TTS_CACHE) {
-        const oldestKey = geminiTtsAudioCache.keys().next().value;
-        if (oldestKey) geminiTtsAudioCache.delete(oldestKey);
+      if (freeNeuralAudioCache.size >= MAX_NEURAL_TTS_CACHE) {
+        const oldestKey = freeNeuralAudioCache.keys().next().value;
+        if (oldestKey) freeNeuralAudioCache.delete(oldestKey);
       }
-      geminiTtsAudioCache.set(cacheKey, audioBlob);
-    } catch (err: any) {
+      freeNeuralAudioCache.set(cacheKey, audioBlob);
+    } catch {
       clearTimeout(timeoutId);
-      if (currentTtsAbortController === controller) {
-        currentTtsAbortController = null;
-      }
-      if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) {
-        return;
-      }
-      const isTimeout = err?.name === 'AbortError';
-      fallbackToStandard(
-        isTimeout
-          ? 'Gemini TTS timed out — switched to standard voice.'
-          : 'Gemini TTS network error — switched to standard voice.'
-      );
+      if (currentTtsAbortController === controller) currentTtsAbortController = null;
+      if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) return;
+      fallbackToBrowser();
       return;
     }
   }
 
-  if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled || !audioBlob) {
-    return;
-  }
+  if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled || !audioBlob) return;
 
   const blobUrl = URL.createObjectURL(audioBlob);
   currentBlobUrl = blobUrl;
@@ -1103,7 +956,6 @@ export async function playGeminiTtsSpeech(
   audio.muted = false;
   audio.preload = 'auto';
   audio.src = blobUrl;
-  audio.playbackRate = effectiveRate;
   currentAudioElement = audio;
 
   audio.onplay = () => {
@@ -1122,9 +974,7 @@ export async function playGeminiTtsSpeech(
       try { URL.revokeObjectURL(blobUrl); } catch {}
       currentBlobUrl = null;
     }
-    if (currentAudioElement === audio) {
-      currentAudioElement = null;
-    }
+    if (currentAudioElement === audio) currentAudioElement = null;
     if (sessionId === currentSpeechSessionId && !isCloudAudioCancelled) {
       options.onEnd?.();
     }
@@ -1138,19 +988,262 @@ export async function playGeminiTtsSpeech(
       currentBlobUrl = null;
     }
     if (sessionId === currentSpeechSessionId && !isCloudAudioCancelled) {
-      fallbackToStandard('Audio playback error — switched to standard voice.');
+      fallbackToBrowser();
     }
   };
 
   try {
     await audio.play();
   } catch (err: any) {
-    if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) {
-      return;
-    }
-    if (err && (err.name === 'AbortError' || err.message?.includes('interrupted'))) {
-      return;
-    }
-    fallbackToStandard('Browser blocked audio autoplay — tap the orb or Listen again.');
+    if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) return;
+    if (err && (err.name === 'AbortError' || err.message?.includes('interrupted'))) return;
+    fallbackToBrowser();
   }
+}
+
+/* ------------------------------------------------------------------ */
+/* Real-Time Pipelined Sentence TTS Queue (Zero-Gap Streaming Speech)  */
+/* Pre-fetches sentence N+1 while sentence N plays aloud!              */
+/* ------------------------------------------------------------------ */
+
+async function fetchFreeNeuralAudioBlob(
+  text: string,
+  voice: FreeNeuralVoiceName,
+  rate: number,
+  signal: AbortSignal
+): Promise<Blob | null> {
+  const cleanText = text.replace(/[*_#`~[\]]/g, '').trim();
+  if (!cleanText) return null;
+  const ratePctNum = Math.round((Math.max(0.75, Math.min(1.3, rate)) - 1.0) * 100);
+  const rateParam = `${ratePctNum >= 0 ? '+' : ''}${ratePctNum}%`;
+  const cacheKey = `${voice}|${rateParam}|${cleanText}`;
+  const cached = freeNeuralAudioCache.get(cacheKey);
+  if (cached) return cached;
+
+  let url = `/api/neural-tts?voice=${encodeURIComponent(voice)}&rate=${encodeURIComponent(
+    rateParam
+  )}&q=${encodeURIComponent(cleanText)}`;
+  if (typeof window !== 'undefined' && window.location.origin && window.location.origin !== 'null') {
+    url = `${window.location.origin}${url}`;
+  }
+
+  try {
+    const res = await fetch(url, { signal });
+    if (!res.ok) return null;
+    const ct = (res.headers.get('content-type') || '').toLowerCase();
+    if (!ct.includes('audio')) return null;
+    const blob = await res.blob();
+    if (!blob || blob.size < 256) return null;
+    if (freeNeuralAudioCache.size >= MAX_NEURAL_TTS_CACHE) {
+      const oldest = freeNeuralAudioCache.keys().next().value;
+      if (oldest) freeNeuralAudioCache.delete(oldest);
+    }
+    freeNeuralAudioCache.set(cacheKey, blob);
+    return blob;
+  } catch {
+    return null;
+  }
+}
+
+export interface RealtimeTtsQueue {
+  enqueue: (sentence: string) => void;
+  markStreamDone: () => void;
+  cancel: () => void;
+}
+
+/**
+ * Starts synthesizing & playing each streamed sentence immediately via Free Unlimited Neural HD
+ * while pre-fetching upcoming sentences in parallel — zero quota limits, near-instant real-time speech!
+ */
+export function createRealtimeTtsQueue(options: {
+  voiceConfig: BuddyVoiceConfig;
+  onFirstStart?: () => void;
+  onAllEnd?: () => void;
+  onAudioLevel?: (level: number) => void;
+}): RealtimeTtsQueue {
+  stopAllSpeech();
+  const sessionId = ++currentSpeechSessionId;
+  isCloudAudioCancelled = false;
+
+  const controller = new AbortController();
+  currentTtsAbortController = controller;
+
+  interface QueueItem {
+    text: string;
+    promise: Promise<Blob | null>;
+  }
+
+  const items: QueueItem[] = [];
+  let playIdx = 0;
+  let isPlayingLoop = false;
+  let streamDone = false;
+  let startedOnce = false;
+  let finishedOnce = false;
+
+  const isAlive = () => sessionId === currentSpeechSessionId && !isCloudAudioCancelled;
+
+  const finishIfComplete = () => {
+    if (finishedOnce || !isAlive()) return;
+    if (streamDone && playIdx >= items.length) {
+      finishedOnce = true;
+      cleanupTtsAnalyser();
+      options.onAudioLevel?.(0);
+      options.onAllEnd?.();
+    }
+  };
+
+  const playBlobOnce = (blob: Blob): Promise<boolean> =>
+    new Promise((resolve) => {
+      if (!isAlive()) {
+        resolve(false);
+        return;
+      }
+      const blobUrl = URL.createObjectURL(blob);
+      currentBlobUrl = blobUrl;
+
+      const audio = new Audio();
+      audio.volume = 1.0;
+      audio.muted = false;
+      audio.preload = 'auto';
+      audio.src = blobUrl;
+      currentAudioElement = audio;
+
+      const cleanupUrl = () => {
+        cleanupTtsAnalyser();
+        options.onAudioLevel?.(0);
+        if (currentBlobUrl === blobUrl) {
+          try { URL.revokeObjectURL(blobUrl); } catch {}
+          currentBlobUrl = null;
+        }
+        if (currentAudioElement === audio) currentAudioElement = null;
+      };
+
+      audio.onplay = () => {
+        if (!isAlive()) {
+          audio.pause();
+          cleanupUrl();
+          resolve(false);
+          return;
+        }
+        attachAudioWaveformAnalyser(audio, options.onAudioLevel);
+        if (!startedOnce) {
+          startedOnce = true;
+          options.onFirstStart?.();
+        }
+      };
+
+      audio.onended = () => {
+        cleanupUrl();
+        resolve(true);
+      };
+
+      audio.onerror = () => {
+        cleanupUrl();
+        resolve(false);
+      };
+
+      audio.play().catch(() => {
+        cleanupUrl();
+        resolve(false);
+      });
+    });
+
+  const playBrowserOnce = (text: string): Promise<void> =>
+    new Promise((resolve) => {
+      if (!isAlive() || typeof window === 'undefined' || !('speechSynthesis' in window)) {
+        resolve();
+        return;
+      }
+      const utt = new SpeechSynthesisUtterance(text);
+      utt.rate = options.voiceConfig.rate || 1.0;
+      utt.volume = 1.0;
+      const chosen = resolveVoice();
+      if (chosen) {
+        utt.voice = chosen;
+        utt.lang = chosen.lang;
+      } else {
+        utt.lang = 'en-GB';
+      }
+      activeUtterances = [utt];
+      let done = false;
+      const finish = () => {
+        if (done) return;
+        done = true;
+        resolve();
+      };
+      const watchdog = setTimeout(finish, 12000);
+      utt.onstart = () => {
+        if (!startedOnce) {
+          startedOnce = true;
+          options.onFirstStart?.();
+        }
+      };
+      utt.onend = () => {
+        clearTimeout(watchdog);
+        finish();
+      };
+      utt.onerror = () => {
+        clearTimeout(watchdog);
+        finish();
+      };
+      try {
+        if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+        window.speechSynthesis.speak(utt);
+      } catch {
+        clearTimeout(watchdog);
+        finish();
+      }
+    });
+
+  const pump = async () => {
+    if (isPlayingLoop) return;
+    isPlayingLoop = true;
+    try {
+      while (isAlive() && playIdx < items.length) {
+        const current = items[playIdx++];
+        const blob = await current.promise;
+        if (!isAlive()) return;
+        if (blob) {
+          const ok = await playBlobOnce(blob);
+          if (!ok && isAlive()) {
+            await playBrowserOnce(current.text);
+          }
+        } else if (isAlive()) {
+          await playBrowserOnce(current.text);
+        }
+      }
+    } finally {
+      isPlayingLoop = false;
+      finishIfComplete();
+    }
+  };
+
+  return {
+    enqueue(sentence: string) {
+      const clean = sentence.replace(/[*_#`~[\]]/g, '').trim();
+      if (!clean || !isAlive()) return;
+      const promise =
+        options.voiceConfig.provider === 'standard'
+          ? Promise.resolve(null)
+          : fetchFreeNeuralAudioBlob(
+              clean,
+              options.voiceConfig.freeNeuralVoice,
+              options.voiceConfig.rate,
+              controller.signal
+            );
+      items.push({ text: clean, promise });
+      void pump();
+    },
+    markStreamDone() {
+      streamDone = true;
+      if (!isPlayingLoop) {
+        finishIfComplete();
+      }
+    },
+    cancel() {
+      if (isAlive()) {
+        stopAllSpeech();
+      }
+    }
+  };
 }

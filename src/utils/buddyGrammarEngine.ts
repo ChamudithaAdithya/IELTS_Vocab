@@ -150,11 +150,25 @@ export function validateTranscriptCoherence(
   }
 
   // 3B. General Broken-Syntax / Garbled STT Collision Detector (catches arbitrary mic word salads!)
-  // Non-English en-IN STT bleed tokens mixed into an English sentence (e.g., "Koi natural English...")
-  const foreignSttBleed = clean.match(/\b(koi|kya|hai|nahi|achha|mokada|ane|eka)\b/i);
-  if (foreignSttBleed && tokens.length >= 4) {
+  // Non-English en-IN STT bleed tokens (standalone or mixed into an English sentence, e.g., "Main hun.", "Ek.", "Kunjit.", "Koi natural...")
+  const standaloneForeignBleed = clean.match(
+    /^\s*(?:main\s+hun|hun|ek|amma|kunjit|kya|nahi|hai|koi|achha|mokada|ane|eka)[.!?,\s]*$/i
+  );
+  if (standaloneForeignBleed) {
+    hardGarbleScore += 3;
+    suspiciousSpans.push(clean);
+  }
+  const foreignSttBleed = clean.match(/\b(koi|kya|hai|nahi|achha|mokada|ane|eka|main\s+hun)\b/i);
+  if (foreignSttBleed && !standaloneForeignBleed && tokens.length >= 2) {
     hardGarbleScore += 2;
     suspiciousSpans.push(foreignSttBleed[0]);
+  }
+
+  // Truncated mid-sentence cutoff ending on a dangling preposition/conjunction (e.g., "...playing multiplayer with.")
+  const truncatedEnding = clean.match(/\b(?:with|because|and|but|while|although|about|from|into)\s*[.]?\s*$/i);
+  if (truncatedEnding && tokens.length >= 4 && !/\?$/.test(clean)) {
+    hardGarbleScore += 2;
+    suspiciousSpans.push(truncatedEnding[0].trim());
   }
 
   // Impossible English verb/preposition chains produced by corrupted STT ("make going like out my pic night")
@@ -238,6 +252,8 @@ interface LocalGrammarPattern {
   regex: RegExp;
   category: GrammarCategoryCode;
   severity: FeedbackSeverity;
+  /** Optional precision sub-span targeting so adjacent errors (e.g. "go" + "to shopping") never overlap! */
+  getSpan?: (match: RegExpExecArray) => { startOffset: number; endOffset: number; original: string };
   getCorrection: (match: RegExpExecArray, fullSentence: string) => string;
   explanation: string;
   simpleExplanation?: string;
@@ -253,6 +269,57 @@ interface LocalGrammarPattern {
 }
 
 const LOCAL_BUDDY_PATTERNS: LocalGrammarPattern[] = [
+  {
+    id: 'art-a-plural-noun',
+    regex: /\b(a)\s+(friends|people|games|clothes|things|books|movies|days|hours|minutes|students|teachers|children|parents|colleagues|places|ideas|questions|problems|mistakes)\b/gi,
+    category: 'ARTICLES',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => m[2],
+    explanation: 'Do not use "a" before a plural noun (like "a friends"). Use the plural noun directly ("with friends") or singular ("with a friend").',
+    simpleExplanation: 'Never put "a" before a plural noun — say "with friends" (or "with a friend").',
+    explanationSi: 'බහුවචන නාමපදයකට පෙර "a" භාවිත නොකරන්න — "a friends" වෙනුවට "friends" (හෝ ඒකවචනයෙන් "a friend") ලෙස කියන්න.',
+    grammar_rule: 'No "a / an" before Plural Nouns',
+    example: 'We had a party at home while hanging out with friends.',
+    learning_tip: '"A" always means ONE — never pair it with a plural noun ending in -s like "friends" or "games".',
+    confidence: 0.98
+  },
+  {
+    id: 'ss-i-not-missing-aux',
+    regex: /\b(I|we|they|you)\s+not\s+(like|play|know|want|need|think|have|go|work|study|eat|drink|watch|use|prefer|survival|good|sure|ready|busy|happy|tired|fine|able)\b/gi,
+    category: 'SENTENCE_STRUCTURE',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => {
+      const subj = m[1];
+      const next = m[2].toLowerCase();
+      const adjOrNoun = ['survival', 'good', 'sure', 'ready', 'busy', 'happy', 'tired', 'fine', 'able'].includes(next);
+      if (adjOrNoun) {
+        const be = subj.toLowerCase() === 'i' ? 'am not' : 'are not';
+        return next === 'survival' ? `${subj} don't play ${m[2]}` : `${subj} ${be} ${m[2]}`;
+      }
+      return `${subj} don't ${m[2]}`;
+    },
+    explanation: 'English negative sentences need a helping verb ("don\'t" before action verbs, or "am not / are not" before adjectives) instead of putting "not" directly after the subject.',
+    simpleExplanation: 'Add "don\'t" or "am not" instead of "I not ...".',
+    explanationSi: 'නැත යන අර්ථය දැක්වීමට "I not..." ලෙස කෙලින්ම යොදන්න එපා — ක්‍රියාපදයකට පෙර "I don\'t..." සහ විශේෂණයකට පෙර "I am not..." භාවිත කරන්න.',
+    grammar_rule: 'Negatives: Subject + don\'t + verb / Subject + am/are not + adjective',
+    example: "I don't play survival mode because I already have everything I need.",
+    learning_tip: 'Never say "I not..." — always use "I don\'t..." (for actions) or "I\'m not..." (for states).',
+    confidence: 0.96
+  },
+  {
+    id: 'ss-resumptive-that-i-need-it',
+    regex: /\b(everything|something|anything|all)\s+that\s+(I|you|we|they|he|she)\s+(need|needed|want|wanted|like|liked|use|used)\s+(it|them)\b/gi,
+    category: 'SENTENCE_STRUCTURE',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => `${m[1]} that ${m[2]} ${m[3]}`,
+    explanation: 'When you already used "everything that...", do not repeat "it" or "them" at the end of the clause — "everything" is already the object.',
+    simpleExplanation: 'Remove the extra "it" at the end: say "everything that I need" (not "everything that I need it").',
+    explanationSi: '"Everything that I need" යන්නෙහි "everything" දැනටමත් කර්මය බැවින් අගට අමතර "it" යෙදීම අවශ්‍ය නොවේ.',
+    grammar_rule: 'Relative Clauses: No extra object pronoun ("it / them") at the end',
+    example: 'I almost have everything that I need.',
+    learning_tip: 'After "everything that I need", stop at the verb — drop the extra "it".',
+    confidence: 0.96
+  },
   // 0. HIGH-PRIORITY REAL SPOKEN SYNTAX & STRUCTURAL PATTERNS (Reported Questions, Broken Modals, Incomplete Predicates)
   {
     id: 'ss-didnt-get-what-asking',
@@ -702,12 +769,16 @@ const LOCAL_BUDDY_PATTERNS: LocalGrammarPattern[] = [
   // 2. PREPOSITIONS
   {
     id: 'prep-went-to-shopping',
-    regex: /\b(go|went|going)\s+to\s+(shopping|swimming|running|hiking|camping|fishing|sightseeing)\b/gi,
+    regex: /\b(go|went|going)\s+(to\s+(shopping|swimming|running|hiking|camping|fishing|sightseeing))\b/gi,
     category: 'PREPOSITIONS',
     severity: 'GRAMMAR_ERROR',
-    getCorrection: (m) => `${m[1]} ${m[2]}`,
+    getSpan: (m) => {
+      const startOffset = m[0].length - m[2].length;
+      return { startOffset, endOffset: m[0].length, original: m[2] };
+    },
+    getCorrection: (m) => m[3],
     explanation: 'We don\'t use "to" between "go/went" and "-ing" leisure activities like "shopping" or "swimming".',
-    simpleExplanation: 'Skip "to" before "-ing" activities: say "went shopping".',
+    simpleExplanation: 'Skip "to" before "-ing" activities: say "went shopping" instead of "went to shopping".',
     explanationSi: '"Go / went" සමඟ "shopping", "swimming" වැනි -ing ක්‍රියාකාරකම් යෙදෙන විට අතරමැදට "to" නොයොදන්න.',
     sinhalaTransferNote: 'සිංහලෙන් "ෂොපින් යන්න" යන අදහසට "went to shopping" ලෙස සිතුවත්, ඉංග්‍රීසියේ "to" යොදන්නේ ස්ථානයකට ("go to the mall") පමණි.',
     grammar_rule: 'go + verb-ing (go shopping, go swimming, go hiking)',
@@ -785,28 +856,43 @@ const LOCAL_BUDDY_PATTERNS: LocalGrammarPattern[] = [
   // 3. VERB TENSE (Past Context Mismatches)
   {
     id: 'vt-yesterday-present',
-    regex: /\b(yesterday|last\s+night|last\s+week|two\s+days\s+ago)(,?\s+)(I|we|they)\s+(am|go|eat|buy|meet|see|have|do|study|work)\b/gi,
+    regex: /\b(yesterday|last\s+night|last\s+week|two\s+days\s+ago)(,?\s+)(I|we|they|he|she)\s+(am|is|go|goes|eat|eats|buy|buys|meet|meets|see|sees|have|has|do|does|study|studies|work|works)\b/gi,
     category: 'VERB_TENSE',
     severity: 'GRAMMAR_ERROR',
+    getSpan: (m) => {
+      const startOffset = m[0].length - m[4].length;
+      return { startOffset, endOffset: m[0].length, original: m[4] };
+    },
     getCorrection: (m) => {
       const past: Record<string, string> = {
         am: 'was',
+        is: 'was',
         go: 'went',
+        goes: 'went',
         eat: 'ate',
+        eats: 'ate',
         buy: 'bought',
+        buys: 'bought',
         meet: 'met',
+        meets: 'met',
         see: 'saw',
+        sees: 'saw',
         have: 'had',
+        has: 'had',
         do: 'did',
+        does: 'did',
         study: 'studied',
-        work: 'worked'
+        studies: 'studied',
+        work: 'worked',
+        works: 'worked'
       };
-      return `${m[1]}${m[2]}${m[3]} ${past[m[4].toLowerCase()] || m[4]}`;
+      return past[m[4].toLowerCase()] || m[4];
     },
     explanation: 'Because the sentence refers to a finished past time (e.g., "yesterday"), the verb needs to be in the simple past tense.',
+    simpleExplanation: 'Because it happened yesterday, change the verb to past tense (e.g., "go" → "went").',
     explanationSi: '"Yesterday" වැනි අතීත කාල වචනයක් ඇති බැවින් ක්‍රියාපදය අතීත කාලයෙන් (Simple Past) යෙදිය යුතුය.',
     grammar_rule: 'Simple Past Tense with past time markers',
-    example: 'Yesterday I went to university and met my friends.',
+    example: 'Yesterday I went shopping and bought some clothes.',
     learning_tip: 'Spot time words like "yesterday" or "last week" and shift your verbs into past tense.',
     confidence: 0.96
   },
@@ -1501,7 +1587,10 @@ export function analyzeBuddyGrammarLocally(params: {
     pat.regex.lastIndex = 0;
     let m: RegExpExecArray | null;
     while ((m = pat.regex.exec(clean)) !== null) {
-      const matchedText = m[0];
+      const span = pat.getSpan ? pat.getSpan(m) : null;
+      const matchedText = span ? span.original : m[0];
+      const matchStart = m.index + (span ? span.startOffset : 0);
+      const matchEnd = m.index + (span ? span.endOffset : m[0].length);
       const matchTokens = matchedText
         .toLowerCase()
         .replace(/[^a-z0-9'\s]/g, ' ')
@@ -1522,10 +1611,10 @@ export function analyzeBuddyGrammarLocally(params: {
       if (finalCorr.toLowerCase() === matchedText.toLowerCase()) continue;
 
       rawMatches.push({
-        start: m.index,
-        end: m.index + matchedText.length,
+        start: matchStart,
+        end: matchEnd,
         mistake: {
-          id: `${pat.id}-${m.index}`,
+          id: `${pat.id}-${matchStart}`,
           original: matchedText,
           correction: finalCorr,
           category: pat.category,
@@ -1876,6 +1965,17 @@ Respond STRICTLY in valid JSON matching this schema:
               };
             })
         : [];
+
+    // Safety cross-check: if Gemini returned 0 mistakes on a sentence where our deterministic local analyzer
+    // caught high-confidence (>= 0.94) GRAMMAR_ERRORs (e.g. "buyed", "with a friends", "I not ..."),
+    // preserve those local errors so a lenient LLM response never shows a false "✓ Clean English" badge!
+    if (
+      resolvedQuality !== 'unclear' &&
+      mistakes.length === 0 &&
+      localFallback.mistakes.some(m => m.severity === 'GRAMMAR_ERROR' && m.confidence >= 0.94)
+    ) {
+      return localFallback;
+    }
 
     const resolvedCorrected =
       resolvedQuality === 'unclear'

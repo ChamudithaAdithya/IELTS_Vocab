@@ -56,24 +56,24 @@ const SEVERITY_META: Record<
   { label: string; badgeClass: string; borderClass: string }
 > = {
   GRAMMAR_ERROR: {
-    label: 'Incorrect',
-    badgeClass: 'bg-rose-50 text-rose-700 border-rose-200',
-    borderClass: 'border-rose-200/80'
+    label: 'Mistake',
+    badgeClass: 'bg-red-50 text-red-700 border-red-200',
+    borderClass: 'border-red-200/90'
   },
   UNNATURAL: {
-    label: 'Less Natural',
-    badgeClass: 'bg-amber-50 text-amber-800 border-amber-200',
-    borderClass: 'border-amber-200/80'
+    label: 'Natural Expression',
+    badgeClass: 'bg-purple-50 text-purple-700 border-purple-200',
+    borderClass: 'border-purple-200/85'
   },
   ALTERNATIVE: {
-    label: 'Alternative',
-    badgeClass: 'bg-sky-50 text-sky-700 border-sky-200',
-    borderClass: 'border-sky-200/80'
-  },
-  ADVANCED: {
-    label: 'Advanced',
+    label: 'Natural Option',
     badgeClass: 'bg-purple-50 text-purple-700 border-purple-200',
     borderClass: 'border-purple-200/80'
+  },
+  ADVANCED: {
+    label: 'Expression Upgrade',
+    badgeClass: 'bg-purple-50 text-purple-700 border-purple-200',
+    borderClass: 'border-purple-200/85'
   }
 };
 
@@ -286,8 +286,8 @@ export const BuddyFeedbackCard: React.FC<BuddyFeedbackCardProps> = ({
               errCode === 'not-allowed'
                 ? 'Microphone permission blocked — allow mic access or click Type.'
                 : errCode === 'network'
-                ? 'Browser speech network busy — click Try Again or use Type to practice.'
-                : `Mic stopped (${errCode}) — tap Try Again or click Type.`
+                  ? 'Browser speech network busy — click Try Again or use Type to practice.'
+                  : `Mic stopped (${errCode}) — tap Try Again or click Type.`
             );
             setShowTryAgainTypeBox(true);
           }
@@ -423,31 +423,27 @@ export const BuddyFeedbackCard: React.FC<BuddyFeedbackCardProps> = ({
       >
         <div className="flex items-center gap-2 min-w-0">
           <span
-            className={`w-2 h-2 rounded-full shrink-0 ${
-              errorCount > 0 ? 'bg-amber-500' : 'bg-purple-500'
-            }`}
+            className={`w-2 h-2 rounded-full shrink-0 ${errorCount > 0 ? 'bg-red-500' : 'bg-purple-500'
+              }`}
           />
           <span className="text-xs font-bold text-slate-900 truncate">
             Live English Feedback
           </span>
           <span
-            className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border shrink-0 ${
-              errorCount > 0
-                ? 'bg-amber-50 text-amber-700 border-amber-200'
-                : 'bg-purple-50 text-purple-700 border-purple-200'
-            }`}
+            className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border shrink-0 ${errorCount > 0
+              ? 'bg-red-50 text-red-700 border-red-200'
+              : 'bg-purple-50 text-purple-700 border-purple-200'
+              }`}
           >
             {errorCount > 0
-              ? `${errorCount} ${errorCount === 1 ? 'mistake' : 'mistakes'}${
-                  suggestionCount - errorCount + vocabCount > 0
-                    ? ` · +${suggestionCount - errorCount + vocabCount} boost`
-                    : ''
-                }`
+              ? `${errorCount} ${errorCount === 1 ? 'mistake' : 'mistakes'}${suggestionCount - errorCount + vocabCount > 0
+                ? ` · +${suggestionCount - errorCount + vocabCount} boost`
+                : ''
+              }`
               : suggestionCount > 0
-              ? `${suggestionCount} ${suggestionCount === 1 ? 'suggestion' : 'suggestions'}${
-                  vocabCount > 0 ? ` · +${vocabCount} vocab` : ''
+                ? `${suggestionCount} ${suggestionCount === 1 ? 'suggestion' : 'suggestions'}${vocabCount > 0 ? ` · +${vocabCount} vocab` : ''
                 }`
-              : `${vocabCount} vocabulary ${vocabCount === 1 ? 'upgrade' : 'upgrades'}`}
+                : `${vocabCount} vocabulary ${vocabCount === 1 ? 'upgrade' : 'upgrades'}`}
           </span>
           {activeTryResult?.matched && (
             <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0">
@@ -465,19 +461,19 @@ export const BuddyFeedbackCard: React.FC<BuddyFeedbackCardProps> = ({
       {/* Expanded Full Phase 2 Feedback Card */}
       {expanded && (
         <div className="px-3.5 pb-3.5 pt-2.5 space-y-3 border-t border-slate-200/80 animate-in fade-in duration-150">
-          {/* Side-by-Side Original vs. Corrected Sentence */}
+          {/* Side-by-Side Original (Red) vs. Corrected Sentence (Green) */}
           {analysis.corrected_sentence.toLowerCase() !== analysis.original_sentence.toLowerCase() && (
-            <div className="rounded-xl bg-white border border-slate-200/90 p-3 space-y-2.5 text-xs shadow-xs">
-              <div className="space-y-0.5">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+            <div className="rounded-xl bg-white/95 border border-slate-200/90 p-3 space-y-2.5 text-xs shadow-2xs">
+              <div className="rounded-lg bg-red-50/60 border border-red-100 px-2.5 py-2 space-y-0.5">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-red-600 block">
                   What You Said
                 </span>
-                <p className="text-slate-600 leading-relaxed line-through decoration-rose-400/80">
+                <p className="text-red-900/85 leading-relaxed line-through decoration-red-400">
                   “{analysis.original_sentence}”
                 </p>
               </div>
 
-              <div className="pt-2 border-t border-slate-100 space-y-1">
+              <div className="rounded-lg bg-emerald-50/75 border border-emerald-200/80 px-2.5 py-2 space-y-1">
                 <div className="flex items-center justify-between gap-2 flex-wrap">
                   <div className="flex items-center gap-1.5">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">
@@ -492,11 +488,10 @@ export const BuddyFeedbackCard: React.FC<BuddyFeedbackCardProps> = ({
                   <button
                     type="button"
                     onClick={() => speakCoachAudio('corrected-full', analysis.corrected_sentence)}
-                    className={`px-2 py-0.5 rounded-lg text-[10px] font-semibold flex items-center gap-1 transition-colors cursor-pointer ${
-                      speakingId === 'corrected-full'
-                        ? 'bg-emerald-600 text-white'
-                        : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200'
-                    }`}
+                    className={`px-2 py-0.5 rounded-lg text-[10px] font-semibold flex items-center gap-1 transition-colors cursor-pointer ${speakingId === 'corrected-full'
+                      ? 'bg-emerald-600 text-white'
+                      : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200'
+                      }`}
                     title="Hear the corrected sentence spoken aloud"
                   >
                     <Volume2 className="w-3 h-3" />
@@ -525,13 +520,12 @@ export const BuddyFeedbackCard: React.FC<BuddyFeedbackCardProps> = ({
                       <button
                         type="button"
                         onClick={handleStartTryAgainMic}
-                        className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-xs ${
-                          isRecordingTryAgain
-                            ? 'bg-rose-600 text-white animate-pulse'
-                            : activeTryResult?.matched
+                        className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-xs ${isRecordingTryAgain
+                          ? 'bg-rose-600 text-white animate-pulse'
+                          : activeTryResult?.matched
                             ? 'bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200'
                             : 'bg-blue-600 hover:bg-blue-700 text-white'
-                        }`}
+                          }`}
                       >
                         {isRecordingTryAgain ? (
                           <>
@@ -603,11 +597,10 @@ export const BuddyFeedbackCard: React.FC<BuddyFeedbackCardProps> = ({
 
                   {activeTryResult && (
                     <div
-                      className={`rounded-lg px-2.5 py-2 text-[11px] border flex items-start justify-between gap-2 ${
-                        activeTryResult.matched
-                          ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
-                          : 'bg-amber-50 border-amber-200 text-amber-900'
-                      }`}
+                      className={`rounded-lg px-2.5 py-2 text-[11px] border flex items-start justify-between gap-2 ${activeTryResult.matched
+                        ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                        : 'bg-amber-50 border-amber-200 text-amber-900'
+                        }`}
                     >
                       <div className="space-y-0.5">
                         <p className="font-semibold">
@@ -652,9 +645,8 @@ export const BuddyFeedbackCard: React.FC<BuddyFeedbackCardProps> = ({
               return (
                 <div
                   key={m.id}
-                  className={`rounded-xl bg-white border ${sev.borderClass} p-3 space-y-2 text-xs shadow-xs transition-opacity ${
-                    m.learned ? 'opacity-65' : ''
-                  }`}
+                  className={`rounded-xl bg-white border ${sev.borderClass} p-3 space-y-2 text-xs shadow-xs transition-opacity ${m.learned ? 'opacity-65' : ''
+                    }`}
                 >
                   {/* Top Row: Number, Phrase -> Correction, Severity & Category */}
                   <div className="flex items-start justify-between gap-2 flex-wrap">
@@ -787,11 +779,10 @@ export const BuddyFeedbackCard: React.FC<BuddyFeedbackCardProps> = ({
                       <button
                         type="button"
                         onClick={() => handleExplainMistakeAloud(m)}
-                        className={`text-[11px] font-semibold flex items-center gap-1 cursor-pointer ${
-                          speakingId === m.id
-                            ? 'text-emerald-700'
-                            : 'text-slate-500 hover:text-slate-900'
-                        }`}
+                        className={`text-[11px] font-semibold flex items-center gap-1 cursor-pointer ${speakingId === m.id
+                          ? 'text-emerald-700'
+                          : 'text-slate-500 hover:text-slate-900'
+                          }`}
                         title="Hear Lingo Buddy explain this rule verbally"
                       >
                         <Volume2 className="w-3 h-3" />
@@ -803,11 +794,10 @@ export const BuddyFeedbackCard: React.FC<BuddyFeedbackCardProps> = ({
                       <button
                         type="button"
                         onClick={() => onToggleLearned(m.id)}
-                        className={`px-2 py-0.5 rounded-lg text-[10px] font-semibold flex items-center gap-1 border transition-colors cursor-pointer ${
-                          m.learned
-                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                            : 'bg-slate-50 hover:bg-slate-100 text-slate-600 border-slate-200'
-                        }`}
+                        className={`px-2 py-0.5 rounded-lg text-[10px] font-semibold flex items-center gap-1 border transition-colors cursor-pointer ${m.learned
+                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                          : 'bg-slate-50 hover:bg-slate-100 text-slate-600 border-slate-200'
+                          }`}
                       >
                         <Check className="w-3 h-3" />
                         <span>{m.learned ? 'Learned' : 'Mark Learned'}</span>
@@ -871,11 +861,10 @@ export const BuddyFeedbackCard: React.FC<BuddyFeedbackCardProps> = ({
                             type="button"
                             onClick={() => handleSaveVocabUpgrade(vu)}
                             disabled={isSaved}
-                            className={`px-2 py-1 rounded-lg text-[10px] font-semibold flex items-center gap-1 border transition-colors cursor-pointer ${
-                              isSaved
-                                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                                : 'bg-purple-600 hover:bg-purple-700 text-white border-purple-600'
-                            }`}
+                            className={`px-2 py-1 rounded-lg text-[10px] font-semibold flex items-center gap-1 border transition-colors cursor-pointer ${isSaved
+                              ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                              : 'bg-purple-600 hover:bg-purple-700 text-white border-purple-600'
+                              }`}
                           >
                             {isSaved ? (
                               <>

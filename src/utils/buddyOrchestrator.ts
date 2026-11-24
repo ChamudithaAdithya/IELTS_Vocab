@@ -43,11 +43,33 @@ import {
   saveMistakeToGrammarLibrary
 } from './buddyLearningStore';
 
+/**
+ * Mathematical 0%-Autocorrect Guard: ensures punctuation/capitalization restoration
+ * NEVER adds, deletes, or substitutes a single spoken word token.
+ */
+function ensureZeroWordMutation(verbatim: string, normalized: string): string {
+  const tokenize = (s: string) =>
+    s
+      .toLowerCase()
+      .replace(/[^a-z0-9'\s]/g, ' ')
+      .split(/\s+/)
+      .filter(Boolean);
+
+  const a = tokenize(verbatim);
+  const b = tokenize(normalized);
+  if (a.length !== b.length) return verbatim;
+  for (let i = 0; i < a.length; i++) {
+    if (a[i] !== b[i]) return verbatim;
+  }
+  return normalized;
+}
+
 export function buildFinalizedTurnPacket(params: {
   sessionId: string;
   rawTranscript: string;
   editedTranscript?: string;
   engine: BuddySpeechEngine | 'typed';
+  recordedAudioUrl?: string;
   uncertainWords?: string[];
   sttConfidence?: number;
   durationSec?: number;
@@ -55,9 +77,15 @@ export function buildFinalizedTurnPacket(params: {
 }): FinalizedTurnPacket {
   const now = Date.now();
   const cleanRaw = params.rawTranscript.trim();
-  const normalizedTranscript = processBuddyTranscript(cleanRaw);
-  const analysisTranscript = params.editedTranscript
-    ? processBuddyTranscript(params.editedTranscript)
+  // Stage 1 -> Stage 2: Preserve exact finalized verbatim words separately from punctuation restoration
+  const finalizedVerbatimTranscript = cleanRaw.replace(/\s+/g, ' ').trim();
+  const normalizedTranscript = ensureZeroWordMutation(
+    finalizedVerbatimTranscript,
+    processBuddyTranscript(finalizedVerbatimTranscript)
+  );
+  const cleanEdited = params.editedTranscript ? params.editedTranscript.trim() : undefined;
+  const analysisTranscript = cleanEdited
+    ? ensureZeroWordMutation(cleanEdited, processBuddyTranscript(cleanEdited))
     : normalizedTranscript;
 
   // Stage A Coherence runs ONCE here and is shared by BOTH Friend Engine & Grammar Coach
@@ -73,9 +101,13 @@ export function buildFinalizedTurnPacket(params: {
     messageId: `msg-user-${now}`,
     timestamp: now,
     rawTranscript: cleanRaw,
+    finalizedVerbatimTranscript,
     normalizedTranscript,
-    editedTranscript: params.editedTranscript,
+    punctuationNormalizedTranscript: normalizedTranscript,
+    editedTranscript: cleanEdited,
+    userEditedTranscript: cleanEdited,
     analysisTranscript,
+    recordedAudioUrl: params.recordedAudioUrl,
     uncertainWords:
       params.uncertainWords && params.uncertainWords.length > 0
         ? params.uncertainWords
@@ -89,6 +121,10 @@ export function buildFinalizedTurnPacket(params: {
 }
 
 export interface OrchestratedTurnCallbacks {
+  /** Fires live as tokens stream from Gemini so the Buddy chat bubble renders in real time */
+  onFriendPartialReply?: (partialText: string, packet: FinalizedTurnPacket) => void;
+  /** Fires the moment each sentence finishes streaming so TTS begins speaking immediately */
+  onFriendSentenceReady?: (sentence: string, packet: FinalizedTurnPacket) => void;
   onFriendReplyReady: (result: BuddyFriendReplyResult, packet: FinalizedTurnPacket) => void;
   onGrammarAnalysisReady: (
     analysis: BuddyGrammarAnalysis,
@@ -182,7 +218,7 @@ export async function orchestrateBuddyTurn(params: {
     };
   });
 
-  // Run Brain 1 (AI Friend Responder)
+  // Run Brain 1 (AI Friend Responder — Real-Time SSE Streaming!)
   const friendResult = await generateBuddyFriendReply({
     userText: packet.analysisTranscript,
     history: packet.priorHistory,
@@ -193,7 +229,13 @@ export async function orchestrateBuddyTurn(params: {
     longTermMemories: activeMemories,
     topWeakCategory: topRecurringCat,
     apiKey,
-    model
+    model,
+    onPartialReply: (partialText) => {
+      callbacks.onFriendPartialReply?.(partialText, packet);
+    },
+    onSentenceReady: (sentence) => {
+      callbacks.onFriendSentenceReady?.(sentence, packet);
+    }
   });
 
   // Deliver Friend Reply immediately so voice playback starts with zero wait for Grammar
@@ -206,6 +248,7 @@ export async function orchestrateBuddyTurn(params: {
     sessionId: packet.sessionId,
     timestamp: packet.timestamp,
     rawTranscript: packet.rawTranscript,
+    finalizedVerbatimTranscript: packet.finalizedVerbatimTranscript,
     normalizedTranscript: packet.normalizedTranscript,
     analysisTranscript: packet.analysisTranscript,
     coherenceQuality: packet.coherence.quality,

@@ -214,7 +214,12 @@ export function loadBuddySessions(): BuddySession[] {
 export function saveBuddySessions(sessions: BuddySession[]): void {
   if (typeof window === 'undefined') return;
   try {
-    localStorage.setItem(BUDDY_SESSIONS_KEY, JSON.stringify(sessions.slice(0, MAX_STORED_SESSIONS)));
+    // Strip transient in-memory Blob URLs before persisting to localStorage
+    const serializable = sessions.slice(0, MAX_STORED_SESSIONS).map(s => ({
+      ...s,
+      messages: s.messages.map(({ recordedAudioUrl: _omit, ...rest }) => rest)
+    }));
+    localStorage.setItem(BUDDY_SESSIONS_KEY, JSON.stringify(serializable));
   } catch {}
 }
 
@@ -1037,6 +1042,10 @@ export async function generateBuddyFriendReply(params: {
   topWeakCategory?: GrammarCategoryCode | null;
   apiKey?: string;
   model?: string;
+  /** Real-time token streaming callback — fires as soon as each chunk arrives */
+  onPartialReply?: (fullTextSoFar: string) => void;
+  /** Real-time sentence boundary callback — enables TTS to start speaking Sentence 1 immediately! */
+  onSentenceReady?: (sentence: string) => void;
 }): Promise<BuddyFriendReplyResult> {
   const t0 = typeof performance !== 'undefined' ? performance.now() : Date.now();
   const {
@@ -1049,7 +1058,9 @@ export async function generateBuddyFriendReply(params: {
     longTermMemories = [],
     topWeakCategory = null,
     apiKey,
-    model
+    model,
+    onPartialReply,
+    onSentenceReady
   } = params;
 
   const personalityCfg = getPersonalityConfig(personality);
@@ -1078,6 +1089,14 @@ export async function generateBuddyFriendReply(params: {
       resolvedCoherence,
       ctx
     );
+    onPartialReply?.(reply);
+    if (onSentenceReady) {
+      const localSentences = reply.match(/[^.!?]+[.!?]?/g) || [reply];
+      for (const s of localSentences) {
+        const cleanS = s.trim();
+        if (cleanS) onSentenceReady(cleanS);
+      }
+    }
     const t1 = typeof performance !== 'undefined' ? performance.now() : Date.now();
     return {
       reply,
@@ -1174,10 +1193,11 @@ Lingo Buddy:`;
 
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 7000);
+    const timeoutId = setTimeout(() => controller.abort(), 9000);
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(candidateModel)}:generateContent?key=${encodeURIComponent(apiKey)}`;
-    const response = await fetch(url, {
+    // Real-time Server-Sent Events (SSE) streaming so first words appear & start speaking in ~300ms!
+    const streamUrl = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(candidateModel)}:streamGenerateContent?alt=sse&key=${encodeURIComponent(apiKey)}`;
+    const response = await fetch(streamUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       signal: controller.signal,
@@ -1187,14 +1207,88 @@ Lingo Buddy:`;
       })
     });
 
-    clearTimeout(timeoutId);
-
     if (!response.ok) {
+      clearTimeout(timeoutId);
       return finishLocal('gemini', `Gemini API HTTP ${response.status} — fell back to Local Engine`);
     }
 
-    const data = await response.json();
-    const rawReply = (data?.candidates?.[0]?.content?.parts?.[0]?.text || '')
+    let accumulated = '';
+    let emittedCursor = 0;
+
+    const flushReadySentences = (forceAll: boolean = false) => {
+      if (!onSentenceReady) return;
+      const cleaned = accumulated.replace(/^["']|["']$/g, '').replace(/\*\*/g, '');
+      const remaining = cleaned.slice(emittedCursor);
+      if (!remaining.trim()) return;
+
+      if (forceAll) {
+        const tail = remaining.trim();
+        if (tail) {
+          onSentenceReady(tail);
+          emittedCursor = cleaned.length;
+        }
+        return;
+      }
+
+      // Emit complete sentences the instant punctuation completes
+      const match = remaining.match(/^([\s\S]*?[.!?])(?:\s+|$)/);
+      if (match && match[1].trim().length >= 8) {
+        onSentenceReady(match[1].trim());
+        emittedCursor += match[0].length;
+      }
+    };
+
+    if (response.body && typeof response.body.getReader === 'function') {
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder('utf-8');
+      let sseBuffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        sseBuffer += decoder.decode(value, { stream: true });
+
+        const lines = sseBuffer.split('\n');
+        sseBuffer = lines.pop() || '';
+
+        for (const rawLine of lines) {
+          const line = rawLine.trim();
+          if (!line.startsWith('data:')) continue;
+          const payload = line.slice(5).trim();
+          if (!payload || payload === '[DONE]') continue;
+          try {
+            const parsed = JSON.parse(payload);
+            const delta = parsed?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+            if (delta) {
+              accumulated += delta;
+              const cleanDisplay = accumulated
+                .replace(/^["']|["']$/g, '')
+                .replace(/\*\*/g, '')
+                .trim();
+              if (cleanDisplay) {
+                onPartialReply?.(cleanDisplay);
+                flushReadySentences(false);
+              }
+            }
+          } catch {
+            // Partial JSON chunk — wait for next SSE line
+          }
+        }
+      }
+      clearTimeout(timeoutId);
+      flushReadySentences(true);
+    } else {
+      const data = await response.json();
+      clearTimeout(timeoutId);
+      accumulated = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      const cleanDisplay = accumulated.replace(/^["']|["']$/g, '').replace(/\*\*/g, '').trim();
+      if (cleanDisplay) {
+        onPartialReply?.(cleanDisplay);
+        flushReadySentences(true);
+      }
+    }
+
+    const rawReply = accumulated
       .replace(/^["']|["']$/g, '')
       .replace(/\*\*/g, '')
       .trim();
@@ -1217,7 +1311,7 @@ Lingo Buddy:`;
     return finishLocal(
       'gemini',
       err?.name === 'AbortError'
-        ? 'Gemini timed out (>7s) — fell back to Local Engine'
+        ? 'Gemini timed out (>9s) — fell back to Local Engine'
         : `Gemini network error (${err?.message || 'unknown'}) — fell back to Local Engine`
     );
   }
