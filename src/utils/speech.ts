@@ -1195,12 +1195,27 @@ export function createRealtimeTtsQueue(options: {
       }
     });
 
+  const waitPauseMs = (ms: number): Promise<void> =>
+    new Promise((resolve) => {
+      const t = setTimeout(resolve, ms);
+      controller.signal.addEventListener('abort', () => {
+        clearTimeout(t);
+        resolve();
+      }, { once: true });
+    });
+
   const pump = async () => {
     if (isPlayingLoop) return;
     isPlayingLoop = true;
     try {
       while (isAlive() && playIdx < items.length) {
+        const idxNow = playIdx;
         const current = items[playIdx++];
+        // Brief natural 280ms breathing pause between spoken recast and conversational continuation
+        if (idxNow > 0 && isAlive()) {
+          await waitPauseMs(280);
+          if (!isAlive()) return;
+        }
         const blob = await current.promise;
         if (!isAlive()) return;
         if (blob) {

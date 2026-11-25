@@ -28,6 +28,7 @@ export interface TranscriptCoherenceResult {
   quality: TranscriptQuality;
   reason?: string;
   suspiciousSpans?: string[];
+  incompleteFragment?: string;
   clarificationHint?: string;
 }
 
@@ -301,13 +302,31 @@ export interface PersonalGrammarNote {
   mastered: boolean;
 }
 
+/** High-level 12-Category Context-Aware Conversational Intent Taxonomy */
+export type BuddyConversationalIntent =
+  | 'ANSWER_TO_PREVIOUS_QUESTION'
+  | 'ASKING_QUESTION'
+  | 'ASKING_WORD_MEANING'
+  | 'ASKING_FOR_CLARIFICATION'
+  | 'CORRECTING_AI'
+  | 'CHANGING_TOPIC'
+  | 'EXPRESSING_EMOTION'
+  | 'SHARING_INFORMATION'
+  | 'DISAGREEING'
+  | 'UNCLEAR_SPEECH'
+  | 'INCOMPLETE_SENTENCE'
+  | 'GENERAL_CONVERSATION';
+
 /** Audit Architecture — Explicit Conversational Intent Taxonomy */
 export type BuddyTurnIntent =
   | 'unclear_speech'
+  | 'incomplete_sentence'
   | 'repeat_last_buddy'
   | 'explain_earlier_mistake'
+  | 'ask_word_meaning'
   | 'clarify_specific_term'
   | 'clarify_last_question'
+  | 'correcting_ai'
   | 'topic_correction'
   | 'topic_change'
   | 'user_disagreement'
@@ -361,6 +380,7 @@ export interface BuddyTurnTrace {
   normalizedTranscript: string;
   analysisTranscript: string;
   coherenceQuality: TranscriptQuality;
+  conversationalIntent?: BuddyConversationalIntent;
   intent: BuddyTurnIntent;
   activeTopic: string;
   activeSubject: string | null;

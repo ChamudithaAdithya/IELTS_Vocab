@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 320" font-family="Inter, system-ui, sans-serif">
+  <rect width="680" height="320" rx="18" fill="#f8fafc"/>
+  <text x="340" y="30" text-anchor="middle" font-size="16" font-weight="800" fill="#0f172a">Flood-Resilient Architecture: Stilt House vs. Amphibious Floating House</text>
+
+  <!-- Left: Traditional Stilt House -->
+  <rect x="22" y="48" width="308" height="252" rx="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="176" y="72" text-anchor="middle" font-size="13.5" font-weight="800" fill="#b45309">STILT HOUSE (කණු මත ඉදිකළ නිවස)</text>
+  <rect x="38" y="212" width="276" height="46" fill="#38bdf8" opacity="0.65"/>
+  <rect x="38" y="258" width="276" height="24" fill="#a8a29e"/>
+  <!-- Fixed stilts -->
+  <rect x="112" y="162" width="10" height="102" fill="#78350f"/>
+  <rect x="171" y="162" width="10" height="102" fill="#78350f"/>
+  <rect x="230" y="162" width="10" height="102" fill="#78350f"/>
+  <!-- House body -->
+  <polygon points="94,124 176,88 258,124" fill="#d97706"/>
+  <rect x="102" y="124" width="148" height="42" fill="#fef3c7" stroke="#92400e" stroke-width="2"/>
+  <text x="176" y="294" text-anchor="middle" font-size="10.5" font-weight="600" fill="#78350f">Permanently raised above flood level</text>
+
+  <!-- Right: Amphibious House (Rests on foundations, floats when flooded) -->
+  <rect x="350" y="48" width="308" height="252" rx="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="504" y="72" text-anchor="middle" font-size="13.5" font-weight="800" fill="#1d4ed8">AMPHIBIOUS HOUSE (පාවෙන නිවස)</text>
+  <rect x="366" y="186" width="276" height="72" fill="#0ea5e9" opacity="0.65"/>
+  <rect x="366" y="258" width="276" height="24" fill="#94a3b8"/>
+  <!-- Vertical guideposts + foundations -->
+  <rect x="424" y="102" width="8" height="162" fill="#334155"/>
+  <rect x="576" y="102" width="8" height="162" fill="#334155"/>
+  <rect x="434" y="250" width="140" height="10" fill="#475569"/>
+  <!-- Buoyant base + floating house -->
+  <rect x="436" y="168" width="136" height="22" rx="5" fill="#1e40af"/>
+  <text x="504" y="183" text-anchor="middle" font-size="9.5" font-weight="700" fill="#ffffff">Buoyant Retrofitted Base</text>
+  <polygon points="428,126 504,92 580,126" fill="#2563eb"/>
+  <rect x="436" y="126" width="136" height="42" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+  <!-- Upward arrow -->
+  <path d="M612 228 L612 152" stroke="#059669" stroke-width="3.5"/>
+  <polygon points="612,144 605,156 619,156" fill="#059669"/>
+  <text x="504" y="294" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e40af">Sits on foundations on dry land · FLOATS on floods</text>
+</svg>

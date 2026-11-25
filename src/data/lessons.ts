@@ -4,6 +4,12 @@ import { LESSON_10_MAPUNGUBWE } from './lesson10Mapungubwe';
 import { LESSON_11_TENSES } from './lesson11TensesIrregularVerbs';
 import { LESSON_12_CAMBRIDGE_BATCH_1 } from './lesson12CambridgeBatch1';
 import { LESSON_13_MANATEES, LESSON_14_PROCRASTINATION } from './lesson13And14NewVocab';
+import {
+  LESSON_15_GEORGIA_OKEEFFE,
+  LESSON_16_CLIMATE_ADAPTATION,
+  LESSON_17_LIVESTOCK_GUARD_DOGS,
+  LESSON_18_READING_CONNECTORS
+} from './lessons15To18ReadingMastery';
 
 export const LESSONS: Lesson[] = [
   {
@@ -2720,7 +2726,11 @@ export const LESSONS: Lesson[] = [
   LESSON_11_TENSES,
   LESSON_12_CAMBRIDGE_BATCH_1,
   LESSON_13_MANATEES,
-  LESSON_14_PROCRASTINATION
+  LESSON_14_PROCRASTINATION,
+  LESSON_15_GEORGIA_OKEEFFE,
+  LESSON_16_CLIMATE_ADAPTATION,
+  LESSON_17_LIVESTOCK_GUARD_DOGS,
+  LESSON_18_READING_CONNECTORS
 ];
 
 // Flat list of all words for quick lookup & dictionary

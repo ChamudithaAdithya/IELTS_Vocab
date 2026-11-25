@@ -312,7 +312,8 @@ export async function orchestrateBuddyTurn(params: {
   const suppressInlineRecast =
     baseFriendResult.intent === 'repeat_last_buddy' ||
     baseFriendResult.intent === 'explain_earlier_mistake' ||
-    baseFriendResult.intent === 'unclear_speech';
+    baseFriendResult.intent === 'unclear_speech' ||
+    baseFriendResult.intent === 'incomplete_sentence';
 
   const finalSpokenCorrection = suppressInlineRecast ? '' : recast.spokenCorrection;
   const finalCorrectionType = suppressInlineRecast ? 'none' : recast.correctionType;
@@ -370,6 +371,7 @@ export async function orchestrateBuddyTurn(params: {
     normalizedTranscript: packet.normalizedTranscript,
     analysisTranscript: packet.analysisTranscript,
     coherenceQuality: packet.coherence.quality,
+    conversationalIntent: friendResult.conversationalIntent,
     intent: friendResult.intent,
     activeTopic: friendResult.activeTopic,
     activeSubject: friendResult.activeSubject,

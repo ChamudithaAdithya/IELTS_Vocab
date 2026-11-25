@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 320" font-family="Inter, system-ui, sans-serif">
+  <rect width="680" height="320" rx="18" fill="#f0fdf4"/>
+  <text x="340" y="30" text-anchor="middle" font-size="16" font-weight="800" fill="#0f172a">Livestock Guard Dogs: Protecting Herds, "Landscape of Fear" &amp; Wildlife Refuges</text>
+
+  <!-- Guarded Pasture Refuge Zone -->
+  <rect x="24" y="50" width="410" height="246" rx="16" fill="#dcfce7" stroke="#16a34a" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="229" y="74" text-anchor="middle" font-size="12.5" font-weight="800" fill="#166534">GUARDED PASTURE &amp; BIODIVERSITY REFUGE (ආරක්ෂිත කලාපය)</text>
+
+  <!-- Livestock Herd (Sheep) + Ground-nesting vulnerable birds -->
+  <g>
+    <ellipse cx="96" cy="154" rx="28" ry="20" fill="#ffffff" stroke="#64748b" stroke-width="2"/>
+    <circle cx="122" cy="148" r="10" fill="#334155"/>
+    <ellipse cx="156" cy="178" rx="28" ry="20" fill="#ffffff" stroke="#64748b" stroke-width="2"/>
+    <circle cx="182" cy="172" r="10" fill="#334155"/>
+    <text x="135" y="122" text-anchor="middle" font-size="11" font-weight="700" fill="#1e293b">Livestock Herd (බැටළු රංචුව)</text>
+  </g>
+
+  <!-- Vulnerable prey / ground nests protected inside -->
+  <ellipse cx="118" cy="242" rx="24" ry="11" fill="#fef08a" stroke="#ca8a04" stroke-width="1.5"/>
+  <circle cx="112" cy="240" r="4" fill="#ffffff"/>
+  <circle cx="123" cy="240" r="4" fill="#ffffff"/>
+  <text x="128" y="272" text-anchor="middle" font-size="10.5" font-weight="700" fill="#15803d">Refuge for prey &amp; ground nests</text>
+
+  <!-- Guard Dog placing itself between livestock and predator -->
+  <rect x="274" y="138" width="124" height="72" rx="12" fill="#fef3c7" stroke="#d97706" stroke-width="2.5"/>
+  <text x="336" y="164" text-anchor="middle" font-size="13" font-weight="800" fill="#92400e">GUARD DOG</text>
+  <text x="336" y="182" text-anchor="middle" font-size="10" font-weight="600" fill="#78350f">Places itself between</text>
+  <text x="336" y="197" text-anchor="middle" font-size="10" font-weight="600" fill="#b45309">"Landscape of fear"</text>
+
+  <!-- Repelling arrow (Chases away / Displaces) -->
+  <path d="M404 174 L468 174" stroke="#dc2626" stroke-width="4"/>
+  <polygon points="476,174 462,166 462,182" fill="#dc2626"/>
+
+  <!-- Outside Zone: Predators / Neighbouring Unprotected Property -->
+  <rect x="454" y="50" width="202" height="246" rx="16" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="555" y="74" text-anchor="middle" font-size="12" font-weight="800" fill="#991b1b">PREDATORS CHASED AWAY</text>
+  <rect x="484" y="136" width="142" height="58" rx="10" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="555" y="160" text-anchor="middle" font-size="12" font-weight="700" fill="#7f1d1d">Wolves / Jackals / Foxes</text>
+  <text x="555" y="178" text-anchor="middle" font-size="10" fill="#991b1b">(Carnivores &amp; Nest Raiders)</text>
+  <text x="555" y="238" text-anchor="middle" font-size="10.5" font-weight="600" fill="#7f1d1d">May displace predators to</text>
+  <text x="555" y="254" text-anchor="middle" font-size="10.5" font-weight="700" fill="#991b1b">neighbouring unprotected farms</text>
+</svg>

@@ -2253,7 +2253,11 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                     const totalTips =
                       (msg.analysis?.mistakes.length || 0) +
                       (msg.analysis?.vocabUpgrades?.length || 0);
-                    const isUnclear = msg.analysis?.transcriptQuality === 'unclear';
+                    const isUnclear =
+                      msg.analysis?.transcriptQuality === 'unclear' ||
+                      (msg.analysis?.transcriptQuality === 'partially_unclear' && totalTips === 0);
+                    const isIncomplete =
+                      msg.analysis?.transcriptQuality === 'partially_unclear' && totalTips === 0;
                     const isMastered = Boolean(msg.analysis?.tryAgainResult?.matched);
 
                     return (
@@ -2412,7 +2416,9 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                                     } ${isFocused ? 'ring-2 ring-blue-500/25' : ''}`}
                                   >
                                     <span>
-                                      {isUnclear
+                                      {isIncomplete
+                                        ? 'Incomplete / cut off · Review →'
+                                        : isUnclear
                                         ? 'Unclear capture · Review →'
                                         : isMastered
                                         ? '✓ Mastered · View →'
@@ -2538,6 +2544,9 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                       m => m.severity === 'GRAMMAR_ERROR' || m.severity === 'UNNATURAL'
                     ).length || 0;
                   const isLatestUnclear = latestUserTurn?.analysis?.transcriptQuality === 'unclear';
+                  const isLatestIncomplete =
+                    latestUserTurn?.analysis?.transcriptQuality === 'partially_unclear' &&
+                    latestErrors === 0;
                   const liveTextPreview = [liveFinalText, liveInterimText].filter(Boolean).join(' ');
 
                   return (
@@ -2615,7 +2624,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                                   ? 'bg-slate-50 text-slate-400 border-slate-200'
                                   : latestUserTurn?.isAnalyzing
                                   ? 'bg-blue-50 text-blue-700 border-blue-200 animate-pulse'
-                                  : isLatestUnclear
+                                  : isLatestUnclear || isLatestIncomplete
                                   ? 'bg-amber-50 text-amber-800 border-amber-200'
                                   : latestErrors > 0
                                   ? 'bg-rose-50 text-rose-700 border-rose-200'
@@ -2636,6 +2645,8 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                               ? 'Checking grammar & phrasing...'
                               : isLatestUnclear
                               ? 'Unclear capture — skipped grading'
+                              : isLatestIncomplete
+                              ? 'Incomplete fragment — needs clarification'
                               : latestErrors > 0
                               ? `${latestErrors} ${latestErrors === 1 ? 'mistake' : 'mistakes'} identified`
                               : '✓ Clean, natural English'}
@@ -2820,6 +2831,9 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                                     (turn.analysis?.mistakes.length || 0) +
                                     (turn.analysis?.vocabUpgrades?.length || 0);
                                   const unclear = turn.analysis?.transcriptQuality === 'unclear';
+                                  const incomplete =
+                                    turn.analysis?.transcriptQuality === 'partially_unclear' &&
+                                    tipCount === 0;
                                   const mastered = Boolean(turn.analysis?.tryAgainResult?.matched);
 
                                   return (
@@ -2834,7 +2848,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                                       </span>
                                       <span
                                         className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border shrink-0 ${
-                                          unclear
+                                          unclear || incomplete
                                             ? 'bg-amber-50 text-amber-800 border-amber-200'
                                             : mastered
                                             ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
@@ -2847,6 +2861,8 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                                       >
                                         {unclear
                                           ? 'Unclear'
+                                          : incomplete
+                                          ? 'Incomplete'
                                           : mastered
                                           ? '✓ Mastered'
                                           : eCount > 0

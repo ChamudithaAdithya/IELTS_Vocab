@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 320" font-family="Inter, system-ui, sans-serif">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#bae6fd"/>
+      <stop offset="100%" stop-color="#fef3c7"/>
+    </linearGradient>
+  </defs>
+  <rect width="680" height="320" rx="18" fill="url(#sky)"/>
+  <text x="340" y="30" text-anchor="middle" font-size="16" font-weight="800" fill="#0f172a">New Mexico Terrain: Cliff, Jagged Ridges, Geological Formations &amp; Retreat</text>
+
+  <!-- Jagged Distant Ridge -->
+  <polygon points="0,195 55,130 92,168 135,98 175,152 218,88 262,148 305,105 348,162 395,120 440,175 490,195" fill="#d97706" opacity="0.45"/>
+  <text x="218" y="76" text-anchor="middle" font-size="12" font-weight="700" fill="#92400e">Jagged peaks (තියුණු අක්‍රමවත් දාර)</text>
+
+  <!-- Steep Cliff & Layered Geological Formations -->
+  <polygon points="420,68 650,68 680,265 375,265 405,165" fill="#b45309"/>
+  <line x1="412" y1="110" x2="658" y2="110" stroke="#fcd34d" stroke-width="5" opacity="0.65"/>
+  <line x1="404" y1="150" x2="665" y2="150" stroke="#fde68a" stroke-width="6" opacity="0.7"/>
+  <line x1="392" y1="192" x2="672" y2="192" stroke="#78350f" stroke-width="5" opacity="0.55"/>
+  <text x="540" y="96" text-anchor="middle" font-size="13" font-weight="800" fill="#fffbeb">STEEP CLIFF (ප්‍රපාතය)</text>
+  <text x="542" y="136" text-anchor="middle" font-size="11" font-weight="700" fill="#fef3c7">Weathered Geological Formations</text>
+
+  <!-- Desert Foreground Terrain -->
+  <path d="M0 245 Q180 228 360 248 T680 245 L680 320 L0 320 Z" fill="#e7cba9"/>
+  <path d="M0 272 Q220 258 450 278 T680 270 L680 320 L0 320 Z" fill="#d6b087"/>
+
+  <!-- Adobe Retreat House Nestled Beneath Cliff -->
+  <rect x="292" y="218" width="76" height="42" rx="4" fill="#f5ebe0" stroke="#78350f" stroke-width="2"/>
+  <rect x="318" y="234" width="18" height="26" fill="#78350f"/>
+  <rect x="299" y="227" width="12" height="12" fill="#38bdf8" stroke="#78350f" stroke-width="1.5"/>
+  <rect x="347" y="227" width="12" height="12" fill="#38bdf8" stroke="#78350f" stroke-width="1.5"/>
+  <rect x="266" y="194" width="142" height="20" rx="10" fill="#ffffff" stroke="#92400e" stroke-width="1.2"/>
+  <text x="337" y="208" text-anchor="middle" font-size="10.5" font-weight="700" fill="#78350f">Retreat nestled beneath cliff</text>
+
+  <text x="140" y="295" text-anchor="middle" font-size="12" font-weight="700" fill="#57534e">Rugged Desert Terrain (රළු භූමි ප්‍රදේශය)</text>
+</svg>

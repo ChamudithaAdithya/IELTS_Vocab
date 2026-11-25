@@ -351,6 +351,35 @@ export const BuddyFeedbackCard: React.FC<BuddyFeedbackCardProps> = ({
     );
   }
 
+  // Stage A Gate (Incomplete / Cut-Off Fragment with 0 cleanable mistakes, e.g. "Much into. Nothing much."):
+  // NEVER show a false green "Clean, natural English" badge on incomplete speech!
+  if (analysis.transcriptQuality === 'partially_unclear' && totalCardItems === 0) {
+    return (
+      <div className="w-full rounded-2xl bg-amber-50/90 border border-amber-200 px-3.5 py-3 space-y-2 text-xs text-left shadow-xs">
+        <div className="flex items-center justify-between gap-2">
+          <span className="flex items-center gap-2 text-amber-800 font-semibold">
+            <HelpCircle className="w-4 h-4 text-amber-600 shrink-0" />
+            <span>Incomplete or Cut-Off Speech · Needs Clarification</span>
+          </span>
+          {onRequestEdit && (
+            <button
+              type="button"
+              onClick={onRequestEdit}
+              className="px-2.5 py-1 rounded-lg bg-amber-100 hover:bg-amber-200/80 border border-amber-300 text-amber-900 text-[11px] font-semibold flex items-center gap-1 transition-colors cursor-pointer shrink-0"
+            >
+              <Edit3 className="w-3 h-3" />
+              <span>Edit What I Meant</span>
+            </button>
+          )}
+        </div>
+        <p className="text-[12px] text-amber-900/85 leading-relaxed">
+          {analysis.clarificationNote ||
+            'Part of your sentence sounded incomplete or cut off, so I paused grammar grading until you clarify.'}
+        </p>
+      </div>
+    );
+  }
+
   // Clean English — zero mistakes AND zero vocab upgrades
   if (totalCardItems === 0) {
     // Don't clutter trivial 1-2 word greetings ("Hello.", "Hi.", "Okay.") with a full grammar report card!

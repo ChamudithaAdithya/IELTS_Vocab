@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 320" font-family="Inter, system-ui, sans-serif">
+  <rect width="680" height="320" rx="18" fill="#f0f9ff"/>
+  <text x="340" y="30" text-anchor="middle" font-size="16" font-weight="800" fill="#0f172a">Coastal Defences: Seawall, Breach vs. Seep &amp; Coastal Erosion</text>
+
+  <!-- Left: Breach + Seawall -->
+  <rect x="20" y="48" width="310" height="252" rx="14" fill="#ffffff" stroke="#bae6fd" stroke-width="1.5"/>
+  <text x="175" y="72" text-anchor="middle" font-size="13.5" font-weight="800" fill="#0369a1">1. SEAWALL &amp; BREACH (බිඳගෙන යාම)</text>
+  <!-- Sea waves -->
+  <path d="M32 165 Q65 140 98 165 T162 165 L162 255 L32 255 Z" fill="#0284c7"/>
+  <!-- Concrete Seawall with crack/breach at top -->
+  <rect x="158" y="128" width="34" height="127" fill="#64748b" stroke="#334155" stroke-width="2"/>
+  <!-- Breaching wave -->
+  <path d="M125 142 C155 102, 198 104, 228 148" fill="none" stroke="#0ea5e9" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="235" cy="156" r="5" fill="#0ea5e9"/>
+  <circle cx="248" cy="168" r="4" fill="#38bdf8"/>
+  <!-- Land & Elevated Road -->
+  <rect x="192" y="195" width="124" height="60" fill="#d6d3d1"/>
+  <rect x="215" y="178" width="88" height="17" rx="3" fill="#475569"/>
+  <text x="259" y="172" text-anchor="middle" font-size="10" font-weight="700" fill="#334155">Elevated road</text>
+  <text x="175" y="114" text-anchor="middle" font-size="11" font-weight="700" fill="#dc2626">Floodwater BREACHES wall</text>
+  <text x="95" y="276" text-anchor="middle" font-size="10.5" font-weight="600" fill="#0c4a6e">Coastal erosion scours base</text>
+
+  <!-- Right: Seep through porous ground/wall -->
+  <rect x="350" y="48" width="310" height="252" rx="14" fill="#ffffff" stroke="#bae6fd" stroke-width="1.5"/>
+  <text x="505" y="72" text-anchor="middle" font-size="13.5" font-weight="800" fill="#0f766e">2. SEEP (සෙමින් කාන්දු වීම)</text>
+  <rect x="366" y="150" width="100" height="105" fill="#38bdf8" opacity="0.75"/>
+  <!-- Porous limestone / wall -->
+  <rect x="466" y="118" width="42" height="137" fill="#cbd5e1" stroke="#64748b" stroke-width="1.5"/>
+  <!-- Tiny seepage paths -->
+  <path d="M466 175 Q487 180 508 178" stroke="#0284c7" stroke-width="2.5" stroke-dasharray="4 3" fill="none"/>
+  <path d="M466 205 Q487 200 508 208" stroke="#0284c7" stroke-width="2.5" stroke-dasharray="4 3" fill="none"/>
+  <path d="M466 230 Q487 234 508 232" stroke="#0284c7" stroke-width="2.5" stroke-dasharray="4 3" fill="none"/>
+  <ellipse cx="534" cy="246" rx="22" ry="7" fill="#38bdf8"/>
+  <!-- Pump removing water -->
+  <rect x="572" y="210" width="54" height="36" rx="6" fill="#2563eb"/>
+  <text x="599" y="232" text-anchor="middle" font-size="10.5" font-weight="700" fill="#ffffff">PUMP</text>
+  <path d="M556 244 L572 232" stroke="#1d4ed8" stroke-width="3"/>
+  <text x="505" y="278" text-anchor="middle" font-size="10.5" font-weight="600" fill="#115e59">Water slowly SEEPS through tiny pores</text>
+</svg>

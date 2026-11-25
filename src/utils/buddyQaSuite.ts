@@ -786,6 +786,339 @@ export function runAll13BuddyQaScenarios(): BuddyQaSuiteReport {
         }
         return `Gym, Workout, Naturalness ("I'm going home"), & Gentle/Balanced/Detailed verified.`;
       }
+    ),
+    // -----------------------------------------------------------------------
+    // CRITICAL CONVERSATIONAL INTELLIGENCE & NATURAL CORRECTION — TESTS 1 TO 7
+    // -----------------------------------------------------------------------
+    runScenario(
+      34,
+      'TEST 1 — Word meaning from AI message ("low-key" + phonetic STT slip "Locky")',
+      'Context & Word Meaning',
+      () => {
+        const history: BuddyMessage[] = [
+          {
+            id: 'b-lowkey',
+            role: 'buddy',
+            timestamp: 1,
+            text: 'Sometimes those are low-key days.'
+          }
+        ];
+        const ctx = extractSessionContext(history, 'What is the meaning of low-key?');
+        const cls = classifyBuddyIntent('What is the meaning of low-key?', ctx, { quality: 'clear' });
+        const replyExact = generateLocalFriendReply(
+          'What is the meaning of low-key?',
+          history,
+          'friendly',
+          'friendly'
+        );
+        const replyPhonetic = generateLocalFriendReply(
+          'What is the meaning of Locky?',
+          history,
+          'friendly',
+          'friendly'
+        );
+        const gram = analyzeBuddyGrammarLocally({
+          originalTranscript: 'What is the meaning of low-key?',
+          intensity: 'gentle'
+        });
+        const recast = buildSpokenCorrection(gram, 'gentle');
+
+        if (cls.conversationalIntent !== 'ASKING_WORD_MEANING') {
+          throw new Error(`Expected ASKING_WORD_MEANING, got ${cls.conversationalIntent}`);
+        }
+        if (!/relaxed|quiet/i.test(replyExact) || !/\?$/.test(replyExact.trim())) {
+          throw new Error(`Failed TEST 1 exact low-key explanation: ${replyExact}`);
+        }
+        if (!/low-key/i.test(replyPhonetic) || !/relaxed|quiet/i.test(replyPhonetic)) {
+          throw new Error(`Failed phonetic "Locky" -> "low-key" resolution: ${replyPhonetic}`);
+        }
+        if (!/what does 'low-key' mean\?/i.test(recast.spokenCorrection)) {
+          throw new Error(`Expected natural phrasing recast, got: ${recast.spokenCorrection}`);
+        }
+        return `${recast.spokenCorrection} ${replyExact}`;
+      },
+      true
+    ),
+    runScenario(
+      35,
+      'TEST 2 — Clarification + grammar recast ("No, I didn\'t got you." & "didn\'t understand what you mean")',
+      'Clarification & Grammar',
+      () => {
+        const history1: BuddyMessage[] = [
+          { id: 'b-u1', role: 'buddy', timestamp: 1, text: 'Did you understand what I meant?' }
+        ];
+        const gram1 = analyzeBuddyGrammarLocally({
+          originalTranscript: "No, I didn't got you.",
+          intensity: 'gentle'
+        });
+        const recast1 = buildSpokenCorrection(gram1, 'gentle');
+        const reply1 = generateLocalFriendReply(
+          "No, I didn't got you.",
+          history1,
+          'friendly',
+          'friendly'
+        );
+
+        const history2: BuddyMessage[] = [
+          { id: 'b-u2', role: 'buddy', timestamp: 1, text: 'Did you enjoy your day?' }
+        ];
+        const gram2 = analyzeBuddyGrammarLocally({
+          originalTranscript: "No, I didn't understand what you mean.",
+          intensity: 'gentle'
+        });
+        const recast2 = buildSpokenCorrection(gram2, 'gentle');
+        const reply2 = generateLocalFriendReply(
+          "No, I didn't understand what you mean.",
+          history2,
+          'friendly',
+          'friendly'
+        );
+
+        if (
+          recast1.spokenCorrection !== 'You can say, "No, I didn\'t get you."' ||
+          !/explain it differently/i.test(reply1)
+        ) {
+          throw new Error(`Failed TEST 2 ("No, I didn't got you."): ${recast1.spokenCorrection} | ${reply1}`);
+        }
+        if (
+          recast2.spokenCorrection !== 'You can say, "No, I didn\'t understand what you meant."' ||
+          !/whether you enjoyed your day/i.test(reply2)
+        ) {
+          throw new Error(`Failed "didn't understand what you mean": ${recast2.spokenCorrection} | ${reply2}`);
+        }
+        return `${recast1.spokenCorrection} ${reply1}`;
+      },
+      true
+    ),
+    runScenario(
+      36,
+      'TEST 3 — Unclear speech ("I rain got you.") — never invents rain story or marks Clean',
+      'Unclear Speech Guard',
+      () => {
+        const pkt = buildFinalizedTurnPacket({
+          sessionId: 's-test-3',
+          rawTranscript: 'I rain got you.',
+          engine: 'gemini-cloud',
+          priorHistory: []
+        });
+        const ctx = extractSessionContext([], pkt.analysisTranscript);
+        const cls = classifyBuddyIntent(pkt.analysisTranscript, ctx, pkt.coherence);
+        const gram = analyzeBuddyGrammarLocally({
+          originalTranscript: pkt.analysisTranscript,
+          coherence: pkt.coherence,
+          intensity: 'gentle'
+        });
+        const recast = buildSpokenCorrection(gram, 'gentle');
+        const reply = generateLocalFriendReply(
+          pkt.analysisTranscript,
+          [],
+          'friendly',
+          'friendly',
+          pkt.coherence,
+          ctx
+        );
+
+        if (
+          pkt.coherence.quality !== 'unclear' ||
+          gram.transcriptQuality !== 'unclear' ||
+          cls.conversationalIntent !== 'UNCLEAR_SPEECH' ||
+          recast.correctionRequired
+        ) {
+          throw new Error(`Failed TEST 3 unclear detection: quality=${gram.transcriptQuality}, intent=${cls.conversationalIntent}`);
+        }
+        if (/\b(umbrella|weather|wet|storm|raining)\b/i.test(reply) || !/catch|did you mean/i.test(reply)) {
+          throw new Error(`Unexpected TEST 3 reply: ${reply}`);
+        }
+        return `Quality=${gram.transcriptQuality} (${cls.conversationalIntent}) → "${reply}"`;
+      },
+      true
+    ),
+    runScenario(
+      37,
+      'TESTS 4 & 5 — Topic switch ("Let\'s talk about something else.") + Clean ("I have developed an AI tool.")',
+      'Intent & Precision',
+      () => {
+        const ctx4 = extractSessionContext([], "Let's talk about something else.");
+        const cls4 = classifyBuddyIntent("Let's talk about something else.", ctx4, { quality: 'clear' });
+        const reply4 = generateLocalFriendReply(
+          "Let's talk about something else.",
+          [],
+          'friendly',
+          'friendly'
+        );
+
+        const gram5 = analyzeBuddyGrammarLocally({
+          originalTranscript: 'I have developed an AI tool.',
+          intensity: 'gentle'
+        });
+        const recast5 = buildSpokenCorrection(gram5, 'gentle');
+        const reply5 = generateLocalFriendReply(
+          'I have developed an AI tool.',
+          [],
+          'friendly',
+          'friendly'
+        );
+
+        if (
+          cls4.conversationalIntent !== 'CHANGING_TOPIC' ||
+          !/of course! what would you like to talk about/i.test(reply4)
+        ) {
+          throw new Error(`Failed TEST 4: ${cls4.conversationalIntent} | ${reply4}`);
+        }
+        if (
+          gram5.transcriptQuality !== 'clear' ||
+          recast5.correctionRequired ||
+          !/ai tool|problem does it solve|feature/i.test(reply5)
+        ) {
+          throw new Error(`Failed TEST 5: recast=${recast5.spokenCorrection} | reply=${reply5}`);
+        }
+        return `TEST 4: "${reply4}" | TEST 5: 0 false fixes + "${reply5}"`;
+      }
+    ),
+    runScenario(
+      38,
+      'TEST 6 — Incomplete speech ("Much into. Nothing much.") — never marked Clean English',
+      'Incomplete Speech Guard',
+      () => {
+        const pkt = buildFinalizedTurnPacket({
+          sessionId: 's-test-6',
+          rawTranscript: 'Much into. Nothing much.',
+          engine: 'gemini-cloud',
+          priorHistory: []
+        });
+        const ctx = extractSessionContext([], pkt.analysisTranscript);
+        const cls = classifyBuddyIntent(pkt.analysisTranscript, ctx, pkt.coherence);
+        const gram = analyzeBuddyGrammarLocally({
+          originalTranscript: pkt.analysisTranscript,
+          coherence: pkt.coherence,
+          intensity: 'gentle'
+        });
+        const recast = buildSpokenCorrection(gram, 'gentle');
+        const reply = generateLocalFriendReply(
+          pkt.analysisTranscript,
+          [],
+          'friendly',
+          'friendly',
+          pkt.coherence,
+          ctx
+        );
+
+        if (
+          pkt.coherence.quality !== 'partially_unclear' ||
+          pkt.coherence.incompleteFragment !== 'Much into' ||
+          gram.transcriptQuality !== 'partially_unclear' ||
+          cls.conversationalIntent !== 'INCOMPLETE_SENTENCE' ||
+          recast.correctionRequired
+        ) {
+          throw new Error(
+            `Failed TEST 6 incomplete check: quality=${gram.transcriptQuality}, frag=${pkt.coherence.incompleteFragment}, intent=${cls.conversationalIntent}`
+          );
+        }
+        if (!/cut off|much into/i.test(reply)) {
+          throw new Error(`Unexpected TEST 6 clarification reply: ${reply}`);
+        }
+        return `Fragment "${pkt.coherence.incompleteFragment}" flagged (${cls.conversationalIntent}) → "${reply}"`;
+      },
+      true
+    ),
+    runScenario(
+      39,
+      'TEST 7 & Misunderstanding Recovery ("You\'re going off-topic..." & "No, that\'s not what I meant.")',
+      'User Corrects AI',
+      () => {
+        const ctx7 = extractSessionContext(
+          [],
+          "You're going off-topic. We were talking about my project."
+        );
+        const cls7 = classifyBuddyIntent(
+          "You're going off-topic. We were talking about my project.",
+          ctx7,
+          { quality: 'clear' }
+        );
+        const reply7 = generateLocalFriendReply(
+          "You're going off-topic. We were talking about my project.",
+          [],
+          'friendly',
+          'friendly'
+        );
+
+        const ctxMis = extractSessionContext([], "No, that's not what I meant.");
+        const clsMis = classifyBuddyIntent("No, that's not what I meant.", ctxMis, {
+          quality: 'clear'
+        });
+        const replyMis = generateLocalFriendReply(
+          "No, that's not what I meant.",
+          [],
+          'friendly',
+          'friendly'
+        );
+
+        if (
+          cls7.conversationalIntent !== 'CORRECTING_AI' ||
+          !/you're right/i.test(reply7) ||
+          !/your project/i.test(reply7)
+        ) {
+          throw new Error(`Failed TEST 7: ${cls7.conversationalIntent} | ${reply7}`);
+        }
+        if (
+          clsMis.conversationalIntent !== 'CORRECTING_AI' ||
+          replyMis !== 'Oh, sorry! I misunderstood you. What did you mean?'
+        ) {
+          throw new Error(`Failed misunderstanding recovery: ${clsMis.conversationalIntent} | ${replyMis}`);
+        }
+        return `TEST 7: "${reply7}" | Misunderstanding: "${replyMis}"`;
+      },
+      true
+    ),
+    runScenario(
+      40,
+      'Primary Objective Flow — Contextual past ("Nothing much. I just stay at home." → "I watching a movie yesterday.")',
+      'Natural Recast + Flow',
+      () => {
+        const h1: BuddyMessage[] = [
+          { id: 'b-day', role: 'buddy', timestamp: 1, text: 'What did you do today?' }
+        ];
+        const ctx1 = extractSessionContext(h1, 'Nothing much. I just stay at home.');
+        const gram1 = analyzeBuddyGrammarLocally({
+          originalTranscript: 'Nothing much. I just stay at home.',
+          conversationContext: ctx1.lastBuddyMessage || '',
+          intensity: 'gentle'
+        });
+        const recast1 = buildSpokenCorrection(gram1, 'gentle');
+        const reply1 = generateLocalFriendReply(
+          'Nothing much. I just stay at home.',
+          h1,
+          'friendly',
+          'friendly'
+        );
+
+        const gram2 = analyzeBuddyGrammarLocally({
+          originalTranscript: 'I watching a movie yesterday.',
+          intensity: 'gentle'
+        });
+        const recast2 = buildSpokenCorrection(gram2, 'gentle');
+        const reply2 = generateLocalFriendReply(
+          'I watching a movie yesterday.',
+          h1,
+          'friendly',
+          'friendly'
+        );
+
+        if (
+          recast1.spokenCorrection !== 'You can say, "I just stayed at home."' ||
+          !/relaxing day! did you watch anything interesting\?/i.test(reply1)
+        ) {
+          throw new Error(`Turn 1 mismatch: ${recast1.spokenCorrection} | ${reply1}`);
+        }
+        if (
+          recast2.spokenCorrection !== 'You can say, "I watched a movie yesterday."' ||
+          !/nice! what kind of movie was it\?/i.test(reply2)
+        ) {
+          throw new Error(`Turn 2 mismatch: ${recast2.spokenCorrection} | ${reply2}`);
+        }
+        return `T1: ${recast1.spokenCorrection} ${reply1} | T2: ${recast2.spokenCorrection} ${reply2}`;
+      },
+      true
     )
   ];
 
@@ -797,10 +1130,10 @@ export function runAll13BuddyQaScenarios(): BuddyQaSuiteReport {
 
   // Compute quantitative subsystem metrics
   const byId = (id: number) => results.find(r => r.id === id)?.passed ?? false;
-  const contextIds = [10, 12, 14, 15, 16, 17, 19, 20, 27, 28, 30, 31];
-  const intentIds = [10, 14, 15, 16, 17, 19, 20, 21, 22, 30, 31];
-  const precisionIds = [8, 9, 13, 26, 29];
-  const recallIds = [1, 4, 7, 17, 18, 24, 25, 27, 28, 32, 33];
+  const contextIds = [10, 12, 14, 15, 16, 17, 19, 20, 27, 28, 30, 31, 34, 35, 39, 40];
+  const intentIds = [10, 14, 15, 16, 17, 19, 20, 21, 22, 30, 31, 34, 35, 36, 37, 38, 39];
+  const precisionIds = [8, 9, 13, 26, 29, 36, 37, 38];
+  const recallIds = [1, 4, 7, 17, 18, 24, 25, 27, 28, 32, 33, 34, 35, 40];
 
   const pct = (ids: number[]) =>
     Math.round((ids.filter(byId).length / Math.max(1, ids.length)) * 100);

@@ -5,6 +5,7 @@
  */
 
 import type {
+  BuddyConversationalIntent,
   BuddyMemoryItem,
   BuddyMessage,
   BuddyMode,
@@ -603,148 +604,383 @@ export function extractSessionContext(
  * NEVER triggers unrelated hardcoded guesses (like "school cancelled tomorrow" just because the word "class" appeared!).
  * Handles BOTH specific term queries ("What you mean by concept in class?") AND general ("What do you mean?").
  */
+/**
+ * Conversational Idiom & Expression Glossary + Phonetic Near-Miss Matcher
+ * Enables Lingo Buddy to explain expressions it just used (e.g. "low-key", even if STT heard "Locky"!).
+ */
+const CONVERSATIONAL_WORD_GLOSSARY: Record<
+  string,
+  { canonical: string; definition: string; followUp: string }
+> = {
+  'low-key': {
+    canonical: 'low-key',
+    definition: '"Low-key" means relaxed, quiet, or without much fuss or excitement.',
+    followUp: 'Have you had a low-key day yourself?'
+  },
+  lowkey: {
+    canonical: 'low-key',
+    definition: '"Low-key" means relaxed, quiet, or without much fuss or excitement.',
+    followUp: 'Have you had a low-key day yourself?'
+  },
+  unwind: {
+    canonical: 'unwind',
+    definition: '"Unwind" means to relax and let go of stress after work or a busy day.',
+    followUp: 'What do you usually do to unwind in the evening?'
+  },
+  'hands-on': {
+    canonical: 'hands-on',
+    definition: '"Hands-on" means learning by actually building or doing things practically rather than just reading theory.',
+    followUp: 'Do you prefer hands-on projects or classroom theory?'
+  },
+  'catch up': {
+    canonical: 'catch up',
+    definition: '"Catch up" means talking with friends you haven\'t seen in a while to share life updates.',
+    followUp: 'Did you catch up with any friends recently?'
+  },
+  overwhelmed: {
+    canonical: 'overwhelmed',
+    definition: '"Overwhelmed" means feeling like you have too many tasks or emotions to handle at once.',
+    followUp: 'Have things felt calmer for you lately?'
+  },
+  spontaneous: {
+    canonical: 'spontaneous',
+    definition: '"Spontaneous" means doing something suddenly on impulse without planning it ahead of time.',
+    followUp: 'Do you like spontaneous trips, or do you prefer planning ahead?'
+  },
+  getaway: {
+    canonical: 'getaway',
+    definition: 'A "getaway" is a short relaxing holiday or weekend trip away from your routine.',
+    followUp: 'Where would you go for a quick weekend getaway?'
+  },
+  cliffhanger: {
+    canonical: 'cliffhanger',
+    definition: 'A "cliffhanger" is a dramatic, unfinished ending in a story or show that leaves you eager to know what happens next.',
+    followUp: 'Have you watched any shows with crazy cliffhangers lately?'
+  },
+  cliffhangers: {
+    canonical: 'cliffhangers',
+    definition: '"Cliffhangers" are dramatic endings in shows or stories that leave you in suspense waiting for the next part.',
+    followUp: 'Do you enjoy shows with cliffhangers, or do they drive you crazy?'
+  },
+  refreshing: {
+    canonical: 'refreshing',
+    definition: '"Refreshing" means something that makes you feel energized, fresh, and mentally reset.',
+    followUp: 'What kind of activity feels most refreshing to you?'
+  },
+  hectic: {
+    canonical: 'hectic',
+    definition: '"Hectic" means very busy, fast-paced, and full of activity.',
+    followUp: 'Has your week been hectic or fairly calm?'
+  },
+  highlight: {
+    canonical: 'highlight',
+    definition: 'A "highlight" is the best, happiest, or most memorable part of your day or week.',
+    followUp: 'What was the highlight of your week so far?'
+  }
+};
+
+function editDistanceAlpha(a: string, b: string): number {
+  const s1 = a.toLowerCase().replace(/[^a-z]/g, '');
+  const s2 = b.toLowerCase().replace(/[^a-z]/g, '');
+  if (s1 === s2) return 0;
+  if (!s1.length) return s2.length;
+  if (!s2.length) return s1.length;
+
+  const dp: number[][] = Array.from({ length: s1.length + 1 }, () =>
+    Array(s2.length + 1).fill(0)
+  );
+  for (let i = 0; i <= s1.length; i++) dp[i][0] = i;
+  for (let j = 0; j <= s2.length; j++) dp[0][j] = j;
+
+  for (let i = 1; i <= s1.length; i++) {
+    for (let j = 1; j <= s2.length; j++) {
+      const cost = s1[i - 1] === s2[j - 1] ? 0 : 1;
+      dp[i][j] = Math.min(
+        dp[i - 1][j] + 1,
+        dp[i][j - 1] + 1,
+        dp[i - 1][j - 1] + cost
+      );
+    }
+  }
+  return dp[s1.length][s2.length];
+}
+
+export function resolveAskedWordAgainstContext(
+  askedRaw: string,
+  lastBuddyMessage: string | null,
+  recentBuddyTexts: string[] = []
+): {
+  askedClean: string;
+  matchedTerm: string;
+  isPhoneticNearMiss: boolean;
+  explanationReply: string;
+} {
+  const askedClean = askedRaw
+    .trim()
+    .replace(/^["'“”]+|["'“”?.!,]+$/g, '')
+    .trim();
+  const askedLower = askedClean.toLowerCase();
+  const askedAlpha = askedLower.replace(/[^a-z]/g, '');
+
+  // 1. Direct glossary lookup
+  if (CONVERSATIONAL_WORD_GLOSSARY[askedLower] || CONVERSATIONAL_WORD_GLOSSARY[askedAlpha]) {
+    const entry =
+      CONVERSATIONAL_WORD_GLOSSARY[askedLower] || CONVERSATIONAL_WORD_GLOSSARY[askedAlpha];
+    return {
+      askedClean,
+      matchedTerm: entry.canonical,
+      isPhoneticNearMiss: false,
+      explanationReply: `${entry.definition} ${entry.followUp}`
+    };
+  }
+
+  // 2. Check words/hyphenated expressions inside Lingo Buddy's immediately preceding message(s) for phonetic near-misses (e.g. "Locky" -> "low-key")
+  const buddyCorpus = [lastBuddyMessage || '', ...recentBuddyTexts.slice(-2)].join(' ');
+  const candidateTokens = Array.from(
+    new Set(
+      (buddyCorpus.match(/[a-zA-Z]+(?:-[a-zA-Z]+)?/g) || []).filter(t => t.length >= 4)
+    )
+  );
+
+  let bestCandidate: string | null = null;
+  let bestDist = 99;
+  for (const cand of candidateTokens) {
+    const candAlpha = cand.toLowerCase().replace(/[^a-z]/g, '');
+    if (candAlpha.length < 4 || askedAlpha.length < 4) continue;
+    if (candAlpha[0] !== askedAlpha[0]) continue;
+    const dist = editDistanceAlpha(askedAlpha, candAlpha);
+    if (dist > 0 && dist <= 2 && dist < bestDist) {
+      bestDist = dist;
+      bestCandidate = cand;
+    }
+  }
+
+  if (bestCandidate) {
+    const candKey = bestCandidate.toLowerCase();
+    const candAlpha = candKey.replace(/[^a-z]/g, '');
+    const gloss = CONVERSATIONAL_WORD_GLOSSARY[candKey] || CONVERSATIONAL_WORD_GLOSSARY[candAlpha];
+    if (gloss) {
+      return {
+        askedClean,
+        matchedTerm: gloss.canonical,
+        isPhoneticNearMiss: true,
+        explanationReply: `Did you mean "${gloss.canonical}" from what I just said? ${gloss.definition} ${gloss.followUp}`
+      };
+    }
+    return {
+      askedClean,
+      matchedTerm: bestCandidate,
+      isPhoneticNearMiss: true,
+      explanationReply: `Did you mean "${bestCandidate}" from my previous message? In simple words, I used "${bestCandidate}" to talk about what we were just discussing — want me to give another example?`
+    };
+  }
+
+  if (/\bconcept/.test(askedLower) && /\bclass\b/.test(askedLower)) {
+    return {
+      askedClean,
+      matchedTerm: askedClean,
+      isPhoneticNearMiss: false,
+      explanationReply: `By "${askedClean}", I meant learning the theory your lecturer teaches in university — compared to building a practical project yourself. Which one are you focusing on more right now?`
+    };
+  }
+  if (/\bconcept/.test(askedLower)) {
+    return {
+      askedClean,
+      matchedTerm: askedClean,
+      isPhoneticNearMiss: false,
+      explanationReply: `By "${askedClean}", I just meant the main theory or core ideas behind a topic before putting them into practice. Does that make sense?`
+    };
+  }
+
+  return {
+    askedClean,
+    matchedTerm: askedClean,
+    isPhoneticNearMiss: false,
+    explanationReply: `Good question! "${askedClean}" basically refers to that idea in everyday English — want me to put it in a simple example sentence?`
+  };
+}
+
 function reExplainLastBuddyQuestion(
   lastBuddyMessage: string | null,
-  askedTerm?: string | null
+  askedTerm?: string | null,
+  recentBuddyTexts: string[] = []
 ): string {
   if (askedTerm && askedTerm.trim().length >= 2) {
-    const cleanTerm = askedTerm.trim().replace(/[?!.]+$/, '');
-    const termLower = cleanTerm.toLowerCase();
-
-    if (/\bconcept/.test(termLower) && /\bclass\b/.test(termLower)) {
-      return `Oh, good question! By "${cleanTerm}", I meant learning the theory or ideas your lecturer teaches in university — compared to building a real hands-on project yourself. Which one are you focusing on more right now?`;
-    }
-    if (/\bconcept/.test(termLower)) {
-      return `Good question! By "${cleanTerm}", I just meant the main theory or core ideas behind a topic before putting them into practice. Does that make more sense?`;
-    }
-    if (/\bhighlight\b/.test(termLower)) {
-      return `By "${cleanTerm}", I just meant the best or most enjoyable moment you've had recently!`;
-    }
-    if (/\bunwind\b/.test(termLower)) {
-      return `By "${cleanTerm}", I just meant relaxing and letting go of stress after a busy day!`;
-    }
-    if (lastBuddyMessage) {
-      return `Oh, good question! When I mentioned "${cleanTerm}", I was just asking in a simple way about ${
-        /\bproject|building|studying\b/i.test(lastBuddyMessage)
-          ? 'whether you are learning theory in class or building something practical yourself'
-          : 'what we were just chatting about'
-      }. Does that clear it up?`;
-    }
-    return `Good question! By "${cleanTerm}", I just meant that idea in everyday simple terms — want me to give a quick example?`;
+    return resolveAskedWordAgainstContext(askedTerm, lastBuddyMessage, recentBuddyTexts)
+      .explanationReply;
   }
 
   if (!lastBuddyMessage) {
-    return "Oh, sorry about that! I just meant — feel free to tell me anything about your day, like what you've been up to or what's on your mind.";
+    return "Oh, let me explain! I was just asking how your day has been going and what you'd like to talk about.";
   }
 
   const lower = lastBuddyMessage.toLowerCase();
 
-  // Only match school cancellation if Buddy ACTUALLY talked about cancellation / day off!
+  if (/\bdid you understand what i meant\b/.test(lower)) {
+    const earlier = recentBuddyTexts.length >= 2 ? recentBuddyTexts[recentBuddyTexts.length - 2] : null;
+    if (earlier) {
+      return `Oh, let me explain it differently! Earlier I was asking: "${earlier}" — basically, I just wanted to hear your thoughts in simple words.`;
+    }
+    return 'Oh, let me explain it differently! I just wanted to check if my question made sense — feel free to tell me about your day in your own words.';
+  }
+  if (/\bdid you enjoy your day\b/.test(lower)) {
+    return 'Sorry! I was asking whether you enjoyed your day — did you have a nice time today?';
+  }
   if (/\b(cancel|cancelled|off\s+tomorrow|no\s+school|day\s+off|holiday)\b/.test(lower)) {
-    return "My bad, let me say that simpler! I was just asking why you think school or classes might be cancelled tomorrow — is it a holiday or something else?";
+    return 'Sorry! I was just asking why you think school or classes might be cancelled tomorrow — is it a holiday or something else?';
   }
   if (/\b(concepts\s+in\s+class|building\s+a\s+project|hands-on\s+project)\b/.test(lower)) {
-    return "Oh, sorry about that! I was just asking if you're currently building a real coding or tech project on your own, or mostly learning the theory in university classes.";
+    return "Sorry about that! I was asking whether you're building a practical coding project right now, or mostly studying theory in your university classes.";
   }
   if (/\b(highlight|week|interesting happen|talk about today|on your mind)\b/.test(lower)) {
-    return "Oh, sorry about that! I just meant — has anything fun or memorable happened to you today or this week, or has it just been an ordinary day?";
+    return 'Sorry! I was just asking if anything fun happened today, or if it has been a normal, relaxed day.';
   }
-  if (/\b(quiet day|relax at home|lazy day|planning to do)\b/.test(lower)) {
-    return "Sorry, let me put that more simply! I was just asking if you enjoyed relaxing at home today, or if you had plans that got cancelled.";
+  if (/\b(quiet day|relax at home|lazy day|planning to do|low-key)\b/.test(lower)) {
+    return 'Sorry! I was just asking whether you enjoyed relaxing at home today.';
   }
   if (/\b(cook|dish|ingredient|recipe|meal|ginger|oil)\b/.test(lower)) {
-    return "Oh, sorry for being unclear! I was just asking what dish you're planning to cook and what ingredients you usually put in it.";
+    return 'Sorry! I was just asking what dish you are cooking and what ingredients you put in it.';
   }
   if (/\b(shop|shopping|clothes|mall)\b/.test(lower)) {
-    return "Sorry about that! I was just asking what you ended up buying when you went shopping.";
+    return 'Sorry! I was just asking what you bought when you went shopping.';
   }
   if (/\b(travel|trip|weekend|visit)\b/.test(lower)) {
-    return "Oh, sorry! I was just asking if there's a place you'd love to visit for a short getaway.";
+    return "Sorry! I was just asking if there's a place you'd like to visit for a short trip.";
   }
 
   const sentences = lastBuddyMessage
     .split(/(?<=[.!?])\s+/)
     .map(s => s.trim())
     .filter(Boolean);
-  const questionSentence = [...sentences].reverse().find(s => s.endsWith('?')) || sentences[sentences.length - 1];
+  const questionSentence =
+    [...sentences].reverse().find(s => s.endsWith('?')) || sentences[sentences.length - 1];
 
-  return `Oh, sorry about that! Earlier I asked: "${questionSentence}" — basically, I was just curious to hear your thoughts on that, or we can switch to any topic you feel like talking about!`;
+  // Paraphrase simple "Did you..." / "What did you..." questions directly
+  const didYouMatch = questionSentence.match(/^did\s+you\s+(.+?)\?$/i);
+  if (didYouMatch) {
+    return `Sorry! I was asking whether you ${didYouMatch[1].trim()}.`;
+  }
+
+  return `Oh, let me put that more simply! I was asking: "${questionSentence}"`;
 }
 
 /**
- * Audit Architecture — Explicit Intent Classifier (used by both Orchestrator & Local Friend Engine)
+ * Context-Aware 12-Category Intent Classifier (Section 4).
+ * Evaluates user transcript IN CONTEXT of `ctx.lastBuddyMessage`, `ctx.lastBuddyQuestion`, and `coherence`.
  */
 export function classifyBuddyIntent(
   userText: string,
   ctx: BuddySessionContext,
   coherence: TranscriptCoherenceResult
-): { intent: BuddyTurnIntent; extractedTerm?: string } {
-  const lower = userText.trim().toLowerCase();
+): {
+  intent: BuddyTurnIntent;
+  conversationalIntent: BuddyConversationalIntent;
+  extractedTerm?: string;
+} {
+  const clean = userText.trim();
+  const lower = clean.toLowerCase();
 
+  // 1. UNCLEAR_SPEECH (e.g. "I rain got you", "Must will be cappuccino potato mango")
   if (coherence.quality === 'unclear') {
-    return { intent: 'unclear_speech' };
+    return { intent: 'unclear_speech', conversationalIntent: 'UNCLEAR_SPEECH' };
   }
 
+  // 2. INCOMPLETE_SENTENCE (e.g. "Much into. Nothing much.", dangling cutoff)
+  if (coherence.incompleteFragment) {
+    return {
+      intent: 'incomplete_sentence',
+      conversationalIntent: 'INCOMPLETE_SENTENCE',
+      extractedTerm: coherence.incompleteFragment
+    };
+  }
+
+  // 3. Repeat request
   if (
     /\b(can\s+you\s+say\s+that\s+again|say\s+that\s+again|repeat\s+(?:that|what\s+you\s+said|your\s+last\s+message)|didn't\s+hear\s+(?:that|you))\b/i.test(
       lower
     )
   ) {
-    return { intent: 'repeat_last_buddy' };
+    return { intent: 'repeat_last_buddy', conversationalIntent: 'ASKING_FOR_CLARIFICATION' };
   }
 
+  // 4. Explain earlier grammar correction
   if (
     /\b(explain|why\s+was|what\s+was|tell\s+me\s+about)\b.*\b(mistake|error|correction|wrong|corrected|grammar)\b|\bwhy\s+did\s+you\s+correct\b/i.test(
       lower
     )
   ) {
-    return { intent: 'explain_earlier_mistake' };
+    return { intent: 'explain_earlier_mistake', conversationalIntent: 'ASKING_QUESTION' };
   }
 
+  // 5. CORRECTING_AI — Off-topic reminder ("You're going off-topic. We were talking about my project.")
   if (
-    /\b(off[\s-]?topic|going\s+off[\s-]?topic|stay\s+on\s+topic|not\s+what\s+i\s+(?:was\s+talking|meant)|back\s+to\s+(?:the\s+|our\s+)?topic)\b/i.test(
+    /\b(off[\s-]?topic|going\s+off[\s-]?topic|stay\s+on\s+topic|back\s+to\s+(?:the\s+|our\s+)?topic)\b/i.test(
       lower
     )
   ) {
-    return { intent: 'topic_correction' };
+    return { intent: 'topic_correction', conversationalIntent: 'CORRECTING_AI' };
   }
 
+  // 6. CORRECTING_AI — Fixing AI's misunderstanding ("No, that's not what I meant", "You misunderstood me")
+  if (
+    /\b(that'?s\s+not\s+what\s+i\s+(?:meant|said|was\s+talking\s+about)|not\s+what\s+i\s+meant|you\s+misunderstood(?:\s+me)?|you\s+got\s+(?:it|me)\s+wrong|no,?\s+i\s+meant\b)/i.test(
+      lower
+    )
+  ) {
+    return { intent: 'correcting_ai', conversationalIntent: 'CORRECTING_AI' };
+  }
+
+  // 7. CHANGING_TOPIC ("Let's talk about something else.")
   if (
     /\b(let'?s\s+(?:discuss|talk\s+about)\s+something\s+else|change\s+(?:the\s+)?topic|talk\s+about\s+something\s+else|switch\s+(?:the\s+)?topic|different\s+topic)\b/i.test(
       lower
     )
   ) {
-    return { intent: 'topic_change' };
+    return { intent: 'topic_change', conversationalIntent: 'CHANGING_TOPIC' };
   }
 
-  const meanByMatch = userText.match(/\bmean\s+by\s+([^?.!]+)/i);
-  if (meanByMatch && meanByMatch[1].trim().length >= 2) {
-    return { intent: 'clarify_specific_term', extractedTerm: meanByMatch[1].trim() };
+  // 8. ASKING_WORD_MEANING ("What is the meaning of low-key?", "What does X mean?", "What you mean by X?")
+  const meaningOfMatch =
+    clean.match(/\b(?:what\s+(?:is|was)?\s*the\s+meaning\s+of|what'?s\s+the\s+meaning\s+of|meaning\s+of|define)\s+["']?([^?.!,"']+)["']?/i) ||
+    clean.match(/\bwhat\s+(?:does|do|is)\s+["']?([a-zA-Z0-9-]+(?:\s+[a-zA-Z0-9-]+)?)["']?\s+mean\b/i) ||
+    clean.match(/\bmean\s+by\s+["']?([^?.!,"']+)["']?/i);
+  if (meaningOfMatch && meaningOfMatch[1].trim().length >= 2) {
+    const term = meaningOfMatch[1].trim();
+    return {
+      intent: 'ask_word_meaning',
+      conversationalIntent: 'ASKING_WORD_MEANING',
+      extractedTerm: term
+    };
   }
 
+  // 9. ASKING_FOR_CLARIFICATION (including learner errors like "No, I didn't got you" / "didn't understand what you mean")
   if (
-    /\b(didn'?t\s+(?:get|understand|catch)|don'?t\s+(?:get|understand)|not\s+sure\s+what\s+you|what\s+(?:are|were|do)?\s*you\s+(?:asking|saying|mean)|what\s+do\s+you\s+mean|i'?m\s+confused|pardon\??|sorry\s+what)\b/i.test(
+    /\b(didn'?t\s+(?:get|got|understand|understood|catch|caught)\s+you|didn'?t\s+(?:get|understand|catch)|don'?t\s+(?:get|understand)|not\s+sure\s+what\s+you|what\s+(?:are|were|do|did)?\s*you\s+(?:asking|saying|mean|meant)|i'?m\s+confused|pardon\??|sorry\s+what)\b/i.test(
       lower
     )
   ) {
-    return { intent: 'clarify_last_question' };
+    return {
+      intent: 'clarify_last_question',
+      conversationalIntent: 'ASKING_FOR_CLARIFICATION'
+    };
   }
 
+  // 10. DISAGREEING
   if (
     /\b(i\s+don'?t\s+agree|i\s+disagree|not\s+really\s+agree|i\s+don'?t\s+think\s+so|i\s+see\s+it\s+differently|that'?s\s+not\s+(?:true|right))\b/i.test(
       lower
     )
   ) {
-    return { intent: 'user_disagreement' };
+    return { intent: 'user_disagreement', conversationalIntent: 'DISAGREEING' };
   }
 
-  // 8. Empathy / negative emotional day or self-doubt ("I had a terrible day", "don't think anything possible in my life")
+  // 11. EXPRESSING_EMOTION
   if (
     /\b(terrible\s+day|awful\s+day|horrible\s+day|bad\s+day|worst\s+day|rough\s+day|feeling\s+(?:down|sad|upset|depressed|anxious|stressed|hopeless|lost)|everything\s+went\s+wrong|really\s+upset|really\s+frustrated|don'?t\s+think\s+anything\s+(?:is\s+)?possible|nothing\s+(?:is\s+)?possible\s+in\s+my\s+life|can'?t\s+do\s+anything)\b/i.test(
       lower
     )
   ) {
-    return { intent: 'empathy_negative_day' };
+    return { intent: 'empathy_negative_day', conversationalIntent: 'EXPRESSING_EMOTION' };
   }
 
   if (
@@ -752,7 +988,7 @@ export function classifyBuddyIntent(
       lower
     )
   ) {
-    return { intent: 'context_retention' };
+    return { intent: 'context_retention', conversationalIntent: 'ASKING_QUESTION' };
   }
 
   if (
@@ -760,23 +996,57 @@ export function classifyBuddyIntent(
       lower
     )
   ) {
-    return { intent: 'project_continuation' };
+    return { intent: 'project_continuation', conversationalIntent: 'SHARING_INFORMATION' };
   }
 
-  if (ctx.activeTopic === 'quiet_day') return { intent: 'quiet_day' };
-  if (ctx.activeTopic === 'school_cancellation') return { intent: 'school_cancellation' };
-  if (ctx.activeTopic === 'cooking_process') return { intent: 'cooking_process' };
-  if (ctx.activeTopic !== 'general') return { intent: 'topic_chat' };
+  const isDirectQuestion = /\?$/.test(clean);
+  const answeredPrevQ = Boolean(ctx.lastBuddyQuestion) && !isDirectQuestion;
+
+  if (ctx.activeTopic === 'quiet_day') {
+    return {
+      intent: 'quiet_day',
+      conversationalIntent: answeredPrevQ ? 'ANSWER_TO_PREVIOUS_QUESTION' : 'SHARING_INFORMATION'
+    };
+  }
+  if (ctx.activeTopic === 'school_cancellation') {
+    return {
+      intent: 'school_cancellation',
+      conversationalIntent: answeredPrevQ ? 'ANSWER_TO_PREVIOUS_QUESTION' : 'SHARING_INFORMATION'
+    };
+  }
+  if (ctx.activeTopic === 'cooking_process') {
+    return {
+      intent: 'cooking_process',
+      conversationalIntent: answeredPrevQ ? 'ANSWER_TO_PREVIOUS_QUESTION' : 'SHARING_INFORMATION'
+    };
+  }
+  if (ctx.activeTopic !== 'general') {
+    return {
+      intent: 'topic_chat',
+      conversationalIntent: isDirectQuestion
+        ? 'ASKING_QUESTION'
+        : answeredPrevQ
+        ? 'ANSWER_TO_PREVIOUS_QUESTION'
+        : 'SHARING_INFORMATION'
+    };
+  }
 
   if (
     /^(hi|hello|hey|good morning|good evening|good afternoon|yo|sup|yes|yeah|yep|yup|no|nope|nah|okay|ok|sure|maybe|nothing)[!.,\s]*$/i.test(
       lower
     )
   ) {
-    return { intent: 'greeting_or_ack' };
+    return { intent: 'greeting_or_ack', conversationalIntent: 'GENERAL_CONVERSATION' };
   }
 
-  return { intent: 'grounded_general' };
+  return {
+    intent: 'grounded_general',
+    conversationalIntent: isDirectQuestion
+      ? 'ASKING_QUESTION'
+      : answeredPrevQ
+      ? 'ANSWER_TO_PREVIOUS_QUESTION'
+      : 'GENERAL_CONVERSATION'
+  };
 }
 
 /**
@@ -818,10 +1088,34 @@ export function generateLocalFriendReply(
     if (/\b(nothing|resting|happen)\b/i.test(lower)) {
       return `Sorry, I didn't quite catch that clearly! Did you mean that nothing interesting happened today, or were you trying to tell me about something else?`;
     }
-    if (/\b(promote|promoted)\b/i.test(lower)) {
-      return `Hmm, I think the microphone may have misheard part of that — it sounded like "${suspicious}". Could you say that again in a simpler way?`;
+    if (/\bgot\s+you\b/i.test(lower)) {
+      return `Sorry, I didn't quite catch that clearly — it came through as "${clean}". Did you mean "I didn't get you", or were you trying to say something else?`;
     }
-    return `Haha, I think I missed what you meant there — it came through as "${suspicious}". Could you say that again, or rephrase it for me?`;
+    return `Sorry, I didn't quite catch what you meant there — it came through as "${suspicious}". Could you say that again or clarify?`;
+  }
+
+  if (intent === 'incomplete_sentence') {
+    const frag = extractedTerm || coherence.incompleteFragment || clean;
+    if (/\bnothing\s+much\b/i.test(lower)) {
+      return `It sounded like the first part cut off ("${frag}") — did you just mean "nothing much" happened today, or were you starting to say what you're into?`;
+    }
+    return `It sounded like part of your sentence got cut off ("${frag}"). Could you finish that thought or repeat it so I make sure I follow you?`;
+  }
+
+  if (intent === 'correcting_ai') {
+    const afterMeant = clean.match(/\bi\s+meant\s+(.+)$/i);
+    if (afterMeant && afterMeant[1].trim().length >= 3) {
+      return `Oh, sorry! Thanks for clarifying — so you meant ${afterMeant[1].trim().replace(/[.!?]+$/, '')}. Tell me more about that!`;
+    }
+    return 'Oh, sorry! I misunderstood you. What did you mean?';
+  }
+
+  if (intent === 'ask_word_meaning') {
+    return resolveAskedWordAgainstContext(
+      extractedTerm || clean,
+      ctx.lastBuddyMessage,
+      ctx.recentBuddyTexts
+    ).explanationReply;
   }
 
   if (intent === 'repeat_last_buddy') {
@@ -860,7 +1154,7 @@ export function generateLocalFriendReply(
   }
 
   if (intent === 'clarify_specific_term' || intent === 'clarify_last_question') {
-    return reExplainLastBuddyQuestion(ctx.lastBuddyMessage, extractedTerm);
+    return reExplainLastBuddyQuestion(ctx.lastBuddyMessage, extractedTerm, ctx.recentBuddyTexts);
   }
 
   if (intent === 'user_disagreement') {
@@ -928,10 +1222,17 @@ export function generateLocalFriendReply(
   }
 
   if (intent === 'quiet_day') {
-    coreReply = pickNonRepeating([
-      "Haha, sounds like a pretty quiet day! Did you just relax at home, or were you planning to do something that ended up not happening?",
-      "Honestly, slow days where nothing much happens can be a nice reset! Did you get some good rest, or did it start feeling a bit boring?"
-    ]);
+    if (/\bstay(?:ed)?\s+at\s+home\b/i.test(lower)) {
+      coreReply = pickNonRepeating([
+        'Sounds like a relaxing day! Did you watch anything interesting?',
+        'Sometimes a quiet day at home is the best! Did you watch anything good or just rest?'
+      ]);
+    } else {
+      coreReply = pickNonRepeating([
+        'Haha, sounds like a pretty low-key day! Did you just relax at home, or watch anything good?',
+        'Honestly, slow days where nothing much happens can be a nice reset! Did you get some good rest?'
+      ]);
+    }
   } else if (intent === 'school_cancellation') {
     const placeMatch = lower.match(/\b(school|classes|class|university|college|lectures|lecture|work|office)\b/i);
     const placeWord = placeMatch ? placeMatch[1].toLowerCase() : 'school';
@@ -1050,10 +1351,17 @@ export function generateLocalFriendReply(
       "Getting out for a trip always clears the head. Are you going with friends or family, and how long are you staying?"
     ]);
   } else if (ctx.activeTopic === 'entertainment') {
-    coreReply = pickNonRepeating([
-      "Ooh, nice pick! What pulled you in the most — the storyline, the action, or just the overall vibe?",
-      "Sounds like a solid way to unwind! Would you actually recommend it to a friend, or did it have any weak parts?"
-    ]);
+    if (/\b(movie|film)\b/i.test(lower)) {
+      coreReply = pickNonRepeating([
+        'Nice! What kind of movie was it?',
+        'Ooh, nice! What movie did you watch, and was it worth watching?'
+      ]);
+    } else {
+      coreReply = pickNonRepeating([
+        'Ooh, nice pick! What pulled you in the most — the storyline, the action, or just the overall vibe?',
+        'Sounds like a solid way to unwind! Would you actually recommend it to a friend?'
+      ]);
+    }
   } else if (ctx.activeTopic === 'social') {
     coreReply = pickNonRepeating([
       "Catching up with people you care about always changes the mood of a day! What did you all end up doing together?",
@@ -1134,6 +1442,7 @@ export interface BuddyFriendReplyResult {
   providerRequested: 'gemini' | 'local';
   fallbackReason?: string;
   intent: BuddyTurnIntent;
+  conversationalIntent: BuddyConversationalIntent;
   activeTopic: BuddySessionTopic;
   activeSubject: string | null;
   latencyMs: number;
@@ -1180,7 +1489,11 @@ export async function generateBuddyFriendReply(params: {
   const personalityCfg = getPersonalityConfig(personality);
   const resolvedCoherence = coherence || validateTranscriptCoherence(userText);
   const ctx = context || extractSessionContext(history, userText);
-  const { intent } = classifyBuddyIntent(userText, ctx, resolvedCoherence);
+  const { intent, conversationalIntent, extractedTerm } = classifyBuddyIntent(
+    userText,
+    ctx,
+    resolvedCoherence
+  );
 
   let priorHistory = history;
   if (
@@ -1218,6 +1531,7 @@ export async function generateBuddyFriendReply(params: {
       providerRequested,
       fallbackReason,
       intent,
+      conversationalIntent,
       activeTopic: ctx.activeTopic,
       activeSubject: ctx.activeSubject,
       latencyMs: Math.max(1, Math.round(t1 - t0))
@@ -1264,8 +1578,23 @@ export async function generateBuddyFriendReply(params: {
       ? 'Subtle Coaching Goal: When natural, ask a playful "what if / future plans" question.'
       : null;
 
+  const wordMeaningHint =
+    intent === 'ask_word_meaning' && extractedTerm
+      ? (() => {
+          const resolved = resolveAskedWordAgainstContext(
+            extractedTerm,
+            ctx.lastBuddyMessage,
+            ctx.recentBuddyTexts
+          );
+          return resolved.isPhoneticNearMiss
+            ? `CRITICAL WORD-MEANING CONTEXT: The user asked about "${extractedTerm}" right after you used "${resolved.matchedTerm}"! Ask gently if they meant "${resolved.matchedTerm}", explain "${resolved.matchedTerm}" simply, and continue the conversation!`
+            : `WORD-MEANING REQUEST: The user is asking the meaning of "${resolved.matchedTerm}" from your conversation. Explain "${resolved.matchedTerm}" clearly in 1 simple sentence and connect back to the topic!`;
+        })()
+      : null;
+
   const entityMemory = [
-    `Detected User Intent: ${intent}`,
+    `Detected Conversational Intention: ${conversationalIntent} (${intent})`,
+    wordMeaningHint,
     ctx.activeTopic !== 'general' ? `Active Topic: ${ctx.activeTopic}` : null,
     ctx.activeSubject ? `Active Subject / Project (for "it" / "that"): ${ctx.activeSubject}` : null,
     ctx.activePlace ? `Active Place / Location (for "there"): ${ctx.activePlace}` : null,
@@ -1298,7 +1627,9 @@ CRITICAL CONVERSATIONAL CONTINUATION RULES:
    - Never repeat generic praise ("That's really interesting!", "I'd love to hear more!") or repeat questions you already asked.
    - You don't have to end EVERY single turn with a question if a warm, natural observation fits better — avoid sounding like an interrogator!
 3. SELF-AWARENESS & META-INTENTS:
-   - If the user says "I don't understand what you are asking" or "What do you mean?", explain "Your exact previous message" in simpler everyday English — NEVER invent a different topic!
+   - If the user says "No, that's not what I meant" or corrects a misunderstanding, NEVER defend your mistake — say "Oh, sorry! I misunderstood you. What did you mean?"
+   - If the user asks the meaning of an expression you just used (like "low-key", or a phonetic near-miss like "Locky"), explain that exact expression simply and connect back to the conversation.
+   - If the user says "I don't understand what you are asking" or "No, I didn't got you", explain "Your exact previous message" in simpler everyday English!
    - If the user says "You're going off-topic", acknowledge it ("You're right!") and immediately return to the Active Subject / Project they mentioned.
    - If the user asks to talk about something else ("Let's talk about something else"), agree warmly ("Of course! What would you like to talk about?") and drop the old topic.
    - If the user challenges or disagrees with you, engage thoughtfully with their viewpoint.
@@ -1437,6 +1768,7 @@ Lingo Buddy:`;
         source: 'gemini',
         providerRequested: 'gemini',
         intent,
+        conversationalIntent,
         activeTopic: ctx.activeTopic,
         activeSubject: ctx.activeSubject,
         latencyMs: Math.max(1, Math.round(t1 - t0))

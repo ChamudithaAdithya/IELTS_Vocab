@@ -171,6 +171,50 @@ export function validateTranscriptCoherence(
     suspiciousSpans.push(truncatedEnding[0].trim());
   }
 
+  // 3C. Impossible Pronoun + Unrelated Noun/Base-Verb + Finite Past/Aux Collision (e.g. "I rain got you", "we table went")
+  // Excludes valid adverbs and auxiliaries/modals so valid English ("You have got it", "I just got it") never false-triggers
+  const impossiblePronounCollision = clean.match(
+    /\b(I|you|we|they|he|she)\s+(?!(?:just|really|never|always|already|almost|still|also|even|only|often|usually|sometimes|probably|definitely|actually|basically|honestly|literally|simply|nearly|hardly|barely|all|both|each|have|has|had|can|could|will|would|shall|should|may|might|must|did|does|not|who|that)\b)([a-z]{3,})\s+(got|went|came|saw|did|ate|took|made|gave|knew|thought|said|told|found|left|felt|was|were|am|is|are|had)\s+(you|me|it|him|her|us|them|there|here)\b/i
+  );
+  if (impossiblePronounCollision) {
+    hardGarbleScore += 3;
+    suspiciousSpans.push(impossiblePronounCollision[0]);
+  }
+
+  // Impossible Article + Finite Auxiliary/Past Verb ("the had a party", "a went home")
+  const impossibleArticleAux = clean.match(/\b(the|a|an)\s+(had|was|were|did|went|got|am|are)\s+(?:a|an|the|my|our|to)\b/i);
+  if (impossibleArticleAux) {
+    hardGarbleScore += 2;
+    suspiciousSpans.push(impossibleArticleAux[0]);
+  }
+
+  // 3D. Per-Sentence Incomplete / Dangling Fragment Check (catches "Much into. Nothing much.")
+  const VALID_SHORT_CONVERSATIONAL_FRAGMENTS = /^(?:yes|yeah|yep|yup|no|nope|nah|not\s+really|not\s+much|nothing\s+much|nothing\s+special|not\s+yet|of\s+course|sure|sure\s+thing|okay|ok|alright|all\s+right|maybe|maybe\s+later|maybe\s+tomorrow|sounds\s+good|sounds\s+great|good\s+idea|fair\s+enough|thank\s+you|thanks|thanks\s+a\s+lot|hi|hello|hey|good\s+morning|good\s+evening|good\s+night|see\s+you|by\s+the\s+way|me\s+too|same\s+here|why\s+not|no\s+worries|no\s+problem|for\s+sure|a\s+little\s+bit|just\s+a\s+little|just\s+relaxing|just\s+chilling|(?:for\s+)?(?:about\s+)?[a-z0-9]+\s+(?:people|hours|days|minutes|years|weeks)|like\s+[a-z0-9\s]{2,20}|in\s+the\s+(?:morning|evening|afternoon)|at\s+(?:home|work|night|school|university))$/i;
+
+  const subSentences = clean
+    .split(/[.!?]+/)
+    .map(s => s.trim())
+    .filter(Boolean);
+
+  let detectedIncompleteFragment: string | undefined;
+  for (const sub of subSentences) {
+    const subWords = sub.split(/\s+/).filter(Boolean);
+    if (subWords.length >= 1 && subWords.length <= 3 && !VALID_SHORT_CONVERSATIONAL_FRAGMENTS.test(sub)) {
+      // Flag 1-3 word fragments ending in a preposition/auxiliary/determiner ("Much into", "What I am", "My", "With a")
+      if (
+        /\b(into|with|from|about|for|onto|upon|without|between|through|under|over|am|is|are|was|were|have|has|had|my|your|our|their|his|her|the|a|an|very|much|so|too)$/i.test(
+          sub
+        ) ||
+        /^(much|very|so|too|also|because|although|while|when|if)\s+[a-z]+$/i.test(sub)
+      ) {
+        detectedIncompleteFragment = sub;
+        hardGarbleScore += 2;
+        suspiciousSpans.push(sub);
+        break;
+      }
+    }
+  }
+
   // Impossible English verb/preposition chains produced by corrupted STT ("make going like out my pic night")
   const brokenVerbChain = clean.match(
     /\b(?:make|take|get|give|put|keep|let)\s+(?:going|coming|running|doing|saying|working)\b/i
@@ -238,9 +282,14 @@ export function validateTranscriptCoherence(
   if (hardGarbleScore === 2) {
     return {
       quality: 'partially_unclear',
-      reason: `Part of the sentence (${suspiciousSpans.join(', ')}) sounded unclear.`,
+      reason: detectedIncompleteFragment
+        ? `The fragment "${detectedIncompleteFragment}" looks incomplete or cut off.`
+        : `Part of the sentence (${suspiciousSpans.join(', ')}) sounded unclear.`,
       suspiciousSpans,
-      clarificationHint: `Part of that sounded unclear (${suspiciousSpans.join(', ')}) — check if the mic misheard a word.`
+      incompleteFragment: detectedIncompleteFragment,
+      clarificationHint: detectedIncompleteFragment
+        ? `Part of your speech ("${detectedIncompleteFragment}") sounded cut off or incomplete — could you clarify what you meant?`
+        : `Part of that sounded unclear (${suspiciousSpans.join(', ')}) — check if the mic misheard a word.`
     };
   }
 
@@ -269,6 +318,102 @@ interface LocalGrammarPattern {
 }
 
 const LOCAL_BUDDY_PATTERNS: LocalGrammarPattern[] = [
+  {
+    id: 'ne-what-is-meaning-of',
+    regex: /^what\s+is\s+the\s+meaning\s+of\s+["']?([a-zA-Z0-9-]+(?:\s+[a-zA-Z0-9-]+)?)["']?\??$/gi,
+    category: 'WORD_CHOICE',
+    severity: 'UNNATURAL',
+    getCorrection: (m) => `What does '${m[1].trim()}' mean?`,
+    explanation: 'In everyday spoken English, native speakers almost always ask "What does X mean?" rather than "What is the meaning of X?".',
+    simpleExplanation: 'Native speakers naturally ask "What does X mean?" in conversation.',
+    explanationSi: 'සාමාන්‍ය ඉංග්‍රීසි කතාබහේදී "What is the meaning of X?" වෙනුවට "What does X mean?" ලෙස ඇසීම වඩාත් ස්වාභාවිකයි.',
+    grammar_rule: 'What does [word/phrase] mean?',
+    example: "What does 'low-key' mean?",
+    learning_tip: 'Use "What does ... mean?" whenever asking about a word or expression.',
+    confidence: 0.95
+  },
+  {
+    id: 'vt-bare-ing-past-time',
+    regex: /\b(I|he|she|we|they|you)\s+(watching|going|doing|eating|playing|working|studying|staying|reading|cooking|buying|making|visiting|walking|running|sleeping|talking|meeting)\b(?=[^.?!]{0,40}\b(yesterday|last\s+(?:night|week|month|year|weekend|sunday|saturday|friday)|ago)\b)/gi,
+    category: 'VERB_TENSE',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => {
+      const vMap: Record<string, string> = {
+        watching: 'watched',
+        going: 'went',
+        doing: 'did',
+        eating: 'ate',
+        playing: 'played',
+        working: 'worked',
+        studying: 'studied',
+        staying: 'stayed',
+        reading: 'read',
+        cooking: 'cooked',
+        buying: 'bought',
+        making: 'made',
+        visiting: 'visited',
+        walking: 'walked',
+        running: 'ran',
+        sleeping: 'slept',
+        talking: 'talked',
+        meeting: 'met'
+      };
+      return `${m[1]} ${vMap[m[2].toLowerCase()] || m[2]}`;
+    },
+    explanation: 'For a finished action in the past (with "yesterday" or "last week"), use the simple past verb ("watched") instead of a bare "-ing" form.',
+    simpleExplanation: 'Use the past tense ("watched") for things that happened yesterday.',
+    explanationSi: '"Yesterday" වැනි නිමවූ අතීත කාලයක් සමඟ "-ing" ක්‍රියාපදයක් තනිව නොයොදා සරල අතීත කාලය ("watched") භාවිත කරන්න.',
+    grammar_rule: 'Finished Past Action: Subject + Past Simple Verb + yesterday',
+    example: 'I watched a movie yesterday.',
+    learning_tip: 'Never use an "-ing" verb without am/is/are/was/were — and with "yesterday", prefer simple past ("watched").',
+    confidence: 0.99
+  },
+  {
+    id: 'vf-bare-ing-present',
+    regex: /(?:^|[.!?]\s+|\b(?:and|but|so|because)\s+)(I|he|she|we|they|you)\s+(watching|going|doing|eating|playing|working|studying|staying|reading|cooking|buying|making|visiting|walking|running|sleeping|talking)\b/gi,
+    category: 'VERB_FORMS',
+    severity: 'GRAMMAR_ERROR',
+    getSpan: (m) => {
+      const sub = `${m[1]} ${m[2]}`;
+      const startOffset = m[0].length - sub.length;
+      return { startOffset, endOffset: m[0].length, original: sub };
+    },
+    getCorrection: (m) => {
+      const s = m[1];
+      const sl = s.toLowerCase();
+      const aux = sl === 'i' ? "'m" : sl === 'he' || sl === 'she' ? "'s" : "'re";
+      return `${s}${aux} ${m[2]}`;
+    },
+    explanation: 'An "-ing" action verb always requires a form of "be" ("am / is / are" or "was / were") after the subject.',
+    simpleExplanation: 'Add "am / is / are" before an "-ing" verb (e.g., "I\'m watching").',
+    explanationSi: 'කර්තෘ පදයකට පසුව කෙලින්ම "-ing" ක්‍රියාපදයක් යෙදිය නොහැක — "am / is / are" එක් කරන්න ("I\'m watching").',
+    grammar_rule: 'Present Continuous: Subject + am / is / are + verb-ing',
+    example: "I'm watching a movie right now.",
+    learning_tip: 'Pair "I" + "-ing" with "I\'m": "I\'m watching", "I\'m going".',
+    confidence: 0.97
+  },
+  {
+    id: 'vt-didnt-understand-what-mean',
+    regex: /\b(didn'?t|did\s+not)\s+(understand|get|hear|catch|know|realise|realize)\s+(what|where|why|how)\s+(you|he|she|they|we)\s+(mean|say|want|ask)\b/gi,
+    category: 'VERB_TENSE',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => {
+      const pastMap: Record<string, string> = {
+        mean: 'meant',
+        say: 'said',
+        want: 'wanted',
+        ask: 'asked'
+      };
+      return `${m[1]} ${m[2]} ${m[3]} ${m[4]} ${pastMap[m[5].toLowerCase()] || m[5]}`;
+    },
+    explanation: 'Because "didn\'t understand" refers to what was just said in the past, use the past tense "meant" ("what you meant") instead of "mean".',
+    simpleExplanation: 'Use "meant" (past) when referring to what someone just said: "what you meant."',
+    explanationSi: 'මීට පෙර පැවසූ දෙයක් අදහස් කරන බැවින් "what you mean" වෙනුවට අතීත කාලයෙන් "what you meant" යෙදිය යුතුය.',
+    grammar_rule: 'Past Reference in Clauses: didn\'t understand + what you meant / said',
+    example: "Sorry, I didn't understand what you meant.",
+    learning_tip: 'When asking about an earlier comment, pair "didn\'t understand" with "what you meant".',
+    confidence: 0.97
+  },
   {
     id: 'art-copula-profession',
     regex: /\b(I\s+am|I'm|he\s+is|he's|she\s+is|she's|you\s+are|you're|was|became)\s+(software\s+engineer|civil\s+engineer|mechanical\s+engineer|electrical\s+engineer|data\s+scientist|data\s+analyst|web\s+developer|mobile\s+developer|frontend\s+developer|backend\s+developer|full[\s-]stack\s+developer|ui\s+designer|ux\s+designer|university\s+student|college\s+student|high\s+school\s+student|medical\s+student|project\s+manager|product\s+manager|business\s+analyst|engineer|developer|programmer|designer|doctor|nurse|teacher|lecturer|professor|student|lawyer|accountant|manager|researcher|scientist|architect|consultant|entrepreneur|freelancer|intern|driver|chef|artist|writer)\b/gi,
@@ -1632,6 +1777,7 @@ export function detectVocabUpgrades(
  */
 export function analyzeBuddyGrammarLocally(params: {
   originalTranscript: string;
+  conversationContext?: string;
   intensity?: CorrectionIntensity;
   mode?: BuddyMode;
   uncertainWords?: string[];
@@ -1641,6 +1787,7 @@ export function analyzeBuddyGrammarLocally(params: {
 }): BuddyGrammarAnalysis {
   const {
     originalTranscript,
+    conversationContext = '',
     intensity = 'balanced',
     mode = 'friendly',
     uncertainWords = [],
@@ -1683,8 +1830,12 @@ export function analyzeBuddyGrammarLocally(params: {
   const rawMatches: SpanMatch[] = [];
 
   for (const pat of LOCAL_BUDDY_PATTERNS) {
-    // Intensity gating: Gentle focuses on genuine GRAMMAR_ERRORs only
-    if (intensity === 'gentle' && pat.severity !== 'GRAMMAR_ERROR') {
+    // Intensity gating: Gentle focuses on genuine GRAMMAR_ERRORs and clear UNNATURAL phrasings
+    if (
+      intensity === 'gentle' &&
+      pat.severity !== 'GRAMMAR_ERROR' &&
+      pat.severity !== 'UNNATURAL'
+    ) {
       continue;
     }
     // Balanced keeps GRAMMAR_ERROR & UNNATURAL, plus at most 1 ADVANCED vocab hint
@@ -1740,6 +1891,66 @@ export function analyzeBuddyGrammarLocally(params: {
       });
 
       if (!pat.regex.global) break;
+    }
+  }
+
+  // Contextual Past-Tense Agreement:
+  // If the AI's immediately preceding turn asked a past-tense question ("What did you do today?", "Where did you go?", "How was your weekend?")
+  // and the user answered with a bare present-simple action ("I just stay at home", "I watch a movie", "I go to the park"),
+  // catch the past-tense error using conversation context!
+  const lastBuddyPart = conversationContext.split('|').pop() || conversationContext;
+  const aiAskedPastQuestion =
+    /\b(?:what|where|who|how|when)\s+did\s+you\b|\bdid\s+you\s+(?:do|go|have|watch|eat|see|buy|enjoy|get|finish|meet)\b|\bwhat\s+happened\b|\bhow\s+was\s+your\b/i.test(
+      lastBuddyPart
+    );
+  if (aiAskedPastQuestion && !/\b(usually|always|every\s+day|normally|often|tomorrow)\b/i.test(clean)) {
+    const ctxPastRegex = /\b(I|we|they)\s+(?:(just|only|mostly|really)\s+)?(stay|watch|play|go|eat|sleep|cook|work|study|visit|meet|buy|walk|clean|rest|relax)\b(?!\s+to\b)/gi;
+    let cm: RegExpExecArray | null;
+    const pastVerbLookup: Record<string, string> = {
+      stay: 'stayed',
+      watch: 'watched',
+      play: 'played',
+      go: 'went',
+      eat: 'ate',
+      sleep: 'slept',
+      cook: 'cooked',
+      work: 'worked',
+      study: 'studied',
+      visit: 'visited',
+      meet: 'met',
+      buy: 'bought',
+      walk: 'walked',
+      clean: 'cleaned',
+      rest: 'rested',
+      relax: 'relaxed'
+    };
+    while ((cm = ctxPastRegex.exec(clean)) !== null) {
+      const verb = cm[3];
+      const verbStart = cm.index + cm[0].length - verb.length;
+      const verbEnd = cm.index + cm[0].length;
+      if (uncertainSet.has(verb.toLowerCase())) continue;
+      const pastForm = pastVerbLookup[verb.toLowerCase()];
+      if (!pastForm) continue;
+      rawMatches.push({
+        start: verbStart,
+        end: verbEnd,
+        mistake: {
+          id: `ctx-past-${verbStart}`,
+          original: verb,
+          correction: preservesInitialCap(verb, pastForm),
+          category: 'VERB_TENSE',
+          categoryLabel: CATEGORY_LABELS.VERB_TENSE,
+          severity: 'GRAMMAR_ERROR',
+          explanation: `Because the question asked about a past time ("What did you do today?"), use the past tense "${pastForm}" instead of "${verb}".`,
+          simpleExplanation: `Use the past tense "${pastForm}" when talking about earlier today.`,
+          explanationSi: 'ප්‍රශ්නයෙන් අතීතයේ කළ දෙයක් ("What did you do today?") ඇසූ බැවින් ක්‍රියාපදය අතීත කාලයෙන් ("' + pastForm + '") යෙදිය යුතුය.',
+          grammar_rule: 'Contextual Past Simple: Answer "What did you do...?" with a past-tense verb',
+          example: `I just ${pastForm} at home and relaxed.`,
+          learning_tip: 'When a question uses "did", answer with a past-tense verb!',
+          confidence: 0.96,
+          learned: false
+        }
+      });
     }
   }
 
@@ -1861,7 +2072,12 @@ export function buildSpokenCorrection(
   correctionRequired: boolean;
   correctionType: 'none' | 'grammar' | 'naturalness' | 'vocabulary';
 } {
-  if (!analysis || analysis.transcriptQuality === 'unclear') {
+  // Never invent grammar corrections on unclear speech OR incomplete broken fragments!
+  if (
+    !analysis ||
+    analysis.transcriptQuality === 'unclear' ||
+    (analysis.transcriptQuality === 'partially_unclear' && analysis.mistakes.length === 0)
+  ) {
     return { spokenCorrection: '', correctionRequired: false, correctionType: 'none' };
   }
 
@@ -1883,12 +2099,30 @@ export function buildSpokenCorrection(
   const hasGrammarError = actionable.some(m => m.severity === 'GRAMMAR_ERROR');
   const correctionType: 'grammar' | 'naturalness' = hasGrammarError ? 'grammar' : 'naturalness';
 
-  const quotedTarget = /[.!?]$/.test(corrClean) ? corrClean : `${corrClean}.`;
+  // Smart multi-sentence focus: if the user spoke 2 short sentences (e.g. "Nothing much. I just stay at home.")
+  // and ONLY one sentence changed, quote just the changed sentence so Lingo Buddy sounds concise and natural!
+  let targetSentenceToQuote = corrClean;
+  const origParts = origClean.split(/(?<=[.!?])\s+/).map(s => s.trim()).filter(Boolean);
+  const corrParts = corrClean.split(/(?<=[.!?])\s+/).map(s => s.trim()).filter(Boolean);
+  if (origParts.length > 1 && origParts.length === corrParts.length) {
+    const changedParts = corrParts.filter(
+      (cp, idx) => cp.toLowerCase() !== origParts[idx].toLowerCase()
+    );
+    if (changedParts.length === 1) {
+      targetSentenceToQuote = changedParts[0];
+    }
+  }
+
+  const quotedTarget = /[.!?]$/.test(targetSentenceToQuote)
+    ? targetSentenceToQuote
+    : `${targetSentenceToQuote}.`;
+
   const baseRecast =
     correctionType === 'grammar'
       ? `You can say, "${quotedTarget}"`
       : `A more natural way to say that is, "${quotedTarget}"`;
 
+  // Gentle Friend (Default): strictly concise, warm recast with ZERO grammar lecture
   if (intensity === 'gentle') {
     return {
       spokenCorrection: baseRecast,
@@ -1907,6 +2141,7 @@ export function buildSpokenCorrection(
       : `${rawShortNote}.`
     : '';
 
+  // Balanced Coach: short recast + 1 ultra-brief plain-English tip (no long lecture)
   if (intensity === 'balanced') {
     return {
       spokenCorrection: shortNote ? `${baseRecast} ${shortNote}` : baseRecast,
@@ -1915,6 +2150,7 @@ export function buildSpokenCorrection(
     };
   }
 
+  // Detailed Teacher: recast + short rule + 1 crisp spoken example (deep notes stay in Feedback panel)
   const ex = (primary.example || '').trim();
   const exClause = ex ? ` For example, "${/[.!?]$/.test(ex) ? ex : `${ex}.`}"` : '';
   return {
@@ -1969,9 +2205,10 @@ export async function analyzeBuddyGrammar(params: {
   const coherence =
     providedCoherence || validateTranscriptCoherence(clean, uncertainWords, sttConfidence);
 
-  // Always compute instant local baseline as fallback & sanity cross-check
+  // Always compute instant local baseline as fallback & sanity cross-check (including conversationContext!)
   const localFallback = analyzeBuddyGrammarLocally({
     originalTranscript: clean,
+    conversationContext,
     intensity,
     mode,
     uncertainWords,

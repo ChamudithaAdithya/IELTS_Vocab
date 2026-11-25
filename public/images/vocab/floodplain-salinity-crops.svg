@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 320" font-family="Inter, system-ui, sans-serif">
+  <rect width="680" height="320" rx="18" fill="#fefce8"/>
+  <text x="340" y="30" text-anchor="middle" font-size="16" font-weight="800" fill="#0f172a">Floodplains &amp; Soil Salinity: Barren Salty Land vs. Lush Salt-Tolerant Crops</text>
+
+  <!-- Left: Barren High-Salinity Soil -->
+  <rect x="22" y="48" width="308" height="252" rx="14" fill="#ffffff" stroke="#fde68a" stroke-width="1.5"/>
+  <text x="176" y="74" text-anchor="middle" font-size="13.5" font-weight="800" fill="#b91c1c">BARREN SALTY SOIL (නිසරු ලවණ පස)</text>
+  <rect x="38" y="190" width="276" height="72" rx="6" fill="#d6b087"/>
+  <!-- White salt crust & cracks -->
+  <path d="M52 192 L112 192 M148 192 L222 192 M248 192 L298 192" stroke="#ffffff" stroke-width="5"/>
+  <path d="M95 192 L108 228 L92 252 M205 192 L192 225 L210 250" stroke="#78350f" stroke-width="2" fill="none"/>
+  <!-- Withered plant -->
+  <path d="M176 190 Q182 162 198 158" stroke="#92400e" stroke-width="3" fill="none"/>
+  <text x="176" y="128" text-anchor="middle" font-size="11" font-weight="700" fill="#991b1b">High Soil Salinity (පසෙහි ලවණතාව)</text>
+  <text x="176" y="284" text-anchor="middle" font-size="10.5" font-weight="600" fill="#7f1d1d">Ordinary varieties wither on salty floodplains</text>
+
+  <!-- Right: Lush Salt-Tolerant Crops -->
+  <rect x="350" y="48" width="308" height="252" rx="14" fill="#ffffff" stroke="#bbf7d0" stroke-width="1.5"/>
+  <text x="504" y="74" text-anchor="middle" font-size="13.5" font-weight="800" fill="#15803d">LUSH SALT-TOLERANT CROPS (සශ්‍රීක බෝග)</text>
+  <rect x="366" y="190" width="276" height="72" rx="6" fill="#92400e"/>
+  <!-- Lush green crop rows -->
+  <g fill="#16a34a">
+    <ellipse cx="412" cy="170" rx="16" ry="24"/>
+    <ellipse cx="458" cy="166" rx="18" ry="28"/>
+    <ellipse cx="504" cy="168" rx="17" ry="26"/>
+    <ellipse cx="550" cy="165" rx="18" ry="28"/>
+    <ellipse cx="596" cy="170" rx="16" ry="24"/>
+  </g>
+  <text x="504" y="120" text-anchor="middle" font-size="11" font-weight="700" fill="#166534">Salt-tolerant varieties THRIVE</text>
+  <text x="504" y="284" text-anchor="middle" font-size="10.5" font-weight="600" fill="#14532d">Turns barren floodplains into lush harvests</text>
+</svg>
