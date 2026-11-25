@@ -370,6 +370,46 @@ export interface FinalizedTurnPacket {
   priorHistory: BuddyMessage[];
 }
 
+/** Section 6 — 12-Stage Real-Time Voice Performance Timestamps (performance.now() ms) */
+export interface BuddyTurnPerfTimestamps {
+  speech_start: number | null;
+  first_partial_transcript: number | null;
+  speech_end: number | null;
+  final_transcript: number | null;
+  ai_request_start: number | null;
+  ai_first_token: number | null;
+  grammar_ready: number | null;
+  ai_response_complete: number | null;
+  tts_request_start: number | null;
+  tts_first_audio: number | null;
+  playback_start: number | null;
+  response_complete: number | null;
+}
+
+/** Section 6 — 7 Derived End-to-End Voice Latency Metrics (ms) */
+export interface BuddyTurnPerfDurations {
+  timeToFirstTranscriptMs: number | null;
+  finalTranscriptionLatencyMs: number | null;
+  aiTimeToFirstTokenMs: number | null;
+  grammarAnalysisLatencyMs: number | null;
+  ttsTimeToFirstAudioMs: number | null;
+  userEndToFirstAudioMs: number | null;
+  totalResponseCompletionMs: number | null;
+}
+
+export interface BuddyTurnPerfRecord {
+  turnId: string;
+  sessionId: string;
+  recordedAt: number;
+  sttEngineUsed: string;
+  aiProviderUsed: 'gemini' | 'local';
+  ttsProviderUsed: 'neural-stream' | 'neural-cache' | 'browser-speech' | 'muted';
+  wordCount: number;
+  bargeInInterrupted?: boolean;
+  timestamps: BuddyTurnPerfTimestamps;
+  durations: BuddyTurnPerfDurations;
+}
+
 /** Audit Architecture — Per-Turn Execution Trace for Transparency & QA Debugging */
 export interface BuddyTurnTrace {
   turnId: string;
@@ -388,11 +428,13 @@ export interface BuddyTurnTrace {
   providerUsed: 'gemini' | 'local';
   fallbackReason?: string;
   friendLatencyMs: number;
+  aiFirstTokenMs?: number;
   grammarLatencyMs: number;
   grammarSource: 'gemini' | 'local';
   mistakesCount: number;
   spokenCorrection?: string;
   replyPreview: string;
+  perf?: BuddyTurnPerfRecord;
 }
 
 export interface BuddyMessage {

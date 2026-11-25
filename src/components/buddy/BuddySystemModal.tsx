@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   X,
   CheckCircle2,
@@ -9,13 +9,15 @@ import {
   Download,
   Layers,
   FlaskConical,
-  Cpu
+  Cpu,
+  Gauge
 } from 'lucide-react';
 import type {
   BuddyLearningAnalytics,
   BuddyMemoryState,
   BuddyOrbState,
   BuddySession,
+  BuddyTurnPerfRecord,
   BuddyTurnTrace,
   PersonalGrammarNote,
   SavedBuddyVocabItem
@@ -32,6 +34,7 @@ import { BuddyEnergyOrb } from './BuddyEnergyOrb';
 export interface BuddySystemModalProps {
   isOpen: boolean;
   onClose: () => void;
+  initialTab?: ModalTab;
   currentOrbState: BuddyOrbState;
   onPreviewOrbState: (state: BuddyOrbState) => void;
   sessions: BuddySession[];
@@ -40,13 +43,15 @@ export interface BuddySystemModalProps {
   savedVocab: SavedBuddyVocabItem[];
   grammarLibrary: PersonalGrammarNote[];
   turnTraces?: BuddyTurnTrace[];
+  perfRecords?: BuddyTurnPerfRecord[];
 }
 
-type ModalTab = 'orb' | 'qa' | 'traces' | 'architecture';
+type ModalTab = 'orb' | 'perf' | 'qa' | 'traces' | 'architecture';
 
 export const BuddySystemModal: React.FC<BuddySystemModalProps> = ({
   isOpen,
   onClose,
+  initialTab = 'orb',
   currentOrbState,
   onPreviewOrbState,
   sessions,
@@ -54,9 +59,13 @@ export const BuddySystemModal: React.FC<BuddySystemModalProps> = ({
   memory,
   savedVocab,
   grammarLibrary,
-  turnTraces = []
+  turnTraces = [],
+  perfRecords = []
 }) => {
-  const [tab, setTab] = useState<ModalTab>('orb');
+  const [tab, setTab] = useState<ModalTab>(initialTab);
+  useEffect(() => {
+    if (isOpen) setTab(initialTab);
+  }, [isOpen, initialTab]);
   const [previewState, setPreviewState] = useState<BuddyOrbState>(currentOrbState);
   const [qaReport, setQaReport] = useState<BuddyQaSuiteReport>(() => runAll13BuddyQaScenarios());
   const previewAudioRef = useRef<number>(42);
@@ -120,6 +129,11 @@ export const BuddySystemModal: React.FC<BuddySystemModalProps> = ({
         <div className="px-5 py-2.5 border-b border-slate-200/80 flex items-center gap-2 overflow-x-auto bg-slate-50/70">
           {[
             { id: 'orb' as ModalTab, label: '14-State Living Orb', icon: Sparkles },
+            {
+              id: 'perf' as ModalTab,
+              label: `Voice Latency (${perfRecords.length})`,
+              icon: Gauge
+            },
             {
               id: 'qa' as ModalTab,
               label: `QA Lab (${qaReport.passedCount}/${qaReport.total})`,
@@ -214,6 +228,206 @@ export const BuddySystemModal: React.FC<BuddySystemModalProps> = ({
               </div>
             </div>
           )}
+
+          {/* ========================================================= */}
+          {/* TAB 1B: REAL-TIME VOICE PERFORMANCE DIAGNOSTICS (SEC. 6)  */}
+          {/* ========================================================= */}
+          {tab === 'perf' && (() => {
+            const avgMetric = (getter: (r: BuddyTurnPerfRecord) => number | null) => {
+              const vals = perfRecords.map(getter).filter((v): v is number => v !== null);
+              if (vals.length === 0) return null;
+              return Math.round(vals.reduce((a, b) => a + b, 0) / vals.length);
+            };
+            const avgFirstStt = avgMetric(r => r.durations.timeToFirstTranscriptMs);
+            const avgAiTtft = avgMetric(r => r.durations.aiTimeToFirstTokenMs);
+            const avgFirstAudio = avgMetric(r => r.durations.userEndToFirstAudioMs);
+            const avgTts = avgMetric(r => r.durations.ttsTimeToFirstAudioMs);
+
+            const fmtMs = (v: number | null | undefined) =>
+              v === null || v === undefined ? '—' : `${v} ms`;
+
+            return (
+              <div className="space-y-4">
+                <div className="rounded-2xl bg-gradient-to-r from-emerald-50 via-white to-sky-50 border border-emerald-200 p-4 space-y-2 shadow-xs">
+                  <div className="flex items-center justify-between gap-2 flex-wrap">
+                    <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                      <Gauge className="w-4 h-4 text-emerald-600" />
+                      <span>Real-Time Voice Pipeline Telemetry (`performance.now()`)</span>
+                    </span>
+                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white border border-slate-200 text-slate-600">
+                      Zero API keys or raw audio logged
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-600">
+                    Measures all 12 pipeline timestamps per turn: live partial STT, final transcript, AI TTFT, non-blocking grammar, progressive MSE TTS first byte, speaker playback start, and full completion.
+                  </p>
+
+                  {/* Engineering Performance Targets Scorecard */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+                    {[
+                      {
+                        label: 'First Live Transcript',
+                        target: 'Target < 500 ms',
+                        val: fmtMs(avgFirstStt),
+                        ok: avgFirstStt !== null && avgFirstStt <= 500
+                      },
+                      {
+                        label: 'AI First Text Token',
+                        target: 'Target < 1,000 ms',
+                        val: fmtMs(avgAiTtft),
+                        ok: avgAiTtft !== null && avgAiTtft <= 1000
+                      },
+                      {
+                        label: 'End-of-Speech → Audio',
+                        target: 'Target < 1,500 ms',
+                        val: fmtMs(avgFirstAudio),
+                        ok: avgFirstAudio !== null && avgFirstAudio <= 1500
+                      },
+                      {
+                        label: 'TTS First Audio Byte',
+                        target: 'Progressive Stream',
+                        val: fmtMs(avgTts),
+                        ok: avgTts !== null && avgTts <= 900
+                      }
+                    ].map(card => (
+                      <div
+                        key={card.label}
+                        className="rounded-xl bg-white border border-slate-200/90 p-2.5 text-left shadow-2xs"
+                      >
+                        <span className="text-[10px] font-bold text-slate-500 block">
+                          {card.label}
+                        </span>
+                        <span
+                          className={`text-sm font-extrabold font-mono block mt-0.5 ${
+                            card.val === '—'
+                              ? 'text-slate-400'
+                              : card.ok
+                              ? 'text-emerald-600'
+                              : 'text-amber-600'
+                          }`}
+                        >
+                          {card.val}
+                        </span>
+                        <span className="text-[9px] text-slate-400">{card.target}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {perfRecords.length === 0 ? (
+                  <div className="rounded-2xl bg-white border border-slate-200/90 p-6 text-center text-xs text-slate-500 shadow-xs">
+                    Speak or type a turn in Lingo Buddy to inspect live 12-stage `performance.now()` latency measurements here.
+                  </div>
+                ) : (
+                  <div className="space-y-2.5">
+                    {perfRecords.map((rec, idx) => {
+                      const baseT0 =
+                        rec.timestamps.speech_start ??
+                        rec.timestamps.speech_end ??
+                        rec.timestamps.ai_request_start ??
+                        0;
+                      const rel = (t: number | null) =>
+                        t === null ? '—' : `+${Math.max(0, Math.round(t - baseT0))}ms`;
+
+                      return (
+                        <div
+                          key={`${rec.turnId}-${idx}`}
+                          className="rounded-xl bg-white border border-slate-200/90 p-3.5 space-y-2.5 text-xs shadow-xs"
+                        >
+                          <div className="flex items-center justify-between gap-2 flex-wrap">
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">
+                                STT: {rec.sttEngineUsed}
+                              </span>
+                              <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+                                AI: {rec.aiProviderUsed}
+                              </span>
+                              <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200">
+                                TTS: {rec.ttsProviderUsed}
+                              </span>
+                              <span className="text-[10px] text-slate-500">
+                                {rec.wordCount} words
+                              </span>
+                            </div>
+                            <span className="text-[11px] font-mono font-bold text-emerald-700">
+                              User-End → First Audio: {fmtMs(rec.durations.userEndToFirstAudioMs)}
+                            </span>
+                          </div>
+
+                          {/* 7 Derived Durations */}
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[10px]">
+                            <div className="rounded-lg bg-slate-50 px-2 py-1 border border-slate-100">
+                              <span className="text-slate-400 block">1st Partial STT</span>
+                              <strong className="font-mono text-slate-800">
+                                {fmtMs(rec.durations.timeToFirstTranscriptMs)}
+                              </strong>
+                            </div>
+                            <div className="rounded-lg bg-slate-50 px-2 py-1 border border-slate-100">
+                              <span className="text-slate-400 block">Final STT Latency</span>
+                              <strong className="font-mono text-slate-800">
+                                {fmtMs(rec.durations.finalTranscriptionLatencyMs)}
+                              </strong>
+                            </div>
+                            <div className="rounded-lg bg-slate-50 px-2 py-1 border border-slate-100">
+                              <span className="text-slate-400 block">AI 1st Token</span>
+                              <strong className="font-mono text-slate-800">
+                                {fmtMs(rec.durations.aiTimeToFirstTokenMs)}
+                              </strong>
+                            </div>
+                            <div className="rounded-lg bg-slate-50 px-2 py-1 border border-slate-100">
+                              <span className="text-slate-400 block">TTS 1st Audio</span>
+                              <strong className="font-mono text-slate-800">
+                                {fmtMs(rec.durations.ttsTimeToFirstAudioMs)}
+                              </strong>
+                            </div>
+                            <div className="rounded-lg bg-slate-50 px-2 py-1 border border-slate-100">
+                              <span className="text-slate-400 block">Bg Grammar Ready</span>
+                              <strong className="font-mono text-slate-800">
+                                {fmtMs(rec.durations.grammarAnalysisLatencyMs)}
+                              </strong>
+                            </div>
+                            <div className="rounded-lg bg-slate-50 px-2 py-1 border border-slate-100">
+                              <span className="text-slate-400 block">End → Playback</span>
+                              <strong className="font-mono text-emerald-700">
+                                {fmtMs(rec.durations.userEndToFirstAudioMs)}
+                              </strong>
+                            </div>
+                            <div className="rounded-lg bg-slate-50 px-2 py-1 border border-slate-100 sm:col-span-2">
+                              <span className="text-slate-400 block">Total Turn Completion</span>
+                              <strong className="font-mono text-slate-800">
+                                {fmtMs(rec.durations.totalResponseCompletionMs)}
+                              </strong>
+                            </div>
+                          </div>
+
+                          {/* Raw 12-Point Timestamp Waterfall */}
+                          <details className="text-[10px] text-slate-500">
+                            <summary className="cursor-pointer font-semibold text-blue-600 hover:underline">
+                              Inspect all 12 `performance.now()` stage marks
+                            </summary>
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 pt-1.5 font-mono text-[10px]">
+                              <span>speech_start: {rel(rec.timestamps.speech_start)}</span>
+                              <span>1st_partial: {rel(rec.timestamps.first_partial_transcript)}</span>
+                              <span>speech_end: {rel(rec.timestamps.speech_end)}</span>
+                              <span>final_stt: {rel(rec.timestamps.final_transcript)}</span>
+                              <span>ai_req_start: {rel(rec.timestamps.ai_request_start)}</span>
+                              <span>ai_1st_token: {rel(rec.timestamps.ai_first_token)}</span>
+                              <span>grammar_ready: {rel(rec.timestamps.grammar_ready)}</span>
+                              <span>ai_complete: {rel(rec.timestamps.ai_response_complete)}</span>
+                              <span>tts_req_start: {rel(rec.timestamps.tts_request_start)}</span>
+                              <span>tts_1st_audio: {rel(rec.timestamps.tts_first_audio)}</span>
+                              <span>playback_start: {rel(rec.timestamps.playback_start)}</span>
+                              <span>resp_complete: {rel(rec.timestamps.response_complete)}</span>
+                            </div>
+                          </details>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })()}
 
           {/* ========================================================= */}
           {/* TAB 2: LIVE 23-SCENARIO SUBSYSTEM QA SUITE                */}

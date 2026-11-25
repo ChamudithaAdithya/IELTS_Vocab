@@ -2172,6 +2172,8 @@ export async function analyzeBuddyGrammar(params: {
   sttConfidence?: number;
   durationSec?: number;
   coherence?: TranscriptCoherenceResult;
+  /** Optional precomputed local grammar baseline from Tier-1 instant recast gate (avoids duplicate work!) */
+  precomputedLocalFallback?: BuddyGrammarAnalysis;
   apiKey?: string;
   model?: string;
 }): Promise<BuddyGrammarAnalysis> {
@@ -2184,6 +2186,7 @@ export async function analyzeBuddyGrammar(params: {
     sttConfidence,
     durationSec,
     coherence: providedCoherence,
+    precomputedLocalFallback,
     apiKey,
     model
   } = params;
@@ -2205,17 +2208,18 @@ export async function analyzeBuddyGrammar(params: {
   const coherence =
     providedCoherence || validateTranscriptCoherence(clean, uncertainWords, sttConfidence);
 
-  // Always compute instant local baseline as fallback & sanity cross-check (including conversationContext!)
-  const localFallback = analyzeBuddyGrammarLocally({
-    originalTranscript: clean,
-    conversationContext,
-    intensity,
-    mode,
-    uncertainWords,
-    sttConfidence,
-    durationSec,
-    coherence
-  });
+  const localFallback =
+    precomputedLocalFallback ||
+    analyzeBuddyGrammarLocally({
+      originalTranscript: clean,
+      conversationContext,
+      intensity,
+      mode,
+      uncertainWords,
+      sttConfidence,
+      durationSec,
+      coherence
+    });
 
   // If Stage A already flagged clear STT garbage and no API key is present (or even with API key),
   // avoid misreporting garbled STT as clean grammar.
@@ -2305,7 +2309,15 @@ Respond STRICTLY in valid JSON matching this schema:
   for (const candidateModel of candidateModels) {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 8000);
+      const timeoutId = setTimeout(() => controller.abort(), 5800);
+
+      const generationConfig: Record<string, any> = {
+        temperature: 0.12,
+        responseMimeType: 'application/json'
+      };
+      if (candidateModel.startsWith('gemini-2.5')) {
+        generationConfig.thinkingConfig = { thinkingBudget: 0 };
+      }
 
       const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(candidateModel)}:generateContent?key=${encodeURIComponent(apiKey)}`;
       const response = await fetch(url, {
@@ -2314,7 +2326,7 @@ Respond STRICTLY in valid JSON matching this schema:
         signal: controller.signal,
         body: JSON.stringify({
           contents: [{ role: 'user', parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 0.12, responseMimeType: 'application/json' }
+          generationConfig
         })
       });
 

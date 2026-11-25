@@ -23,7 +23,8 @@ import {
   ArrowLeft,
   Maximize2,
   Minimize2,
-  FlaskConical
+  FlaskConical,
+  Gauge
 } from 'lucide-react';
 import type {
   BuddyLearningAnalytics,
@@ -35,6 +36,8 @@ import type {
   BuddyPersonality,
   BuddySession,
   BuddySpeechEngine,
+  BuddyTurnPerfRecord,
+  BuddyTurnPerfTimestamps,
   BuddyTurnTrace,
   CorrectionIntensity,
   ExplanationLangMode,
@@ -86,6 +89,10 @@ import {
 } from '../../utils/buddyLearningStore';
 import { transcribeAudioBlobWithGemini } from '../../utils/speakingEngine';
 import {
+  createLive16kPcmCapture,
+  type Live16kPcmCaptureHandle
+} from '../../utils/audioConditioner';
+import {
   createRealtimeTtsQueue,
   FREE_NEURAL_VOICES,
   loadBuddyVoiceConfig,
@@ -94,6 +101,7 @@ import {
   saveBuddyVoiceConfig,
   stopSpeech,
   unlockAudioOutput,
+  warmUpNeuralTts,
   type BuddyVoiceConfig,
   type FreeNeuralVoiceName,
   type RealtimeTtsQueue
@@ -174,8 +182,10 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
   const [grammarLibrary, setGrammarLibrary] = useState<PersonalGrammarNote[]>(() =>
     loadGrammarLibrary()
   );
-  // Audit Architecture — Live Per-Turn Execution Traces (provider, fallback, intent, latency)
+  // Audit Architecture — Live Per-Turn Execution Traces & 12-Point Performance Telemetry
   const [turnTraces, setTurnTraces] = useState<BuddyTurnTrace[]>([]);
+  const [perfRecords, setPerfRecords] = useState<BuddyTurnPerfRecord[]>([]);
+  const [systemModalInitialTab, setSystemModalInitialTab] = useState<'orb' | 'qa' | 'perf' | 'traces' | 'architecture'>('orb');
   // Phase 4 P2.3 — 4 Explanation Language Modes (English / Simple English / English+Sinhala / Sinhala Focused)
   const [explanationLangMode, setExplanationLangMode] = useState<ExplanationLangMode>(() =>
     loadExplanationLangMode(showSinhala)
@@ -189,22 +199,24 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
   useEffect(() => { buddyMemoryRef.current = buddyMemory; }, [buddyMemory]);
   useEffect(() => { learningAnalyticsRef.current = learningAnalytics; }, [learningAnalytics]);
 
-  // Speech Engine & Accent (Zero-Conflict 2-Engine Architecture: Gemini Verbatim Audio + Browser Live)
-  // Auto-migrates any legacy Chrome Web Speech ("en-IN") or removed Whisper AI preference cleanly.
+  // Real-Time Streaming Speech Engine (v3 defaults to Live Streaming STT when browser SpeechRecognition exists,
+  // with automatic in-place Gemini 16kHz WAV fallback if streaming disconnects!)
   const [speechEngine, setSpeechEngine] = useState<BuddySpeechEngine>(() => {
     try {
+      const hasSpeechRec =
+        typeof window !== 'undefined' &&
+        Boolean((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition);
       const hasKey = Boolean(loadApiKey());
-      const v2Choice = localStorage.getItem('lingo_buddy_stt_engine_v2') as string | null;
-      if (v2Choice === 'gemini-cloud' || v2Choice === 'live-solo') {
-        if (v2Choice === 'gemini-cloud' && !hasKey) return 'live-solo';
-        return v2Choice;
+      const v3Choice = localStorage.getItem('lingo_buddy_stt_engine_v3') as string | null;
+      if (v3Choice === 'gemini-cloud' || v3Choice === 'live-solo') {
+        if (v3Choice === 'gemini-cloud' && !hasKey) return 'live-solo';
+        return v3Choice;
       }
-      const preferred: BuddySpeechEngine = hasKey ? 'gemini-cloud' : 'live-solo';
-      localStorage.setItem('lingo_buddy_stt_engine_v2', preferred);
-      localStorage.setItem('ielts_speaking_stt_engine', preferred);
+      const preferred: BuddySpeechEngine = hasSpeechRec ? 'live-solo' : hasKey ? 'gemini-cloud' : 'live-solo';
+      localStorage.setItem('lingo_buddy_stt_engine_v3', preferred);
       return preferred;
     } catch {
-      return loadApiKey() ? 'gemini-cloud' : 'live-solo';
+      return 'live-solo';
     }
   });
   const [recognitionLang, setRecognitionLang] = useState<string>(() => {
@@ -261,7 +273,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
   };
 
   const handleBackToApp = async () => {
-    stopAllAudioAndCapture();
+    stopAllAudioAndCapture(true);
     if (document.fullscreenElement && document.exitFullscreen) {
       try {
         await document.exitFullscreen();
@@ -290,11 +302,13 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
   const [apiKey, setApiKey] = useState<string>(() => loadApiKey());
   const [selectedModel, setSelectedModel] = useState<string>(() => loadModel());
 
-  // Mutable Refs for 60 FPS Orb & Audio Lifecycle
+  // Mutable Refs for 60 FPS Orb, Warm Mic Pool & 12-Point Performance Telemetry
   const audioLevelRef = useRef<number>(0);
   const recognitionRef = useRef<any>(null);
   const mediaStreamRef = useRef<MediaStream | null>(null);
+  const warmMicDeviceRef = useRef<string>('');
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const livePcmCaptureRef = useRef<Live16kPcmCaptureHandle | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const audioCtxRef = useRef<AudioContext | null>(null);
   const rafRef = useRef<number | null>(null);
@@ -304,6 +318,13 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
   const uncertainWordsRef = useRef<Set<string>>(new Set());
   const confidenceSumRef = useRef<{ total: number; count: number }>({ total: 0, count: 0 });
   const listenStartedAtRef = useRef<number>(0);
+  const activeSpeechPerfRef = useRef<{
+    speech_start: number | null;
+    first_partial_transcript: number | null;
+    speech_end: number | null;
+  }>({ speech_start: null, first_partial_transcript: null, speech_end: null });
+  const inFlightTurnSigRef = useRef<string>('');
+  const activeTtsQueueRef = useRef<RealtimeTtsQueue | null>(null);
   const isListeningRef = useRef<boolean>(false);
   const continuousModeRef = useRef<boolean>(continuousMode);
   const voiceOutputEnabledRef = useRef<boolean>(voiceOutputEnabled);
@@ -339,8 +360,12 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
   }, [showKeyboardInput]);
 
   useEffect(() => {
+    // Pre-warm Neural TTS socket pool immediately on mount
+    if (buddyVoiceConfigRef.current.provider !== 'standard') {
+      warmUpNeuralTts(buddyVoiceConfigRef.current.freeNeuralVoice);
+    }
     return () => {
-      stopAllAudioAndCapture();
+      stopAllAudioAndCapture(true);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -351,7 +376,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     setSessions(prev => prev.map(s => (s.id === targetId ? updater(s) : s)));
   };
 
-  const cleanupMediaCapture = () => {
+  const cleanupMediaCapture = (releaseWarmMic: boolean = false) => {
     if (vadPauseTimerRef.current) {
       clearTimeout(vadPauseTimerRef.current);
       vadPauseTimerRef.current = null;
@@ -359,6 +384,10 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     if (rafRef.current) {
       cancelAnimationFrame(rafRef.current);
       rafRef.current = null;
+    }
+    if (livePcmCaptureRef.current) {
+      try { livePcmCaptureRef.current.stop(); } catch {}
+      livePcmCaptureRef.current = null;
     }
     if (recognitionRef.current) {
       try {
@@ -377,11 +406,12 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
       } catch { }
       mediaRecorderRef.current = null;
     }
-    if (mediaStreamRef.current) {
+    if (releaseWarmMic && mediaStreamRef.current) {
       try {
         mediaStreamRef.current.getTracks().forEach(t => t.stop());
       } catch { }
       mediaStreamRef.current = null;
+      warmMicDeviceRef.current = '';
     }
     if (audioCtxRef.current && audioCtxRef.current.state !== 'closed') {
       try {
@@ -392,14 +422,18 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     audioLevelRef.current = 0;
   };
 
-  const stopAllAudioAndCapture = () => {
+  const stopAllAudioAndCapture = (releaseWarmMic: boolean = false) => {
+    if (activeTtsQueueRef.current) {
+      try { activeTtsQueueRef.current.cancel(); } catch {}
+      activeTtsQueueRef.current = null;
+    }
     stopSpeech();
     setIsBuddySpeaking(false);
     isListeningRef.current = false;
     setIsListening(false);
     setLiveFinalText('');
     setLiveInterimText('');
-    cleanupMediaCapture();
+    cleanupMediaCapture(releaseWarmMic);
   };
 
   const speakBuddyMessage = (text: string, autoResumeAfter: boolean) => {
@@ -659,11 +693,18 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
   const processFinalizedUserTurn = async (params: {
     rawTranscript: string;
     engine: BuddySpeechEngine | 'typed';
+    sttEngineDetail?: string;
     recordedAudioUrl?: string;
     uncertainWords?: string[];
     sttConfidence?: number;
     durationSec?: number;
     autoResumeAfter?: boolean;
+    speechPerf?: {
+      speech_start: number | null;
+      first_partial_transcript: number | null;
+      speech_end: number | null;
+      final_transcript: number | null;
+    };
   }) => {
     const cleanRaw = params.rawTranscript.trim();
     if (!cleanRaw) {
@@ -672,10 +713,38 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
       return;
     }
 
+    const nowPerf = () => (typeof performance !== 'undefined' ? performance.now() : Date.now());
+    const targetSessionId = activeSessionRef.current.id;
+
+    // Section 7 — Turn Idempotency Guard: never generate duplicate responses for the same finalized user turn!
+    const dedupSig = `${targetSessionId}|${cleanRaw.toLowerCase()}|${Math.floor(Date.now() / 1800)}`;
+    if (inFlightTurnSigRef.current === dedupSig) {
+      return;
+    }
+    inFlightTurnSigRef.current = dedupSig;
+
+    const pMarks: BuddyTurnPerfTimestamps = {
+      speech_start: params.speechPerf?.speech_start ?? null,
+      first_partial_transcript: params.speechPerf?.first_partial_transcript ?? null,
+      speech_end: params.speechPerf?.speech_end ?? nowPerf(),
+      final_transcript: params.speechPerf?.final_transcript ?? nowPerf(),
+      ai_request_start: null,
+      ai_first_token: null,
+      grammar_ready: null,
+      ai_response_complete: null,
+      tts_request_start: null,
+      tts_first_audio: null,
+      playback_start: null,
+      response_complete: null
+    };
+    let ttsDeliveryUsed: 'neural-stream' | 'neural-cache' | 'browser-speech' | 'muted' =
+      voiceOutputEnabledRef.current ? 'neural-stream' : 'muted';
+    let aiProviderUsed: 'gemini' | 'local' = apiKey || loadApiKey() ? 'gemini' : 'local';
+    let perfCommitted = false;
+
     setOrbState('understanding');
     setLifecyclePhase('PHASE_04_UNDERSTANDING');
 
-    const targetSessionId = activeSessionRef.current.id;
     const priorMessages = activeSessionRef.current?.messages || [];
 
     // Audit Section 3 — Single Immutable Turn Packet consumed identically by Friend Engine & Grammar Coach
@@ -689,6 +758,42 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
       durationSec: params.durationSec,
       priorHistory: priorMessages
     });
+
+    const commitPerfSnapshot = (bargeInInterrupted?: boolean) => {
+      if (perfCommitted) return;
+      perfCommitted = true;
+      if (pMarks.response_complete === null) {
+        pMarks.response_complete = nowPerf();
+      }
+      const diff = (b: number | null, a: number | null) =>
+        b !== null && a !== null ? Math.max(0, Math.round(b - a)) : null;
+
+      const record: BuddyTurnPerfRecord = {
+        turnId: packet.turnId,
+        sessionId: packet.sessionId,
+        recordedAt: Date.now(),
+        sttEngineUsed: params.sttEngineDetail || params.engine,
+        aiProviderUsed,
+        ttsProviderUsed: ttsDeliveryUsed,
+        wordCount: packet.analysisTranscript.split(/\s+/).filter(Boolean).length,
+        bargeInInterrupted,
+        timestamps: { ...pMarks },
+        durations: {
+          timeToFirstTranscriptMs: diff(pMarks.first_partial_transcript, pMarks.speech_start),
+          finalTranscriptionLatencyMs: diff(pMarks.final_transcript, pMarks.speech_end),
+          aiTimeToFirstTokenMs: diff(pMarks.ai_first_token, pMarks.ai_request_start),
+          grammarAnalysisLatencyMs: diff(pMarks.grammar_ready, pMarks.ai_request_start),
+          ttsTimeToFirstAudioMs: diff(pMarks.tts_first_audio, pMarks.tts_request_start),
+          userEndToFirstAudioMs: diff(pMarks.playback_start, pMarks.speech_end),
+          totalResponseCompletionMs: diff(pMarks.response_complete, pMarks.speech_end)
+        }
+      };
+
+      setPerfRecords(prev => [record, ...prev].slice(0, 30));
+      setTurnTraces(prev =>
+        prev.map(t => (t.turnId === packet.turnId ? { ...t, perf: record } : t))
+      );
+    };
 
     const userMsg: BuddyMessage = {
       id: packet.messageId,
@@ -739,7 +844,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     setOrbState(packet.coherence.quality === 'unclear' ? 'confused' : 'thinking');
     setLifecyclePhase('PHASE_05_RESPONDING');
 
-    // Create a real-time pipelined TTS queue so Sentence 1 starts speaking aloud while Sentence 2 streams!
+    // Create a progressive streaming TTS queue so Segment 0 plays while Segment 1+ streams & prefetches!
     let ttsQueue: RealtimeTtsQueue | null = null;
     let enqueuedSentenceCount = 0;
 
@@ -749,12 +854,23 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
         onAudioLevel: (lvl) => {
           audioLevelRef.current = lvl;
         },
+        onTtsRequestStart: () => {
+          if (pMarks.tts_request_start === null) pMarks.tts_request_start = nowPerf();
+        },
+        onTtsFirstAudio: (delivery) => {
+          ttsDeliveryUsed = delivery;
+          if (pMarks.tts_first_audio === null) pMarks.tts_first_audio = nowPerf();
+        },
         onFirstStart: () => {
+          if (pMarks.playback_start === null) pMarks.playback_start = nowPerf();
           setIsBuddySpeaking(true);
           setOrbState('speaking');
           setLifecyclePhase('PHASE_06_SPEAKING');
         },
         onAllEnd: () => {
+          activeTtsQueueRef.current = null;
+          pMarks.response_complete = nowPerf();
+          commitPerfSnapshot(false);
           audioLevelRef.current = 0;
           setIsBuddySpeaking(false);
           setLifecyclePhase('PHASE_07_SAVED');
@@ -767,12 +883,13 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
               if (!isListeningRef.current) {
                 void startListeningTurn();
               }
-            }, 650);
+            }, 320);
           } else {
             setOrbState('idle');
           }
         }
       });
+      activeTtsQueueRef.current = ttsQueue;
     }
 
     await orchestrateBuddyTurn({
@@ -785,10 +902,17 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
       apiKey: apiKey || loadApiKey(),
       model: selectedModel || loadModel(),
       callbacks: {
+        onAiRequestStart: () => {
+          pMarks.ai_request_start = nowPerf();
+        },
+        onAiFirstToken: () => {
+          if (pMarks.ai_first_token === null) pMarks.ai_first_token = nowPerf();
+        },
         onMemoryUpdated: (nextMem) => {
           setBuddyMemory(nextMem);
         },
         onFriendPartialReply: (partialText, pkt, meta) => {
+          if (pMarks.ai_first_token === null) pMarks.ai_first_token = nowPerf();
           if (meta?.spokenCorrection && !isBuddySpeaking && !isListeningRef.current) {
             setOrbState(curr => (curr === 'thinking' || curr === 'understanding' ? 'correcting' : curr));
           }
@@ -820,9 +944,10 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
           }
         },
         onFriendReplyReady: (friendResult, pkt) => {
+          pMarks.ai_response_complete = nowPerf();
+          aiProviderUsed = friendResult.source;
           setStreamingBuddyMsgId(curr => (curr === buddyPlaceholderId ? null : curr));
 
-          // Finalize the streamed Buddy bubble cleanly (never duplicates messages!)
           setSessions(prev =>
             prev.map(s =>
               s.id === pkt.sessionId
@@ -854,21 +979,23 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
               }
               ttsQueue.markStreamDone();
             } else if (!voiceOutputEnabledRef.current) {
+              pMarks.response_complete = nowPerf();
+              commitPerfSnapshot(false);
               setOrbState('idle');
               setLifecyclePhase('PHASE_07_SAVED');
               if (params.autoResumeAfter && continuousModeRef.current) {
                 setTimeout(() => {
                   if (!isListeningRef.current) void startListeningTurn();
-                }, 350);
+                }, 260);
               }
             }
           }
         },
         onGrammarAnalysisReady: (analysis, updatedAnalytics, updatedLib, pkt) => {
+          pMarks.grammar_ready = nowPerf();
           setLearningAnalytics(updatedAnalytics);
           setGrammarLibrary(updatedLib);
 
-          // Strictly locked to pkt.sessionId + pkt.messageId! Never overwrites originalRawTranscript/text!
           setSessions(prev =>
             prev.map(s =>
               s.id === pkt.sessionId
@@ -890,7 +1017,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
             )
           );
 
-          if (activeSessionRef.current?.id === pkt.sessionId && !isListeningRef.current) {
+          if (activeSessionRef.current?.id === pkt.sessionId && !isListeningRef.current && !isBuddySpeaking) {
             if (analysis.transcriptQuality === 'unclear') {
               setOrbState(curr => (curr === 'idle' ? 'confused' : curr));
               setTimeout(() => setOrbState(curr => (curr === 'confused' ? 'idle' : curr)), 1800);
@@ -910,24 +1037,275 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     });
   };
 
+  /**
+   * Acquires or reuses a warm echo-cancelled, noise-suppressed microphone MediaStream
+   * so consecutive turns start in < 5ms instead of paying 250-450ms OS hardware cold-start!
+   */
+  const acquireWarmMicStream = async (): Promise<MediaStream> => {
+    const desiredDevice = selectedMicDeviceIdRef.current || 'default';
+    if (
+      mediaStreamRef.current &&
+      warmMicDeviceRef.current === desiredDevice &&
+      mediaStreamRef.current.getAudioTracks().some(t => t.readyState === 'live' && t.enabled)
+    ) {
+      return mediaStreamRef.current;
+    }
+
+    if (mediaStreamRef.current) {
+      try { mediaStreamRef.current.getTracks().forEach(t => t.stop()); } catch {}
+      mediaStreamRef.current = null;
+    }
+
+    const constraints: MediaTrackConstraints = {
+      echoCancellation: true,
+      noiseSuppression: true,
+      autoGainControl: true,
+      channelCount: 1
+    };
+    if (selectedMicDeviceIdRef.current) {
+      constraints.deviceId = { exact: selectedMicDeviceIdRef.current };
+    }
+
+    let stream: MediaStream;
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ audio: constraints });
+    } catch {
+      stream = await navigator.mediaDevices.getUserMedia({
+        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
+      });
+    }
+    mediaStreamRef.current = stream;
+    warmMicDeviceRef.current = desiredDevice;
+    return stream;
+  };
+
+  const finalizeCapturedTurn = async (reason: 'vad' | 'manual' | 'stt-end') => {
+    if (!isListeningRef.current) return;
+    isListeningRef.current = false;
+    setIsListening(false);
+
+    const nowPerf = () => (typeof performance !== 'undefined' ? performance.now() : Date.now());
+    const speechEndPerf = nowPerf();
+    activeSpeechPerfRef.current.speech_end = speechEndPerf;
+
+    if (vadPauseTimerRef.current) {
+      clearTimeout(vadPauseTimerRef.current);
+      vadPauseTimerRef.current = null;
+    }
+
+    // Snapshot live streaming recognition buffers BEFORE stopping recognition
+    const liveStreamedTranscript = [finalBufferRef.current.trim(), interimBufferRef.current.trim()]
+      .filter(Boolean)
+      .join(' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    const capturedUncertainWords = Array.from(uncertainWordsRef.current);
+    const avgConf =
+      confidenceSumRef.current.count > 0
+        ? Number((confidenceSumRef.current.total / confidenceSumRef.current.count).toFixed(2))
+        : undefined;
+
+    if (recognitionRef.current) {
+      try {
+        recognitionRef.current.onresult = null;
+        recognitionRef.current.onerror = null;
+        recognitionRef.current.onend = null;
+        recognitionRef.current.stop();
+      } catch {}
+      recognitionRef.current = null;
+    }
+
+    // Finalize incremental 16kHz conditioned WAV in ~1ms (zero decodeAudioData / OfflineAudioContext!)
+    const conditionedPcmResult = livePcmCaptureRef.current
+      ? livePcmCaptureRef.current.finalizeWav()
+      : null;
+    livePcmCaptureRef.current = null;
+
+    // Collect MediaRecorder compressed blob for "My voice" replay if active
+    let recordedAudioUrl: string | undefined;
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+      const rec = mediaRecorderRef.current;
+      mediaRecorderRef.current = null;
+      await new Promise<void>((resolve) => {
+        const safety = setTimeout(resolve, 140);
+        rec.onstop = () => {
+          clearTimeout(safety);
+          if (audioChunksRef.current.length > 0) {
+            const rawBlob = new Blob(audioChunksRef.current, { type: rec.mimeType || 'audio/webm' });
+            if (rawBlob.size > 0) {
+              recordedAudioUrl = URL.createObjectURL(rawBlob);
+            }
+          }
+          resolve();
+        };
+        try { rec.stop(); } catch { clearTimeout(safety); resolve(); }
+      });
+    } else if (conditionedPcmResult?.wavBlob) {
+      recordedAudioUrl = URL.createObjectURL(conditionedPcmResult.wavBlob);
+    }
+
+    cleanupMediaCapture(false); // Keep warm mic stream alive for instant next turn!
+    setLiveFinalText('');
+    setLiveInterimText('');
+
+    const rawElapsedSec = (Date.now() - listenStartedAtRef.current) / 1000;
+    const durationSec =
+      conditionedPcmResult?.durationSec ||
+      Math.max(1, Math.round(rawElapsedSec - (reason === 'vad' ? 0.9 : 0)));
+
+    const activeEngine = speechEngineRef.current;
+    const currentKey = apiKey || loadApiKey();
+
+    // PATH A: Real-Time Streaming STT ('live-solo') -> 0ms post-speech finalization when words streamed!
+    if (activeEngine === 'live-solo' && liveStreamedTranscript.length > 0) {
+      const finalPerf = nowPerf();
+      await processFinalizedUserTurn({
+        rawTranscript: liveStreamedTranscript,
+        engine: 'live-solo',
+        sttEngineDetail: `live-streaming (${recognitionLangRef.current})`,
+        recordedAudioUrl,
+        uncertainWords: capturedUncertainWords,
+        sttConfidence: avgConf,
+        durationSec,
+        autoResumeAfter: continuousModeRef.current,
+        speechPerf: {
+          speech_start: activeSpeechPerfRef.current.speech_start,
+          first_partial_transcript: activeSpeechPerfRef.current.first_partial_transcript,
+          speech_end: speechEndPerf,
+          final_transcript: finalPerf
+        }
+      });
+      return;
+    }
+
+    // PATH B: Either 'gemini-cloud' Verbatim Mode OR automatic fallback when browser streaming STT disconnected/missed audio!
+    if (conditionedPcmResult && currentKey) {
+      setOrbState('transcribing');
+      setLifecyclePhase('PHASE_03_TRANSCRIBING');
+      if (liveStreamedTranscript) {
+        setLiveInterimText(liveStreamedTranscript);
+      }
+      try {
+        const geminiText = await transcribeAudioBlobWithGemini(
+          currentKey,
+          selectedModel || loadModel(),
+          conditionedPcmResult.wavBlob,
+          recognitionLangRef.current,
+          {
+            isPreConditionedWav: true,
+            timeoutMs: liveStreamedTranscript ? 3600 : 5200,
+            onPartialTranscript: (partial) => {
+              if (activeSpeechPerfRef.current.first_partial_transcript === null) {
+                activeSpeechPerfRef.current.first_partial_transcript = nowPerf();
+              }
+              setLiveInterimText(partial);
+            }
+          }
+        );
+        setLiveInterimText('');
+        const resolvedText = (geminiText && geminiText.trim()) || liveStreamedTranscript;
+        if (!resolvedText) {
+          if (recordedAudioUrl) { try { URL.revokeObjectURL(recordedAudioUrl); } catch {} }
+          setOrbState('idle');
+          setLifecyclePhase('PHASE_01_IDLE');
+          setStatusNotice('No clear speech detected — speak naturally near your microphone.');
+          return;
+        }
+        const finalPerf = nowPerf();
+        await processFinalizedUserTurn({
+          rawTranscript: resolvedText,
+          engine: activeEngine === 'gemini-cloud' ? 'gemini-cloud' : 'live-solo',
+          sttEngineDetail:
+            activeEngine === 'gemini-cloud'
+              ? 'gemini-sse-16k-wav'
+              : 'gemini-fallback-16k-wav',
+          recordedAudioUrl,
+          durationSec,
+          autoResumeAfter: continuousModeRef.current,
+          speechPerf: {
+            speech_start: activeSpeechPerfRef.current.speech_start,
+            first_partial_transcript: activeSpeechPerfRef.current.first_partial_transcript,
+            speech_end: speechEndPerf,
+            final_transcript: finalPerf
+          }
+        });
+        return;
+      } catch (err: any) {
+        setLiveInterimText('');
+        // Graceful fallback: if Gemini network timed out/disconnected, use the live streamed transcript immediately!
+        if (liveStreamedTranscript) {
+          const finalPerf = nowPerf();
+          await processFinalizedUserTurn({
+            rawTranscript: liveStreamedTranscript,
+            engine: 'live-solo',
+            sttEngineDetail: 'live-streaming (gemini-timeout-fallback)',
+            recordedAudioUrl,
+            uncertainWords: capturedUncertainWords,
+            sttConfidence: avgConf,
+            durationSec,
+            autoResumeAfter: continuousModeRef.current,
+            speechPerf: {
+              speech_start: activeSpeechPerfRef.current.speech_start,
+              first_partial_transcript: activeSpeechPerfRef.current.first_partial_transcript,
+              speech_end: speechEndPerf,
+              final_transcript: finalPerf
+            }
+          });
+          return;
+        }
+        if (recordedAudioUrl) { try { URL.revokeObjectURL(recordedAudioUrl); } catch {} }
+        setOrbState('error');
+        setStatusNotice(err?.message || 'Speech transcription failed. Check your network or API key.');
+        return;
+      }
+    }
+
+    // If neither live speech nor conditioned PCM detected real voice (e.g. pure silence)
+    if (recordedAudioUrl) { try { URL.revokeObjectURL(recordedAudioUrl); } catch {} }
+    setOrbState('idle');
+    setLifecyclePhase('PHASE_01_IDLE');
+  };
+
   const startListeningTurn = async (initialNotice?: string) => {
-    // Clean Barge-In: immediately cancel AI voice playback
+    // Immediate Barge-In: cancel AI voice playback in 0ms
+    if (activeTtsQueueRef.current) {
+      try { activeTtsQueueRef.current.cancel(); } catch {}
+      activeTtsQueueRef.current = null;
+    }
     stopSpeech();
     setIsBuddySpeaking(false);
     setStatusNotice(initialNotice || null);
 
-    if (speechEngineRef.current === 'gemini-cloud' && !(apiKey || loadApiKey())) {
-      setStatusNotice('Connect a Gemini API key for Gemini Verbatim Audio, or switch to Browser Live in Audio Settings.');
-      setIsApiModalOpen(true);
-      return;
+    // Pre-warm Neural TTS WebSocket pool while the user speaks so response audio starts immediately!
+    if (voiceOutputEnabledRef.current && buddyVoiceConfigRef.current.provider !== 'standard') {
+      warmUpNeuralTts(buddyVoiceConfigRef.current.freeNeuralVoice);
     }
 
-    cleanupMediaCapture();
+    if (speechEngineRef.current === 'gemini-cloud' && !(apiKey || loadApiKey())) {
+      const hasSpeechRec =
+        typeof window !== 'undefined' &&
+        Boolean((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition);
+      if (hasSpeechRec) {
+        handleSelectEngine('live-solo');
+      } else {
+        setStatusNotice('Connect a Gemini API key for Gemini Verbatim Audio.');
+        setIsApiModalOpen(true);
+        return;
+      }
+    }
+
+    cleanupMediaCapture(false);
+    const nowPerf = () => (typeof performance !== 'undefined' ? performance.now() : Date.now());
     finalBufferRef.current = '';
     interimBufferRef.current = '';
     uncertainWordsRef.current = new Set();
     confidenceSumRef.current = { total: 0, count: 0 };
     listenStartedAtRef.current = Date.now();
+    activeSpeechPerfRef.current = {
+      speech_start: nowPerf(),
+      first_partial_transcript: null,
+      speech_end: null
+    };
     isListeningRef.current = true;
     setIsListening(true);
     setLiveFinalText('');
@@ -935,90 +1313,48 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     setOrbState('listening');
     setLifecyclePhase('PHASE_02_LISTENING');
 
-    if (speechEngineRef.current === 'live-solo') {
-      const SpeechRecognition =
-        (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const DANGLING_PAUSE_WORDS =
+      /\b(and|but|because|so|or|to|the|a|an|in|on|at|with|about|for|if|when|while|although|um|uh)\s*$/i;
 
-      if (!SpeechRecognition) {
-        isListeningRef.current = false;
-        setIsListening(false);
-        if (apiKey || loadApiKey()) {
-          handleSelectEngine('gemini-cloud');
-          setTimeout(() => {
-            void startListeningTurn(
-              'Browser speech is unavailable here — switched to Gemini Verbatim Audio. Speak now!'
-            );
-          }, 120);
-        } else {
-          setOrbState('error');
-          setStatusNotice('Browser speech recognition is unavailable here. Connect a Gemini API key to use Gemini Verbatim Audio.');
-        }
-        return;
-      }
+    const scheduleSmartVadCommit = () => {
+      if (vadPauseTimerRef.current) clearTimeout(vadPauseTimerRef.current);
+      if (!continuousModeRef.current || !isListeningRef.current) return;
+      const preview = [finalBufferRef.current.trim(), interimBufferRef.current.trim()]
+        .filter(Boolean)
+        .join(' ')
+        .trim();
+      if (!preview) return;
+      const wordCount = preview.split(/\s+/).filter(Boolean).length;
+      // Adaptive pause: 1,500ms if pausing mid-clause ("...because", "...and"), else crisp 900ms!
+      const waitMs =
+        DANGLING_PAUSE_WORDS.test(preview) || wordCount < 2 ? 1500 : 900;
+      vadPauseTimerRef.current = setTimeout(() => {
+        void finalizeCapturedTurn('vad');
+      }, waitMs);
+    };
 
+    // 1. Start Live Streaming SpeechRecognition (displays interim words in < 300ms in BOTH engines!)
+    const SpeechRecognition =
+      typeof window !== 'undefined'
+        ? (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+        : null;
+
+    if (SpeechRecognition) {
       try {
         const rec = new SpeechRecognition();
         rec.continuous = true;
         rec.interimResults = true;
         rec.maxAlternatives = 3;
-        rec.lang = recognitionLangRef.current || 'en-IN';
-
-        const commitLiveTurnNow = () => {
-          if (!isListeningRef.current) return;
-          isListeningRef.current = false;
-          setIsListening(false);
-          if (vadPauseTimerRef.current) {
-            clearTimeout(vadPauseTimerRef.current);
-            vadPauseTimerRef.current = null;
-          }
-          if (recognitionRef.current) {
-            try {
-              recognitionRef.current.onresult = null;
-              recognitionRef.current.onerror = null;
-              recognitionRef.current.onend = null;
-              recognitionRef.current.stop();
-            } catch { }
-            recognitionRef.current = null;
-          }
-
-          const combined = [finalBufferRef.current.trim(), interimBufferRef.current.trim()]
-            .filter(Boolean)
-            .join(' ')
-            .replace(/\s+/g, ' ')
-            .trim();
-
-          setLiveFinalText('');
-          setLiveInterimText('');
-          // Subtract the 2.2s VAD silence wait so WPM reflects actual speaking time!
-          const rawElapsedSec = (Date.now() - listenStartedAtRef.current) / 1000;
-          const durationSec = Math.max(1, Math.round(rawElapsedSec - (continuousModeRef.current ? 2.0 : 0)));
-          const avgConf =
-            confidenceSumRef.current.count > 0
-              ? Number((confidenceSumRef.current.total / confidenceSumRef.current.count).toFixed(2))
-              : undefined;
-
-          if (!combined) {
-            setOrbState('idle');
-            setLifecyclePhase('PHASE_01_IDLE');
-            return;
-          }
-
-          setOrbState('transcribing');
-          setLifecyclePhase('PHASE_03_TRANSCRIBING');
-          processFinalizedUserTurn({
-            rawTranscript: combined,
-            engine: 'live-solo',
-            uncertainWords: Array.from(uncertainWordsRef.current),
-            sttConfidence: avgConf,
-            durationSec,
-            autoResumeAfter: continuousModeRef.current
-          });
-        };
+        rec.lang = recognitionLangRef.current || 'en-GB';
 
         rec.onresult = (event: any) => {
+          if (!isListeningRef.current) return;
+          if (activeSpeechPerfRef.current.first_partial_transcript === null) {
+            activeSpeechPerfRef.current.first_partial_transcript = nowPerf();
+          }
+
           let fin = '';
           let inter = '';
-
           for (let i = 0; i < event.results.length; i++) {
             const item = event.results[i];
             if (item && item.length > 0) {
@@ -1054,130 +1390,65 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
 
           finalBufferRef.current = fin;
           interimBufferRef.current = inter;
-          const preview = [fin.trim(), inter.trim()].filter(Boolean).join(' ');
           setLiveFinalText(fin.trim());
           setLiveInterimText(inter.trim());
-
-          audioLevelRef.current = 58;
-          setTimeout(() => {
-            if (isListeningRef.current) audioLevelRef.current = 18;
-          }, 220);
-
-          if (vadPauseTimerRef.current) clearTimeout(vadPauseTimerRef.current);
-          if (continuousModeRef.current && preview.length > 0) {
-            // Natural 2.1s pause window so learners can think mid-sentence without getting cut off
-            vadPauseTimerRef.current = setTimeout(() => {
-              commitLiveTurnNow();
-            }, 2100);
-          }
+          scheduleSmartVadCommit();
         };
 
         rec.onerror = (e: any) => {
-          if (e.error === 'no-speech') return;
+          if (!isListeningRef.current) return;
+          if (e.error === 'no-speech' || e.error === 'aborted') return;
           if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
-            isListeningRef.current = false;
-            setIsListening(false);
-            setOrbState('error');
-            setStatusNotice('Microphone access was blocked. Allow microphone permission in your browser bar.');
-          } else if (e.error === 'network') {
-            isListeningRef.current = false;
-            setIsListening(false);
-            if (vadPauseTimerRef.current) {
-              clearTimeout(vadPauseTimerRef.current);
-              vadPauseTimerRef.current = null;
-            }
-            if (recognitionRef.current) {
-              try {
-                recognitionRef.current.onresult = null;
-                recognitionRef.current.onerror = null;
-                recognitionRef.current.onend = null;
-                recognitionRef.current.abort();
-              } catch {}
-              recognitionRef.current = null;
-            }
-            if (apiKey || loadApiKey()) {
-              handleSelectEngine('gemini-cloud');
-              setTimeout(() => {
-                void startListeningTurn(
-                  'Browser speech service could not connect — automatically switched to Gemini Verbatim Audio. Speak now!'
-                );
-              }, 140);
-            } else {
+            if (!mediaStreamRef.current) {
+              isListeningRef.current = false;
+              setIsListening(false);
               setOrbState('error');
-              setStatusNotice('Browser speech service could not connect. Connect a Gemini API key in Audio Settings for Gemini Verbatim Audio.');
+              setStatusNotice('Microphone access blocked. Allow microphone permission in your browser bar.');
             }
-          } else if (e.error !== 'aborted') {
-            setStatusNotice(`Speech recognition notice (${e.error}). Switch to Gemini Verbatim in Audio Settings for highest accuracy.`);
+            return;
+          }
+          // Network/service hiccup on SpeechRecognition: keep recording seamlessly via live 16kHz PCM + acoustic VAD!
+          if (e.error === 'network' && !(apiKey || loadApiKey()) && speechEngineRef.current === 'live-solo') {
+            setStatusNotice('Browser live speech disconnected — connect a Gemini API key in Audio Settings for offline-resilient cloud audio.');
           }
         };
 
         rec.onend = () => {
           if (!isListeningRef.current) return;
           const hasWords = (finalBufferRef.current + interimBufferRef.current).trim().length > 0;
-          if (hasWords && continuousModeRef.current) {
-            commitLiveTurnNow();
-          } else if (isListeningRef.current) {
-            try {
-              rec.start();
-            } catch {
-              isListeningRef.current = false;
-              setIsListening(false);
-              setOrbState('idle');
-            }
+          if (hasWords && continuousModeRef.current && speechEngineRef.current === 'live-solo') {
+            void finalizeCapturedTurn('stt-end');
+          } else if (isListeningRef.current && recognitionRef.current === rec) {
+            try { rec.start(); } catch {}
           }
         };
 
         rec.start();
         recognitionRef.current = rec;
-      } catch (err: any) {
-        isListeningRef.current = false;
-        setIsListening(false);
-        setOrbState('error');
-        setStatusNotice(err?.message || 'Unable to initialize speech recognition.');
+      } catch {
+        // Fallback smoothly to WebAudio PCM + MediaRecorder below
       }
-      return;
     }
 
-    // Gemini Verbatim Audio -> Clean Studio-Filtered Audio Capture (Noise-Suppressed & Echo-Cancelled)
+    // 2. Simultaneously attach Warm Mic Stream + Incremental 16kHz PCM Collector + Acoustic Energy VAD
     try {
-      const constraints: MediaTrackConstraints = {
-        echoCancellation: true,
-        noiseSuppression: true,
-        autoGainControl: true,
-        channelCount: 1
-      };
-      if (selectedMicDeviceIdRef.current) {
-        constraints.deviceId = { exact: selectedMicDeviceIdRef.current };
-      }
-
-      let stream: MediaStream;
-      try {
-        stream = await navigator.mediaDevices.getUserMedia({ audio: constraints });
-      } catch {
-        stream = await navigator.mediaDevices.getUserMedia({
-          audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
-        });
-      }
-
-      if (!isListeningRef.current) {
-        stream.getTracks().forEach(t => t.stop());
-        return;
-      }
-
-      mediaStreamRef.current = stream;
+      const stream = await acquireWarmMicStream();
+      if (!isListeningRef.current) return;
 
       const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
       if (AudioCtx) {
         const ctx = new AudioCtx();
         audioCtxRef.current = ctx;
+        const source = ctx.createMediaStreamSource(stream);
+
+        // Incremental 16kHz PCM collector (~0.04ms per frame, ready in < 1.5ms at speech_end!)
+        livePcmCaptureRef.current = createLive16kPcmCapture(ctx, source);
+
         const analyser = ctx.createAnalyser();
         analyser.fftSize = 128;
-        ctx.createMediaStreamSource(stream).connect(analyser);
+        source.connect(analyser);
         const buf = new Uint8Array(analyser.frequencyBinCount);
-        // Adaptive Noise-Floor Hands-Free VAD:
-        // 1. Calibrates room noise floor during first 350ms
-        // 2. Requires >= 320ms of real sustained speech before arming auto-send (blocks clicks/speaker echo!)
-        // 3. Waits 2.2s of silence before finalizing so learners can pause mid-sentence without cutoffs!
+
         const vadStartMs = Date.now();
         let lastFrameMs = vadStartMs;
         let noiseSum = 0;
@@ -1199,7 +1470,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
           const dt = Math.min(80, Math.max(0, now - lastFrameMs));
           lastFrameMs = now;
 
-          if (now - vadStartMs < 350 && !hasSpokenInTurn) {
+          if (now - vadStartMs < 240 && !hasSpokenInTurn) {
             noiseSum += level;
             noiseCount += 1;
             noiseFloor = Math.min(24, Math.round(noiseSum / Math.max(1, noiseCount)));
@@ -1208,17 +1479,25 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
             const silenceThreshold = Math.max(7, noiseFloor + 3);
             if (level >= speechThreshold) {
               activeSpeechMs += dt;
-              if (activeSpeechMs >= 320) {
+              if (activeSpeechMs >= 260) {
                 hasSpokenInTurn = true;
               }
               silenceStartedAt = 0;
             } else if (hasSpokenInTurn && level <= silenceThreshold) {
               if (!silenceStartedAt) {
                 silenceStartedAt = now;
-              } else if (now - silenceStartedAt >= 2200) {
-                // User finished speaking cleanly — automatically stop & transcribe verbatim!
-                stopListeningAndSend();
-                return;
+              } else {
+                const liveText = (finalBufferRef.current + ' ' + interimBufferRef.current).trim();
+                const silenceBudget =
+                  liveText && DANGLING_PAUSE_WORDS.test(liveText)
+                    ? 1550
+                    : liveText
+                    ? 920
+                    : 1150;
+                if (now - silenceStartedAt >= silenceBudget) {
+                  void finalizeCapturedTurn('vad');
+                  return;
+                }
               }
             }
           }
@@ -1233,146 +1512,42 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
       recorder.ondataavailable = (e) => {
         if (e.data && e.data.size > 0) audioChunksRef.current.push(e.data);
       };
-      recorder.onstop = async () => {
-        const blob =
-          audioChunksRef.current.length > 0
-            ? new Blob(audioChunksRef.current, { type: recorder.mimeType || 'audio/webm' })
-            : null;
-        cleanupMediaCapture();
-
-        if (!blob || blob.size === 0) {
-          setOrbState('idle');
-          setLifecyclePhase('PHASE_01_IDLE');
-          return;
-        }
-
-        const durationSec = Math.max(1, Math.round((Date.now() - listenStartedAtRef.current) / 1000));
-        const recordedAudioUrl = URL.createObjectURL(blob);
-        setOrbState('transcribing');
-        setLifecyclePhase('PHASE_03_TRANSCRIBING');
-
-        try {
-          const transcribed = await transcribeAudioBlobWithGemini(
-            apiKey || loadApiKey(),
-            selectedModel || loadModel(),
-            blob,
-            recognitionLangRef.current
-          );
-
-          if (!transcribed || !transcribed.trim()) {
-            try { URL.revokeObjectURL(recordedAudioUrl); } catch {}
-            setOrbState('idle');
-            setLifecyclePhase('PHASE_01_IDLE');
-            setStatusNotice('No clear speech detected in that clip — tap the orb or speak a little closer to your mic.');
-            return;
-          }
-
-          await processFinalizedUserTurn({
-            rawTranscript: transcribed,
-            engine: 'gemini-cloud',
-            recordedAudioUrl,
-            durationSec,
-            autoResumeAfter: continuousModeRef.current
-          });
-        } catch (err: any) {
-          try { URL.revokeObjectURL(recordedAudioUrl); } catch {}
-          setOrbState('error');
-          setStatusNotice(err?.message || 'Gemini Audio transcription failed. Check your API key or network.');
-        }
-      };
-
-      recorder.start();
+      recorder.start(250); // 250ms timeslices so stop() flushes in < 15ms!
       mediaRecorderRef.current = recorder;
     } catch (err: any) {
-      isListeningRef.current = false;
-      setIsListening(false);
-      setOrbState('error');
-      setStatusNotice(err?.message || 'Microphone access denied.');
+      // If SpeechRecognition is already running, let it continue; otherwise report mic error
+      if (!recognitionRef.current) {
+        isListeningRef.current = false;
+        setIsListening(false);
+        setOrbState('error');
+        setStatusNotice(err?.message || 'Microphone access denied.');
+      }
     }
   };
 
   const stopListeningAndSend = () => {
     if (!isListeningRef.current) return;
-
-    if (speechEngineRef.current === 'live-solo') {
-      isListeningRef.current = false;
-      setIsListening(false);
-      if (vadPauseTimerRef.current) {
-        clearTimeout(vadPauseTimerRef.current);
-        vadPauseTimerRef.current = null;
-      }
-      if (recognitionRef.current) {
-        try {
-          recognitionRef.current.onresult = null;
-          recognitionRef.current.onerror = null;
-          recognitionRef.current.onend = null;
-          recognitionRef.current.stop();
-        } catch { }
-        recognitionRef.current = null;
-      }
-
-      const combined = [finalBufferRef.current.trim(), interimBufferRef.current.trim()]
-        .filter(Boolean)
-        .join(' ')
-        .replace(/\s+/g, ' ')
-        .trim();
-      setLiveFinalText('');
-      setLiveInterimText('');
-      const durationSec = Math.max(1, Math.round((Date.now() - listenStartedAtRef.current) / 1000));
-      const avgConf =
-        confidenceSumRef.current.count > 0
-          ? Number((confidenceSumRef.current.total / confidenceSumRef.current.count).toFixed(2))
-          : undefined;
-
-      if (!combined) {
-        setOrbState('idle');
-        setLifecyclePhase('PHASE_01_IDLE');
-        return;
-      }
-
-      setOrbState('transcribing');
-      setLifecyclePhase('PHASE_03_TRANSCRIBING');
-      processFinalizedUserTurn({
-        rawTranscript: combined,
-        engine: 'live-solo',
-        uncertainWords: Array.from(uncertainWordsRef.current),
-        sttConfidence: avgConf,
-        durationSec,
-        autoResumeAfter: continuousModeRef.current
-      });
-      return;
-    }
-
-    isListeningRef.current = false;
-    setIsListening(false);
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
-      try {
-        mediaRecorderRef.current.stop();
-      } catch {
-        cleanupMediaCapture();
-        setOrbState('idle');
-      }
-    } else {
-      cleanupMediaCapture();
-      setOrbState('idle');
-    }
+    void finalizeCapturedTurn('manual');
   };
 
   const handleOrbOrMicClick = () => {
     unlockAudioOutput();
     if (isBuddySpeaking) {
+      if (activeTtsQueueRef.current) {
+        try { activeTtsQueueRef.current.cancel(); } catch {}
+        activeTtsQueueRef.current = null;
+      }
       stopSpeech();
       setIsBuddySpeaking(false);
       setOrbState('interrupted');
-      setTimeout(() => {
-        void startListeningTurn();
-      }, 180);
+      // Immediate 0-delay barge-in straight into active listening!
+      void startListeningTurn();
       return;
     }
     if (isListening) {
       stopListeningAndSend();
     } else {
-      startListeningTurn();
+      void startListeningTurn();
     }
   };
 
@@ -1460,6 +1635,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     setSpeechEngine(eng);
     setStatusNotice(null);
     try {
+      localStorage.setItem('lingo_buddy_stt_engine_v3', eng);
       localStorage.setItem('lingo_buddy_stt_engine_v2', eng);
       localStorage.setItem('ielts_speaking_stt_engine', eng);
     } catch { }
@@ -1483,8 +1659,10 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
 
   const engineLabel =
     speechEngine === 'gemini-cloud'
-      ? 'Gemini Verbatim'
-      : `Browser Live · ${recognitionLang}`;
+      ? 'Gemini Verbatim + Live'
+      : `Live Stream · ${recognitionLang}`;
+
+  const latestPerf = perfRecords[0] || null;
 
   const currentOrbDesc = getOrbStateDescriptor(orbState);
 
@@ -1675,9 +1853,29 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
 
             <button
               type="button"
-              onClick={() => setIsSystemModalOpen(true)}
+              onClick={() => {
+                setSystemModalInitialTab('perf');
+                setIsSystemModalOpen(true);
+              }}
+              className="px-2.5 py-1.5 rounded-full bg-emerald-50 hover:bg-emerald-100/80 border border-emerald-200 text-xs font-semibold text-emerald-800 flex items-center gap-1.5 transition-colors cursor-pointer"
+              title="Real-Time Voice Latency Diagnostics (12-stage performance.now() telemetry)"
+            >
+              <Gauge className="w-3.5 h-3.5 text-emerald-600" />
+              <span className="hidden xl:inline">
+                {latestPerf?.durations.userEndToFirstAudioMs != null
+                  ? `${latestPerf.durations.userEndToFirstAudioMs}ms`
+                  : 'Latency'}
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setSystemModalInitialTab('orb');
+                setIsSystemModalOpen(true);
+              }}
               className="px-3 py-1.5 rounded-full bg-purple-50 hover:bg-purple-100/80 border border-purple-200 text-xs font-semibold text-purple-700 flex items-center gap-1.5 transition-colors cursor-pointer"
-              title="14-State Living Orb Lab, 23-Scenario QA Suite & Turn Traces"
+              title="14-State Living Orb Lab, 40-Scenario QA Suite & Turn Traces"
             >
               <FlaskConical className="w-3.5 h-3.5 text-purple-600" />
               <span className="hidden lg:inline">Orb Lab &amp; QA</span>
@@ -1729,30 +1927,30 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                   <button
                     type="button"
                     disabled={isListening}
-                    onClick={() => handleSelectEngine('gemini-cloud')}
-                    className={`py-1.5 px-2.5 rounded-lg text-xs font-semibold transition-all cursor-pointer disabled:opacity-40 flex items-center justify-center gap-1.5 ${
-                      speechEngine === 'gemini-cloud'
-                        ? 'bg-blue-600 text-white shadow-xs'
-                        : 'text-slate-600 hover:text-slate-900'
-                    }`}
-                    title="Studio 16kHz WAV sent to Gemini Multimodal Audio — highest accuracy across all accents, 0% auto-correction"
-                  >
-                    <Sparkles className="w-3.5 h-3.5" />
-                    <span>Gemini Verbatim (Best)</span>
-                  </button>
-                  <button
-                    type="button"
-                    disabled={isListening}
                     onClick={() => handleSelectEngine('live-solo')}
                     className={`py-1.5 px-2.5 rounded-lg text-xs font-semibold transition-all cursor-pointer disabled:opacity-40 flex items-center justify-center gap-1.5 ${
                       speechEngine === 'live-solo'
                         ? 'bg-blue-600 text-white shadow-xs'
                         : 'text-slate-600 hover:text-slate-900'
                     }`}
-                    title="Chrome built-in live speech (instant captioning, less accurate on accents)"
+                    title="Real-time streaming STT (< 300ms live words, 0ms post-speech wait) + recorded audio + automatic Gemini 16kHz WAV fallback"
                   >
                     <Radio className="w-3.5 h-3.5" />
-                    <span>Browser Live</span>
+                    <span>Live Streaming (Fastest)</span>
+                  </button>
+                  <button
+                    type="button"
+                    disabled={isListening}
+                    onClick={() => handleSelectEngine('gemini-cloud')}
+                    className={`py-1.5 px-2.5 rounded-lg text-xs font-semibold transition-all cursor-pointer disabled:opacity-40 flex items-center justify-center gap-1.5 ${
+                      speechEngine === 'gemini-cloud'
+                        ? 'bg-blue-600 text-white shadow-xs'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                    title="Live interim word preview + conditioned 16kHz WAV verified by Gemini SSE Audio (0% auto-correction)"
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>Gemini Verbatim + Live</span>
                   </button>
                 </div>
               </div>
@@ -1767,10 +1965,11 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                   disabled={isListening}
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-blue-500 cursor-pointer"
                 >
+                  <option value="en-LK">Sri Lankan English (en-LK)</option>
+                  <option value="en-IN">South Asian English (en-IN)</option>
                   <option value="en-GB">British English (en-GB)</option>
                   <option value="en-US">American English (en-US)</option>
                   <option value="en-AU">Australian English (en-AU)</option>
-                  <option value="en-IN">South Asian / Sri Lankan (en-IN)</option>
                 </select>
               </div>
 
@@ -2490,8 +2689,31 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                     );
                   })}
 
+                  {/* Live Streaming Speech Bubble inside Chat Stream (distinguishes Finalized vs Provisional words!) */}
+                  {isListening && (liveFinalText || liveInterimText) && (
+                    <div className="flex flex-col items-end space-y-1 animate-in fade-in duration-100">
+                      <div className="flex items-center gap-1.5 px-1">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-sky-50 border border-sky-200 text-[9px] font-bold uppercase tracking-wider text-sky-700">
+                          <span className="w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse" />
+                          <span>Speaking Live</span>
+                        </span>
+                        <span className="text-[11px] font-semibold text-slate-500">You</span>
+                      </div>
+                      <div className="max-w-[88%] rounded-2xl rounded-tr-sm px-4 py-3 text-sm leading-relaxed bg-gradient-to-br from-blue-600/90 to-indigo-600/90 text-white shadow-xs border border-blue-400/40">
+                        <p>
+                          {liveFinalText && <span>{liveFinalText}</span>}
+                          {liveFinalText && liveInterimText ? ' ' : ''}
+                          {liveInterimText && (
+                            <span className="text-sky-200 italic">{liveInterimText}</span>
+                          )}
+                          <span className="inline-block w-1 h-4 bg-sky-200 ml-1 align-middle rounded-full animate-pulse" />
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Fresh Conversation Topic Generator Cards */}
-                  {!hasUserMessages && (
+                  {!hasUserMessages && !isListening && (
                     <div className="pt-3 space-y-2.5">
                       <div className="flex items-center justify-between gap-2">
                         <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
@@ -3075,10 +3297,11 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
         showSinhala={showSinhala}
       />
 
-      {/* Phase 5 — 14-State Living Orb Lab, 13-Scenario Subsystem QA & Immutable Audit Modal */}
+      {/* Phase 5 — 14-State Living Orb Lab, 40-Scenario QA, Voice Latency Diagnostics & Immutable Audit Modal */}
       <BuddySystemModal
         isOpen={isSystemModalOpen}
         onClose={() => setIsSystemModalOpen(false)}
+        initialTab={systemModalInitialTab}
         currentOrbState={orbState}
         onPreviewOrbState={(nextState) => {
           setOrbState(nextState);
@@ -3094,6 +3317,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
         savedVocab={savedVocab}
         grammarLibrary={grammarLibrary}
         turnTraces={turnTraces}
+        perfRecords={perfRecords}
       />
 
       {/* Gemini API Settings Modal */}

@@ -1446,13 +1446,12 @@ export interface BuddyFriendReplyResult {
   activeTopic: BuddySessionTopic;
   activeSubject: string | null;
   latencyMs: number;
+  firstTokenMs: number;
 }
 
 /**
  * Generates the AI Friend's natural spoken response (Phase 05A — independent from Grammar Analysis).
- * Uses Gemini API when available with a fast 7s timeout, falling back transparently to Local Friend Engine
- * with full diagnostic metadata (providerRequested, source, fallbackReason, intent, latencyMs).
- * Audit Fix #2: Strictly uses priorHistory without duplicating the latest user turn!
+ * Uses Gemini SSE streaming with `thinkingBudget: 0` for < 450ms TTFT, falling back transparently to Local Friend Engine.
  */
 export async function generateBuddyFriendReply(params: {
   userText: string;
@@ -1461,16 +1460,24 @@ export async function generateBuddyFriendReply(params: {
   mode: BuddyMode;
   coherence?: TranscriptCoherenceResult;
   context?: BuddySessionContext;
+  precomputedIntent?: {
+    intent: BuddyTurnIntent;
+    conversationalIntent: BuddyConversationalIntent;
+    extractedTerm?: string;
+  };
   longTermMemories?: BuddyMemoryItem[];
   topWeakCategory?: GrammarCategoryCode | null;
   apiKey?: string;
   model?: string;
+  /** Fires once when the very first text token arrives */
+  onFirstToken?: () => void;
   /** Real-time token streaming callback — fires as soon as each chunk arrives */
   onPartialReply?: (fullTextSoFar: string) => void;
-  /** Real-time sentence boundary callback — enables TTS to start speaking Sentence 1 immediately! */
+  /** Real-time sentence/safe-clause boundary callback — enables TTS to start speaking immediately! */
   onSentenceReady?: (sentence: string) => void;
 }): Promise<BuddyFriendReplyResult> {
   const t0 = typeof performance !== 'undefined' ? performance.now() : Date.now();
+  let firstTokenAt: number | null = null;
   const {
     userText,
     history,
@@ -1478,10 +1485,12 @@ export async function generateBuddyFriendReply(params: {
     mode,
     coherence,
     context,
+    precomputedIntent,
     longTermMemories = [],
     topWeakCategory = null,
     apiKey,
     model,
+    onFirstToken,
     onPartialReply,
     onSentenceReady
   } = params;
@@ -1489,11 +1498,8 @@ export async function generateBuddyFriendReply(params: {
   const personalityCfg = getPersonalityConfig(personality);
   const resolvedCoherence = coherence || validateTranscriptCoherence(userText);
   const ctx = context || extractSessionContext(history, userText);
-  const { intent, conversationalIntent, extractedTerm } = classifyBuddyIntent(
-    userText,
-    ctx,
-    resolvedCoherence
-  );
+  const { intent, conversationalIntent, extractedTerm } =
+    precomputedIntent || classifyBuddyIntent(userText, ctx, resolvedCoherence);
 
   let priorHistory = history;
   if (
@@ -1516,6 +1522,10 @@ export async function generateBuddyFriendReply(params: {
       resolvedCoherence,
       ctx
     );
+    if (firstTokenAt === null) {
+      firstTokenAt = typeof performance !== 'undefined' ? performance.now() : Date.now();
+      onFirstToken?.();
+    }
     onPartialReply?.(reply);
     if (onSentenceReady) {
       const localSentences = reply.match(/[^.!?]+[.!?]?/g) || [reply];
@@ -1534,7 +1544,8 @@ export async function generateBuddyFriendReply(params: {
       conversationalIntent,
       activeTopic: ctx.activeTopic,
       activeSubject: ctx.activeSubject,
-      latencyMs: Math.max(1, Math.round(t1 - t0))
+      latencyMs: Math.max(1, Math.round(t1 - t0)),
+      firstTokenMs: Math.max(1, Math.round((firstTokenAt ?? t1) - t0))
     };
   };
 
@@ -1542,9 +1553,10 @@ export async function generateBuddyFriendReply(params: {
     return finishLocal('local', 'No Gemini API key configured — using Local Friend Engine');
   }
 
+  // Keep last 6 compact turns so context stays complete without unnecessary prompt latency
   const recentTurns = priorHistory
-    .slice(-10)
-    .map(m => `${m.role === 'user' ? 'Friend (User)' : 'Lingo Buddy'}: ${m.text}`)
+    .slice(-6)
+    .map(m => `${m.role === 'user' ? 'User' : 'Buddy'}: ${m.text.slice(0, 220)}`)
     .join('\n');
 
   const modeHint =
@@ -1654,9 +1666,17 @@ Lingo Buddy:`;
   for (const candidateModel of candidateModels) {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 9000);
+      const timeoutId = setTimeout(() => controller.abort(), 5800);
 
-      // Real-time Server-Sent Events (SSE) streaming so first words appear & start speaking fast!
+      const generationConfig: Record<string, any> = {
+        temperature: 0.65,
+        maxOutputTokens: 115
+      };
+      if (candidateModel.startsWith('gemini-2.5')) {
+        generationConfig.thinkingConfig = { thinkingBudget: 0 };
+      }
+
+      // Real-time Server-Sent Events (SSE) streaming with thinkingBudget:0 so first words arrive in ~300-480ms!
       const streamUrl = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(candidateModel)}:streamGenerateContent?alt=sse&key=${encodeURIComponent(apiKey)}`;
       const response = await fetch(streamUrl, {
         method: 'POST',
@@ -1664,7 +1684,7 @@ Lingo Buddy:`;
         signal: controller.signal,
         body: JSON.stringify({
           contents: [{ role: 'user', parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 0.68, maxOutputTokens: 130 }
+          generationConfig
         })
       });
 
@@ -1681,7 +1701,7 @@ Lingo Buddy:`;
       const flushReadySentences = (forceAll: boolean = false) => {
         if (!onSentenceReady) return;
         const cleaned = accumulated.replace(/^["']|["']$/g, '').replace(/\*\*/g, '');
-        const remaining = cleaned.slice(emittedCursor);
+        let remaining = cleaned.slice(emittedCursor);
         if (!remaining.trim()) return;
 
         if (forceAll) {
@@ -1693,10 +1713,26 @@ Lingo Buddy:`;
           return;
         }
 
-        const match = remaining.match(/^([\s\S]*?[.!?])(?:\s+|$)/);
-        if (match && match[1].trim().length >= 8) {
-          onSentenceReady(match[1].trim());
-          emittedCursor += match[0].length;
+        // 1. Emit any complete sentences (. ! ?) immediately
+        while (true) {
+          remaining = cleaned.slice(emittedCursor);
+          const sentMatch = remaining.match(/^([\s\S]*?[.!?])(?:\s+|$)/);
+          if (sentMatch && sentMatch[1].trim().length >= 6) {
+            onSentenceReady(sentMatch[1].trim());
+            emittedCursor += sentMatch[0].length;
+            continue;
+          }
+          // 2. If the very first segment is long (>= 10 words) and hits a natural clause break (, / — / ;),
+          // emit that safe clause early so TTS begins speaking without waiting for a 20-word sentence!
+          if (emittedCursor === 0) {
+            const clauseMatch = remaining.match(/^((?:\S+\s+){9,}\S+[,;—])\s+/);
+            if (clauseMatch && clauseMatch[1].trim().length >= 38) {
+              onSentenceReady(clauseMatch[1].trim());
+              emittedCursor += clauseMatch[0].length;
+              continue;
+            }
+          }
+          break;
         }
       };
 
@@ -1722,6 +1758,10 @@ Lingo Buddy:`;
               const parsed = JSON.parse(payload);
               const delta = parsed?.candidates?.[0]?.content?.parts?.[0]?.text || '';
               if (delta) {
+                if (firstTokenAt === null) {
+                  firstTokenAt = typeof performance !== 'undefined' ? performance.now() : Date.now();
+                  onFirstToken?.();
+                }
                 accumulated += delta;
                 const cleanDisplay = accumulated
                   .replace(/^["']|["']$/g, '')
@@ -1745,6 +1785,10 @@ Lingo Buddy:`;
         accumulated = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
         const cleanDisplay = accumulated.replace(/^["']|["']$/g, '').replace(/\*\*/g, '').trim();
         if (cleanDisplay) {
+          if (firstTokenAt === null) {
+            firstTokenAt = typeof performance !== 'undefined' ? performance.now() : Date.now();
+            onFirstToken?.();
+          }
           onPartialReply?.(cleanDisplay);
           flushReadySentences(true);
         }
@@ -1771,12 +1815,13 @@ Lingo Buddy:`;
         conversationalIntent,
         activeTopic: ctx.activeTopic,
         activeSubject: ctx.activeSubject,
-        latencyMs: Math.max(1, Math.round(t1 - t0))
+        latencyMs: Math.max(1, Math.round(t1 - t0)),
+        firstTokenMs: Math.max(1, Math.round((firstTokenAt ?? t1) - t0))
       };
     } catch (err: any) {
       lastFailReason =
         err?.name === 'AbortError'
-          ? 'Gemini timed out (>9s)'
+          ? 'Gemini timed out (>5.8s)'
           : `Gemini network error (${err?.message || 'unknown'})`;
     }
   }
