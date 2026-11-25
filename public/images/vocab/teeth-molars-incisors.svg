@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
+  <rect width="800" height="420" rx="20" fill="#f8fafc"/>
+  <text x="400" y="38" text-anchor="middle" font-size="19" font-weight="800" fill="#0f172a">Incisors vs. Molars &amp; Manatee “Marching Molars”</text>
+  <text x="400" y="60" text-anchor="middle" font-size="13" fill="#475569">How Abrasive Plants Wear Down Teeth &amp; New Molars Push Forward</text>
+
+  <!-- Left Panel: Incisors vs Molars -->
+  <rect x="28" y="80" width="340" height="312" rx="16" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="198" y="110" text-anchor="middle" font-size="15" font-weight="800" fill="#1e293b">1. Tooth Types &amp; Shapes</text>
+
+  <!-- Incisor Illustration -->
+  <rect x="48" y="128" width="138" height="240" rx="12" fill="#eff6ff" stroke="#bfdbfe"/>
+  <text x="117" y="152" text-anchor="middle" font-size="14" font-weight="800" fill="#1d4ed8">INCISORS</text>
+  <text x="117" y="170" text-anchor="middle" font-size="11" fill="#3b82f6">Front Cutting Teeth</text>
+  <!-- Chisel-shaped incisor crown + root -->
+  <path d="M95 200 L139 200 L133 255 L101 255 Z" fill="#ffffff" stroke="#475569" stroke-width="2.5"/>
+  <path d="M101 255 C104 298, 112 315, 117 315 C122 315, 130 298, 133 255 Z" fill="#fef3c7" stroke="#94a3b8" stroke-width="2"/>
+  <line x1="92" y1="200" x2="142" y2="200" stroke="#ef4444" stroke-width="3"/>
+  <text x="117" y="338" text-anchor="middle" font-size="11" font-weight="700" fill="#1e293b">Sharp narrow edge</text>
+  <text x="117" y="354" text-anchor="middle" font-size="10.5" fill="#64748b">(Bites &amp; cuts food)</text>
+
+  <!-- Molar Illustration -->
+  <rect x="208" y="128" width="140" height="240" rx="12" fill="#ecfdf5" stroke="#a7f3d0"/>
+  <text x="278" y="152" text-anchor="middle" font-size="14" font-weight="800" fill="#047857">MOLARS</text>
+  <text x="278" y="170" text-anchor="middle" font-size="11" fill="#059669">Back Grinding Teeth</text>
+  <!-- Broad flat/rounded molar crown + double roots -->
+  <path d="M242 208 C242 198, 258 198, 278 202 C298 198, 314 198, 314 208 L310 252 L246 252 Z" fill="#ffffff" stroke="#475569" stroke-width="2.5"/>
+  <path d="M248 252 C248 295, 256 314, 263 314 C270 314, 272 280, 278 280 C284 280, 286 314, 293 314 C300 314, 308 295, 308 252 Z" fill="#fef3c7" stroke="#94a3b8" stroke-width="2"/>
+  <text x="278" y="338" text-anchor="middle" font-size="11" font-weight="700" fill="#1e293b">Flat, rounded surface</text>
+  <text x="278" y="354" text-anchor="middle" font-size="10.5" fill="#64748b">(Grinds tough plants)</text>
+
+  <!-- Right Panel: Manatee Conveyor-Belt Tooth Replacement -->
+  <rect x="392" y="80" width="380" height="312" rx="16" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="582" y="110" text-anchor="middle" font-size="15" font-weight="800" fill="#1e293b">2. Continuous Molar Replacement</text>
+  <text x="582" y="130" text-anchor="middle" font-size="11.5" fill="#64748b">Abrasive sand &amp; silica in seagrass wear teeth down</text>
+
+  <!-- Jaw gumline -->
+  <path d="M430 265 Q585 275 742 260 L742 315 Q585 330 430 312 Z" fill="#fda4af" stroke="#f43f5e" stroke-width="2"/>
+  <text x="456" y="335" font-size="11" font-weight="800" fill="#be123c">FRONT OF JAW</text>
+  <text x="655" y="335" font-size="11" font-weight="800" fill="#be123c">BACK OF JAW</text>
+
+  <!-- Falling out worn tooth at front -->
+  <g transform="translate(425, 195) rotate(-28)">
+    <rect x="0" y="0" width="34" height="22" rx="5" fill="#e2e8f0" stroke="#64748b" stroke-width="2"/>
+  </g>
+  <path d="M440 190 Q420 175 412 205" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-dasharray="4 3"/>
+  <text x="448" y="168" text-anchor="middle" font-size="11.5" font-weight="800" fill="#dc2626">FALL OUT</text>
+
+  <!-- Row of molars: worn down at front -> tall & fresh at back -->
+  <!-- Tooth 1: Worn down -->
+  <rect x="482" y="242" width="42" height="26" rx="5" fill="#f1f5f9" stroke="#475569" stroke-width="2"/>
+  <text x="503" y="232" text-anchor="middle" font-size="10.5" font-weight="800" fill="#b45309">Worn down</text>
+  <!-- Abrasive sand dots -->
+  <circle cx="492" cy="238" r="2" fill="#d97706"/>
+  <circle cx="504" cy="236" r="2" fill="#d97706"/>
+  <circle cx="514" cy="238" r="2" fill="#d97706"/>
+
+  <!-- Tooth 2 -->
+  <rect x="536" y="230" width="44" height="38" rx="6" fill="#ffffff" stroke="#475569" stroke-width="2"/>
+  <!-- Tooth 3 -->
+  <rect x="592" y="222" width="46" height="45" rx="7" fill="#ffffff" stroke="#475569" stroke-width="2"/>
+  <!-- Tooth 4 -->
+  <rect x="650" y="218" width="46" height="47" rx="8" fill="#ffffff" stroke="#059669" stroke-width="2.5"/>
+  <!-- New forming molar at back -->
+  <rect x="706" y="232" width="36" height="36" rx="8" fill="#d1fae5" stroke="#059669" stroke-width="2" stroke-dasharray="4 2"/>
+  <text x="718" y="210" text-anchor="middle" font-size="11" font-weight="800" fill="#047857">New Molars</text>
+
+  <!-- Big Conveyor Arrow: PUSH FORWARD -->
+  <line x1="720" y1="292" x2="495" y2="292" stroke="#ffffff" stroke-width="4"/>
+  <polygon points="484,292 500,284 500,300" fill="#ffffff"/>
+  <text x="610" y="286" text-anchor="middle" font-size="12" font-weight="800" fill="#881337">← PUSH FORWARD CONTINUALLY</text>
+
+  <rect x="424" y="350" width="318" height="28" rx="8" fill="#fffbeb" stroke="#fde68a"/>
+  <text x="583" y="368" text-anchor="middle" font-size="11.5" font-weight="700" fill="#92400e">Abrasive = Rough / Grinding (wears teeth down)</text>
+</svg>

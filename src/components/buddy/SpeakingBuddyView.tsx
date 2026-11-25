@@ -17,7 +17,6 @@ import {
   Keyboard,
   ChevronDown,
   Square,
-  Cpu,
   Radio,
   RefreshCw,
   ArrowUpRight,
@@ -87,12 +86,6 @@ import {
 } from '../../utils/buddyLearningStore';
 import { transcribeAudioBlobWithGemini } from '../../utils/speakingEngine';
 import {
-  preloadWhisperModel,
-  transcribeBlobWithWhisper,
-  type WhisperModelId,
-  type WhisperProgressUpdate
-} from '../../utils/whisperClient';
-import {
   createRealtimeTtsQueue,
   FREE_NEURAL_VOICES,
   loadBuddyVoiceConfig,
@@ -151,7 +144,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
   );
   const [mode, setMode] = useState<BuddyMode>(activeSession?.mode || 'friendly');
   const [intensity, setIntensity] = useState<CorrectionIntensity>(
-    activeSession?.intensity || 'balanced'
+    activeSession?.intensity || 'gentle'
   );
   const [rightTab, setRightTab] = useState<'feedback' | 'hub'>('feedback');
   const [selectedFeedbackMsgId, setSelectedFeedbackMsgId] = useState<string | null>(null);
@@ -196,23 +189,22 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
   useEffect(() => { buddyMemoryRef.current = buddyMemory; }, [buddyMemory]);
   useEffect(() => { learningAnalyticsRef.current = learningAnalytics; }, [learningAnalytics]);
 
-  // Speech Engine & Accent (Zero-Conflict 3-Engine Architecture)
-  // Auto-migrates legacy Chrome Web Speech ("live-solo" + "en-IN") once so users immediately get
-  // 0%-autocorrect studio-grade accuracy (Gemini Verbatim WAV when API key is connected, or Whisper Small HD offline).
+  // Speech Engine & Accent (Zero-Conflict 2-Engine Architecture: Gemini Verbatim Audio + Browser Live)
+  // Auto-migrates any legacy Chrome Web Speech ("en-IN") or removed Whisper AI preference cleanly.
   const [speechEngine, setSpeechEngine] = useState<BuddySpeechEngine>(() => {
     try {
       const hasKey = Boolean(loadApiKey());
-      const v2Choice = localStorage.getItem('lingo_buddy_stt_engine_v2') as BuddySpeechEngine | null;
-      if (v2Choice === 'gemini-cloud' || v2Choice === 'whisper-local' || v2Choice === 'live-solo') {
-        if (v2Choice === 'gemini-cloud' && !hasKey) return 'whisper-local';
+      const v2Choice = localStorage.getItem('lingo_buddy_stt_engine_v2') as string | null;
+      if (v2Choice === 'gemini-cloud' || v2Choice === 'live-solo') {
+        if (v2Choice === 'gemini-cloud' && !hasKey) return 'live-solo';
         return v2Choice;
       }
-      const preferred: BuddySpeechEngine = hasKey ? 'gemini-cloud' : 'whisper-local';
+      const preferred: BuddySpeechEngine = hasKey ? 'gemini-cloud' : 'live-solo';
       localStorage.setItem('lingo_buddy_stt_engine_v2', preferred);
       localStorage.setItem('ielts_speaking_stt_engine', preferred);
       return preferred;
     } catch {
-      return loadApiKey() ? 'gemini-cloud' : 'whisper-local';
+      return loadApiKey() ? 'gemini-cloud' : 'live-solo';
     }
   });
   const [recognitionLang, setRecognitionLang] = useState<string>(() => {
@@ -225,21 +217,6 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
       return 'en-GB';
     } catch {
       return 'en-GB';
-    }
-  });
-  const [whisperModel, setWhisperModel] = useState<WhisperModelId>(() => {
-    try {
-      const saved = localStorage.getItem('ielts_speaking_whisper_model') as WhisperModelId | null;
-      if (
-        saved === 'onnx-community/whisper-small.en' ||
-        saved === 'onnx-community/whisper-base.en' ||
-        saved === 'onnx-community/whisper-tiny.en'
-      ) {
-        return saved;
-      }
-      return 'onnx-community/whisper-small.en';
-    } catch {
-      return 'onnx-community/whisper-small.en';
     }
   });
   const [selectedMicDeviceId, setSelectedMicDeviceId] = useState<string>(() => {
@@ -303,7 +280,6 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
   const [streamingBuddyMsgId, setStreamingBuddyMsgId] = useState<string | null>(null);
   const [typedInput, setTypedInput] = useState<string>('');
   const [statusNotice, setStatusNotice] = useState<string | null>(null);
-  const [whisperProgress, setWhisperProgress] = useState<WhisperProgressUpdate | null>(null);
 
   // Inline Transcript Editing (Phase 1 P0.2)
   const [editingMsgId, setEditingMsgId] = useState<string | null>(null);
@@ -333,7 +309,6 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
   const voiceOutputEnabledRef = useRef<boolean>(voiceOutputEnabled);
   const speechEngineRef = useRef<BuddySpeechEngine>(speechEngine);
   const recognitionLangRef = useRef<string>(recognitionLang);
-  const whisperModelRef = useRef<WhisperModelId>(whisperModel);
   const selectedMicDeviceIdRef = useRef<string>(selectedMicDeviceId);
   const personalityRef = useRef<BuddyPersonality>(personality);
   const modeRef = useRef<BuddyMode>(mode);
@@ -346,7 +321,6 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
   useEffect(() => { voiceOutputEnabledRef.current = voiceOutputEnabled; }, [voiceOutputEnabled]);
   useEffect(() => { speechEngineRef.current = speechEngine; }, [speechEngine]);
   useEffect(() => { recognitionLangRef.current = recognitionLang; }, [recognitionLang]);
-  useEffect(() => { whisperModelRef.current = whisperModel; }, [whisperModel]);
   useEffect(() => { selectedMicDeviceIdRef.current = selectedMicDeviceId; }, [selectedMicDeviceId]);
   useEffect(() => { personalityRef.current = personality; }, [personality]);
   useEffect(() => { modeRef.current = mode; }, [mode]);
@@ -357,13 +331,6 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     if (!el) return;
     el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
   }, [activeSession?.messages.length, liveInterimText, streamingBuddyMsgId]);
-
-  // Pre-warm Whisper AI silently in the background when selected so transcription is near-instant!
-  useEffect(() => {
-    if (speechEngine === 'whisper-local') {
-      preloadWhisperModel(whisperModel).catch(() => {});
-    }
-  }, [speechEngine, whisperModel]);
 
   useEffect(() => {
     if (showKeyboardInput) {
@@ -821,14 +788,25 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
         onMemoryUpdated: (nextMem) => {
           setBuddyMemory(nextMem);
         },
-        onFriendPartialReply: (partialText, pkt) => {
+        onFriendPartialReply: (partialText, pkt, meta) => {
+          if (meta?.spokenCorrection && !isBuddySpeaking && !isListeningRef.current) {
+            setOrbState(curr => (curr === 'thinking' || curr === 'understanding' ? 'correcting' : curr));
+          }
           setSessions(prev =>
             prev.map(s =>
               s.id === pkt.sessionId
                 ? {
                     ...s,
                     messages: s.messages.map(m =>
-                      m.id === buddyPlaceholderId ? { ...m, text: partialText } : m
+                      m.id === buddyPlaceholderId
+                        ? {
+                            ...m,
+                            text: partialText,
+                            spokenCorrection: meta?.spokenCorrection || undefined,
+                            conversationalResponse: meta?.conversationalResponse || undefined,
+                            correctionType: meta?.correctionType || undefined
+                          }
+                        : m
                     )
                   }
                 : s
@@ -853,7 +831,15 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                     updatedAt: Date.now(),
                     messages: s.messages.map(m =>
                       m.id === buddyPlaceholderId
-                        ? { ...m, text: friendResult.reply, responseSource: friendResult.source }
+                        ? {
+                            ...m,
+                            text: friendResult.reply,
+                            spokenCorrection: friendResult.spokenCorrection || undefined,
+                            conversationalResponse: friendResult.conversationalResponse || undefined,
+                            correctionType: friendResult.correctionType,
+                            structuredTurn: friendResult.structuredTurn,
+                            responseSource: friendResult.source
+                          }
                         : m
                     )
                   }
@@ -929,10 +915,9 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     stopSpeech();
     setIsBuddySpeaking(false);
     setStatusNotice(initialNotice || null);
-    setWhisperProgress(null);
 
     if (speechEngineRef.current === 'gemini-cloud' && !(apiKey || loadApiKey())) {
-      setStatusNotice('Connect a Gemini API key or switch to Whisper AI / Pure Live in Audio Settings.');
+      setStatusNotice('Connect a Gemini API key for Gemini Verbatim Audio, or switch to Browser Live in Audio Settings.');
       setIsApiModalOpen(true);
       return;
     }
@@ -957,14 +942,17 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
       if (!SpeechRecognition) {
         isListeningRef.current = false;
         setIsListening(false);
-        speechEngineRef.current = 'whisper-local';
-        setSpeechEngine('whisper-local');
-        try { localStorage.setItem('ielts_speaking_stt_engine', 'whisper-local'); } catch {}
-        setTimeout(() => {
-          void startListeningTurn(
-            'Live browser speech is unavailable here — switched to Whisper AI (free & verbatim). Speak now, then click Stop & Send.'
-          );
-        }, 120);
+        if (apiKey || loadApiKey()) {
+          handleSelectEngine('gemini-cloud');
+          setTimeout(() => {
+            void startListeningTurn(
+              'Browser speech is unavailable here — switched to Gemini Verbatim Audio. Speak now!'
+            );
+          }, 120);
+        } else {
+          setOrbState('error');
+          setStatusNotice('Browser speech recognition is unavailable here. Connect a Gemini API key to use Gemini Verbatim Audio.');
+        }
         return;
       }
 
@@ -1092,7 +1080,6 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
             setOrbState('error');
             setStatusNotice('Microphone access was blocked. Allow microphone permission in your browser bar.');
           } else if (e.error === 'network') {
-            // Seamlessly auto-switch to Whisper AI (100% free, offline, strictly verbatim!) when browser speech cloud cannot connect
             isListeningRef.current = false;
             setIsListening(false);
             if (vadPauseTimerRef.current) {
@@ -1108,16 +1095,19 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
               } catch {}
               recognitionRef.current = null;
             }
-            speechEngineRef.current = 'whisper-local';
-            setSpeechEngine('whisper-local');
-            try { localStorage.setItem('ielts_speaking_stt_engine', 'whisper-local'); } catch {}
-            setTimeout(() => {
-              void startListeningTurn(
-                'Browser speech service could not connect — automatically switched to Whisper AI (free & verbatim). Speak now, then click Stop & Send!'
-              );
-            }, 140);
+            if (apiKey || loadApiKey()) {
+              handleSelectEngine('gemini-cloud');
+              setTimeout(() => {
+                void startListeningTurn(
+                  'Browser speech service could not connect — automatically switched to Gemini Verbatim Audio. Speak now!'
+                );
+              }, 140);
+            } else {
+              setOrbState('error');
+              setStatusNotice('Browser speech service could not connect. Connect a Gemini API key in Audio Settings for Gemini Verbatim Audio.');
+            }
           } else if (e.error !== 'aborted') {
-            setStatusNotice(`Speech recognition notice (${e.error}). Try Whisper AI in Audio Settings.`);
+            setStatusNotice(`Speech recognition notice (${e.error}). Switch to Gemini Verbatim in Audio Settings for highest accuracy.`);
           }
         };
 
@@ -1148,7 +1138,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
       return;
     }
 
-    // Whisper Local / Gemini Cloud -> Clean Studio-Filtered Audio Capture (Noise-Suppressed & Echo-Cancelled)
+    // Gemini Verbatim Audio -> Clean Studio-Filtered Audio Capture (Noise-Suppressed & Echo-Cancelled)
     try {
       const constraints: MediaTrackConstraints = {
         echoCancellation: true,
@@ -1262,37 +1252,12 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
         setLifecyclePhase('PHASE_03_TRANSCRIBING');
 
         try {
-          let transcribed = '';
-          let effectiveEngine: BuddySpeechEngine = speechEngineRef.current;
-
-          if (speechEngineRef.current === 'whisper-local') {
-            const res = await transcribeBlobWithWhisper(blob, {
-              model: whisperModelRef.current,
-              onProgress: (p) => setWhisperProgress(p)
-            });
-            transcribed = res.text;
-          } else {
-            try {
-              transcribed = await transcribeAudioBlobWithGemini(
-                apiKey || loadApiKey(),
-                selectedModel || loadModel(),
-                blob,
-                recognitionLangRef.current
-              );
-            } catch (gemErr: any) {
-              // Seamless automatic fallback to offline Whisper Small HD on the exact same recording!
-              console.warn('Gemini audio STT failed; falling back to local Whisper HD:', gemErr);
-              effectiveEngine = 'whisper-local';
-              setStatusNotice('Gemini Audio temporarily unavailable — transcribed locally via Whisper HD.');
-              const res = await transcribeBlobWithWhisper(blob, {
-                model: whisperModelRef.current,
-                onProgress: (p) => setWhisperProgress(p)
-              });
-              transcribed = res.text;
-            }
-          }
-
-          setWhisperProgress(null);
+          const transcribed = await transcribeAudioBlobWithGemini(
+            apiKey || loadApiKey(),
+            selectedModel || loadModel(),
+            blob,
+            recognitionLangRef.current
+          );
 
           if (!transcribed || !transcribed.trim()) {
             try { URL.revokeObjectURL(recordedAudioUrl); } catch {}
@@ -1304,16 +1269,15 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
 
           await processFinalizedUserTurn({
             rawTranscript: transcribed,
-            engine: effectiveEngine,
+            engine: 'gemini-cloud',
             recordedAudioUrl,
             durationSec,
             autoResumeAfter: continuousModeRef.current
           });
         } catch (err: any) {
           try { URL.revokeObjectURL(recordedAudioUrl); } catch {}
-          setWhisperProgress(null);
           setOrbState('error');
-          setStatusNotice(err?.message || 'Transcription failed.');
+          setStatusNotice(err?.message || 'Gemini Audio transcription failed. Check your API key or network.');
         }
       };
 
@@ -1397,7 +1361,12 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
   const handleOrbOrMicClick = () => {
     unlockAudioOutput();
     if (isBuddySpeaking) {
-      startListeningTurn();
+      stopSpeech();
+      setIsBuddySpeaking(false);
+      setOrbState('interrupted');
+      setTimeout(() => {
+        void startListeningTurn();
+      }, 180);
       return;
     }
     if (isListening) {
@@ -1515,11 +1484,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
   const engineLabel =
     speechEngine === 'gemini-cloud'
       ? 'Gemini Verbatim'
-      : speechEngine === 'whisper-local'
-        ? whisperModel === 'onnx-community/whisper-small.en'
-          ? 'Whisper Small HD'
-          : 'Whisper AI'
-        : `Browser Live · ${recognitionLang}`;
+      : `Browser Live · ${recognitionLang}`;
 
   const currentOrbDesc = getOrbStateDescriptor(orbState);
 
@@ -1544,7 +1509,9 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                     ? 'Breaking down the grammar rule...'
                     : orbState === 'understanding' || orbState === 'thinking'
                       ? 'Thinking of a reply...'
-                      : orbState === 'speaking'
+                      : orbState === 'interrupted'
+                        ? 'Interrupted — listening to you now...'
+                        : orbState === 'speaking'
                         ? 'Speaking — tap orb to interrupt'
                         : orbState === 'sleeping'
                           ? 'Session paused'
@@ -1669,9 +1636,9 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                 aria-label="Correction Intensity"
                 className="appearance-none bg-slate-50 hover:bg-slate-100 border border-slate-200/90 rounded-full pl-3.5 pr-8 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/15 transition-all cursor-pointer"
               >
-                <option value="gentle">Gentle Feedback</option>
-                <option value="balanced">Balanced Feedback</option>
-                <option value="detailed">Detailed Feedback</option>
+                <option value="gentle">Gentle Friend</option>
+                <option value="balanced">Balanced Coach</option>
+                <option value="detailed">Detailed Teacher</option>
               </select>
               <ChevronDown className="w-3.5 h-3.5 text-slate-400 pointer-events-none -ml-6" />
             </div>
@@ -1758,47 +1725,33 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                 <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
                   Speech Input Engine (Your Mic · 0% Auto-Correction)
                 </span>
-                <div className="grid grid-cols-3 gap-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200/80">
+                <div className="grid grid-cols-2 gap-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200/80">
                   <button
                     type="button"
                     disabled={isListening}
                     onClick={() => handleSelectEngine('gemini-cloud')}
-                    className={`py-1.5 px-2 rounded-lg text-xs font-semibold transition-all cursor-pointer disabled:opacity-40 flex items-center justify-center gap-1 ${
+                    className={`py-1.5 px-2.5 rounded-lg text-xs font-semibold transition-all cursor-pointer disabled:opacity-40 flex items-center justify-center gap-1.5 ${
                       speechEngine === 'gemini-cloud'
                         ? 'bg-blue-600 text-white shadow-xs'
                         : 'text-slate-600 hover:text-slate-900'
                     }`}
                     title="Studio 16kHz WAV sent to Gemini Multimodal Audio — highest accuracy across all accents, 0% auto-correction"
                   >
-                    <Sparkles className="w-3 h-3" />
-                    <span>Gemini HD</span>
-                  </button>
-                  <button
-                    type="button"
-                    disabled={isListening}
-                    onClick={() => handleSelectEngine('whisper-local')}
-                    className={`py-1.5 px-2 rounded-lg text-xs font-semibold transition-all cursor-pointer disabled:opacity-40 flex items-center justify-center gap-1 ${
-                      speechEngine === 'whisper-local'
-                        ? 'bg-blue-600 text-white shadow-xs'
-                        : 'text-slate-600 hover:text-slate-900'
-                    }`}
-                    title="100% Free Offline OpenAI Whisper neural model in your browser — 0% auto-correction"
-                  >
-                    <Cpu className="w-3 h-3" />
-                    <span>Whisper HD</span>
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>Gemini Verbatim (Best)</span>
                   </button>
                   <button
                     type="button"
                     disabled={isListening}
                     onClick={() => handleSelectEngine('live-solo')}
-                    className={`py-1.5 px-2 rounded-lg text-xs font-semibold transition-all cursor-pointer disabled:opacity-40 flex items-center justify-center gap-1 ${
+                    className={`py-1.5 px-2.5 rounded-lg text-xs font-semibold transition-all cursor-pointer disabled:opacity-40 flex items-center justify-center gap-1.5 ${
                       speechEngine === 'live-solo'
                         ? 'bg-blue-600 text-white shadow-xs'
                         : 'text-slate-600 hover:text-slate-900'
                     }`}
-                    title="Chrome built-in live speech (instant captioning, but less accurate on accents and may mishear words)"
+                    title="Chrome built-in live speech (instant captioning, less accurate on accents)"
                   >
-                    <Radio className="w-3 h-3" />
+                    <Radio className="w-3.5 h-3.5" />
                     <span>Browser Live</span>
                   </button>
                 </div>
@@ -1806,36 +1759,19 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
 
               <div className="space-y-1.5">
                 <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
-                  {speechEngine === 'whisper-local' ? 'Whisper Model Accuracy' : 'Accent Profile'}
+                  Accent Profile
                 </span>
-                {speechEngine === 'whisper-local' ? (
-                  <select
-                    value={whisperModel}
-                    onChange={(e) => {
-                      const next = e.target.value as WhisperModelId;
-                      setWhisperModel(next);
-                      try { localStorage.setItem('ielts_speaking_whisper_model', next); } catch {}
-                    }}
-                    disabled={isListening}
-                    className="w-full bg-blue-50/70 border border-blue-200 rounded-xl px-3 py-2 text-xs font-semibold text-blue-900 focus:outline-none focus:border-blue-500 cursor-pointer"
-                  >
-                    <option value="onnx-community/whisper-small.en">Whisper Small HD (Best Accuracy)</option>
-                    <option value="onnx-community/whisper-base.en">Whisper Base (Balanced)</option>
-                    <option value="onnx-community/whisper-tiny.en">Whisper Tiny (Fastest)</option>
-                  </select>
-                ) : (
-                  <select
-                    value={recognitionLang}
-                    onChange={(e) => handleSelectAccent(e.target.value)}
-                    disabled={isListening}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-blue-500 cursor-pointer"
-                  >
-                    <option value="en-IN">South Asian / Sri Lankan (en-IN)</option>
-                    <option value="en-GB">British English (en-GB)</option>
-                    <option value="en-US">American English (en-US)</option>
-                    <option value="en-AU">Australian English (en-AU)</option>
-                  </select>
-                )}
+                <select
+                  value={recognitionLang}
+                  onChange={(e) => handleSelectAccent(e.target.value)}
+                  disabled={isListening}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-blue-500 cursor-pointer"
+                >
+                  <option value="en-GB">British English (en-GB)</option>
+                  <option value="en-US">American English (en-US)</option>
+                  <option value="en-AU">Australian English (en-AU)</option>
+                  <option value="en-IN">South Asian / Sri Lankan (en-IN)</option>
+                </select>
               </div>
 
               <div className="flex items-center gap-2 flex-wrap">
@@ -2134,28 +2070,9 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                     </button>
                   </div>
 
-                  {/* Live Caption & Whisper Download Progress */}
+                  {/* Live Caption */}
                   <div className="min-h-[54px] w-full flex flex-col items-center justify-center space-y-1 px-1">
-                    {whisperProgress &&
-                    (whisperProgress.status === 'loading' ||
-                      whisperProgress.status === 'inferencing') ? (
-                      <div className="w-full px-3 py-2 rounded-2xl bg-blue-50/90 border border-blue-200 text-xs text-blue-800 space-y-1.5">
-                        <div className="flex items-center justify-between font-semibold">
-                          <span className="truncate">{whisperProgress.message}</span>
-                          {typeof whisperProgress.percent === 'number' && (
-                            <span className="font-mono">{whisperProgress.percent}%</span>
-                          )}
-                        </div>
-                        {typeof whisperProgress.percent === 'number' && (
-                          <div className="w-full h-1.5 bg-blue-200/70 rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-blue-600 transition-all duration-200 rounded-full"
-                              style={{ width: `${whisperProgress.percent}%` }}
-                            />
-                          </div>
-                        )}
-                      </div>
-                    ) : isListening && (liveFinalText || liveInterimText) ? (
+                    {isListening && (liveFinalText || liveInterimText) ? (
                       <div className="space-y-0.5 animate-in fade-in duration-150">
                         <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-sky-50 border border-sky-200 text-[9px] font-bold uppercase tracking-wider text-sky-700">
                           <span className="w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse" />
@@ -2404,6 +2321,26 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                               <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-bounce" style={{ animationDelay: '140ms' }} />
                               <span className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-bounce" style={{ animationDelay: '280ms' }} />
                             </span>
+                          ) : !isUser && msg.spokenCorrection ? (
+                            <div className="space-y-1.5">
+                              <span
+                                className={`inline-block rounded-xl px-2.5 py-1 text-xs font-semibold border leading-relaxed ${
+                                  msg.correctionType === 'naturalness'
+                                    ? 'bg-purple-50/90 text-purple-900 border-purple-200/90'
+                                    : 'bg-emerald-50/90 text-emerald-900 border-emerald-200/90'
+                                }`}
+                              >
+                                {msg.spokenCorrection}
+                              </span>
+                              {(msg.conversationalResponse || msg.id === streamingBuddyMsgId) && (
+                                <p className="text-slate-800">
+                                  {msg.conversationalResponse}
+                                  {msg.id === streamingBuddyMsgId && (
+                                    <span className="inline-block w-1.5 h-4 bg-blue-500 ml-1 align-middle rounded-full animate-pulse" />
+                                  )}
+                                </p>
+                              )}
+                            </div>
                           ) : (
                             <p>
                               {msg.text}
@@ -3008,7 +2945,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                           setSelectedFeedbackMsgId(null);
                           setPersonality(sess.personality);
                           setMode(sess.mode);
-                          setIntensity(sess.intensity || 'balanced');
+                          setIntensity(sess.intensity || 'gentle');
                           setOrbState('idle');
                           setIsHistoryOpen(false);
                         }}
@@ -3081,9 +3018,9 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                   aria-label="Correction Intensity"
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800"
                 >
-                  <option value="gentle">Gentle Feedback</option>
-                  <option value="balanced">Balanced Feedback</option>
-                  <option value="detailed">Detailed Feedback</option>
+                  <option value="gentle">Gentle Friend</option>
+                  <option value="balanced">Balanced Coach</option>
+                  <option value="detailed">Detailed Teacher</option>
                 </select>
                 <select
                   value={explanationLangMode}
@@ -3115,11 +3052,6 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
         }}
         speechEngine={speechEngine}
         onSelectSpeechEngine={handleSelectEngine}
-        whisperModel={whisperModel}
-        onSelectWhisperModel={(m) => {
-          setWhisperModel(m);
-          try { localStorage.setItem('ielts_speaking_whisper_model', m); } catch { }
-        }}
         recognitionLang={recognitionLang}
         onAccentChange={handleSelectAccent}
         apiKey={apiKey}

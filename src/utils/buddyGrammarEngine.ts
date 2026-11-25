@@ -270,6 +270,110 @@ interface LocalGrammarPattern {
 
 const LOCAL_BUDDY_PATTERNS: LocalGrammarPattern[] = [
   {
+    id: 'art-copula-profession',
+    regex: /\b(I\s+am|I'm|he\s+is|he's|she\s+is|she's|you\s+are|you're|was|became)\s+(software\s+engineer|civil\s+engineer|mechanical\s+engineer|electrical\s+engineer|data\s+scientist|data\s+analyst|web\s+developer|mobile\s+developer|frontend\s+developer|backend\s+developer|full[\s-]stack\s+developer|ui\s+designer|ux\s+designer|university\s+student|college\s+student|high\s+school\s+student|medical\s+student|project\s+manager|product\s+manager|business\s+analyst|engineer|developer|programmer|designer|doctor|nurse|teacher|lecturer|professor|student|lawyer|accountant|manager|researcher|scientist|architect|consultant|entrepreneur|freelancer|intern|driver|chef|artist|writer)\b/gi,
+    category: 'ARTICLES',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => {
+      const role = m[2];
+      const vowelSound = /^(?:[aeiou])/i.test(role) && !/^uni/i.test(role);
+      return `${m[1]} ${vowelSound ? 'an' : 'a'} ${role}`;
+    },
+    explanation: 'In English, always use "a" or "an" before a singular job title or role (e.g., "I am a software engineer", "She is a doctor").',
+    simpleExplanation: 'Use "a" or "an" before jobs and roles: "I am a software engineer."',
+    explanationSi: 'රැකියාවක් හෝ භූමිකාවක් ඒකවචනයෙන් පැවසීමේදී ඊට පෙර "a" හෝ "an" යෙදීම අනිවාර්ය වේ ("I am a software engineer").',
+    grammar_rule: 'Professions & Roles: be + a / an + singular profession',
+    example: 'I am a software engineer working on web applications.',
+    more_examples: ['She is a university student.', 'My brother became an architect.'],
+    learning_tip: 'Whenever you state someone\'s job or student status, include "a" or "an" right before it.',
+    confidence: 0.99
+  },
+  {
+    id: 'art-go-to-the-place',
+    regex: /\b(go|going|went|goes|head|heading|headed|walk|walking|walked|drive|driving|drove)\s+to\s+(gym|cinema|park|mall|airport|bank|hospital|supermarket|market|store|shop|office|beach|library|station|museum|hotel|cafe|restaurant|doctor|dentist)\b/gi,
+    category: 'ARTICLES',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => `${m[1]} to the ${m[2]}`,
+    explanation: 'Common everyday places like "the gym", "the park", "the mall", or "the office" require the article "the" after "go to".',
+    simpleExplanation: 'Add "the" before everyday places: "going to the gym".',
+    explanationSi: '"Gym", "park", "mall", "office" වැනි පොදු ස්ථානවලට යාමේදී "to the..." ලෙස "the" යෙදිය යුතුය ("going to the gym").',
+    grammar_rule: 'Everyday Destinations: go to + the + place (the gym, the park, the airport)',
+    example: "I'm going to the gym this evening.",
+    more_examples: ['We went to the beach on Sunday.', 'She is heading to the airport now.'],
+    learning_tip: 'No "the" for school/work/home ("going home", "going to work"), but ALWAYS "the" for the gym, the park, the mall, and the office!',
+    confidence: 0.99
+  },
+  {
+    id: 'unnat-going-to-my-home',
+    regex: /\b(I\s+am\s+going|I'm\s+going|go|going|went|goes|head|heading|walk|walking|come|coming|came|return|returning|returned)\s+to\s+(?:my|our|your|his|her|their)\s+home\b/gi,
+    category: 'PREPOSITIONS',
+    severity: 'UNNATURAL',
+    getCorrection: (m) => {
+      const v = m[1];
+      if (/^i\s+am\s+going$/i.test(v)) return "I'm going home";
+      return `${v} home`;
+    },
+    explanation: 'While understandable, native speakers treat "home" as an adverb of direction after movement verbs — saying "I\'m going home" instead of "going to my home".',
+    simpleExplanation: 'Drop "to my" before "home": say "I\'m going home."',
+    explanationSi: 'ගෙදර යනවා යන්න ස්වාභාවික ඉංග්‍රීසියෙන් පවසන්නේ "to my" නොමැතිව "I\'m going home" ලෙසයි.',
+    grammar_rule: 'Natural Movement Expression: go / come / head + home (no "to my")',
+    example: "I'm going home right after work.",
+    more_examples: ['We went home around nine.', 'Are you heading home now?'],
+    learning_tip: 'With verbs of motion (go, come, walk, drive, head), attach "home" directly with nothing in between.',
+    confidence: 0.97
+  },
+  {
+    id: 'prep-go-to-home',
+    regex: /\b(go|going|went|goes|come|coming|came|get|got|getting|arrive|arrived|head|heading)\s+to\s+home\b/gi,
+    category: 'PREPOSITIONS',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => `${m[1]} home`,
+    explanation: 'Never use the preposition "to" before "home" after verbs of movement like "go", "went", "come", or "get".',
+    simpleExplanation: 'Do not use "to" before "home" — say "go home" or "went home".',
+    explanationSi: '"Home" ඉදිරියෙන් "to" නිපාතය යොදන්න එපා — "went home" හෝ "going home" ලෙස කියන්න.',
+    grammar_rule: 'Movement + home (NO "to"): go home, went home, get home',
+    example: 'I went home early yesterday.',
+    learning_tip: 'Say "at home" for location, and "go home" (no "to"!) for direction.',
+    confidence: 0.99
+  },
+  {
+    id: 'ss-subjectless-tired-opening',
+    regex: /^(tired|exhausted|sleepy|hungry|stressed|sore)\s+(after|from|before|because\s+of)\b/gi,
+    category: 'SENTENCE_STRUCTURE',
+    severity: 'GRAMMAR_ERROR',
+    getSpan: (m) => ({ startOffset: 0, endOffset: m[1].length, original: m[1] }),
+    getCorrection: (m) => `I feel ${m[1].toLowerCase()}`,
+    explanation: 'In complete spoken English, include a subject and verb ("I feel" or "I\'m") before an opening adjective like "tired".',
+    simpleExplanation: 'Start with "I feel" or "I\'m": "I feel tired after..."',
+    explanationSi: 'වාක්‍යයක් "Tired..." ලෙස කෙලින්ම ආරම්භ කරනවාට වඩා "I feel tired..." හෝ "I\'m tired..." ලෙස කර්තෘ සහ ක්‍රියාපදය සමඟ පැවසීම ව්‍යාකරණානුකූලව සම්පූර්ණ වේ.',
+    grammar_rule: 'Complete Clause Subject + Linking Verb: I feel / I am + adjective',
+    example: "I feel tired after a workout, but it's refreshing.",
+    learning_tip: 'Attach "I feel" or "I\'m" when describing how you feel.',
+    confidence: 0.95
+  },
+  {
+    id: 'art-prep-bare-workout-event',
+    regex: /\b(after|before|during)\s+(workout|meeting|lecture|exam|interview|session|match|nap|shower)\b/gi,
+    category: 'ARTICLES',
+    severity: 'GRAMMAR_ERROR',
+    getSpan: (m) => {
+      const startOffset = m[0].length - m[2].length;
+      return { startOffset, endOffset: m[0].length, original: m[2] };
+    },
+    getCorrection: (m) => {
+      const noun = m[2];
+      const vowel = /^(?:[aeiou])/i.test(noun);
+      return `${vowel ? 'an' : 'a'} ${noun}`;
+    },
+    explanation: 'Singular countable event nouns like "workout", "meeting", or "exam" need an article ("a / an / my / the") after prepositions like "after" or "before".',
+    simpleExplanation: 'Add "a" (or "an") before singular events: "after a workout", "before an exam".',
+    explanationSi: '"Workout", "meeting", "exam" වැනි ඒකවචන නාමපදවලට පෙර "a / an" යෙදිය යුතුය ("after a workout").',
+    grammar_rule: 'Preposition + a / an + singular countable event ("after a workout")',
+    example: 'I usually feel tired after a workout, but it is refreshing.',
+    learning_tip: 'Countable singular events need "a / an / the / my": a workout, a meeting, an exam.',
+    confidence: 0.96
+  },
+  {
     id: 'art-a-plural-noun',
     regex: /\b(a)\s+(friends|people|games|clothes|things|books|movies|days|hours|minutes|students|teachers|children|parents|colleagues|places|ideas|questions|problems|mistakes)\b/gi,
     category: 'ARTICLES',
@@ -1741,6 +1845,86 @@ export function analyzeBuddyGrammarLocally(params: {
 }
 
 /**
+ * Builds the natural, human spoken recast for Lingo Buddy's voice & chat response
+ * directly from the canonical `BuddyGrammarAnalysis`, adapting cleanly to the 3 modes:
+ *  - `gentle`   (Gentle Friend — Default): Short friendly recast ("You can say, '...'") with zero rules.
+ *  - `balanced` (Balanced Coach):          Short recast + 1 brief, plain-English 1-clause reason.
+ *  - `detailed` (Detailed Teacher):        Short recast + concise rule + 1 natural example.
+ *
+ * Guarantees 0% contradiction between Lingo Buddy's spoken correction and the right-hand Feedback panel!
+ */
+export function buildSpokenCorrection(
+  analysis: BuddyGrammarAnalysis,
+  intensity: CorrectionIntensity = 'gentle'
+): {
+  spokenCorrection: string;
+  correctionRequired: boolean;
+  correctionType: 'none' | 'grammar' | 'naturalness' | 'vocabulary';
+} {
+  if (!analysis || analysis.transcriptQuality === 'unclear') {
+    return { spokenCorrection: '', correctionRequired: false, correctionType: 'none' };
+  }
+
+  const actionable = (analysis.mistakes || []).filter(
+    m => m.severity === 'GRAMMAR_ERROR' || m.severity === 'UNNATURAL'
+  );
+
+  const origClean = (analysis.original_sentence || '').trim();
+  const corrClean = (analysis.corrected_sentence || '').trim();
+
+  if (
+    actionable.length === 0 ||
+    !corrClean ||
+    corrClean.toLowerCase() === origClean.toLowerCase()
+  ) {
+    return { spokenCorrection: '', correctionRequired: false, correctionType: 'none' };
+  }
+
+  const hasGrammarError = actionable.some(m => m.severity === 'GRAMMAR_ERROR');
+  const correctionType: 'grammar' | 'naturalness' = hasGrammarError ? 'grammar' : 'naturalness';
+
+  const quotedTarget = /[.!?]$/.test(corrClean) ? corrClean : `${corrClean}.`;
+  const baseRecast =
+    correctionType === 'grammar'
+      ? `You can say, "${quotedTarget}"`
+      : `A more natural way to say that is, "${quotedTarget}"`;
+
+  if (intensity === 'gentle') {
+    return {
+      spokenCorrection: baseRecast,
+      correctionRequired: true,
+      correctionType
+    };
+  }
+
+  const primary = actionable.find(m => m.severity === 'GRAMMAR_ERROR') || actionable[0];
+  const rawShortNote = (primary.simpleExplanation || primary.explanation || '')
+    .split(/(?<=[.!?])\s+/)[0]
+    .trim();
+  const shortNote = rawShortNote
+    ? /[.!?]$/.test(rawShortNote)
+      ? rawShortNote
+      : `${rawShortNote}.`
+    : '';
+
+  if (intensity === 'balanced') {
+    return {
+      spokenCorrection: shortNote ? `${baseRecast} ${shortNote}` : baseRecast,
+      correctionRequired: true,
+      correctionType
+    };
+  }
+
+  const ex = (primary.example || '').trim();
+  const exClause = ex ? ` For example, "${/[.!?]$/.test(ex) ? ex : `${ex}.`}"` : '';
+  return {
+    spokenCorrection: `${baseRecast}${shortNote ? ` ${shortNote}` : ''}${exClause}`,
+    correctionRequired: true,
+    correctionType
+  };
+}
+
+/**
  * Dedicated Phase 2, 3 & 4 Grammar + Vocabulary + Fluency Analyzer (Stage A Coherence + Stage B Gemini Structured JSON + Local Fallback).
  */
 export async function analyzeBuddyGrammar(params: {
@@ -1873,34 +2057,41 @@ Respond STRICTLY in valid JSON matching this schema:
   "learning_recommendation": "Short actionable focus tip or null"
 }`;
 
-  let candidateModel = (model || '').trim().replace(/^models\//, '');
-  if (!candidateModel || candidateModel.includes('3.8')) {
-    candidateModel = 'gemini-2.0-flash';
+  let primaryModel = (model || '').trim().replace(/^models\//, '');
+  if (!primaryModel || primaryModel.includes('3.8')) {
+    primaryModel = 'gemini-2.5-flash';
   }
+  const candidateModels = Array.from(
+    new Set([primaryModel, 'gemini-2.5-flash', 'gemini-2.0-flash'])
+  );
 
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 8000);
+  for (const candidateModel of candidateModels) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 8000);
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(candidateModel)}:generateContent?key=${encodeURIComponent(apiKey)}`;
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      signal: controller.signal,
-      body: JSON.stringify({
-        contents: [{ role: 'user', parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.15, responseMimeType: 'application/json' }
-      })
-    });
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(candidateModel)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
+        body: JSON.stringify({
+          contents: [{ role: 'user', parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.12, responseMimeType: 'application/json' }
+        })
+      });
 
-    clearTimeout(timeoutId);
-    if (!response.ok) return localFallback;
+      clearTimeout(timeoutId);
+      if (!response.ok) {
+        if ([400, 404, 429, 500, 503].includes(response.status)) continue;
+        return localFallback;
+      }
 
-    const data = await response.json();
-    const rawJson = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!rawJson) return localFallback;
+      const data = await response.json();
+      const rawJson = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!rawJson) continue;
 
-    const parsed = JSON.parse(rawJson);
+      const parsed = JSON.parse(rawJson);
     const validCategories = new Set(Object.keys(CATEGORY_LABELS));
     const validSeverities = new Set<FeedbackSeverity>([
       'GRAMMAR_ERROR',
@@ -2025,7 +2216,10 @@ Respond STRICTLY in valid JSON matching this schema:
       analyzerSource: 'gemini',
       analyzedAt: Date.now()
     };
-  } catch {
-    return localFallback;
+    } catch {
+      continue;
+    }
   }
+
+  return localFallback;
 }

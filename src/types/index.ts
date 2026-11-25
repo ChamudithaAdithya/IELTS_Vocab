@@ -30,6 +30,31 @@ export interface Word {
   v2?: string;
   v3?: string;
   verbPattern?: string;
+  synonyms?: string[];
+  sectionGroup?: string;
+  imageUrl?: string;
+  imageCaption?: string;
+  imageCaptionSi?: string;
+}
+
+export interface ParaphrasePairItem {
+  id: string;
+  leftText: string;
+  leftSinhala?: string;
+  rightText: string;
+  rightSinhala?: string;
+  relationship?: string;
+  isDistractor?: boolean;
+}
+
+export interface LessonParaphraseSection {
+  id: string;
+  title: string;
+  subtitle?: string;
+  leftColumnLabel: string;
+  rightColumnLabel: string;
+  items: ParaphrasePairItem[];
+  notes?: string[];
 }
 
 export interface Challenge {
@@ -56,6 +81,7 @@ export interface Lesson {
     prompt: string;
     sampleBand8Paragraph: string;
   };
+  synonymParaphraseSections?: LessonParaphraseSection[];
 }
 
 export interface QuizQuestion {

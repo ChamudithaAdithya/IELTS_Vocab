@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
+  <rect width="800" height="420" rx="20" fill="#f0f9ff"/>
+  <text x="400" y="38" text-anchor="middle" font-size="19" font-weight="800" fill="#0f172a">Vestigial Pelvic Bones &amp; Forelimb Flippers</text>
+  <text x="400" y="60" text-anchor="middle" font-size="13" fill="#475569">Anatomical Evidence of Evolution from Four-Legged Land Ancestors</text>
+
+  <rect x="36" y="80" width="728" height="310" rx="18" fill="#0f172a"/>
+
+  <!-- Manatee Body Silhouette -->
+  <path d="M115 225 C115 175, 175 140, 290 135 C425 130, 540 155, 620 195 C675 190, 725 205, 730 232 C725 260, 675 272, 620 260 C535 288, 415 305, 285 295 C245 322, 195 330, 185 310 C190 292, 208 282, 215 275 C150 268, 115 252, 115 225 Z" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+
+  <!-- Skull -->
+  <ellipse cx="165" cy="212" rx="34" ry="22" fill="#e2e8f0"/>
+  <circle cx="152" cy="206" r="5" fill="#0f172a"/>
+
+  <!-- Curved Spine / Vertebrae -->
+  <path d="M202 208 Q390 165 615 228" fill="none" stroke="#f8fafc" stroke-width="8" stroke-dasharray="12 5" stroke-linecap="round"/>
+  <text x="395" y="166" text-anchor="middle" font-size="12" font-weight="700" fill="#cbd5e1">Backbone (Vertebral Column) · 6 Neck Bones</text>
+
+  <!-- Ribs -->
+  <g stroke="#cbd5e1" stroke-width="3.5" fill="none" stroke-linecap="round">
+    <path d="M265 196 Q258 235 272 262"/>
+    <path d="M292 191 Q285 235 300 266"/>
+    <path d="M320 188 Q314 235 328 268"/>
+    <path d="M348 187 Q342 235 356 268"/>
+    <path d="M376 188 Q370 235 384 266"/>
+    <path d="M404 191 Q398 235 412 262"/>
+    <path d="M432 196 Q426 235 438 258"/>
+  </g>
+
+  <!-- Forelimb Bones inside Flipper -->
+  <path d="M235 205 L218 258 L198 302" stroke="#38bdf8" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <circle cx="215" cy="272" r="42" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="155" y="356" text-anchor="middle" font-size="13" font-weight="800" fill="#38bdf8">FORELIMBS (Flippers)</text>
+  <text x="155" y="373" text-anchor="middle" font-size="11" fill="#94a3b8">Front paddle limbs used for steering</text>
+
+  <!-- Floating Vestigial Pelvic Bones! -->
+  <ellipse cx="528" cy="256" rx="18" ry="8" transform="rotate(-15 528 256)" fill="#fbbf24" stroke="#fef08a" stroke-width="2"/>
+  <circle cx="528" cy="256" r="34" fill="none" stroke="#fbbf24" stroke-width="2.5" stroke-dasharray="5 4"/>
+  <line x1="528" y1="292" x2="528" y2="332" stroke="#fbbf24" stroke-width="2"/>
+  <rect x="385" y="332" width="320" height="46" rx="10" fill="#422006" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="545" y="351" text-anchor="middle" font-size="13" font-weight="800" fill="#fde68a">PELVIC BONES (Evolutionary “Leftover”)</text>
+  <text x="545" y="368" text-anchor="middle" font-size="11" fill="#fed7aa">Tiny hip bones disconnected from spine — no hind legs!</text>
+</svg>

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
+  <defs>
+    <linearGradient id="waterDepth" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#bae6fd"/>
+      <stop offset="82%" stop-color="#0284c7"/>
+      <stop offset="83%" stop-color="#fde68a"/>
+      <stop offset="100%" stop-color="#fcd34d"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="420" rx="20" fill="url(#waterDepth)"/>
+
+  <!-- Water Surface Wave -->
+  <path d="M0 78 Q100 66 200 78 T400 78 T600 78 T800 78" fill="none" stroke="#0369a1" stroke-width="3"/>
+  <rect x="20" y="16" width="760" height="48" rx="12" fill="#ffffff" opacity="0.92"/>
+  <text x="400" y="37" text-anchor="middle" font-size="18" font-weight="800" fill="#0f172a">Buoyancy, Muscular Diaphragm &amp; Gas Compression in Intestine</text>
+  <text x="400" y="55" text-anchor="middle" font-size="12.5" fill="#334155">How Manatees Float Effortlessly &amp; Adjust Depth Without Swimming</text>
+
+  <text x="695" y="96" text-anchor="middle" font-size="12" font-weight="800" fill="#0c4a6e">WATER SURFACE (Come up for air)</text>
+
+  <!-- Upward Buoyancy Arrows -->
+  <g stroke="#ecfdf5" stroke-width="3.5" stroke-linecap="round">
+    <line x1="125" y1="265" x2="125" y2="145"/>
+    <line x1="675" y1="265" x2="675" y2="145"/>
+  </g>
+  <polygon points="125,134 117,149 133,149" fill="#ecfdf5"/>
+  <polygon points="675,134 667,149 683,149" fill="#ecfdf5"/>
+  <rect x="52" y="182" width="146" height="42" rx="10" fill="#065f46"/>
+  <text x="125" y="200" text-anchor="middle" font-size="12" font-weight="800" fill="#a7f3d0">BUOYANCY ↑</text>
+  <text x="125" y="216" text-anchor="middle" font-size="10.5" fill="#ecfdf5">Upward floating force</text>
+
+  <!-- Manatee Cutaway Body -->
+  <path d="M210 218 C210 165, 285 135, 410 135 C535 135, 600 172, 635 206 C675 202, 705 215, 705 228 C705 242, 675 255, 635 246 C590 278, 515 296, 395 294 C280 292, 210 264, 210 218 Z" fill="#334155" stroke="#f8fafc" stroke-width="2.5"/>
+
+  <!-- Long Horizontal Lungs (Top) -->
+  <ellipse cx="415" cy="172" rx="135" ry="22" fill="#93c5fd" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="415" y="176" text-anchor="middle" font-size="12" font-weight="800" fill="#1e3a8a">LUNGS (Hold breath underwater)</text>
+
+  <!-- Horizontal Muscular Diaphragm Sheet -->
+  <path d="M268 202 Q415 194 562 204" fill="none" stroke="#f43f5e" stroke-width="6" stroke-linecap="round"/>
+  <rect x="290" y="209" width="250" height="24" rx="8" fill="#ffe4e6" stroke="#f43f5e"/>
+  <text x="415" y="225" text-anchor="middle" font-size="11.5" font-weight="800" fill="#9f1239">MUSCULAR DIAPHRAGM (Contractions)</text>
+
+  <!-- Large Intestine Folds with Compressed Gas Bubbles -->
+  <path d="M315 255 C335 238, 360 272, 382 252 C404 236, 428 272, 452 252 C476 236, 502 272, 526 254" fill="none" stroke="#fbbf24" stroke-width="14" stroke-linecap="round"/>
+  <circle cx="352" cy="255" r="4" fill="#ffffff"/>
+  <circle cx="416" cy="255" r="4" fill="#ffffff"/>
+  <circle cx="482" cy="255" r="4" fill="#ffffff"/>
+  <text x="420" y="283" text-anchor="middle" font-size="11.5" font-weight="800" fill="#fef08a">LARGE INTESTINE (Compress &amp; store gas)</text>
+
+  <!-- Seafloor + Seagrasses -->
+  <g stroke="#15803d" stroke-width="4" fill="none" stroke-linecap="round">
+    <path d="M110 355 Q102 325 114 305"/>
+    <path d="M126 355 Q134 328 124 308"/>
+    <path d="M650 355 Q642 325 654 305"/>
+    <path d="M668 355 Q676 328 666 308"/>
+  </g>
+  <text x="400" y="392" text-anchor="middle" font-size="14" font-weight="800" fill="#78350f">SEAFLOOR (Shallow seabed with seagrasses)</text>
+</svg>

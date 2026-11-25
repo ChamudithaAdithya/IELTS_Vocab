@@ -237,7 +237,7 @@ export function createFreshBuddySession(
     updatedAt: now,
     personality,
     mode,
-    intensity: 'balanced',
+    intensity: 'gentle',
     messages: [
       {
         id: `msg-buddy-${now}`,
@@ -296,6 +296,8 @@ export type BuddySessionTopic =
   | 'cooking_process'
   | 'school_cancellation'
   | 'quiet_day'
+  | 'fitness_gym'
+  | 'career_work'
   | 'shopping'
   | 'university'
   | 'work_stress'
@@ -309,7 +311,10 @@ export interface BuddySessionContext {
   activeTopic: BuddySessionTopic;
   /** Human-readable active entity/subject from the current thread (for "it", off-topic recovery, project continuation) */
   activeSubject: string | null;
+  /** Active place/location mentioned recently (for resolving "there") */
+  activePlace: string | null;
   lastBuddyMessage: string | null;
+  lastBuddyQuestion: string | null;
   recentUserTexts: string[];
   recentBuddyTexts: string[];
   currentIngredients: string[];
@@ -383,8 +388,18 @@ function extractKeyContentWords(text: string): string[] {
 
 function extractActiveSubjectFromHistory(
   priorUserTexts: string[],
-  lastBuddyMessage: string | null
+  lastBuddyMessage: string | null,
+  currentUserText: string = ''
 ): string | null {
+  // Check if user explicitly named the intended topic in an off-topic reminder ("We were discussing my project")
+  const explicitRecall = currentUserText.match(
+    /\b(?:we\s+were\s+(?:discussing|talking\s+about|chatting\s+about)|back\s+to\s+(?:discussing|talking\s+about)?)\s+(?:my\s+|our\s+|the\s+)?([a-z0-9\s-]{2,30}?)(?:[.!?,]|$)/i
+  );
+  if (explicitRecall && explicitRecall[1].trim()) {
+    const cleanRecalled = explicitRecall[1].trim().replace(/^(?:my|our|the)\s+/i, '');
+    return `your ${cleanRecalled}`;
+  }
+
   for (let i = priorUserTexts.length - 1; i >= 0; i--) {
     const t = priorUserTexts[i];
     const lower = t.toLowerCase();
@@ -402,11 +417,11 @@ function extractActiveSubjectFromHistory(
     const uniExpMatch = t.match(/\b(?:my\s+)?(university\s+(?:experience|life|studies|days)|college\s+(?:experience|life))\b/i);
     if (uniExpMatch) return `your ${uniExpMatch[1].toLowerCase()}`;
 
-    const aiToolMatch = t.match(/\b(?:an?\s+|my\s+)?(AI\s+(?:tool|app|model|assistant|chatbot|project|system|platform))\b/i);
+    const aiToolMatch = t.match(/\b(?:an?\s+|my\s+)?(AI\s+(?:application|tool|app|model|assistant|chatbot|project|system|platform))\b/i);
     if (aiToolMatch) return `your ${aiToolMatch[1]}`;
 
     const projectMatch = t.match(
-      /\b(?:an?\s+|my\s+)?((?:react|typescript|software|web|mobile|coding|university|ielts)\s+(?:project|app|website|tool|platform|assignment))\b/i
+      /\b(?:an?\s+|my\s+)?((?:react|typescript|software|web|mobile|coding|university|ielts)\s+(?:project|app|application|website|tool|platform|assignment)|project)\b/i
     );
     if (projectMatch) return `your ${projectMatch[1]}`;
 
@@ -420,6 +435,8 @@ function extractActiveSubjectFromHistory(
     const tripMatch = t.match(/\b(?:trip|vacation|holiday|travel)\s+to\s+([A-Z][a-zA-Z]+(?:\s+[A-Z][a-zA-Z]+)?)/);
     if (tripMatch) return `your trip to ${tripMatch[1]}`;
 
+    if (/\b(gym|workout|leg\s+press|exercise|fitness)\b/i.test(lower)) return 'your workout routine';
+
     const ings = extractMatchingTerms(t, INGREDIENT_TERMS);
     if (ings.length > 0) return `cooking with ${formatNaturalList(ings.slice(0, 2))}`;
 
@@ -431,14 +448,30 @@ function extractActiveSubjectFromHistory(
 
   if (lastBuddyMessage) {
     const lb = lastBuddyMessage.toLowerCase();
-    if (/\b(ai|artificial intelligence|software|project|coding|react)\b/.test(lb)) {
-      return 'your tech project';
+    if (/\b(ai|artificial intelligence|software|project|coding|react|application)\b/.test(lb)) {
+      return 'your project';
+    }
+    if (/\b(gym|workout|exercise)\b/.test(lb)) {
+      return 'your workout';
     }
     if (/\b(travel|trip|destination)\b/.test(lb)) {
       return 'travel plans';
     }
   }
 
+  return null;
+}
+
+function extractActivePlaceFromHistory(texts: string[]): string | null {
+  for (let i = texts.length - 1; i >= 0; i--) {
+    const m = texts[i].match(
+      /\b(?:to|at|in|visited|visit)\s+(?:the\s+)?(gym|mall|park|beach|cinema|library|airport|hospital|office|market|cafe|restaurant|Colombo|Kandy|Galle)\b/i
+    );
+    if (m && m[1]) {
+      const p = m[1];
+      return /^[A-Z]/.test(p) ? p : `the ${p.toLowerCase()}`;
+    }
+  }
   return null;
 }
 
@@ -463,9 +496,21 @@ export function extractSessionContext(
   const buddyMsgs = priorHistory.filter(m => m.role === 'buddy');
   const userMsgs = priorHistory.filter(m => m.role === 'user');
   const lastBuddyMessage = buddyMsgs.length > 0 ? buddyMsgs[buddyMsgs.length - 1].text : null;
-  const recentUserTexts = userMsgs.slice(-5).map(m => m.text);
+  const lastBuddyQuestion = lastBuddyMessage
+    ? (lastBuddyMessage
+        .split(/(?<=[.!?])\s+/)
+        .map(s => s.trim())
+        .reverse()
+        .find(s => s.endsWith('?')) || null)
+    : null;
+  const recentUserTexts = userMsgs.slice(-6).map(m => m.text);
   const recentBuddyTexts = buddyMsgs.slice(-6).map(m => m.text.toLowerCase());
-  const activeSubject = extractActiveSubjectFromHistory(recentUserTexts, lastBuddyMessage);
+  const activeSubject = extractActiveSubjectFromHistory(
+    recentUserTexts,
+    lastBuddyMessage,
+    currentUserText
+  );
+  const activePlace = extractActivePlaceFromHistory([...recentUserTexts, currentUserText]);
 
   const combinedRecentUser = [...recentUserTexts, currentUserText].join(' ');
   const currentLower = currentUserText.toLowerCase();
@@ -510,9 +555,21 @@ export function extractSessionContext(
     )
   ) {
     activeTopic = 'quiet_day';
+  } else if (
+    /\b(gym|workout|working\s+out|leg\s+press|bench\s+press|squats|cardio|treadmill|weights|lifting|exercise|fitness)\b/i.test(
+      activeClauseLower
+    )
+  ) {
+    activeTopic = 'fitness_gym';
+  } else if (
+    /\b(software\s+engineer|engineer|developer|programmer|designer|doctor|nurse|teacher|lawyer|accountant|architect|consultant|my\s+job|my\s+career|promotion|interview|colleagues|client)\b/i.test(
+      activeClauseLower
+    )
+  ) {
+    activeTopic = 'career_work';
   } else if (/\b(shop|shopping|bought|buyed|clothes|dress|shoes|mall|shirt)\b/i.test(activeClauseLower)) {
     activeTopic = 'shopping';
-  } else if (/\b(university|lecture|college|exam|class|study|studying|assignment|subject|professor|coding|programming|software|react|typescript|ai\s+tool|artificial\s+intelligence|ai|app|website|developer|developed|feature)\b/i.test(activeClauseLower)) {
+  } else if (/\b(university|lecture|college|exam|class|study|studying|assignment|subject|professor|coding|programming|software|react|typescript|ai\s+tool|ai\s+application|artificial\s+intelligence|ai|app|application|website|developed|feature)\b/i.test(activeClauseLower)) {
     activeTopic = 'university';
   } else if (/\b(tired|exhausted|busy|stress|stressed|overwhelmed|lots of work|lot of work|deadline|hectic)\b/i.test(activeClauseLower)) {
     activeTopic = 'work_stress';
@@ -529,7 +586,9 @@ export function extractSessionContext(
   return {
     activeTopic,
     activeSubject,
+    activePlace,
     lastBuddyMessage,
+    lastBuddyQuestion,
     recentUserTexts,
     recentBuddyTexts,
     currentIngredients,
@@ -785,15 +844,18 @@ export function generateLocalFriendReply(
 
   if (intent === 'topic_correction') {
     if (ctx.activeSubject) {
-      return `Oh, my bad — sorry for drifting off-topic! Let's get right back to ${ctx.activeSubject}. What were you going to share about it next?`;
+      if (/\b(project|app|application|tool|website|software)\b/i.test(ctx.activeSubject)) {
+        return `You're right! Sorry for drifting off-topic — let's get right back to ${ctx.activeSubject}. What feature were you working on?`;
+      }
+      return `You're right! Sorry for drifting off-topic — let's get right back to ${ctx.activeSubject}. What were you going to share about it next?`;
     }
-    return "Oh, my bad — sorry for drifting off-topic! Let's jump right back to what you wanted to talk about. Go ahead!";
+    return "You're right — sorry for drifting off-topic! Let's jump right back to what we were discussing. Go ahead!";
   }
 
   if (intent === 'topic_change') {
     return pickNonRepeating([
-      "Sure thing, let's switch gears completely! What sounds fun right now — travel, movies, tech ideas, or just something random from your week?",
-      "No problem at all — fresh topic! What's been on your mind lately that you'd like to talk about?"
+      'Of course! What would you like to talk about?',
+      "Sure thing, let's switch gears! What would you like to talk about instead?"
     ]);
   }
 
@@ -909,15 +971,56 @@ export function generateLocalFriendReply(
         "Homemade cooking is the best! What kind of ingredients do you usually start with?"
       ]);
     }
-  } else if (ctx.activeTopic === 'shopping') {
-    coreReply = pickNonRepeating([
-      "Oh nice! What kind of clothes or items did you end up picking out? Were you shopping for a specific occasion?",
-      "Shopping trips can be fun! Did you find what you went looking for, or was it more of a spontaneous buy?"
-    ]);
-  } else if (ctx.activeTopic === 'university') {
-    if (/\b(developed|built|building|created|made)\b.*\b(ai|tool|app|website|project|system|platform)\b/i.test(lower)) {
+  } else if (ctx.activeTopic === 'fitness_gym') {
+    if (/\b(leg\s+press|bench\s+press|squat|deadlift|cardio|weights|chest|back|arms)\b/i.test(lower)) {
       coreReply = pickNonRepeating([
-        "Whoa, building your own AI tool is awesome! What problem does it solve, and what stack are you using for it?",
+        "That's a great exercise for building strength! How do you usually feel after a challenging workout?",
+        "Solid choice! Do you usually pair that with cardio, or focus mainly on strength training?"
+      ]);
+    } else if (/\b(tired|exhausted|sore|refreshing|energized|good)\b/i.test(lower)) {
+      coreReply = pickNonRepeating([
+        "Do you prefer working out in the morning or in the evening?",
+        "That post-workout feeling really is unbeatable! How many days a week do you usually train?"
+      ]);
+    } else {
+      coreReply = pickNonRepeating([
+        "What do you usually work on when you're there?",
+        "Nice! Are you focusing on strength training today or doing some cardio?"
+      ]);
+    }
+  } else if (ctx.activeTopic === 'career_work') {
+    if (/\bsoftware\s+engineer|developer|programmer\b/i.test(lower)) {
+      coreReply = pickNonRepeating([
+        'What kind of software do you work on?',
+        'Nice! Are you working mostly on web apps, mobile, or backend systems right now?'
+      ]);
+    } else {
+      coreReply = pickNonRepeating([
+        'What kind of work do you enjoy most in your role?',
+        'How long have you been in that field, and what drew you to it?'
+      ]);
+    }
+  } else if (ctx.activeTopic === 'shopping') {
+    if (/\b(clothes|shirt|dress|jacket|shoes|jeans)\b/i.test(lower)) {
+      coreReply = pickNonRepeating([
+        'What kind of clothes did you end up picking out? Were you shopping for a specific occasion?',
+        'Nice! Did you find something you really liked right away?'
+      ]);
+    } else {
+      coreReply = pickNonRepeating([
+        'What did you buy?',
+        'Oh nice! What did you end up buying while you were out?'
+      ]);
+    }
+  } else if (ctx.activeTopic === 'university') {
+    if (/\b(developed|built|building|created|made)\b.*\b(ai\s+application|application|app)\b/i.test(lower)) {
+      coreReply = pickNonRepeating([
+        "That's exciting! What does your application do?",
+        "Whoa, building your own application is awesome! What does it do, and who did you build it for?"
+      ]);
+    } else if (/\b(developed|built|building|created|made)\b.*\b(ai|tool|website|project|system|platform)\b/i.test(lower)) {
+      coreReply = pickNonRepeating([
+        'Whoa, building your own AI tool is awesome! What problem does it solve, and what stack are you using for it?',
         "That's super cool! What's the favourite feature you've built into it so far?"
       ]);
     } else if (/\b(university\s+experience|college\s+experience)\b/i.test(lower)) {
@@ -978,6 +1081,17 @@ export function generateLocalFriendReply(
         "Gotcha! So what's on your mind right now — work, studies, food, or something totally random?"
       ]);
     }
+  } else if (/\b(going|head|heading|went|walk|walking)\s+(?:to\s+(?:my\s+)?)?home\b/i.test(lower)) {
+    coreReply = pickNonRepeating([
+      'Are you heading home now to relax, or do you have plans for later tonight?',
+      'Nothing beats getting home after a long day! How are you planning to unwind this evening?'
+    ]);
+  } else if (/\b(didn'?t|did\s+not)\s+(go|went)\s+there\b/i.test(lower)) {
+    const placeHint = ctx.activePlace ? ` to ${ctx.activePlace}` : '';
+    coreReply = `What stopped you from going${placeHint}?`;
+  } else if (/\bwent\s+there\b/i.test(lower)) {
+    const placeHint = ctx.activePlace ? ` at ${ctx.activePlace}` : ' there';
+    coreReply = `Oh, nice! What did you do${placeHint}?`;
   } else if (mode === 'ielts_partner') {
     const keywords = extractKeyContentWords(clean);
     const topicRef = keywords.length > 0 ? `about ${keywords[0]}` : 'on that';
@@ -1153,17 +1267,19 @@ export async function generateBuddyFriendReply(params: {
   const entityMemory = [
     `Detected User Intent: ${intent}`,
     ctx.activeTopic !== 'general' ? `Active Topic: ${ctx.activeTopic}` : null,
-    ctx.activeSubject ? `Active Subject / Project: ${ctx.activeSubject}` : null,
+    ctx.activeSubject ? `Active Subject / Project (for "it" / "that"): ${ctx.activeSubject}` : null,
+    ctx.activePlace ? `Active Place / Location (for "there"): ${ctx.activePlace}` : null,
     ctx.userIsCooking ? 'IMPORTANT: The user is describing COOKING at home — do NOT ask if it is from a restaurant!' : null,
     ctx.sessionIngredients.length > 0 ? `Mentioned Ingredients: ${ctx.sessionIngredients.join(', ')}` : null,
     ctx.lastBuddyMessage ? `Your exact previous message: "${ctx.lastBuddyMessage}"` : null,
+    ctx.lastBuddyQuestion ? `Your exact previous question: "${ctx.lastBuddyQuestion}"` : null,
     memoryBlock,
     coachingHint
   ]
     .filter(Boolean)
     .join('\n');
 
-  const prompt = `You are "Lingo Buddy", a genuinely intelligent, living AI English-speaking friend.
+  const prompt = `You are "Lingo Buddy", a friendly, curious, supportive, intelligent English-speaking companion (NOT an interviewer, examiner, or generic chatbot).
 Personality: ${personalityCfg.label} (${personalityCfg.systemTone}).
 Active Mode: ${modeHint}
 
@@ -1171,148 +1287,167 @@ CONVERSATION MEMORY & COHERENCE:
 ${coherenceNotice}
 ${entityMemory}
 
-CRITICAL INTELLIGENCE & PERSONA RULES:
-1. Respond purely as a warm, perceptive human friend having a real conversation.
-2. NEVER use generic chatbot fillers like "That's really interesting!", "Oh, I'd love to hear more!", "Tell me a bit more about that", "What happened next?", or "How did you feel about how it went?".
-3. NEVER pretend to understand gibberish or unclear transcripts. If the message doesn't make clear sense, warmly ask for clarification!
-4. SELF-AWARENESS: If the user asks "What do you mean?" or "What do you mean by [term]?", read "Your exact previous message" above and explain THAT exact message or term simply — NEVER invent a different topic! If they ask "Can you say that again?", repeat your previous message clearly.
-5. TOPIC CONTROL: If the user says you went off-topic, apologize and return to Active Subject. If they ask to discuss something else, switch cleanly. If they disagree, engage with their viewpoint warmly. If they had a terrible day, respond with genuine empathy.
-6. NEVER lecture about grammar in this chat reply (unless the user explicitly asks to explain an earlier mistake) — grammar feedback is displayed separately in a side card.
-7. Keep your spoken response concise and natural (2 to 3 short conversational sentences max, ideal for voice playback).
-8. Output ONLY your spoken reply text (no quotes, no speaker prefix, no markdown).
+CRITICAL CONVERSATIONAL CONTINUATION RULES:
+1. NOTE ON GRAMMAR RECASTS: Any short spoken correction ("You can say, '...'") is automatically prepended right BEFORE your reply by the unified coaching layer when needed. Therefore, DO NOT write "You can say..." yourself — write ONLY the natural conversational reaction and continuation so the two parts flow together seamlessly as ONE single human voice!
+   - Example: If the user says "I'm going to gym", your part is simply: "What do you usually work on when you're there?"
+   - Example: If the user says "Yesterday I go to shopping", your part is simply: "What did you end up buying?"
+   - Example: If the user says "I developed an AI application", your part is: "That's exciting! What does your application do?"
+2. TOPIC & CONTEXT CONTINUITY:
+   - Stay anchored to what the user is actually talking about right now. Never generate random unrelated questions.
+   - Understand references like "it", "that", "there", and "the same thing" using Active Subject / Active Place & Recent Conversation below.
+   - Never repeat generic praise ("That's really interesting!", "I'd love to hear more!") or repeat questions you already asked.
+   - You don't have to end EVERY single turn with a question if a warm, natural observation fits better — avoid sounding like an interrogator!
+3. SELF-AWARENESS & META-INTENTS:
+   - If the user says "I don't understand what you are asking" or "What do you mean?", explain "Your exact previous message" in simpler everyday English — NEVER invent a different topic!
+   - If the user says "You're going off-topic", acknowledge it ("You're right!") and immediately return to the Active Subject / Project they mentioned.
+   - If the user asks to talk about something else ("Let's talk about something else"), agree warmly ("Of course! What would you like to talk about?") and drop the old topic.
+   - If the user challenges or disagrees with you, engage thoughtfully with their viewpoint.
+4. Length: Keep your spoken continuation crisp and natural — 1 to 2 short conversational sentences max (ideal for real-time voice conversation).
+5. Output ONLY your spoken continuation text (no quotes, no speaker labels, no markdown).
 
 Recent conversation:
 ${recentTurns}
 Friend (User): ${userText}
 Lingo Buddy:`;
 
-  let candidateModel = (model || '').trim().replace(/^models\//, '');
-  if (!candidateModel || candidateModel.includes('3.8')) {
-    candidateModel = 'gemini-2.0-flash';
+  let primaryModel = (model || '').trim().replace(/^models\//, '');
+  if (!primaryModel || primaryModel.includes('3.8')) {
+    primaryModel = 'gemini-2.5-flash';
   }
+  const candidateModels = Array.from(
+    new Set([primaryModel, 'gemini-2.5-flash', 'gemini-2.0-flash'])
+  );
 
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 9000);
+  let lastFailReason = 'Gemini unavailable';
 
-    // Real-time Server-Sent Events (SSE) streaming so first words appear & start speaking in ~300ms!
-    const streamUrl = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(candidateModel)}:streamGenerateContent?alt=sse&key=${encodeURIComponent(apiKey)}`;
-    const response = await fetch(streamUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      signal: controller.signal,
-      body: JSON.stringify({
-        contents: [{ role: 'user', parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.72, maxOutputTokens: 150 }
-      })
-    });
+  for (const candidateModel of candidateModels) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 9000);
 
-    if (!response.ok) {
-      clearTimeout(timeoutId);
-      return finishLocal('gemini', `Gemini API HTTP ${response.status} — fell back to Local Engine`);
-    }
+      // Real-time Server-Sent Events (SSE) streaming so first words appear & start speaking fast!
+      const streamUrl = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(candidateModel)}:streamGenerateContent?alt=sse&key=${encodeURIComponent(apiKey)}`;
+      const response = await fetch(streamUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
+        body: JSON.stringify({
+          contents: [{ role: 'user', parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.68, maxOutputTokens: 130 }
+        })
+      });
 
-    let accumulated = '';
-    let emittedCursor = 0;
+      if (!response.ok) {
+        clearTimeout(timeoutId);
+        lastFailReason = `Gemini API HTTP ${response.status} on ${candidateModel}`;
+        if ([400, 404, 429, 500, 503].includes(response.status)) continue;
+        return finishLocal('gemini', `${lastFailReason} — fell back to Local Engine`);
+      }
 
-    const flushReadySentences = (forceAll: boolean = false) => {
-      if (!onSentenceReady) return;
-      const cleaned = accumulated.replace(/^["']|["']$/g, '').replace(/\*\*/g, '');
-      const remaining = cleaned.slice(emittedCursor);
-      if (!remaining.trim()) return;
+      let accumulated = '';
+      let emittedCursor = 0;
 
-      if (forceAll) {
-        const tail = remaining.trim();
-        if (tail) {
-          onSentenceReady(tail);
-          emittedCursor = cleaned.length;
+      const flushReadySentences = (forceAll: boolean = false) => {
+        if (!onSentenceReady) return;
+        const cleaned = accumulated.replace(/^["']|["']$/g, '').replace(/\*\*/g, '');
+        const remaining = cleaned.slice(emittedCursor);
+        if (!remaining.trim()) return;
+
+        if (forceAll) {
+          const tail = remaining.trim();
+          if (tail) {
+            onSentenceReady(tail);
+            emittedCursor = cleaned.length;
+          }
+          return;
         }
-        return;
-      }
 
-      // Emit complete sentences the instant punctuation completes
-      const match = remaining.match(/^([\s\S]*?[.!?])(?:\s+|$)/);
-      if (match && match[1].trim().length >= 8) {
-        onSentenceReady(match[1].trim());
-        emittedCursor += match[0].length;
-      }
-    };
+        const match = remaining.match(/^([\s\S]*?[.!?])(?:\s+|$)/);
+        if (match && match[1].trim().length >= 8) {
+          onSentenceReady(match[1].trim());
+          emittedCursor += match[0].length;
+        }
+      };
 
-    if (response.body && typeof response.body.getReader === 'function') {
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder('utf-8');
-      let sseBuffer = '';
+      if (response.body && typeof response.body.getReader === 'function') {
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder('utf-8');
+        let sseBuffer = '';
 
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        sseBuffer += decoder.decode(value, { stream: true });
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          sseBuffer += decoder.decode(value, { stream: true });
 
-        const lines = sseBuffer.split('\n');
-        sseBuffer = lines.pop() || '';
+          const lines = sseBuffer.split('\n');
+          sseBuffer = lines.pop() || '';
 
-        for (const rawLine of lines) {
-          const line = rawLine.trim();
-          if (!line.startsWith('data:')) continue;
-          const payload = line.slice(5).trim();
-          if (!payload || payload === '[DONE]') continue;
-          try {
-            const parsed = JSON.parse(payload);
-            const delta = parsed?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-            if (delta) {
-              accumulated += delta;
-              const cleanDisplay = accumulated
-                .replace(/^["']|["']$/g, '')
-                .replace(/\*\*/g, '')
-                .trim();
-              if (cleanDisplay) {
-                onPartialReply?.(cleanDisplay);
-                flushReadySentences(false);
+          for (const rawLine of lines) {
+            const line = rawLine.trim();
+            if (!line.startsWith('data:')) continue;
+            const payload = line.slice(5).trim();
+            if (!payload || payload === '[DONE]') continue;
+            try {
+              const parsed = JSON.parse(payload);
+              const delta = parsed?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+              if (delta) {
+                accumulated += delta;
+                const cleanDisplay = accumulated
+                  .replace(/^["']|["']$/g, '')
+                  .replace(/\*\*/g, '')
+                  .trim();
+                if (cleanDisplay) {
+                  onPartialReply?.(cleanDisplay);
+                  flushReadySentences(false);
+                }
               }
+            } catch {
+              // Partial JSON chunk — wait for next SSE line
             }
-          } catch {
-            // Partial JSON chunk — wait for next SSE line
           }
         }
-      }
-      clearTimeout(timeoutId);
-      flushReadySentences(true);
-    } else {
-      const data = await response.json();
-      clearTimeout(timeoutId);
-      accumulated = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-      const cleanDisplay = accumulated.replace(/^["']|["']$/g, '').replace(/\*\*/g, '').trim();
-      if (cleanDisplay) {
-        onPartialReply?.(cleanDisplay);
+        clearTimeout(timeoutId);
         flushReadySentences(true);
+      } else {
+        const data = await response.json();
+        clearTimeout(timeoutId);
+        accumulated = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        const cleanDisplay = accumulated.replace(/^["']|["']$/g, '').replace(/\*\*/g, '').trim();
+        if (cleanDisplay) {
+          onPartialReply?.(cleanDisplay);
+          flushReadySentences(true);
+        }
       }
+
+      // Safety strip if model ever echoed a duplicate "You can say..." recast
+      const rawReply = accumulated
+        .replace(/^["']|["']$/g, '')
+        .replace(/\*\*/g, '')
+        .replace(/^(?:you\s+can\s+say|a\s+more\s+natural\s+way\s+to\s+say\s+that\s+is),?\s*["'][^"']+["'][.!?]?\s*/i, '')
+        .trim();
+
+      if (!rawReply) {
+        lastFailReason = 'Gemini returned empty text';
+        continue;
+      }
+
+      const t1 = typeof performance !== 'undefined' ? performance.now() : Date.now();
+      return {
+        reply: rawReply,
+        source: 'gemini',
+        providerRequested: 'gemini',
+        intent,
+        activeTopic: ctx.activeTopic,
+        activeSubject: ctx.activeSubject,
+        latencyMs: Math.max(1, Math.round(t1 - t0))
+      };
+    } catch (err: any) {
+      lastFailReason =
+        err?.name === 'AbortError'
+          ? 'Gemini timed out (>9s)'
+          : `Gemini network error (${err?.message || 'unknown'})`;
     }
-
-    const rawReply = accumulated
-      .replace(/^["']|["']$/g, '')
-      .replace(/\*\*/g, '')
-      .trim();
-
-    if (!rawReply) {
-      return finishLocal('gemini', 'Gemini returned empty text — fell back to Local Engine');
-    }
-
-    const t1 = typeof performance !== 'undefined' ? performance.now() : Date.now();
-    return {
-      reply: rawReply,
-      source: 'gemini',
-      providerRequested: 'gemini',
-      intent,
-      activeTopic: ctx.activeTopic,
-      activeSubject: ctx.activeSubject,
-      latencyMs: Math.max(1, Math.round(t1 - t0))
-    };
-  } catch (err: any) {
-    return finishLocal(
-      'gemini',
-      err?.name === 'AbortError'
-        ? 'Gemini timed out (>9s) — fell back to Local Engine'
-        : `Gemini network error (${err?.message || 'unknown'}) — fell back to Local Engine`
-    );
   }
+
+  return finishLocal('gemini', `${lastFailReason} — fell back to Local Engine`);
 }

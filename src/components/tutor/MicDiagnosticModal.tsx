@@ -9,17 +9,11 @@ import {
   AlertTriangle,
   Sliders,
   Sparkles,
-  RefreshCw,
-  Cpu
+  RefreshCw
 } from 'lucide-react';
-import {
-  transcribeBlobWithWhisper,
-  type WhisperModelId,
-  type WhisperProgressUpdate
-} from '../../utils/whisperClient';
 import { transcribeAudioBlobWithGemini } from '../../utils/speakingEngine';
 
-export type SpeechEngineMode = 'whisper-local' | 'live-solo' | 'gemini-cloud';
+export type SpeechEngineMode = 'gemini-cloud' | 'live-solo';
 
 export interface MicDiagnosticModalProps {
   isOpen: boolean;
@@ -28,8 +22,6 @@ export interface MicDiagnosticModalProps {
   onSelectDeviceId: (deviceId: string) => void;
   speechEngine: SpeechEngineMode;
   onSelectSpeechEngine: (engine: SpeechEngineMode) => void;
-  whisperModel: WhisperModelId;
-  onSelectWhisperModel: (model: WhisperModelId) => void;
   recognitionLang: string;
   onAccentChange: (lang: string) => void;
   apiKey?: string;
@@ -69,8 +61,6 @@ export const MicDiagnosticModal: React.FC<MicDiagnosticModalProps> = ({
   onSelectDeviceId,
   speechEngine,
   onSelectSpeechEngine,
-  whisperModel,
-  onSelectWhisperModel,
   recognitionLang,
   onAccentChange,
   apiKey,
@@ -85,7 +75,6 @@ export const MicDiagnosticModal: React.FC<MicDiagnosticModalProps> = ({
   const [detectedText, setDetectedText] = useState('');
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [isBusy, setIsBusy] = useState(false);
-  const [whisperProgress, setWhisperProgress] = useState<WhisperProgressUpdate | null>(null);
 
   const streamRef = useRef<MediaStream | null>(null);
   const recorderRef = useRef<MediaRecorder | null>(null);
@@ -160,7 +149,6 @@ export const MicDiagnosticModal: React.FC<MicDiagnosticModalProps> = ({
   const handleStartTest = async () => {
     setDetectedText('');
     setStatusMessage(null);
-    setWhisperProgress(null);
     blobRef.current = null;
     if (testAudioUrl) {
       try {
@@ -174,7 +162,7 @@ export const MicDiagnosticModal: React.FC<MicDiagnosticModalProps> = ({
       const SpeechRecognition =
         (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       if (!SpeechRecognition) {
-        setStatusMessage('Browser Speech API unavailable here. Switch to Whisper AI (Local) above!');
+        setStatusMessage('Browser Speech API unavailable here. Switch to Gemini Audio AI above!');
         return;
       }
       try {
@@ -192,7 +180,7 @@ export const MicDiagnosticModal: React.FC<MicDiagnosticModalProps> = ({
           setDetectedText(full.trim());
         };
         rec.onerror = (e: any) => {
-          setStatusMessage(`Browser STT notice: ${e.error}. Try switching to Whisper AI (Local) for guaranteed accuracy.`);
+          setStatusMessage(`Browser STT notice: ${e.error}. Try switching to Gemini Audio AI for highest accuracy.`);
         };
         rec.start();
         recognitionRef.current = rec;
@@ -204,7 +192,7 @@ export const MicDiagnosticModal: React.FC<MicDiagnosticModalProps> = ({
       return;
     }
 
-    // Whisper Local OR Gemini Cloud -> SINGLE CLEAN getUserMedia stream (NO APO distortion!)
+    // Gemini Audio AI -> SINGLE CLEAN getUserMedia stream
     try {
       const audioConstraints: MediaTrackConstraints = {
         echoCancellation: false,
@@ -265,25 +253,16 @@ export const MicDiagnosticModal: React.FC<MicDiagnosticModalProps> = ({
         }
         setTestLevel(0);
 
-        // Immediately run chosen clean transcription engine on the captured blob!
+        // Immediately run Gemini Audio transcription on the captured studio WAV clip!
         setIsBusy(true);
         try {
-          if (speechEngine === 'whisper-local') {
-            const res = await transcribeBlobWithWhisper(blob, {
-              model: whisperModel,
-              onProgress: (p) => setWhisperProgress(p)
-            });
-            setDetectedText(res.text || '(No speech detected in audio clip)');
-            setStatusMessage(`Transcribed locally via Whisper AI (${res.device.toUpperCase()}).`);
-          } else if (speechEngine === 'gemini-cloud') {
-            if (!apiKey) {
-              setStatusMessage('Please connect a Gemini API key first, or select Whisper AI (Local) which is 100% free!');
-            } else {
-              setStatusMessage('Sending clean audio to Gemini Multimodal AI...');
-              const txt = await transcribeAudioBlobWithGemini(apiKey, selectedModel || 'gemini-2.0-flash', blob, recognitionLang);
-              setDetectedText(txt || '(No speech detected)');
-              setStatusMessage('Transcribed via Gemini Multimodal Audio AI.');
-            }
+          if (!apiKey) {
+            setStatusMessage('Please connect a Gemini API key first, or select Browser Live STT.');
+          } else {
+            setStatusMessage('Sending studio-conditioned 16kHz WAV audio to Gemini Multimodal AI...');
+            const txt = await transcribeAudioBlobWithGemini(apiKey, selectedModel || 'gemini-2.5-flash', blob, recognitionLang);
+            setDetectedText(txt || '(No speech detected)');
+            setStatusMessage('Transcribed via Gemini Multimodal Audio AI (0% auto-correction).');
           }
         } catch (err: any) {
           setStatusMessage(err?.message || 'Transcription error.');
@@ -368,27 +347,27 @@ export const MicDiagnosticModal: React.FC<MicDiagnosticModalProps> = ({
             <label className="text-xs font-bold uppercase tracking-wider text-slate-700 block">
               1. Speech Recognition Engine (Zero Dual-Mic Conflict)
             </label>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <button
                 type="button"
-                onClick={() => onSelectSpeechEngine('whisper-local')}
+                onClick={() => onSelectSpeechEngine('gemini-cloud')}
                 className={`p-3 rounded-2xl border text-left transition-all cursor-pointer space-y-1 ${
-                  speechEngine === 'whisper-local'
+                  speechEngine === 'gemini-cloud'
                     ? 'bg-indigo-50 border-indigo-500 ring-2 ring-indigo-200'
                     : 'bg-white border-slate-200 hover:bg-slate-50'
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-extrabold text-indigo-950 flex items-center gap-1">
-                    <Cpu className="w-3.5 h-3.5 text-indigo-600" />
-                    <span>Whisper AI Local</span>
+                    <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                    <span>Gemini Verbatim Audio</span>
                   </span>
                   <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
                     BEST
                   </span>
                 </div>
                 <p className="text-[11px] text-slate-600 leading-snug">
-                  Free neural ASR in browser. Native punctuation & best Sri Lankan / global accent accuracy.
+                  Studio 16kHz WAV sent to Gemini Multimodal Audio. Highest accent accuracy &amp; 0% auto-correction.
                 </p>
               </button>
 
@@ -402,43 +381,20 @@ export const MicDiagnosticModal: React.FC<MicDiagnosticModalProps> = ({
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-extrabold text-slate-900">⚡ Pure Live STT</span>
+                  <span className="text-xs font-extrabold text-slate-900">⚡ Browser Live STT</span>
                   <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-700">
                     INSTANT
                   </span>
                 </div>
                 <p className="text-[11px] text-slate-600 leading-snug">
-                  Browser live streaming without MediaRecorder lock (fixes Windows APO distortion).
-                </p>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => onSelectSpeechEngine('gemini-cloud')}
-                className={`p-3 rounded-2xl border text-left transition-all cursor-pointer space-y-1 ${
-                  speechEngine === 'gemini-cloud'
-                    ? 'bg-indigo-50 border-indigo-500 ring-2 ring-indigo-200'
-                    : 'bg-white border-slate-200 hover:bg-slate-50'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-extrabold text-slate-900 flex items-center gap-1">
-                    <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                    <span>Gemini Audio AI</span>
-                  </span>
-                  <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-800">
-                    CLOUD
-                  </span>
-                </div>
-                <p className="text-[11px] text-slate-600 leading-snug">
-                  Clean raw audio sent to Gemini Multimodal API. Requires your Gemini API key.
+                  Built-in Chrome live speech captioning without MediaRecorder lock.
                 </p>
               </button>
             </div>
           </div>
 
-          {/* 2. Engine-Specific Tuning (Mic Device / Whisper Size / Browser Dialect) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 p-3.5 rounded-2xl border border-slate-200">
+          {/* 2. Engine-Specific Tuning (Mic Device / Browser Dialect) */}
+          <div className="grid grid-cols-1 gap-3 bg-slate-50 p-3.5 rounded-2xl border border-slate-200">
             {speechEngine !== 'live-solo' ? (
               <div className="space-y-1">
                 <div className="flex items-center justify-between">
@@ -467,38 +423,17 @@ export const MicDiagnosticModal: React.FC<MicDiagnosticModalProps> = ({
             ) : (
               <div className="space-y-1">
                 <label className="text-[11px] font-bold text-slate-700">
-                  Browser Accent Locale (Recommended: en-IN for Sri Lankan / South Asian)
+                  Browser Accent Locale
                 </label>
                 <select
                   value={recognitionLang}
                   onChange={(e) => onAccentChange(e.target.value)}
                   className="w-full text-xs font-semibold bg-white border border-slate-300 rounded-xl px-2.5 py-1.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 >
-                  <option value="en-IN">🇱🇰 / 🇮🇳 South Asian English (en-IN — Best for Sri Lankan)</option>
-                  <option value="en-GB">🇬🇧 UK English (en-GB)</option>
+                  <option value="en-GB">🇬🇧 UK English (en-GB — Recommended)</option>
                   <option value="en-US">🇺🇸 US English (en-US)</option>
                   <option value="en-AU">🇦🇺 Australian English (en-AU)</option>
-                </select>
-              </div>
-            )}
-
-            {speechEngine === 'whisper-local' && (
-              <div className="space-y-1">
-                <label className="text-[11px] font-bold text-slate-700">Whisper Neural Model Size</label>
-                <select
-                  value={whisperModel}
-                  onChange={(e) => onSelectWhisperModel(e.target.value as WhisperModelId)}
-                  className="w-full text-xs font-semibold bg-white border border-slate-300 rounded-xl px-2.5 py-1.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                >
-                  <option value="onnx-community/whisper-small.en">
-                    Whisper Small HD (~244MB · Best Verbatim Accuracy)
-                  </option>
-                  <option value="onnx-community/whisper-base.en">
-                    Whisper Base EN (~140MB · Balanced)
-                  </option>
-                  <option value="onnx-community/whisper-tiny.en">
-                    Whisper Tiny EN (~75MB · Fastest 1st Download)
-                  </option>
+                  <option value="en-IN">🇱🇰 / 🇮🇳 South Asian English (en-IN)</option>
                 </select>
               </div>
             )}
@@ -563,26 +498,6 @@ export const MicDiagnosticModal: React.FC<MicDiagnosticModalProps> = ({
                 </button>
               )}
             </div>
-
-            {/* Whisper loading progress bar */}
-            {whisperProgress && (whisperProgress.status === 'loading' || whisperProgress.status === 'inferencing') && (
-              <div className="p-2.5 bg-white rounded-xl border border-indigo-200 space-y-1.5 text-xs">
-                <div className="flex items-center justify-between text-indigo-800 font-semibold">
-                  <span>{whisperProgress.message}</span>
-                  {typeof whisperProgress.percent === 'number' && (
-                    <span className="font-mono">{whisperProgress.percent}%</span>
-                  )}
-                </div>
-                {typeof whisperProgress.percent === 'number' && (
-                  <div className="w-full h-1.5 bg-indigo-100 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-indigo-600 transition-all duration-200"
-                      style={{ width: `${whisperProgress.percent}%` }}
-                    />
-                  </div>
-                )}
-              </div>
-            )}
 
             {statusMessage && (
               <p className="text-xs text-slate-600 font-medium">{statusMessage}</p>

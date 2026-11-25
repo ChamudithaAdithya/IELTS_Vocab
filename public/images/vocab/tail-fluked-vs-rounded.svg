@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
+  <defs>
+    <linearGradient id="oceanBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f0f9ff"/>
+      <stop offset="100%" stop-color="#e0f2fe"/>
+    </linearGradient>
+    <linearGradient id="manateeFill" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#64748b"/>
+      <stop offset="100%" stop-color="#475569"/>
+    </linearGradient>
+    <linearGradient id="dugongFill" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#0369a1"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="420" rx="20" fill="url(#oceanBg)"/>
+  <text x="400" y="38" text-anchor="middle" font-size="19" font-weight="800" fill="#0f172a">Tail Shape Comparison: Broad &amp; Rounded vs. Fluked</text>
+  <text x="400" y="60" text-anchor="middle" font-size="13" fill="#475569">Key IELTS Reading Distinction Between Manatees and Dugongs / Whales</text>
+
+  <!-- Left Card: Manatee Broad Rounded Tail -->
+  <rect x="28" y="80" width="356" height="312" rx="16" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="206" y="112" text-anchor="middle" font-size="16" font-weight="800" fill="#1e293b">MANATEE TAIL</text>
+  <rect x="116" y="122" width="180" height="26" rx="13" fill="#ecfdf5" stroke="#6ee7b7"/>
+  <text x="206" y="139" text-anchor="middle" font-size="12" font-weight="700" fill="#047857">BROAD &amp; ROUNDED (Paddle)</text>
+
+  <!-- Top-down Manatee Body + Broad Rounded Paddle Tail -->
+  <path d="M206 165 C235 165, 248 195, 244 235 C240 262, 268 278, 272 315 C275 348, 244 368, 206 368 C168 368, 137 348, 140 315 C144 278, 172 262, 168 235 C164 195, 177 165, 206 165 Z" fill="url(#manateeFill)"/>
+  <!-- Highlight circle around paddle tail -->
+  <ellipse cx="206" cy="322" rx="76" ry="52" fill="none" stroke="#10b981" stroke-width="2.5" stroke-dasharray="6 4"/>
+  <!-- Width arrow for BROAD -->
+  <line x1="142" y1="322" x2="270" y2="322" stroke="#fef08a" stroke-width="2.5"/>
+  <polygon points="142,322 150,317 150,327" fill="#fef08a"/>
+  <polygon points="270,322 262,317 262,327" fill="#fef08a"/>
+  <text x="206" y="315" text-anchor="middle" font-size="11" font-weight="800" fill="#fef9c3">BROAD (Wide)</text>
+  <text x="206" y="384" text-anchor="middle" font-size="12" font-weight="600" fill="#334155">Single curved, spoon-shaped edge</text>
+
+  <!-- Right Card: Dugong / Whale Fluked Tail -->
+  <rect x="416" y="80" width="356" height="312" rx="16" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="594" y="112" text-anchor="middle" font-size="16" font-weight="800" fill="#1e293b">DUGONG &amp; WHALE TAIL</text>
+  <rect x="499" y="122" width="190" height="26" rx="13" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="594" y="139" text-anchor="middle" font-size="12" font-weight="700" fill="#1d4ed8">FLUKED (Divided into 2 Lobes)</text>
+
+  <!-- Top-down Dugong Body + Fluked Tail -->
+  <path d="M594 165 C620 165, 632 195, 624 240 C618 272, 610 288, 612 298 C642 306, 686 322, 696 354 C664 352, 622 342, 594 328 C566 342, 524 352, 492 354 C502 322, 546 306, 576 298 C578 288, 570 272, 564 240 C556 195, 568 165, 594 165 Z" fill="url(#dugongFill)"/>
+  <!-- Highlight notch -->
+  <circle cx="594" cy="332" r="22" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="4 3"/>
+  <text x="594" y="369" text-anchor="middle" font-size="11" font-weight="800" fill="#b45309">Central V-Notch (2 Flukes)</text>
+  <!-- Propulsion arrows -->
+  <path d="M472 260 L472 205" stroke="#0284c7" stroke-width="3" stroke-linecap="round"/>
+  <polygon points="472,197 466,209 478,209" fill="#0284c7"/>
+  <text x="472" y="278" text-anchor="middle" font-size="11" font-weight="700" fill="#0369a1">Propulsion</text>
+  <text x="594" y="384" text-anchor="middle" font-size="12" font-weight="600" fill="#334155">Moves up &amp; down for forward propulsion</text>
+</svg>

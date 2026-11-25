@@ -195,6 +195,20 @@ export const FlashcardsView: React.FC<FlashcardsViewProps> = ({
           </div>
         ) : (
           <div className="space-y-3 text-left my-auto text-sm">
+            {currentWord.imageUrl && (
+              <div className="rounded-lg border border-slate-200 bg-slate-50 p-2 flex flex-col items-center gap-1.5">
+                <img
+                  src={currentWord.imageUrl}
+                  alt={currentWord.imageCaption || currentWord.term}
+                  className="max-h-40 w-auto object-contain rounded"
+                />
+                {currentWord.imageCaption && (
+                  <p className="text-[11px] text-slate-600 text-center leading-snug">
+                    {currentWord.imageCaption}
+                  </p>
+                )}
+              </div>
+            )}
             <div>
               <span className="font-semibold text-slate-900">Definition: </span>
               <span className="text-slate-800">{currentWord.definition}</span>

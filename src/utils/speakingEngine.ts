@@ -13,7 +13,7 @@ import type {
 import type { EssaySegment, MainProblem, TutorIssue } from '../types/tutor';
 import { roundIeltsBand, formatBand } from './tutorEngine';
 import { playSpeech, stopSpeech } from './speech';
-import { prepareStudioWavFromBlob } from './whisperClient';
+import { prepareStudioWavFromBlob } from './audioConditioner';
 
 /* ------------------------------------------------------------------ */
 /* Random Spontaneous Conversation Topics                              */

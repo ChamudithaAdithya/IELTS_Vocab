@@ -65,11 +65,6 @@ import { SpeakingHistoryModal } from './SpeakingHistoryModal';
 import { VoiceTranscriptNotepad, type SttLiveStatus } from './VoiceTranscriptNotepad';
 import { MicDiagnosticModal, type SpeechEngineMode } from './MicDiagnosticModal';
 import {
-  transcribeBlobWithWhisper,
-  type WhisperModelId,
-  type WhisperProgressUpdate
-} from '../../utils/whisperClient';
-import {
   saveSpeakingAttempt,
   listSpeakingAttempts,
   deleteSpeakingAttempt,
@@ -270,20 +265,11 @@ const SpeakingTutorViewInner: React.FC<SpeakingTutorViewProps> = ({
   });
   const [speechEngine, setSpeechEngine] = useState<SpeechEngineMode>(() => {
     try {
-      const saved = localStorage.getItem('ielts_speaking_stt_engine') as SpeechEngineMode | null;
-      if (saved === 'whisper-local' || saved === 'live-solo' || saved === 'gemini-cloud') return saved;
-      return 'live-solo';
+      const saved = localStorage.getItem('ielts_speaking_stt_engine') as string | null;
+      if (saved === 'gemini-cloud' || saved === 'live-solo') return saved;
+      return loadApiKey() ? 'gemini-cloud' : 'live-solo';
     } catch {
-      return 'live-solo';
-    }
-  });
-  const [whisperModel, setWhisperModel] = useState<WhisperModelId>(() => {
-    try {
-      const saved = localStorage.getItem('ielts_speaking_whisper_model') as WhisperModelId | null;
-      if (saved === 'onnx-community/whisper-base.en' || saved === 'onnx-community/whisper-tiny.en') return saved;
-      return 'onnx-community/whisper-base.en';
-    } catch {
-      return 'onnx-community/whisper-base.en';
+      return loadApiKey() ? 'gemini-cloud' : 'live-solo';
     }
   });
   const [selectedMicDeviceId, setSelectedMicDeviceId] = useState<string>(() => {
@@ -294,7 +280,6 @@ const SpeakingTutorViewInner: React.FC<SpeakingTutorViewProps> = ({
     }
   });
   const [isMicDiagnosticOpen, setIsMicDiagnosticOpen] = useState<boolean>(false);
-  const [whisperProgress, setWhisperProgress] = useState<WhisperProgressUpdate | null>(null);
   const [micError, setMicError] = useState<string | null>(null);
   const [isSpeechSupported, setIsSpeechSupported] = useState<boolean>(true);
 
@@ -364,7 +349,6 @@ const SpeakingTutorViewInner: React.FC<SpeakingTutorViewProps> = ({
   const previousTranscriptRef = useRef<string>('');
 
   const speechEngineRef = useRef<SpeechEngineMode>(speechEngine);
-  const whisperModelRef = useRef<WhisperModelId>(whisperModel);
   const selectedMicDeviceIdRef = useRef<string>(selectedMicDeviceId);
 
   useEffect(() => {
@@ -376,10 +360,6 @@ const SpeakingTutorViewInner: React.FC<SpeakingTutorViewProps> = ({
   }, [speechEngine]);
 
   useEffect(() => {
-    whisperModelRef.current = whisperModel;
-  }, [whisperModel]);
-
-  useEffect(() => {
     selectedMicDeviceIdRef.current = selectedMicDeviceId;
   }, [selectedMicDeviceId]);
 
@@ -387,17 +367,8 @@ const SpeakingTutorViewInner: React.FC<SpeakingTutorViewProps> = ({
     speechEngineRef.current = engine;
     setSpeechEngine(engine);
     setMicError(null);
-    setWhisperProgress(null);
     try {
       localStorage.setItem('ielts_speaking_stt_engine', engine);
-    } catch {}
-  };
-
-  const handleSelectWhisperModel = (model: WhisperModelId) => {
-    whisperModelRef.current = model;
-    setWhisperModel(model);
-    try {
-      localStorage.setItem('ielts_speaking_whisper_model', model);
     } catch {}
   };
 
@@ -654,52 +625,7 @@ const SpeakingTutorViewInner: React.FC<SpeakingTutorViewProps> = ({
     return s;
   };
 
-  // Local OpenAI Whisper Neural Transcription (100% Free, Multi-Accent, Native Punctuation)
-  const handleTranscribeWithWhisper = async (blobOverride?: Blob | null) => {
-    const targetBlob = blobOverride || recordedAudioBlobRef.current;
-    if (!targetBlob || targetBlob.size === 0) {
-      setMicError('No recorded audio clip found yet. Click Start Speaking, speak aloud, and click Stop first.');
-      return;
-    }
-
-    setIsTranscribingAudio(true);
-    setSttStatus('transcribing');
-    setMicError(null);
-    setWhisperProgress({ status: 'loading', message: 'Preparing Whisper neural engine...' });
-
-    try {
-      const result = await transcribeBlobWithWhisper(targetBlob, {
-        model: whisperModelRef.current,
-        onProgress: (upd) => setWhisperProgress(upd)
-      });
-
-      if (result.text && result.text.trim()) {
-        const merged = [baseSpeechTextRef.current.trim(), result.text.trim()]
-          .filter(Boolean)
-          .join(' ')
-          .replace(/\s+/g, ' ')
-          .trim();
-        const formatted = punctuateSpokenTranscript(merged);
-        setUserSpeechText(formatted);
-        baseSpeechTextRef.current = formatted;
-        userSpeechTextRef.current = formatted;
-        setCanUndoBurst(true);
-        setSttStatus('idle');
-      } else {
-        setMicError('Whisper AI listened to the audio clip but did not detect clear speech. Click "Play My Voice" or "Test Mic" to check your microphone input level.');
-        setSttStatus('error');
-      }
-    } catch (err: any) {
-      console.warn('Whisper local transcription error:', err);
-      setMicError(err?.message || 'Whisper local transcription encountered an error. You can retry or switch engines.');
-      setSttStatus('error');
-    } finally {
-      setIsTranscribingAudio(false);
-      setTimeout(() => setWhisperProgress(null), 1500);
-    }
-  };
-
-  // Gemini Multimodal Audio-to-Text Transcription (Cloud Pro)
+  // Gemini Multimodal Audio-to-Text Transcription (Studio 16kHz WAV)
   const handleTranscribeRecordedAudio = async (blobOverride?: Blob | null) => {
     const targetBlob = blobOverride || recordedAudioBlobRef.current;
     if (!targetBlob || targetBlob.size === 0) {
@@ -707,7 +633,7 @@ const SpeakingTutorViewInner: React.FC<SpeakingTutorViewProps> = ({
       return;
     }
     if (!effectiveApiKey) {
-      setMicError('Connect a Gemini API key for Gemini Audio AI, or switch to Whisper AI (100% Free Local).');
+      setMicError('Connect a Gemini API key for Gemini Audio AI, or switch to Pure Live STT.');
       if (onOpenApiKeyModal) onOpenApiKeyModal();
       return;
     }
@@ -740,7 +666,7 @@ const SpeakingTutorViewInner: React.FC<SpeakingTutorViewProps> = ({
       }
     } catch (err: any) {
       console.warn('Gemini audio transcription error:', err);
-      setMicError(err?.message || 'Could not transcribe audio via Gemini AI. Try Whisper AI Local (Free) instead.');
+      setMicError(err?.message || 'Could not transcribe audio via Gemini AI. Check your API key or try Pure Live STT.');
       setSttStatus('error');
     } finally {
       setIsTranscribingAudio(false);
@@ -759,7 +685,7 @@ const SpeakingTutorViewInner: React.FC<SpeakingTutorViewProps> = ({
       isRecordingRef.current = false;
       setIsRecording(false);
       setSttStatus('error');
-      setMicError('Browser Web Speech API is not supported here. Switch to "Whisper AI" above for free high-accuracy offline transcription!');
+      setMicError('Browser Web Speech API is not supported here. Switch to "Gemini Audio" above!');
       return;
     }
 
@@ -850,13 +776,13 @@ const SpeakingTutorViewInner: React.FC<SpeakingTutorViewProps> = ({
           isRecordingRef.current = false;
           setIsRecording(false);
           setSttStatus('error');
-          setMicError('Browser could not open your default microphone. Click "Test Mic" or switch to "Whisper AI" to pick a specific mic device.');
+          setMicError('Browser could not open your default microphone. Click "Test Mic" or switch to "Gemini Audio" to pick a specific mic device.');
         } else if (e.error === 'network') {
           isManuallyStoppedRef.current = true;
           isRecordingRef.current = false;
           setIsRecording(false);
           setSttStatus('error');
-          setMicError('Browser Speech-to-Text hit a network block (common on Brave/VPN/offline). Switch to "Whisper AI" above for 100% free local transcription!');
+          setMicError('Browser Speech-to-Text hit a network block (common on Brave/VPN/offline). Switch to "Gemini Audio" above!');
         } else if (e.error === 'language-not-supported') {
           if (recognitionLangRef.current !== 'en-US') {
             recognitionLangRef.current = 'en-US';
@@ -868,7 +794,7 @@ const SpeakingTutorViewInner: React.FC<SpeakingTutorViewProps> = ({
         } else if (e.error !== 'aborted') {
           console.warn('Speech recognition status:', e.error);
           setSttStatus('error');
-          setMicError(`Browser STT notice (${e.error}). For highest accuracy, switch to "Whisper AI" above.`);
+          setMicError(`Browser STT notice (${e.error}). For highest accuracy, switch to "Gemini Audio" above.`);
         }
       };
 
@@ -913,7 +839,7 @@ const SpeakingTutorViewInner: React.FC<SpeakingTutorViewProps> = ({
     }
   };
 
-  // Engines 1 & 3: Single Clean Raw Audio Capture (Whisper AI Local / Gemini Cloud) — ZERO Windows APO Distortion!
+  // Gemini Audio: Single Clean Raw Audio Capture — ZERO Windows APO Distortion!
   const startCleanAudioCapture = async () => {
     try {
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -985,12 +911,10 @@ const SpeakingTutorViewInner: React.FC<SpeakingTutorViewProps> = ({
         }
         mediaRecorderRef.current = null;
 
-        // Immediately run chosen neural transcription engine on the crisp audio clip!
+        // Immediately run Gemini Audio transcription on the crisp audio clip!
         if (finalBlob && autoTranscribePendingRef.current) {
           autoTranscribePendingRef.current = false;
-          if (speechEngineRef.current === 'whisper-local') {
-            handleTranscribeWithWhisper(finalBlob);
-          } else if (speechEngineRef.current === 'gemini-cloud') {
+          if (speechEngineRef.current === 'gemini-cloud') {
             handleTranscribeRecordedAudio(finalBlob);
           }
         } else {
@@ -1042,13 +966,12 @@ const SpeakingTutorViewInner: React.FC<SpeakingTutorViewProps> = ({
   // Zero-Conflict Recording Starter: STRICTLY launches ONE engine at a time!
   const handleStartRecording = () => {
     setMicError(null);
-    setWhisperProgress(null);
     stopSpeech();
     setIsExaminerSpeaking(false);
     setIsPlayingModelAnswer(false);
 
     if (speechEngineRef.current === 'gemini-cloud' && !effectiveApiKey) {
-      setMicError('Please connect your Gemini API key first, or click "Whisper AI" for 100% free local neural transcription.');
+      setMicError('Please connect your Gemini API key first, or switch to "Pure Live" STT.');
       if (onOpenApiKeyModal) onOpenApiKeyModal();
       return;
     }
@@ -1075,7 +998,7 @@ const SpeakingTutorViewInner: React.FC<SpeakingTutorViewProps> = ({
       // Pure Solo Browser STT — NEVER runs getUserMedia/MediaRecorder alongside!
       startRecognitionSession();
     } else {
-      // Whisper AI Local OR Gemini Cloud — Single Clean Raw Audio Stream!
+      // Gemini Audio — Single Clean Raw Audio Stream!
       startCleanAudioCapture();
     }
   };
@@ -1110,7 +1033,7 @@ const SpeakingTutorViewInner: React.FC<SpeakingTutorViewProps> = ({
     const hasActiveRecorder =
       mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive';
 
-    if (speechEngineRef.current === 'whisper-local' || speechEngineRef.current === 'gemini-cloud') {
+    if (speechEngineRef.current === 'gemini-cloud') {
       if (hasActiveRecorder && mediaRecorderRef.current) {
         autoTranscribePendingRef.current = true;
         setSttStatus('transcribing');
@@ -1155,7 +1078,7 @@ const SpeakingTutorViewInner: React.FC<SpeakingTutorViewProps> = ({
       setSttStatus('idle');
     } else {
       setSttStatus('idle');
-      setMicError('Pure Live Browser STT did not detect words. Try switching accent to "en-IN" (South Asian), click "Test Mic", or switch to "Whisper AI" for guaranteed accuracy!');
+      setMicError('Pure Live Browser STT did not detect words. Click "Test Mic" or switch to "Gemini Audio" for highest accuracy!');
     }
     stopAudioVisualizer(false);
   };
@@ -1994,7 +1917,6 @@ const SpeakingTutorViewInner: React.FC<SpeakingTutorViewProps> = ({
                 audioLevel={audioLevel}
                 speechEngine={speechEngine}
                 onSelectSpeechEngine={handleSelectSpeechEngine}
-                whisperProgress={whisperProgress}
                 recognitionLang={recognitionLang}
                 onAccentChange={handleAccentChange}
                 sttStatus={sttStatus}
@@ -2016,7 +1938,6 @@ const SpeakingTutorViewInner: React.FC<SpeakingTutorViewProps> = ({
                 hasAudioBlob={hasAudioBlob}
                 isTranscribingAudio={isTranscribingAudio}
                 hasGeminiApiKey={Boolean(effectiveApiKey)}
-                onTranscribeWithWhisper={() => handleTranscribeWithWhisper()}
                 onTranscribeWithGemini={() => handleTranscribeRecordedAudio()}
                 onOpenApiKeyModal={onOpenApiKeyModal}
                 hesitationAlert={hesitationAlert}
@@ -2610,7 +2531,6 @@ const SpeakingTutorViewInner: React.FC<SpeakingTutorViewProps> = ({
                 audioLevel={audioLevel}
                 speechEngine={speechEngine}
                 onSelectSpeechEngine={handleSelectSpeechEngine}
-                whisperProgress={whisperProgress}
                 recognitionLang={recognitionLang}
                 onAccentChange={handleAccentChange}
                 sttStatus={sttStatus}
@@ -2632,7 +2552,6 @@ const SpeakingTutorViewInner: React.FC<SpeakingTutorViewProps> = ({
                 hasAudioBlob={hasAudioBlob}
                 isTranscribingAudio={isTranscribingAudio}
                 hasGeminiApiKey={Boolean(effectiveApiKey)}
-                onTranscribeWithWhisper={() => handleTranscribeWithWhisper()}
                 onTranscribeWithGemini={() => handleTranscribeRecordedAudio()}
                 onOpenApiKeyModal={onOpenApiKeyModal}
                 hesitationAlert={hesitationAlert}
@@ -3045,8 +2964,6 @@ const SpeakingTutorViewInner: React.FC<SpeakingTutorViewProps> = ({
         onSelectDeviceId={handleSelectMicDeviceId}
         speechEngine={speechEngine}
         onSelectSpeechEngine={handleSelectSpeechEngine}
-        whisperModel={whisperModel}
-        onSelectWhisperModel={handleSelectWhisperModel}
         recognitionLang={recognitionLang}
         onAccentChange={handleAccentChange}
         apiKey={effectiveApiKey}

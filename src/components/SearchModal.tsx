@@ -50,6 +50,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
           w.term.toLowerCase().includes(q) ||
           w.definition.toLowerCase().includes(q) ||
           w.sinhalaDefinition.includes(q) ||
+          (w.synonyms && w.synonyms.some(s => s.toLowerCase().includes(q))) ||
           w.collocations.some(c => c.text.toLowerCase().includes(q) || c.sinhala.includes(q))
         );
       }).slice(0, 10);

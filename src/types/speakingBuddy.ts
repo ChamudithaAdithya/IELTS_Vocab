@@ -11,6 +11,7 @@ export type BuddyOrbState =
   | 'understanding'
   | 'thinking'
   | 'speaking'
+  | 'interrupted'
   | 'happy'
   | 'encouraging'
   | 'analyzing'
@@ -63,7 +64,7 @@ export type ExplanationLangMode =
   | 'bilingual_si'
   | 'sinhala_focused';
 
-export type BuddySpeechEngine = 'live-solo' | 'whisper-local' | 'gemini-cloud';
+export type BuddySpeechEngine = 'gemini-cloud' | 'live-solo';
 
 /** Phase 2 — 10 Core Grammar Categories + Vocabulary & Repetition */
 export type GrammarCategoryCode =
@@ -180,8 +181,26 @@ export interface BuddyGrammarAnalysis {
   fluency?: BuddyFluencyMetrics;
   pronunciationSpotlights?: PronunciationSpotlight[];
   skippedUncertainWords?: string[];
+  intendedMeaning?: string;
   analyzerSource: 'gemini' | 'local';
   analyzedAt: number;
+}
+
+/** Structured unified response contract for Natural Conversation + Instant English Correction */
+export interface BuddyStructuredTurnResponse {
+  originalTranscript: string;
+  intendedMeaning: string;
+  correctionRequired: boolean;
+  correctedSentence: string;
+  correctionType: 'none' | 'grammar' | 'naturalness' | 'vocabulary';
+  mistakes: {
+    original: string;
+    corrected: string;
+    explanation: string;
+  }[];
+  spokenCorrection: string;
+  conversationalResponse: string;
+  followUpQuestion: string | null;
 }
 
 /** Phase 3 — P1.2 Personal Vocabulary Collection Item */
@@ -352,6 +371,7 @@ export interface BuddyTurnTrace {
   grammarLatencyMs: number;
   grammarSource: 'gemini' | 'local';
   mistakesCount: number;
+  spokenCorrection?: string;
   replyPreview: string;
 }
 
@@ -361,6 +381,14 @@ export interface BuddyMessage {
   timestamp: number;
   /** Display transcript shown in conversation (never overwritten with correctedSentence!) */
   text: string;
+  /** For buddy messages: optional short spoken grammar/naturalness recast preceding conversationalResponse */
+  spokenCorrection?: string;
+  /** For buddy messages: the pure conversational friend continuation */
+  conversationalResponse?: string;
+  /** For buddy messages: whether the recast fixed a grammar mistake vs unnatural phrasing */
+  correctionType?: 'none' | 'grammar' | 'naturalness' | 'vocabulary';
+  /** Full structured turn output (Section 7 contract) */
+  structuredTurn?: BuddyStructuredTurnResponse;
   /** 1. Immutable original STT transcript preserved for debugging & STT-vs-grammar separation */
   originalRawTranscript?: string;
   /** 2. Finalized verbatim transcript before punctuation restoration */

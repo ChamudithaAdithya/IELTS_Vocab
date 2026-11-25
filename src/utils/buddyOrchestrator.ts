@@ -20,6 +20,7 @@ import type {
   BuddyMode,
   BuddyPersonality,
   BuddySpeechEngine,
+  BuddyStructuredTurnResponse,
   BuddyTurnTrace,
   CorrectionIntensity,
   FinalizedTurnPacket,
@@ -33,6 +34,7 @@ import {
 } from './speakingBuddyEngine';
 import {
   analyzeBuddyGrammar,
+  buildSpokenCorrection,
   validateTranscriptCoherence
 } from './buddyGrammarEngine';
 import {
@@ -120,12 +122,27 @@ export function buildFinalizedTurnPacket(params: {
   };
 }
 
+export interface OrchestratedFriendPayload extends BuddyFriendReplyResult {
+  spokenCorrection: string;
+  conversationalResponse: string;
+  correctionType: 'none' | 'grammar' | 'naturalness' | 'vocabulary';
+  structuredTurn: BuddyStructuredTurnResponse;
+}
+
 export interface OrchestratedTurnCallbacks {
-  /** Fires live as tokens stream from Gemini so the Buddy chat bubble renders in real time */
-  onFriendPartialReply?: (partialText: string, packet: FinalizedTurnPacket) => void;
+  /** Fires live as tokens stream so the Buddy chat bubble renders in real time */
+  onFriendPartialReply?: (
+    partialText: string,
+    packet: FinalizedTurnPacket,
+    meta?: {
+      spokenCorrection: string;
+      conversationalResponse: string;
+      correctionType: 'none' | 'grammar' | 'naturalness' | 'vocabulary';
+    }
+  ) => void;
   /** Fires the moment each sentence finishes streaming so TTS begins speaking immediately */
   onFriendSentenceReady?: (sentence: string, packet: FinalizedTurnPacket) => void;
-  onFriendReplyReady: (result: BuddyFriendReplyResult, packet: FinalizedTurnPacket) => void;
+  onFriendReplyReady: (result: OrchestratedFriendPayload, packet: FinalizedTurnPacket) => void;
   onGrammarAnalysisReady: (
     analysis: BuddyGrammarAnalysis,
     updatedAnalytics: BuddyLearningAnalytics,
@@ -137,8 +154,11 @@ export interface OrchestratedTurnCallbacks {
 }
 
 /**
- * Executes a single finalized conversation turn with strict parallel isolation,
- * shared session context, and full trace telemetry.
+ * Executes a single finalized conversation turn with:
+ *  - Parallel Brain 1 (Friend SSE Stream) + Brain 2 (Grammar Coach) launched simultaneously at t=0ms
+ *  - Ordered Stream Merger: prepends the exact mode-adapted `spokenCorrection` ("You can say, '...'")
+ *    right BEFORE the streaming `conversationalResponse` so Lingo Buddy speaks with ONE seamless human voice
+ *    and NEVER contradicts the right-hand Grammar Feedback panel!
  */
 export async function orchestrateBuddyTurn(params: {
   packet: FinalizedTurnPacket;
@@ -151,7 +171,7 @@ export async function orchestrateBuddyTurn(params: {
   model?: string;
   callbacks: OrchestratedTurnCallbacks;
 }): Promise<{
-  friendResult: BuddyFriendReplyResult;
+  friendResult: OrchestratedFriendPayload;
   grammarAnalysis: BuddyGrammarAnalysis;
   trace: BuddyTurnTrace;
 }> {
@@ -160,7 +180,6 @@ export async function orchestrateBuddyTurn(params: {
     personality,
     mode,
     intensity,
-    memory,
     analytics,
     apiKey,
     model,
@@ -187,7 +206,29 @@ export async function orchestrateBuddyTurn(params: {
   const topRecurringCat = getTopRecurringMistakes(analytics)[0]?.category || null;
   const activeMemories = memOutcome.state.enabled ? memOutcome.state.items : [];
 
-  // Run Brain 2 (English Coach) in parallel without delaying Brain 1 (Friend Voice Reply)
+  // Ordered stream merger state — holds live friend tokens briefly until grammar resolves so
+  // `spokenCorrection` is spoken & displayed FIRST with 0% contradiction and parallel speed!
+  let grammarResolved = false;
+  let resolvedSpokenCorrection = '';
+  let resolvedCorrectionType: 'none' | 'grammar' | 'naturalness' | 'vocabulary' = 'none';
+  let latestFriendPartial = '';
+  const pendingFriendSentences: string[] = [];
+
+  const emitCombinedPartial = () => {
+    const combined = [resolvedSpokenCorrection, latestFriendPartial]
+      .filter(Boolean)
+      .join(' ')
+      .trim();
+    if (combined) {
+      callbacks.onFriendPartialReply?.(combined, packet, {
+        spokenCorrection: resolvedSpokenCorrection,
+        conversationalResponse: latestFriendPartial,
+        correctionType: resolvedCorrectionType
+      });
+    }
+  };
+
+  // Launch Brain 2 (English Coach) at t=0ms
   const gramStart = typeof performance !== 'undefined' ? performance.now() : Date.now();
   const grammarPromise = analyzeBuddyGrammar({
     originalTranscript: packet.analysisTranscript,
@@ -211,15 +252,34 @@ export async function orchestrateBuddyTurn(params: {
         }
       }
     }
+
+    const recast = buildSpokenCorrection(analysis, intensity);
+    grammarResolved = true;
+    resolvedSpokenCorrection = recast.spokenCorrection;
+    resolvedCorrectionType = recast.correctionType;
+
+    // 1. Update right-hand Grammar Coach panel immediately
     callbacks.onGrammarAnalysisReady(analysis, updatedAnalytics, nextLib, packet);
+
+    // 2. Speak the short inline recast FIRST (if any), then flush any already-streamed friend sentences!
+    if (resolvedSpokenCorrection) {
+      callbacks.onFriendSentenceReady?.(resolvedSpokenCorrection, packet);
+    }
+    while (pendingFriendSentences.length > 0) {
+      const s = pendingFriendSentences.shift();
+      if (s) callbacks.onFriendSentenceReady?.(s, packet);
+    }
+    emitCombinedPartial();
+
     return {
       analysis,
+      recast,
       latencyMs: Math.max(1, Math.round(gramEnd - gramStart))
     };
   });
 
-  // Run Brain 1 (AI Friend Responder — Real-Time SSE Streaming!)
-  const friendResult = await generateBuddyFriendReply({
+  // Launch Brain 1 (AI Friend Responder — Real-Time SSE Streaming!) simultaneously at t=0ms
+  const rawFriendPromise = generateBuddyFriendReply({
     userText: packet.analysisTranscript,
     history: packet.priorHistory,
     personality,
@@ -231,17 +291,75 @@ export async function orchestrateBuddyTurn(params: {
     apiKey,
     model,
     onPartialReply: (partialText) => {
-      callbacks.onFriendPartialReply?.(partialText, packet);
+      latestFriendPartial = partialText;
+      if (grammarResolved) {
+        emitCombinedPartial();
+      }
     },
     onSentenceReady: (sentence) => {
-      callbacks.onFriendSentenceReady?.(sentence, packet);
+      if (grammarResolved) {
+        callbacks.onFriendSentenceReady?.(sentence, packet);
+      } else {
+        pendingFriendSentences.push(sentence);
+      }
     }
   });
 
-  // Deliver Friend Reply immediately so voice playback starts with zero wait for Grammar
-  callbacks.onFriendReplyReady(friendResult, packet);
+  const [{ analysis: grammarAnalysis, recast, latencyMs: grammarLatencyMs }, baseFriendResult] =
+    await Promise.all([grammarPromise, rawFriendPromise]);
 
-  const { analysis: grammarAnalysis, latencyMs: grammarLatencyMs } = await grammarPromise;
+  // Suppress inline recast only when user specifically asked to repeat last message or explain an earlier mistake
+  const suppressInlineRecast =
+    baseFriendResult.intent === 'repeat_last_buddy' ||
+    baseFriendResult.intent === 'explain_earlier_mistake' ||
+    baseFriendResult.intent === 'unclear_speech';
+
+  const finalSpokenCorrection = suppressInlineRecast ? '' : recast.spokenCorrection;
+  const finalCorrectionType = suppressInlineRecast ? 'none' : recast.correctionType;
+  const conversationalResponse = baseFriendResult.reply.trim();
+  const combinedReply = [finalSpokenCorrection, conversationalResponse]
+    .filter(Boolean)
+    .join(' ')
+    .trim();
+
+  const followUpQuestion =
+    conversationalResponse
+      .split(/(?<=[.!?])\s+/)
+      .map(s => s.trim())
+      .reverse()
+      .find(s => s.endsWith('?')) || null;
+
+  const structuredTurn: BuddyStructuredTurnResponse = {
+    originalTranscript: packet.finalizedVerbatimTranscript,
+    intendedMeaning:
+      grammarAnalysis.intendedMeaning ||
+      grammarAnalysis.corrected_sentence ||
+      packet.analysisTranscript,
+    correctionRequired: Boolean(finalSpokenCorrection),
+    correctedSentence: grammarAnalysis.corrected_sentence,
+    correctionType: finalCorrectionType,
+    mistakes: grammarAnalysis.mistakes
+      .filter(m => m.severity === 'GRAMMAR_ERROR' || m.severity === 'UNNATURAL')
+      .map(m => ({
+        original: m.original,
+        corrected: m.correction,
+        explanation: m.explanation
+      })),
+    spokenCorrection: finalSpokenCorrection,
+    conversationalResponse,
+    followUpQuestion
+  };
+
+  const friendResult: OrchestratedFriendPayload = {
+    ...baseFriendResult,
+    reply: combinedReply,
+    spokenCorrection: finalSpokenCorrection,
+    conversationalResponse,
+    correctionType: finalCorrectionType,
+    structuredTurn
+  };
+
+  callbacks.onFriendReplyReady(friendResult, packet);
 
   const trace: BuddyTurnTrace = {
     turnId: packet.turnId,
@@ -262,7 +380,8 @@ export async function orchestrateBuddyTurn(params: {
     grammarLatencyMs,
     grammarSource: grammarAnalysis.analyzerSource,
     mistakesCount: grammarAnalysis.mistakes.length,
-    replyPreview: friendResult.reply.slice(0, 90)
+    spokenCorrection: finalSpokenCorrection || undefined,
+    replyPreview: combinedReply.slice(0, 110)
   };
 
   if (callbacks.onTraceReady) {

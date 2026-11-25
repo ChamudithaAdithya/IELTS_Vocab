@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
+  <rect width="800" height="420" rx="20" fill="#f0f9ff"/>
+  <text x="400" y="38" text-anchor="middle" font-size="19" font-weight="800" fill="#0f172a">Why Manatees Cannot Move Their Head “Side to Side”</text>
+  <text x="400" y="60" text-anchor="middle" font-size="13" fill="#475569">6 Neck Vertebrae → Must Turn Whole Body by Steering with Flippers</text>
+
+  <!-- Left: Cannot move head side to side -->
+  <rect x="32" y="84" width="348" height="304" rx="16" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="206" y="114" text-anchor="middle" font-size="15" font-weight="800" fill="#dc2626">✗ CANNOT Move Head Side to Side</text>
+  <ellipse cx="206" cy="245" rx="46" ry="88" fill="#64748b"/>
+  <circle cx="206" cy="158" r="32" fill="#475569"/>
+  <!-- Neck 6 bones highlight -->
+  <rect x="188" y="182" width="36" height="18" rx="4" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
+  <text x="278" y="195" font-size="11" font-weight="800" fill="#a16207">← Only 6 neck bones</text>
+  <!-- Blocked left-right arrows -->
+  <path d="M135 155 Q206 115 277 155" fill="none" stroke="#ef4444" stroke-width="3" stroke-dasharray="5 4"/>
+  <polygon points="132,158 144,156 139,146" fill="#ef4444"/>
+  <polygon points="280,158 268,156 273,146" fill="#ef4444"/>
+  <text x="206" y="128" text-anchor="middle" font-size="11.5" font-weight="800" fill="#b91c1c">Side to side (Left ↔ Right blocked)</text>
+  <text x="206" y="366" text-anchor="middle" font-size="12" fill="#475569">Unlike most mammals (which have 7 neck bones)</text>
+
+  <!-- Right: Must turn whole body steering with flippers -->
+  <rect x="420" y="84" width="348" height="304" rx="16" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="594" y="114" text-anchor="middle" font-size="15" font-weight="800" fill="#047857">✓ STEERING with Flippers to Turn</text>
+  <g transform="translate(594, 240) rotate(28)">
+    <ellipse cx="0" cy="0" rx="44" ry="86" fill="#0284c7"/>
+    <circle cx="0" cy="-82" r="30" fill="#0369a1"/>
+    <!-- Left & Right Flippers paddling -->
+    <ellipse cx="-56" cy="-36" rx="24" ry="11" transform="rotate(-30 -56 -36)" fill="#38bdf8" stroke="#0c4a6e" stroke-width="2"/>
+    <ellipse cx="56" cy="-36" rx="24" ry="11" transform="rotate(30 56 -36)" fill="#38bdf8" stroke="#0c4a6e" stroke-width="2"/>
+    <ellipse cx="0" cy="92" rx="36" ry="26" fill="#0369a1"/>
+  </g>
+  <!-- Circular rotation arrow around entire body -->
+  <path d="M488 210 A112 112 0 0 1 686 175" fill="none" stroke="#10b981" stroke-width="3.5"/>
+  <polygon points="692,182 688,168 677,177" fill="#10b981"/>
+  <text x="594" y="350" text-anchor="middle" font-size="12.5" font-weight="800" fill="#065f46">Whole body rotates together</text>
+  <text x="594" y="370" text-anchor="middle" font-size="11.5" fill="#475569">Flexible flippers act like boat paddles for steering</text>
+</svg>

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
+  <rect width="800" height="420" rx="20" fill="#f8fafc"/>
+  <text x="400" y="38" text-anchor="middle" font-size="19" font-weight="800" fill="#0f172a">Herbivores vs. Omnivorous Animals</text>
+  <text x="400" y="60" text-anchor="middle" font-size="13" fill="#475569">Understanding Animal Diet Classifications in IELTS Biology Passages</text>
+
+  <!-- Left Circle: Herbivores -->
+  <rect x="36" y="86" width="344" height="300" rx="18" fill="#ecfdf5" stroke="#34d399" stroke-width="2"/>
+  <text x="208" y="122" text-anchor="middle" font-size="18" font-weight="900" fill="#065f46">HERBIVORES</text>
+  <text x="208" y="144" text-anchor="middle" font-size="12.5" font-weight="700" fill="#047857">Eat ONLY Plants (ශාකභක්ෂක)</text>
+
+  <!-- Plant / Seagrass Icons -->
+  <circle cx="208" cy="225" r="56" fill="#ffffff" stroke="#6ee7b7" stroke-width="2"/>
+  <path d="M192 262 Q182 220 198 186 M208 262 Q208 215 212 182 M224 262 Q234 222 220 190" fill="none" stroke="#16a34a" stroke-width="5" stroke-linecap="round"/>
+  <text x="208" y="312" text-anchor="middle" font-size="13" font-weight="800" fill="#064e3b">Seagrasses, Leaves &amp; Roots</text>
+  <text x="208" y="335" text-anchor="middle" font-size="12" fill="#047857">Examples: Dugongs, Amazonian Manatees,</text>
+  <text x="208" y="353" text-anchor="middle" font-size="12" fill="#047857">Rabbits, Cows, Deer</text>
+
+  <!-- Right Circle: Omnivorous -->
+  <rect x="420" y="86" width="344" height="300" rx="18" fill="#eff6ff" stroke="#60a5fa" stroke-width="2"/>
+  <text x="592" y="122" text-anchor="middle" font-size="18" font-weight="900" fill="#1e3a8a">OMNIVOROUS</text>
+  <text x="592" y="144" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1d4ed8">Eat BOTH Plants + Animals (සර්වභක්ෂක)</text>
+
+  <circle cx="536" cy="225" r="46" fill="#ffffff" stroke="#93c5fd" stroke-width="2"/>
+  <path d="M526 254 Q520 220 532 195 M544 254 Q550 222 540 198" fill="none" stroke="#16a34a" stroke-width="4.5" stroke-linecap="round"/>
+  <text x="592" y="232" text-anchor="middle" font-size="22" font-weight="900" fill="#1d4ed8">+</text>
+  <circle cx="648" cy="225" r="46" fill="#ffffff" stroke="#93c5fd" stroke-width="2"/>
+  <!-- Simple Fish & Shell shape -->
+  <path d="M626 225 Q648 206 668 225 Q648 244 626 225 Z M668 225 L678 215 L678 235 Z" fill="#f97316"/>
+
+  <text x="592" y="312" text-anchor="middle" font-size="13" font-weight="800" fill="#1e3a8a">Plants + Small Molluscs &amp; Fish</text>
+  <text x="592" y="335" text-anchor="middle" font-size="12" fill="#1d4ed8">Examples: African &amp; West Indian Manatees,</text>
+  <text x="592" y="353" text-anchor="middle" font-size="12" fill="#1d4ed8">Bears, Humans</text>
+</svg>

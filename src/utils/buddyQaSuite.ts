@@ -17,8 +17,10 @@ import type {
 } from '../types/speakingBuddy';
 import {
   analyzeBuddyGrammarLocally,
+  buildSpokenCorrection,
   validateTranscriptCoherence
 } from './buddyGrammarEngine';
+import { buildFinalizedTurnPacket } from './buddyOrchestrator';
 import {
   classifyBuddyIntent,
   extractSessionContext,
@@ -50,6 +52,7 @@ export const ORB_14_STATES: OrbStateDescriptor[] = [
   { state: 'understanding', label: 'Understanding', visual: 'Multiple synchronized orbiting rings', meaning: 'Processing meaning & context', dotColor: 'bg-indigo-400' },
   { state: 'thinking', label: 'Thinking', visual: 'Fast-moving internal energy streams', meaning: 'Generating natural friend response', dotColor: 'bg-violet-400' },
   { state: 'speaking', label: 'Speaking', visual: 'Rhythmic pulsation synced to AI audio', meaning: 'AI friend voice playback active', dotColor: 'bg-fuchsia-400' },
+  { state: 'interrupted', label: 'Interrupted', visual: 'Quick cyan-gold ripple reset', meaning: 'User barged in while AI was speaking', dotColor: 'bg-cyan-300' },
   { state: 'happy', label: 'Happy', visual: 'Warm purple glow with gentle lift', meaning: 'Positive, friendly moment / clean English', dotColor: 'bg-purple-400' },
   { state: 'encouraging', label: 'Encouraging', visual: 'Golden aura with sparkling particles', meaning: 'Motivating user ("Try Again" win)', dotColor: 'bg-amber-400' },
   { state: 'analyzing', label: 'Analyzing', visual: 'Subtle dashed orbital rings', meaning: 'Background grammar check running', dotColor: 'bg-teal-400' },
@@ -403,7 +406,7 @@ export function runAll13BuddyQaScenarios(): BuddyQaSuiteReport {
           { id: 'b1', role: 'buddy', timestamp: 2, text: 'What dish are you making?' }
         ];
         const reply = generateLocalFriendReply("Let's discuss something else.", history, 'friendly', 'friendly');
-        if (/ginger|cooking|dish/i.test(reply) || !/switch|fresh topic|mind/i.test(reply)) {
+        if (/ginger|cooking|dish/i.test(reply) || !/of course|what would you like to talk about|switch|fresh topic|mind/i.test(reply)) {
           throw new Error(`Did not switch topics cleanly: ${reply}`);
         }
         return `Switched gears cleanly with zero stale cooking bleed.`;
@@ -596,6 +599,193 @@ export function runAll13BuddyQaScenarios(): BuddyQaSuiteReport {
         }
         return 'All 3 valid English sentences passed cleanly with 0 false positives.';
       }
+    ),
+    // -----------------------------------------------------------------------
+    // MASTER PROMPT §11 — TESTS A TO G (NATURAL CONVERSATION + INSTANT RECAST)
+    // -----------------------------------------------------------------------
+    runScenario(
+      27,
+      'Test A — Past tense spoken recast + continuation ("Yesterday I go to shopping.")',
+      'Spoken Recast & Friend Flow',
+      () => {
+        const pkt = buildFinalizedTurnPacket({
+          sessionId: 's-test-a',
+          rawTranscript: 'Yesterday I go to shopping.',
+          engine: 'gemini-cloud',
+          priorHistory: []
+        });
+        const gram = analyzeBuddyGrammarLocally({
+          originalTranscript: pkt.analysisTranscript,
+          intensity: 'gentle'
+        });
+        const recast = buildSpokenCorrection(gram, 'gentle');
+        const cont = generateLocalFriendReply(pkt.analysisTranscript, [], 'friendly', 'friendly');
+        if (
+          recast.spokenCorrection !== 'You can say, "Yesterday I went shopping."' ||
+          !/what did you (?:end up )?buy/i.test(cont)
+        ) {
+          throw new Error(`Unexpected Test A output: "${recast.spokenCorrection}" | "${cont}"`);
+        }
+        return `${recast.spokenCorrection} ${cont}`;
+      },
+      true
+    ),
+    runScenario(
+      28,
+      'Test B — Missing profession article ("I am software engineer.")',
+      'Spoken Recast & Friend Flow',
+      () => {
+        const gram = analyzeBuddyGrammarLocally({
+          originalTranscript: 'I am software engineer.',
+          intensity: 'gentle'
+        });
+        const recast = buildSpokenCorrection(gram, 'gentle');
+        const cont = generateLocalFriendReply('I am software engineer.', [], 'friendly', 'friendly');
+        if (
+          recast.spokenCorrection !== 'You can say, "I am a software engineer."' ||
+          !/what kind of software do you work on/i.test(cont)
+        ) {
+          throw new Error(`Unexpected Test B output: "${recast.spokenCorrection}" | "${cont}"`);
+        }
+        return `${recast.spokenCorrection} ${cont}`;
+      }
+    ),
+    runScenario(
+      29,
+      'Test C — Correct sentence ("I developed an AI application.") — zero false recast',
+      'Grammar Precision & Friend Flow',
+      () => {
+        const gram = analyzeBuddyGrammarLocally({
+          originalTranscript: 'I developed an AI application.',
+          intensity: 'detailed'
+        });
+        const recast = buildSpokenCorrection(gram, 'gentle');
+        const cont = generateLocalFriendReply(
+          'I developed an AI application.',
+          [],
+          'friendly',
+          'friendly'
+        );
+        if (recast.correctionRequired || recast.spokenCorrection !== '') {
+          throw new Error(`Falsely corrected valid sentence: ${recast.spokenCorrection}`);
+        }
+        if (!/exciting|what does your application do/i.test(cont)) {
+          throw new Error(`Unexpected Test C continuation: "${cont}"`);
+        }
+        return `No recast + "${cont}"`;
+      }
+    ),
+    runScenario(
+      30,
+      'Tests D & E — Subject change & simple question clarification',
+      'Conversation Intelligence',
+      () => {
+        const dReply = generateLocalFriendReply(
+          "Let's talk about something else.",
+          [],
+          'friendly',
+          'friendly'
+        );
+        const eHistory: BuddyMessage[] = [
+          {
+            id: 'b-prev',
+            role: 'buddy',
+            timestamp: 1,
+            text: 'Are you building a project right now, or mostly studying the concepts in class?'
+          }
+        ];
+        const eReply = generateLocalFriendReply(
+          "I don't understand what you are asking.",
+          eHistory,
+          'friendly',
+          'friendly'
+        );
+        if (!/of course! what would you like to talk about/i.test(dReply)) {
+          throw new Error(`Unexpected Test D reply: ${dReply}`);
+        }
+        if (!/building|project|theory|university/i.test(eReply)) {
+          throw new Error(`Unexpected Test E clarification: ${eReply}`);
+        }
+        return `Switch: "${dReply}" | Clarified prior question simply.`;
+      }
+    ),
+    runScenario(
+      31,
+      'Test F — Off-topic detection ("You\'re going off-topic. We were discussing my project.")',
+      'Conversation Intelligence',
+      () => {
+        const reply = generateLocalFriendReply(
+          "You're going off-topic. We were discussing my project.",
+          [],
+          'friendly',
+          'friendly'
+        );
+        if (!/you're right/i.test(reply) || !/your project/i.test(reply) || !/feature/i.test(reply)) {
+          throw new Error(`Unexpected Test F reply: ${reply}`);
+        }
+        return reply;
+      }
+    ),
+    runScenario(
+      32,
+      'Test G — Verbatim speech preserved ("I buyed some clothes.")',
+      'Verbatim Integrity',
+      () => {
+        const pkt = buildFinalizedTurnPacket({
+          sessionId: 's-test-g',
+          rawTranscript: 'I buyed some clothes.',
+          engine: 'gemini-cloud',
+          priorHistory: []
+        });
+        const gram = analyzeBuddyGrammarLocally({
+          originalTranscript: pkt.analysisTranscript,
+          intensity: 'gentle'
+        });
+        const recast = buildSpokenCorrection(gram, 'gentle');
+        if (
+          pkt.rawTranscript !== 'I buyed some clothes.' ||
+          pkt.finalizedVerbatimTranscript !== 'I buyed some clothes.' ||
+          gram.corrected_sentence !== 'I bought some clothes.' ||
+          recast.spokenCorrection !== 'You can say, "I bought some clothes."'
+        ) {
+          throw new Error('Test G verbatim / correction mismatch');
+        }
+        return `Verbatim "${pkt.finalizedVerbatimTranscript}" preserved; recast: ${recast.spokenCorrection}`;
+      },
+      true
+    ),
+    runScenario(
+      33,
+      'Core Gym Conversation + Naturalness ("going to my home") + 3 Mode Intensities',
+      'Modes & Naturalness',
+      () => {
+        const gym1 = analyzeBuddyGrammarLocally({ originalTranscript: "I'm going to gym." });
+        const gym3 = analyzeBuddyGrammarLocally({
+          originalTranscript: "Tired after workout, but I think it's refreshing."
+        });
+        const home = analyzeBuddyGrammarLocally({ originalTranscript: 'I am going to my home.' });
+        const homeRecast = buildSpokenCorrection(home, 'gentle');
+        const gentle = buildSpokenCorrection(gym1, 'gentle').spokenCorrection;
+        const balanced = buildSpokenCorrection(gym1, 'balanced').spokenCorrection;
+        const detailed = buildSpokenCorrection(gym1, 'detailed').spokenCorrection;
+
+        if (gym1.corrected_sentence !== "I'm going to the gym.") {
+          throw new Error(`Gym article failed: ${gym1.corrected_sentence}`);
+        }
+        if (gym3.corrected_sentence !== "I feel tired after a workout, but I think it's refreshing.") {
+          throw new Error(`Workout clause failed: ${gym3.corrected_sentence}`);
+        }
+        if (
+          homeRecast.correctionType !== 'naturalness' ||
+          homeRecast.spokenCorrection !== 'A more natural way to say that is, "I\'m going home."'
+        ) {
+          throw new Error(`Naturalness recast failed: ${homeRecast.spokenCorrection}`);
+        }
+        if (!(detailed.length > balanced.length && balanced.length > gentle.length)) {
+          throw new Error(`3-mode progression failed: G=${gentle} | B=${balanced} | D=${detailed}`);
+        }
+        return `Gym, Workout, Naturalness ("I'm going home"), & Gentle/Balanced/Detailed verified.`;
+      }
     )
   ];
 
@@ -607,10 +797,10 @@ export function runAll13BuddyQaScenarios(): BuddyQaSuiteReport {
 
   // Compute quantitative subsystem metrics
   const byId = (id: number) => results.find(r => r.id === id)?.passed ?? false;
-  const contextIds = [10, 12, 14, 15, 16, 17, 19, 20];
-  const intentIds = [10, 14, 15, 16, 17, 19, 20, 21, 22];
-  const precisionIds = [8, 9, 13, 26];
-  const recallIds = [1, 4, 7, 17, 18, 24, 25];
+  const contextIds = [10, 12, 14, 15, 16, 17, 19, 20, 27, 28, 30, 31];
+  const intentIds = [10, 14, 15, 16, 17, 19, 20, 21, 22, 30, 31];
+  const precisionIds = [8, 9, 13, 26, 29];
+  const recallIds = [1, 4, 7, 17, 18, 24, 25, 27, 28, 32, 33];
 
   const pct = (ids: number[]) =>
     Math.round((ids.filter(byId).length / Math.max(1, ids.length)) * 100);

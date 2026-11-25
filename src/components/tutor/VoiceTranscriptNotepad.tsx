@@ -14,11 +14,9 @@ import {
   Radio,
   Wand2,
   Send,
-  Cpu,
   Sliders
 } from 'lucide-react';
 import type { SpeechEngineMode } from './MicDiagnosticModal';
-import type { WhisperProgressUpdate } from '../../utils/whisperClient';
 
 export type SttLiveStatus =
   | 'idle'
@@ -41,7 +39,6 @@ export interface VoiceTranscriptNotepadProps {
   audioLevel: number;
   speechEngine: SpeechEngineMode;
   onSelectSpeechEngine: (engine: SpeechEngineMode) => void;
-  whisperProgress?: WhisperProgressUpdate | null;
   recognitionLang: string;
   onAccentChange: (lang: string) => void;
   sttStatus: SttLiveStatus;
@@ -60,7 +57,6 @@ export interface VoiceTranscriptNotepadProps {
   hasAudioBlob: boolean;
   isTranscribingAudio: boolean;
   hasGeminiApiKey: boolean;
-  onTranscribeWithWhisper: () => void;
   onTranscribeWithGemini: () => void;
   onOpenApiKeyModal?: () => void;
   hesitationAlert: boolean;
@@ -94,7 +90,6 @@ export const VoiceTranscriptNotepad: React.FC<VoiceTranscriptNotepadProps> = ({
   audioLevel,
   speechEngine,
   onSelectSpeechEngine,
-  whisperProgress,
   recognitionLang,
   onAccentChange,
   sttStatus,
@@ -113,7 +108,6 @@ export const VoiceTranscriptNotepad: React.FC<VoiceTranscriptNotepadProps> = ({
   hasAudioBlob,
   isTranscribingAudio,
   hasGeminiApiKey,
-  onTranscribeWithWhisper,
   onTranscribeWithGemini,
   onOpenApiKeyModal,
   hesitationAlert,
@@ -157,25 +151,17 @@ export const VoiceTranscriptNotepad: React.FC<VoiceTranscriptNotepadProps> = ({
     if (isTranscribingAudio || sttStatus === 'transcribing') {
       return (
         <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-indigo-100 text-indigo-800 border border-indigo-200 animate-pulse">
-          <Cpu className="w-3 h-3 animate-spin" />
-          <span>
-            {speechEngine === 'gemini-cloud'
-              ? 'Transcribing via Gemini Audio AI...'
-              : whisperProgress?.message || 'Transcribing with Whisper AI...'}
-          </span>
+          <Sparkles className="w-3 h-3 animate-spin" />
+          <span>Transcribing via Gemini Audio AI...</span>
         </span>
       );
     }
     if (isRecording) {
-      if (speechEngine === 'whisper-local' || speechEngine === 'gemini-cloud') {
+      if (speechEngine === 'gemini-cloud') {
         return (
           <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-            <span>
-              {speechEngine === 'whisper-local'
-                ? 'Clean Audio Capture → Whisper AI on Stop'
-                : 'Clean Audio Capture → Gemini AI on Stop'}
-            </span>
+            <span>Clean Audio Capture → Gemini AI on Stop</span>
           </span>
         );
       }
@@ -210,7 +196,7 @@ export const VoiceTranscriptNotepad: React.FC<VoiceTranscriptNotepadProps> = ({
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">
-          {/* Zero-Conflict 3-Engine Selector */}
+          {/* Zero-Conflict 2-Engine Selector */}
           <div
             className="inline-flex items-center p-0.5 bg-slate-100 rounded-xl border border-slate-200 text-[11px]"
             title="Each engine owns your microphone cleanly with zero Windows audio conflict"
@@ -218,16 +204,15 @@ export const VoiceTranscriptNotepad: React.FC<VoiceTranscriptNotepadProps> = ({
             <button
               type="button"
               disabled={isRecording}
-              onClick={() => onSelectSpeechEngine('whisper-local')}
-              className={`px-2 py-1 rounded-lg font-bold transition-all flex items-center gap-1 cursor-pointer disabled:opacity-50 ${
-                speechEngine === 'whisper-local'
+              onClick={() => onSelectSpeechEngine('gemini-cloud')}
+              className={`px-2 py-1 rounded-lg font-bold transition-all cursor-pointer disabled:opacity-50 ${
+                speechEngine === 'gemini-cloud'
                   ? 'bg-indigo-600 text-white shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
-              title="Free OpenAI Whisper neural ASR in browser — best accent accuracy & native punctuation"
+              title="Studio 16kHz WAV transcribed via Gemini Multimodal Audio AI (0% auto-correction)"
             >
-              <Cpu className="w-3 h-3" />
-              <span>Whisper AI</span>
+              ✨ Gemini Audio
             </button>
             <button
               type="button"
@@ -241,19 +226,6 @@ export const VoiceTranscriptNotepad: React.FC<VoiceTranscriptNotepadProps> = ({
               title="Pure Browser Live STT without MediaRecorder contention"
             >
               ⚡ Pure Live
-            </button>
-            <button
-              type="button"
-              disabled={isRecording}
-              onClick={() => onSelectSpeechEngine('gemini-cloud')}
-              className={`px-2 py-1 rounded-lg font-bold transition-all cursor-pointer disabled:opacity-50 ${
-                speechEngine === 'gemini-cloud'
-                  ? 'bg-amber-500 text-white shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-              title="Transcribe raw audio via Gemini Multimodal API (requires API key)"
-            >
-              ☁️ Gemini
             </button>
           </div>
 
@@ -302,32 +274,6 @@ export const VoiceTranscriptNotepad: React.FC<VoiceTranscriptNotepadProps> = ({
         </div>
       </div>
 
-      {/* Whisper Neural Model Download / Inference Progress Bar */}
-      {whisperProgress && (whisperProgress.status === 'loading' || whisperProgress.status === 'inferencing') && (
-        <div className="p-3 bg-indigo-50 border border-indigo-200 rounded-xl space-y-1.5 text-xs">
-          <div className="flex items-center justify-between text-indigo-900 font-bold">
-            <span className="flex items-center gap-1.5">
-              <Cpu className="w-3.5 h-3.5 text-indigo-600 animate-spin" />
-              <span>{whisperProgress.message || 'Running Whisper AI locally in your browser...'}</span>
-            </span>
-            {typeof whisperProgress.percent === 'number' && (
-              <span className="font-mono">{whisperProgress.percent}%</span>
-            )}
-          </div>
-          {typeof whisperProgress.percent === 'number' && (
-            <div className="w-full h-1.5 bg-indigo-200 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-indigo-600 transition-all duration-200 rounded-full"
-                style={{ width: `${whisperProgress.percent}%` }}
-              />
-            </div>
-          )}
-          <p className="text-[10px] text-indigo-700">
-            First-time model weights download once and stay cached offline in your browser.
-          </p>
-        </div>
-      )}
-
       {/* Explicit Diagnostic / Rescue Banner */}
       {sttError && (
         <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-950 space-y-2">
@@ -338,7 +284,7 @@ export const VoiceTranscriptNotepad: React.FC<VoiceTranscriptNotepadProps> = ({
                 <p className="font-bold">{sttError}</p>
                 {showSinhala && (
                   <p className="text-[11px] text-amber-800 font-sinhala">
-                    වඩාත් නිවැරදි හඬ හඳුනාගැනීම සඳහා "Whisper AI" එන්ජිම තෝරාගන්න හෝ "Test Mic" මඟින් මයික්‍රෆෝනය පරීක්ෂා කරන්න.
+                    වඩාත් නිවැරදි හඬ හඳුනාගැනීම සඳහා "Gemini Audio" එන්ජිම තෝරාගන්න හෝ "Test Mic" මඟින් මයික්‍රෆෝනය පරීක්ෂා කරන්න.
                   </p>
                 )}
               </div>
@@ -353,26 +299,26 @@ export const VoiceTranscriptNotepad: React.FC<VoiceTranscriptNotepadProps> = ({
           </div>
 
           <div className="flex items-center gap-2 flex-wrap pt-0.5">
-            {speechEngine !== 'whisper-local' && !isRecording && (
+            {speechEngine !== 'gemini-cloud' && hasGeminiApiKey && !isRecording && (
               <button
                 type="button"
                 onClick={() => {
                   onDismissError();
-                  onSelectSpeechEngine('whisper-local');
+                  onSelectSpeechEngine('gemini-cloud');
                 }}
                 className="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-bold cursor-pointer flex items-center gap-1"
               >
-                <Cpu className="w-3 h-3" />
-                <span>Switch to Whisper AI Local (Recommended)</span>
+                <Sparkles className="w-3 h-3" />
+                <span>Switch to Gemini Audio (Recommended)</span>
               </button>
             )}
-            {speechEngine === 'live-solo' && recognitionLang !== 'en-IN' && (
+            {speechEngine === 'live-solo' && recognitionLang !== 'en-GB' && (
               <button
                 type="button"
-                onClick={() => onAccentChange('en-IN')}
+                onClick={() => onAccentChange('en-GB')}
                 className="px-2.5 py-1 rounded-lg bg-white hover:bg-amber-100 text-amber-900 border border-amber-300 text-[11px] font-bold cursor-pointer"
               >
-                🇱🇰 Try South Asian English (en-IN)
+                🇬🇧 Try UK English (en-GB)
               </button>
             )}
             {onOpenMicDiagnostic && !isRecording && (
@@ -409,9 +355,7 @@ export const VoiceTranscriptNotepad: React.FC<VoiceTranscriptNotepadProps> = ({
             >
               <MicOff className="w-4 h-4 text-rose-400" />
               <span>
-                {speechEngine === 'whisper-local'
-                  ? 'Stop & Transcribe (Whisper)'
-                  : speechEngine === 'gemini-cloud'
+                {speechEngine === 'gemini-cloud'
                   ? 'Stop & Transcribe (Gemini)'
                   : 'Stop Recording'}
               </span>
@@ -493,32 +437,17 @@ export const VoiceTranscriptNotepad: React.FC<VoiceTranscriptNotepadProps> = ({
             </button>
           )}
 
-          {!isRecording && hasAudioBlob && (
-            <>
-              <button
-                type="button"
-                onClick={onTranscribeWithWhisper}
-                disabled={isTranscribingAudio}
-                className="px-2.5 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 disabled:opacity-50 text-indigo-800 text-xs font-bold transition-all flex items-center gap-1 cursor-pointer border border-indigo-200"
-                title="Re-transcribe recorded audio locally using OpenAI Whisper"
-              >
-                <Cpu className={`w-3.5 h-3.5 text-indigo-600 ${isTranscribingAudio ? 'animate-spin' : ''}`} />
-                <span>Whisper AI</span>
-              </button>
-
-              {hasGeminiApiKey && (
-                <button
-                  type="button"
-                  onClick={onTranscribeWithGemini}
-                  disabled={isTranscribingAudio}
-                  className="px-2.5 py-1.5 rounded-xl bg-violet-50 hover:bg-violet-100 disabled:opacity-50 text-violet-800 text-xs font-bold transition-all flex items-center gap-1 cursor-pointer border border-violet-200"
-                  title="Re-transcribe recorded audio via Gemini Cloud AI"
-                >
-                  <Wand2 className={`w-3.5 h-3.5 text-violet-600 ${isTranscribingAudio ? 'animate-spin' : ''}`} />
-                  <span>Gemini AI</span>
-                </button>
-              )}
-            </>
+          {!isRecording && hasAudioBlob && hasGeminiApiKey && (
+            <button
+              type="button"
+              onClick={onTranscribeWithGemini}
+              disabled={isTranscribingAudio}
+              className="px-2.5 py-1.5 rounded-xl bg-violet-50 hover:bg-violet-100 disabled:opacity-50 text-violet-800 text-xs font-bold transition-all flex items-center gap-1 cursor-pointer border border-violet-200"
+              title="Re-transcribe recorded audio via Gemini Audio AI"
+            >
+              <Wand2 className={`w-3.5 h-3.5 text-violet-600 ${isTranscribingAudio ? 'animate-spin' : ''}`} />
+              <span>Gemini AI</span>
+            </button>
           )}
 
           {/* Editing Utilities */}
@@ -634,17 +563,13 @@ export const VoiceTranscriptNotepad: React.FC<VoiceTranscriptNotepadProps> = ({
               ) : (
                 <span className="text-emerald-800 font-medium truncate">
                   {audioLevel > 10
-                    ? `Capturing crystal-clear raw voice — click "Stop & Transcribe" for accurate ${speechEngine === 'whisper-local' ? 'Whisper AI' : 'Gemini AI'} text!`
+                    ? 'Capturing crystal-clear raw voice — click "Stop & Transcribe" for accurate Gemini AI text!'
                     : 'Microphone ready — speak your full answer clearly, then click Stop...'}
                 </span>
               )}
             </div>
             <span className="text-[10px] font-mono text-slate-400 shrink-0 hidden sm:inline">
-              {speechEngine === 'whisper-local'
-                ? 'Whisper Neural'
-                : speechEngine === 'gemini-cloud'
-                ? 'Gemini Audio'
-                : recognitionLang}
+              {speechEngine === 'gemini-cloud' ? 'Gemini Audio' : recognitionLang}
             </span>
           </div>
         )}

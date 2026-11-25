@@ -3,6 +3,7 @@ import { IMPORTED_ACADEMIC_LESSON } from './importedVocabulary';
 import { LESSON_10_MAPUNGUBWE } from './lesson10Mapungubwe';
 import { LESSON_11_TENSES } from './lesson11TensesIrregularVerbs';
 import { LESSON_12_CAMBRIDGE_BATCH_1 } from './lesson12CambridgeBatch1';
+import { LESSON_13_MANATEES, LESSON_14_PROCRASTINATION } from './lesson13And14NewVocab';
 
 export const LESSONS: Lesson[] = [
   {
@@ -2717,11 +2718,13 @@ export const LESSONS: Lesson[] = [
   IMPORTED_ACADEMIC_LESSON,
   LESSON_10_MAPUNGUBWE,
   LESSON_11_TENSES,
-  LESSON_12_CAMBRIDGE_BATCH_1
+  LESSON_12_CAMBRIDGE_BATCH_1,
+  LESSON_13_MANATEES,
+  LESSON_14_PROCRASTINATION
 ];
 
 // Flat list of all words for quick lookup & dictionary
-export const ALL_WORDS = LESSONS.flatMap(lesson => 
+export const ALL_WORDS = LESSONS.flatMap(lesson =>
   lesson.words.map(w => ({
     ...w,
     lessonNumber: lesson.number,

@@ -44,6 +44,7 @@ export const WordBankView: React.FC<WordBankViewProps> = ({
         w.term.toLowerCase().includes(q) ||
         w.definition.toLowerCase().includes(q) ||
         w.sinhalaDefinition.includes(q) ||
+        (w.synonyms && w.synonyms.some(s => s.toLowerCase().includes(q))) ||
         w.collocations.some(c => c.text.toLowerCase().includes(q) || c.sinhala.includes(q));
 
       const matchesLesson = selectedLesson === 'all' || w.lessonId === selectedLesson;
@@ -175,6 +176,20 @@ export const WordBankView: React.FC<WordBankViewProps> = ({
                 <p className="text-xs text-slate-600 font-sinhala">
                   {word.sinhalaDefinition}
                 </p>
+              )}
+
+              {word.synonyms && word.synonyms.length > 0 && (
+                <div className="pt-0.5 flex items-center gap-1 flex-wrap">
+                  <span className="text-[11px] font-semibold text-emerald-800">Synonyms:</span>
+                  {word.synonyms.map((syn, sIdx) => (
+                    <span
+                      key={sIdx}
+                      className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 font-medium"
+                    >
+                      {syn}
+                    </span>
+                  ))}
+                </div>
               )}
             </div>
           );

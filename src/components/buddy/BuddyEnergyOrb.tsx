@@ -141,6 +141,21 @@ const STATE_MOTION: Record<BuddyOrbState, StateMotionConfig> = {
     bounceAmp: 0,
     dimFactor: 1.0
   },
+  interrupted: {
+    ribbonSpeed: 0.036,
+    starSpeed: 0.018,
+    ringSpeed: 0.028,
+    ringExpand: 0.1,
+    haloIntensity: 1.08,
+    magentaBoost: 1.05,
+    cyanBoost: 1.32,
+    goldBoost: 0.18,
+    emeraldBoost: 0,
+    errorTint: 0,
+    wobbleAmp: 2.2,
+    bounceAmp: 0,
+    dimFactor: 1.0
+  },
   happy: {
     ribbonSpeed: 0.022,
     starSpeed: 0.011,
