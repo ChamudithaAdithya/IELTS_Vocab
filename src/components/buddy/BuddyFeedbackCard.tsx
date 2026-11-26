@@ -351,6 +351,124 @@ export const BuddyFeedbackCard: React.FC<BuddyFeedbackCardProps> = ({
     );
   }
 
+  // 5-Way Diagnostic Gate #1: Incomplete Speech ("About my...", "I was thinking...") -> Encourage continuation, NEVER mark as grammar error or "Clean English"!
+  if (analysis.utteranceCategory === 'incomplete_speech' && totalCardItems === 0) {
+    return (
+      <div className="w-full rounded-2xl bg-sky-50/90 border border-sky-200 px-3.5 py-3 space-y-1.5 text-xs text-left shadow-xs">
+        <div className="flex items-center justify-between gap-2">
+          <span className="flex items-center gap-2 text-sky-800 font-semibold">
+            <Sparkles className="w-4 h-4 text-sky-600 shrink-0" />
+            <span>Incomplete Thought · Keep Going!</span>
+          </span>
+          {onRequestEdit && (
+            <button
+              type="button"
+              onClick={onRequestEdit}
+              className="px-2.5 py-1 rounded-lg bg-sky-100 hover:bg-sky-200/80 border border-sky-300 text-sky-900 text-[11px] font-semibold flex items-center gap-1 transition-colors cursor-pointer shrink-0"
+            >
+              <Edit3 className="w-3 h-3" />
+              <span>Complete / Edit</span>
+            </button>
+          )}
+        </div>
+        <p className="text-[12px] text-sky-900/85 leading-relaxed">
+          {analysis.clarificationNote ||
+            'No grammar mistake counted — it sounds like you paused mid-thought. Go ahead and finish your sentence!'}
+        </p>
+      </div>
+    );
+  }
+
+  // 5-Way Diagnostic Gate #2: Contextual Speech Recognition Slip vs. Pronunciation Minimal-Pair Tip
+  if (
+    (analysis.utteranceCategory === 'stt_error' ||
+      analysis.utteranceCategory === 'pronunciation_difficulty') &&
+    analysis.contextualWord &&
+    totalCardItems === 0
+  ) {
+    const cw = analysis.contextualWord;
+    const isPron = analysis.utteranceCategory === 'pronunciation_difficulty';
+    return (
+      <div
+        className={`w-full rounded-2xl px-3.5 py-3 space-y-2 text-xs text-left shadow-xs border ${
+          isPron
+            ? 'bg-violet-50/90 border-violet-200'
+            : 'bg-indigo-50/90 border-indigo-200'
+        }`}
+      >
+        <div className="flex items-center justify-between gap-2 flex-wrap">
+          <span
+            className={`flex items-center gap-2 font-semibold ${
+              isPron ? 'text-violet-800' : 'text-indigo-800'
+            }`}
+          >
+            <Lightbulb
+              className={`w-4 h-4 shrink-0 ${
+                isPron ? 'text-violet-600' : 'text-indigo-600'
+              }`}
+            />
+            <span>
+              {isPron
+                ? `Pronunciation Tip · "${cw.intendedWord}" vs "${cw.heardWord}"`
+                : `Speech Recognition Note · Did you mean "${cw.intendedWord}"?`}
+            </span>
+          </span>
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() =>
+                speakCoachAudio(
+                  `cw-${cw.intendedWord}`,
+                  `${cw.intendedWord}. For example, let's talk about your ${cw.intendedWord}.`
+                )
+              }
+              className="px-2.5 py-1 rounded-lg bg-white hover:bg-indigo-100 border border-indigo-200 text-indigo-800 text-[11px] font-semibold flex items-center gap-1 transition-colors cursor-pointer"
+            >
+              <Volume2 className="w-3 h-3" />
+              <span>Hear "{cw.intendedWord}"</span>
+            </button>
+            {onRequestEdit && (
+              <button
+                type="button"
+                onClick={onRequestEdit}
+                className="px-2 py-1 rounded-lg bg-white/80 hover:bg-white border border-slate-200 text-slate-700 text-[11px] font-medium flex items-center gap-1 transition-colors cursor-pointer"
+              >
+                <Edit3 className="w-3 h-3" />
+                <span>Edit</span>
+              </button>
+            )}
+          </div>
+        </div>
+        {cw.ipaComparison && (
+          <div className="inline-block px-2 py-0.5 rounded-md bg-white/90 border border-indigo-200/70 text-[11px] font-mono text-slate-700">
+            {cw.ipaComparison}
+          </div>
+        )}
+        <p className="text-[12px] text-slate-800 leading-relaxed">{cw.phoneticNote}</p>
+        {showSinhalaNotes && cw.phoneticNoteSi && (
+          <p className="text-[11.5px] text-slate-700 leading-relaxed pt-1 border-t border-indigo-200/60">
+            {cw.phoneticNoteSi}
+          </p>
+        )}
+      </div>
+    );
+  }
+
+  // 5-Way Diagnostic Gate #3: Correct but Unusual / Formal Expression (never penalize valid English!)
+  if (analysis.utteranceCategory === 'unusual_but_correct' && totalCardItems === 0) {
+    return (
+      <div className="w-full rounded-2xl bg-teal-50/90 border border-teal-200 px-3.5 py-2.5 space-y-1 text-xs text-left shadow-xs">
+        <div className="flex items-center gap-2 text-teal-800 font-semibold">
+          <CheckCircle2 className="w-3.5 h-3.5 text-teal-600 shrink-0" />
+          <span>Grammatically Correct · Expressive / Formal Phrasing</span>
+        </div>
+        <p className="text-[11.5px] text-teal-900/80 leading-relaxed">
+          Your sentence is 100% grammatically valid! It uses slightly formal or literary phrasing rather than casual everyday speech — no grammar correction needed.
+        </p>
+      </div>
+    );
+  }
+
   // Stage A Gate (Incomplete / Cut-Off Fragment with 0 cleanable mistakes, e.g. "Much into. Nothing much."):
   // NEVER show a false green "Clean, natural English" badge on incomplete speech!
   if (analysis.transcriptQuality === 'partially_unclear' && totalCardItems === 0) {

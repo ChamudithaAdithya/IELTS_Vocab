@@ -98,15 +98,24 @@ import {
 import {
   createRealtimeTtsQueue,
   FREE_NEURAL_VOICES,
+  getEnglishVoices,
+  getKokoroStatus,
+  KOKORO_NATURAL_VOICES,
   loadBuddyVoiceConfig,
   playFreeNeuralSpeech,
+  playKokoroSpeech,
   playSpeech,
   saveBuddyVoiceConfig,
   stopSpeech,
+  subscribeKokoroStatus,
   unlockAudioOutput,
+  warmUpKokoroTts,
   warmUpNeuralTts,
+  type AppVoiceOption,
   type BuddyVoiceConfig,
   type FreeNeuralVoiceName,
+  type KokoroEngineStatus,
+  type KokoroVoiceId,
   type RealtimeTtsQueue
 } from '../../utils/speech';
 import { loadApiKey, loadModel } from '../../utils/tutorEngine';
@@ -164,12 +173,26 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
   const [buddyVoiceConfig, setBuddyVoiceConfig] = useState<BuddyVoiceConfig>(() =>
     loadBuddyVoiceConfig()
   );
+  const [kokoroStatus, setKokoroStatus] = useState<KokoroEngineStatus>(() => getKokoroStatus());
+  const [osVoiceOptions, setOsVoiceOptions] = useState<AppVoiceOption[]>(() =>
+    getEnglishVoices().filter(v => !v.isCloud)
+  );
+  const [voiceTestFeedback, setVoiceTestFeedback] = useState<{
+    tone: 'loading' | 'ok' | 'error';
+    message: string;
+  } | null>(null);
   const buddyVoiceConfigRef = useRef<BuddyVoiceConfig>(buddyVoiceConfig);
   const updateBuddyVoiceConfig = (patch: Partial<BuddyVoiceConfig>) => {
+    setVoiceTestFeedback(null);
     setBuddyVoiceConfig(prev => {
       const next = { ...prev, ...patch };
       buddyVoiceConfigRef.current = next;
       saveBuddyVoiceConfig(next);
+      if (next.provider === 'kokoro') {
+        warmUpKokoroTts();
+      } else if (next.provider === 'neural-free') {
+        warmUpNeuralTts(next.freeNeuralVoice);
+      }
       return next;
     });
   };
@@ -202,21 +225,21 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
   useEffect(() => { buddyMemoryRef.current = buddyMemory; }, [buddyMemory]);
   useEffect(() => { learningAnalyticsRef.current = learningAnalytics; }, [learningAnalytics]);
 
-  // Real-Time Streaming Speech Engine (v3 defaults to Live Streaming STT when browser SpeechRecognition exists,
-  // with automatic in-place Gemini 16kHz WAV fallback if streaming disconnects!)
+  // Real-Time Live Web Speech Engine (v4 always defaults to instant browser Live Streaming STT
+  // so the user sees live words as they speak and gets 0ms instant responses with NO "Transcribing" wait!)
   const [speechEngine, setSpeechEngine] = useState<BuddySpeechEngine>(() => {
     try {
       const hasSpeechRec =
         typeof window !== 'undefined' &&
         Boolean((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition);
       const hasKey = Boolean(loadApiKey());
-      const v3Choice = localStorage.getItem('lingo_buddy_stt_engine_v3') as string | null;
-      if (v3Choice === 'gemini-cloud' || v3Choice === 'live-solo') {
-        if (v3Choice === 'gemini-cloud' && !hasKey) return 'live-solo';
-        return v3Choice;
+      const v4Choice = localStorage.getItem('lingo_buddy_stt_engine_v4') as string | null;
+      if (v4Choice === 'gemini-cloud' || v4Choice === 'live-solo') {
+        if (v4Choice === 'gemini-cloud' && !hasKey) return 'live-solo';
+        return v4Choice;
       }
       const preferred: BuddySpeechEngine = hasSpeechRec ? 'live-solo' : hasKey ? 'gemini-cloud' : 'live-solo';
-      localStorage.setItem('lingo_buddy_stt_engine_v3', preferred);
+      localStorage.setItem('lingo_buddy_stt_engine_v4', preferred);
       return preferred;
     } catch {
       return 'live-solo';
@@ -367,8 +390,22 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
   }, [showKeyboardInput]);
 
   useEffect(() => {
-    // Pre-warm BOTH Neural TTS socket pool AND Gemini HTTP/2 fast Flash model on mount!
-    if (buddyVoiceConfigRef.current.provider !== 'standard') {
+    const unsubKokoro = subscribeKokoroStatus(status => {
+      setKokoroStatus(status);
+    });
+    const refreshOsVoices = () => {
+      const list = getEnglishVoices().filter(v => !v.isCloud);
+      if (list.length > 0) setOsVoiceOptions(list);
+    };
+    refreshOsVoices();
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.addEventListener?.('voiceschanged', refreshOsVoices);
+    }
+
+    // Pre-warm active TTS engine AND Gemini HTTP/2 fast Flash model on mount!
+    if (buddyVoiceConfigRef.current.provider === 'kokoro') {
+      warmUpKokoroTts();
+    } else if (buddyVoiceConfigRef.current.provider === 'neural-free') {
       warmUpNeuralTts(buddyVoiceConfigRef.current.freeNeuralVoice);
     }
     const existingKey = apiKey || loadApiKey();
@@ -377,11 +414,15 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     }
     // Keep Edge Neural WSS sockets warm every 11s while Lingo Buddy view is open
     const keepWarmInterval = setInterval(() => {
-      if (buddyVoiceConfigRef.current.provider !== 'standard') {
+      if (buddyVoiceConfigRef.current.provider === 'neural-free') {
         warmUpNeuralTts(buddyVoiceConfigRef.current.freeNeuralVoice);
       }
     }, 11000);
     return () => {
+      unsubKokoro();
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        window.speechSynthesis.removeEventListener?.('voiceschanged', refreshOsVoices);
+      }
       clearInterval(keepWarmInterval);
       stopAllAudioAndCapture(true);
     };
@@ -508,8 +549,23 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
       setOrbState('idle');
     };
 
-    if (vCfg.provider !== 'standard') {
-      playFreeNeuralSpeech(text, {
+    if (vCfg.provider === 'kokoro') {
+      void playKokoroSpeech(text, {
+        voice: vCfg.kokoroVoice,
+        fallbackEdgeVoice: vCfg.freeNeuralVoice,
+        rate: vCfg.rate,
+        onAudioLevel: (lvl) => {
+          audioLevelRef.current = lvl;
+        },
+        onStart: handleSpeechStart,
+        onEnd: handleSpeechEnd,
+        onError: handleSpeechError
+      });
+      return;
+    }
+
+    if (vCfg.provider === 'neural-free') {
+      void playFreeNeuralSpeech(text, {
         voice: vCfg.freeNeuralVoice,
         rate: vCfg.rate,
         onAudioLevel: (lvl) => {
@@ -523,10 +579,131 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     }
 
     playSpeech(text, {
+      voiceURI: vCfg.osVoiceURI || undefined,
       rate: vCfg.rate || pCfg.speechRate,
       onStart: handleSpeechStart,
       onEnd: handleSpeechEnd,
       onError: handleSpeechError
+    });
+  };
+
+  /** Strict per-voice diagnostic preview in Settings so user can hear & verify which exact voice works! */
+  const handleTestSelectedVoice = () => {
+    unlockAudioOutput();
+    stopSpeech();
+    const vCfg = buddyVoiceConfigRef.current;
+    const sample = "Hi there! I'm Lingo Buddy. How has your day been going so far?";
+
+    if (vCfg.provider === 'kokoro') {
+      const vMeta = KOKORO_NATURAL_VOICES.find(v => v.id === vCfg.kokoroVoice);
+      const label = vMeta?.label || vCfg.kokoroVoice;
+      setVoiceTestFeedback({
+        tone: 'loading',
+        message:
+          kokoroStatus.state === 'ready'
+            ? `Synthesizing Kokoro · ${label}...`
+            : `Loading Kokoro-82M & synthesizing ${label} (first load downloads ~86 MB)...`
+      });
+      void playKokoroSpeech(sample, {
+        voice: vCfg.kokoroVoice,
+        rate: vCfg.rate,
+        strictNoFallback: true,
+        onAudioLevel: (lvl) => {
+          audioLevelRef.current = lvl;
+        },
+        onStart: () => {
+          setIsBuddySpeaking(true);
+          setOrbState('speaking');
+          setVoiceTestFeedback({
+            tone: 'ok',
+            message: `✓ Working! Playing Kokoro AI · ${label}`
+          });
+        },
+        onEnd: () => {
+          audioLevelRef.current = 0;
+          setIsBuddySpeaking(false);
+          setOrbState('idle');
+        },
+        onError: (err) => {
+          audioLevelRef.current = 0;
+          setIsBuddySpeaking(false);
+          setOrbState('idle');
+          setVoiceTestFeedback({
+            tone: 'error',
+            message: `Kokoro voice could not play (${err?.message || 'network/browser error'}) — try Edge Neural HD or OS Voice!`
+          });
+        }
+      });
+      return;
+    }
+
+    if (vCfg.provider === 'neural-free') {
+      const vMeta = FREE_NEURAL_VOICES.find(v => v.id === vCfg.freeNeuralVoice);
+      const label = vMeta?.label || vCfg.freeNeuralVoice;
+      setVoiceTestFeedback({
+        tone: 'loading',
+        message: `Connecting to Edge Neural HD · ${label}...`
+      });
+      void playFreeNeuralSpeech(sample, {
+        voice: vCfg.freeNeuralVoice,
+        rate: vCfg.rate,
+        strictNoFallback: true,
+        onAudioLevel: (lvl) => {
+          audioLevelRef.current = lvl;
+        },
+        onStart: () => {
+          setIsBuddySpeaking(true);
+          setOrbState('speaking');
+          setVoiceTestFeedback({
+            tone: 'ok',
+            message: `✓ Working! Playing Edge Neural HD · ${label}`
+          });
+        },
+        onEnd: () => {
+          audioLevelRef.current = 0;
+          setIsBuddySpeaking(false);
+          setOrbState('idle');
+        },
+        onError: () => {
+          audioLevelRef.current = 0;
+          setIsBuddySpeaking(false);
+          setOrbState('idle');
+          setVoiceTestFeedback({
+            tone: 'error',
+            message: `Edge Neural HD could not connect (make sure Vite dev server is running, or switch to Kokoro AI / OS Voice).`
+          });
+        }
+      });
+      return;
+    }
+
+    setVoiceTestFeedback({
+      tone: 'loading',
+      message: 'Testing Browser / OS Voice...'
+    });
+    playSpeech(sample, {
+      voiceURI: vCfg.osVoiceURI || undefined,
+      rate: vCfg.rate,
+      onStart: () => {
+        setIsBuddySpeaking(true);
+        setOrbState('speaking');
+        setVoiceTestFeedback({
+          tone: 'ok',
+          message: '✓ Working! Playing Browser / OS Voice'
+        });
+      },
+      onEnd: () => {
+        setIsBuddySpeaking(false);
+        setOrbState('idle');
+      },
+      onError: () => {
+        setIsBuddySpeaking(false);
+        setOrbState('idle');
+        setVoiceTestFeedback({
+          tone: 'error',
+          message: 'No browser speech synthesis voice responded on this device.'
+        });
+      }
     });
   };
 
@@ -595,7 +772,10 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
 
       // Phase 5 — Expressive 14-State Living Orb feedback pulse when resting
       if (!isListeningRef.current) {
-        if (analysis.transcriptQuality === 'unclear') {
+        if (analysis.utteranceCategory === 'incomplete_speech') {
+          setOrbState(curr => (curr === 'idle' || curr === 'analyzing' ? 'encouraging' : curr));
+          setTimeout(() => setOrbState(curr => (curr === 'encouraging' ? 'idle' : curr)), 1800);
+        } else if (analysis.transcriptQuality === 'unclear') {
           setOrbState(curr => (curr === 'idle' ? 'confused' : curr));
           setTimeout(() => setOrbState(curr => (curr === 'confused' ? 'idle' : curr)), 1800);
         } else if (analysis.mistakes.length > 0) {
@@ -927,151 +1107,190 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
       activeTtsQueueRef.current = ttsQueue;
     }
 
-    await orchestrateBuddyTurn({
-      packet,
-      personality: personalityRef.current,
-      mode: modeRef.current,
-      intensity: intensityRef.current,
-      memory: buddyMemoryRef.current,
-      analytics: learningAnalyticsRef.current,
-      apiKey: apiKey || loadApiKey(),
-      model: selectedModel || loadModel(),
-      callbacks: {
-        onAiRequestStart: () => {
-          pMarks.aiRequestStart = nowPerf();
-        },
-        onAiFirstToken: () => {
-          if (pMarks.aiFirstToken === null) pMarks.aiFirstToken = nowPerf();
-        },
-        onGrammarStart: () => {
-          pMarks.grammarStart = nowPerf();
-        },
-        onMemoryUpdated: (nextMem) => {
-          setBuddyMemory(nextMem);
-        },
-        onFriendPartialReply: (partialText, pkt, meta) => {
-          if (pMarks.aiFirstToken === null) pMarks.aiFirstToken = nowPerf();
-          if (meta?.spokenCorrection && !isBuddySpeaking && !isListeningRef.current) {
-            setOrbState(curr => (curr === 'thinking' || curr === 'understanding' ? 'correcting' : curr));
-          }
-          setSessions(prev =>
-            prev.map(s =>
-              s.id === pkt.sessionId
-                ? {
-                    ...s,
-                    messages: s.messages.map(m =>
-                      m.id === buddyPlaceholderId
-                        ? {
-                            ...m,
-                            text: partialText,
-                            spokenCorrection: meta?.spokenCorrection || undefined,
-                            conversationalResponse: meta?.conversationalResponse || undefined,
-                            correctionType: meta?.correctionType || undefined
-                          }
-                        : m
-                    )
-                  }
-                : s
-            )
-          );
-        },
-        onFriendSentenceReady: (sentence, pkt) => {
-          if (ttsQueue && activeSessionRef.current?.id === pkt.sessionId) {
-            enqueuedSentenceCount += 1;
-            ttsQueue.enqueue(sentence);
-          }
-        },
-        onFriendReplyReady: (friendResult, pkt) => {
-          aiProviderUsed = friendResult.source;
-          setStreamingBuddyMsgId(curr => (curr === buddyPlaceholderId ? null : curr));
+    try {
+      await orchestrateBuddyTurn({
+        packet,
+        personality: personalityRef.current,
+        mode: modeRef.current,
+        intensity: intensityRef.current,
+        memory: buddyMemoryRef.current,
+        analytics: learningAnalyticsRef.current,
+        apiKey: apiKey || loadApiKey(),
+        model: selectedModel || loadModel(),
+        callbacks: {
+          onAiRequestStart: () => {
+            pMarks.aiRequestStart = nowPerf();
+          },
+          onAiFirstToken: () => {
+            if (pMarks.aiFirstToken === null) pMarks.aiFirstToken = nowPerf();
+          },
+          onGrammarStart: () => {
+            pMarks.grammarStart = nowPerf();
+          },
+          onMemoryUpdated: (nextMem) => {
+            setBuddyMemory(nextMem);
+          },
+          onFriendPartialReply: (partialText, pkt, meta) => {
+            if (pMarks.aiFirstToken === null) pMarks.aiFirstToken = nowPerf();
+            if (meta?.spokenCorrection && !isBuddySpeaking && !isListeningRef.current) {
+              setOrbState(curr => (curr === 'thinking' || curr === 'understanding' ? 'correcting' : curr));
+            }
+            setSessions(prev =>
+              prev.map(s =>
+                s.id === pkt.sessionId
+                  ? {
+                      ...s,
+                      messages: s.messages.map(m =>
+                        m.id === buddyPlaceholderId
+                          ? {
+                              ...m,
+                              text: partialText,
+                              spokenCorrection: meta?.spokenCorrection || undefined,
+                              conversationalResponse: meta?.conversationalResponse || undefined,
+                              correctionType: meta?.correctionType || undefined
+                            }
+                          : m
+                      )
+                    }
+                  : s
+              )
+            );
+          },
+          onFriendSentenceReady: (sentence, pkt) => {
+            if (ttsQueue && activeSessionRef.current?.id === pkt.sessionId) {
+              enqueuedSentenceCount += 1;
+              ttsQueue.enqueue(sentence);
+            }
+          },
+          onFriendReplyReady: (friendResult, pkt) => {
+            aiProviderUsed = friendResult.source;
+            setStreamingBuddyMsgId(curr => (curr === buddyPlaceholderId ? null : curr));
 
-          setSessions(prev =>
-            prev.map(s =>
-              s.id === pkt.sessionId
-                ? {
-                    ...s,
-                    updatedAt: Date.now(),
-                    messages: s.messages.map(m =>
-                      m.id === buddyPlaceholderId
-                        ? {
-                            ...m,
-                            text: friendResult.reply,
-                            spokenCorrection: friendResult.spokenCorrection || undefined,
-                            conversationalResponse: friendResult.conversationalResponse || undefined,
-                            correctionType: friendResult.correctionType,
-                            structuredTurn: friendResult.structuredTurn,
-                            responseSource: friendResult.source
-                          }
-                        : m
-                    )
-                  }
-                : s
-            )
-          );
+            setSessions(prev =>
+              prev.map(s =>
+                s.id === pkt.sessionId
+                  ? {
+                      ...s,
+                      updatedAt: Date.now(),
+                      messages: s.messages.map(m =>
+                        m.id === buddyPlaceholderId
+                          ? {
+                              ...m,
+                              text: friendResult.reply,
+                              spokenCorrection: friendResult.spokenCorrection || undefined,
+                              conversationalResponse: friendResult.conversationalResponse || undefined,
+                              correctionType: friendResult.correctionType,
+                              structuredTurn: friendResult.structuredTurn,
+                              responseSource: friendResult.source
+                            }
+                          : m
+                      )
+                    }
+                  : s
+              )
+            );
 
-          if (activeSessionRef.current?.id === pkt.sessionId) {
-            if (ttsQueue) {
+            if (activeSessionRef.current?.id === pkt.sessionId && ttsQueue) {
               if (enqueuedSentenceCount === 0 && friendResult.reply.trim()) {
+                enqueuedSentenceCount += 1;
                 ttsQueue.enqueue(friendResult.reply);
               }
-              ttsQueue.markStreamDone();
-            } else if (!voiceOutputEnabledRef.current) {
-              pMarks.turnComplete = nowPerf();
-              commitPerfSnapshot(false);
-              setOrbState('idle');
-              setLifecyclePhase('PHASE_07_SAVED');
-              if (params.autoResumeAfter && continuousModeRef.current) {
-                setTimeout(() => {
-                  if (!isListeningRef.current) void startListeningTurn();
-                }, 260);
+            }
+          },
+          onFriendReplyUpdated: (updatedFriendResult, pkt) => {
+            setSessions(prev =>
+              prev.map(s =>
+                s.id === pkt.sessionId
+                  ? {
+                      ...s,
+                      messages: s.messages.map(m =>
+                        m.id === buddyPlaceholderId
+                          ? {
+                              ...m,
+                              text: updatedFriendResult.reply,
+                              spokenCorrection: updatedFriendResult.spokenCorrection || undefined,
+                              conversationalResponse:
+                                updatedFriendResult.conversationalResponse || undefined,
+                              correctionType: updatedFriendResult.correctionType,
+                              structuredTurn: updatedFriendResult.structuredTurn
+                            }
+                          : m
+                      )
+                    }
+                  : s
+              )
+            );
+          },
+          onLateSpokenCorrection: (spokenSentence, pkt) => {
+            if (ttsQueue && activeSessionRef.current?.id === pkt.sessionId && spokenSentence.trim()) {
+              enqueuedSentenceCount += 1;
+              ttsQueue.enqueue(spokenSentence);
+            }
+          },
+          onGrammarAnalysisReady: (analysis, updatedAnalytics, updatedLib, pkt) => {
+            pMarks.grammarComplete = nowPerf();
+            setLearningAnalytics(updatedAnalytics);
+            setGrammarLibrary(updatedLib);
+
+            setSessions(prev =>
+              prev.map(s =>
+                s.id === pkt.sessionId
+                  ? {
+                      ...s,
+                      messages: s.messages.map(m =>
+                        m.id === pkt.messageId
+                          ? {
+                              ...m,
+                              analysis,
+                              correctedSentence: analysis.corrected_sentence,
+                              grammarMistakes: analysis.mistakes,
+                              isAnalyzing: false
+                            }
+                          : m
+                      )
+                    }
+                  : s
+              )
+            );
+
+            if (activeSessionRef.current?.id === pkt.sessionId && !isListeningRef.current && !isBuddySpeaking) {
+              if (analysis.utteranceCategory === 'incomplete_speech') {
+                setOrbState(curr => (curr === 'idle' || curr === 'analyzing' ? 'encouraging' : curr));
+                setTimeout(() => setOrbState(curr => (curr === 'encouraging' ? 'idle' : curr)), 1800);
+              } else if (analysis.transcriptQuality === 'unclear') {
+                setOrbState(curr => (curr === 'idle' ? 'confused' : curr));
+                setTimeout(() => setOrbState(curr => (curr === 'confused' ? 'idle' : curr)), 1800);
+              } else if (analysis.mistakes.length > 0) {
+                setOrbState(curr => (curr === 'idle' || curr === 'analyzing' ? 'correcting' : curr));
+                setTimeout(() => setOrbState(curr => (curr === 'correcting' ? 'idle' : curr)), 1900);
+              } else {
+                setOrbState(curr => (curr === 'idle' || curr === 'analyzing' ? 'happy' : curr));
+                setTimeout(() => setOrbState(curr => (curr === 'happy' ? 'idle' : curr)), 1800);
               }
             }
+          },
+          onTraceReady: (trace) => {
+            setTurnTraces(prev => [trace, ...prev].slice(0, 25));
           }
-        },
-        onGrammarAnalysisReady: (analysis, updatedAnalytics, updatedLib, pkt) => {
-          pMarks.grammarComplete = nowPerf();
-          setLearningAnalytics(updatedAnalytics);
-          setGrammarLibrary(updatedLib);
-
-          setSessions(prev =>
-            prev.map(s =>
-              s.id === pkt.sessionId
-                ? {
-                    ...s,
-                    messages: s.messages.map(m =>
-                      m.id === pkt.messageId
-                        ? {
-                            ...m,
-                            analysis,
-                            correctedSentence: analysis.corrected_sentence,
-                            grammarMistakes: analysis.mistakes,
-                            isAnalyzing: false
-                          }
-                        : m
-                    )
-                  }
-                : s
-            )
-          );
-
-          if (activeSessionRef.current?.id === pkt.sessionId && !isListeningRef.current && !isBuddySpeaking) {
-            if (analysis.transcriptQuality === 'unclear') {
-              setOrbState(curr => (curr === 'idle' ? 'confused' : curr));
-              setTimeout(() => setOrbState(curr => (curr === 'confused' ? 'idle' : curr)), 1800);
-            } else if (analysis.mistakes.length > 0) {
-              setOrbState(curr => (curr === 'idle' || curr === 'analyzing' ? 'correcting' : curr));
-              setTimeout(() => setOrbState(curr => (curr === 'correcting' ? 'idle' : curr)), 1900);
-            } else {
-              setOrbState(curr => (curr === 'idle' || curr === 'analyzing' ? 'happy' : curr));
-              setTimeout(() => setOrbState(curr => (curr === 'happy' ? 'idle' : curr)), 1800);
-            }
+        }
+      });
+    } finally {
+      if (activeSessionRef.current?.id === packet.sessionId) {
+        if (ttsQueue) {
+          ttsQueue.markStreamDone();
+        } else if (!voiceOutputEnabledRef.current) {
+          pMarks.turnComplete = nowPerf();
+          commitPerfSnapshot(false);
+          setOrbState('idle');
+          setLifecyclePhase('PHASE_07_SAVED');
+          if (params.autoResumeAfter && continuousModeRef.current) {
+            setTimeout(() => {
+              if (!isListeningRef.current) void startListeningTurn();
+            }, 260);
           }
-        },
-        onTraceReady: (trace) => {
-          setTurnTraces(prev => [trace, ...prev].slice(0, 25));
         }
       }
-    });
+    }
   };
 
   /**
@@ -1202,26 +1421,36 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     const activeEngine = speechEngineRef.current;
     const currentKey = apiKey || loadApiKey();
 
-    // PATH A: Real-Time Streaming STT ('live-solo') -> 0ms post-speech finalization when words streamed!
-    if (activeEngine === 'live-solo' && liveStreamedTranscript.length > 0 && !inFlightSpeculativeStt) {
-      const finalPerf = nowPerf();
-      await processFinalizedUserTurn({
-        rawTranscript: liveStreamedTranscript,
-        engine: 'live-solo',
-        sttEngineDetail: `live-streaming (${recognitionLangRef.current})`,
-        recordedAudioUrl,
-        uncertainWords: capturedUncertainWords,
-        sttConfidence: avgConf,
-        durationSec,
-        autoResumeAfter: continuousModeRef.current,
-        speechPerf: {
-          speechStart: activeSpeechPerfRef.current.speechStart ?? speechEndPerf,
-          firstPartialSTT: activeSpeechPerfRef.current.firstPartialSTT ?? finalPerf,
-          lastPartialSTT: activeSpeechPerfRef.current.lastPartialSTT ?? finalPerf,
-          speechEnd: speechEndPerf,
-          finalTranscript: finalPerf
-        }
-      });
+    // PATH A: Real-Time Live Web Speech ('live-solo') -> 0ms instant turn handoff with ZERO "Transcribing" delay!
+    if (activeEngine === 'live-solo') {
+      if (inFlightSpeculativeStt) {
+        // Never block live-solo on background WAV promises
+      }
+      if (liveStreamedTranscript.length > 0) {
+        const finalPerf = nowPerf();
+        await processFinalizedUserTurn({
+          rawTranscript: liveStreamedTranscript,
+          engine: 'live-solo',
+          sttEngineDetail: `live-streaming (${recognitionLangRef.current})`,
+          recordedAudioUrl,
+          uncertainWords: capturedUncertainWords,
+          sttConfidence: avgConf,
+          durationSec,
+          autoResumeAfter: continuousModeRef.current,
+          speechPerf: {
+            speechStart: activeSpeechPerfRef.current.speechStart ?? speechEndPerf,
+            firstPartialSTT: activeSpeechPerfRef.current.firstPartialSTT ?? finalPerf,
+            lastPartialSTT: activeSpeechPerfRef.current.lastPartialSTT ?? finalPerf,
+            speechEnd: speechEndPerf,
+            finalTranscript: finalPerf
+          }
+        });
+        return;
+      }
+      // In live-solo, if nothing was spoken (silence), return straight to idle without entering "Transcribing"!
+      if (recordedAudioUrl) { try { URL.revokeObjectURL(recordedAudioUrl); } catch {} }
+      setOrbState('idle');
+      setLifecyclePhase('PHASE_01_IDLE');
       return;
     }
 
@@ -1375,7 +1604,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     setLifecyclePhase('PHASE_02_LISTENING');
 
     const DANGLING_PAUSE_WORDS =
-      /\b(and|but|because|so|or|to|the|a|an|in|on|at|with|about|for|if|when|while|although|um|uh)\s*$/i;
+      /\b(and|but|because|so|or|to|the|a|an|my|your|our|his|her|their|this|that|in|on|at|with|about|for|if|when|while|although|thinking|wondering|planning|trying|going|wanting|talking|was|were|am|is|are|um|uh)\s*$/i;
 
     const scheduleSmartVadCommit = () => {
       if (vadPauseTimerRef.current) clearTimeout(vadPauseTimerRef.current);
@@ -1387,7 +1616,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
       if (!preview) return;
       const wordCount = preview.split(/\s+/).filter(Boolean).length;
       const waitMs =
-        DANGLING_PAUSE_WORDS.test(preview) || wordCount < 2 ? 1200 : 720;
+        DANGLING_PAUSE_WORDS.test(preview) || wordCount < 2 ? 1350 : 720;
       vadPauseTimerRef.current = setTimeout(() => {
         activeSpeechPerfRef.current.speechEnd = nowPerf();
         void finalizeCapturedTurn('vad');
@@ -1511,7 +1740,9 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
         audioCtxRef.current = ctx;
         const source = ctx.createMediaStreamSource(stream);
 
-        livePcmCaptureRef.current = createLive16kPcmCapture(ctx, source);
+        if (speechEngineRef.current === 'gemini-cloud') {
+          livePcmCaptureRef.current = createLive16kPcmCapture(ctx, source);
+        }
 
         const analyser = ctx.createAnalyser();
         analyser.fftSize = 128;
@@ -1619,10 +1850,11 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
               }
               silenceStartedAt = 0;
 
-              // Stream rolling live words while speaking if browser SpeechRecognition hasn't responded!
+              // Only stream rolling WAV chunks when explicitly using Gemini Cloud Audio mode
               const sinceSpeechStart =
                 nowPerf() - (activeSpeechPerfRef.current.speechStart ?? nowPerf());
               if (
+                speechEngineRef.current === 'gemini-cloud' &&
                 !browserSttAlive &&
                 hasSpokenInTurn &&
                 sinceSpeechStart >= 300 &&
@@ -1636,13 +1868,13 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                 activeSpeechPerfRef.current.speechEnd = nowPerf();
               } else if (continuousModeRef.current) {
                 const silenceMs = now - silenceStartedAt;
-                // Speculative Pause Head-Start: at 280ms of silence, start final 16kHz WAV STT in background!
+                // Speculative Pause Head-Start ONLY when user explicitly selected 'gemini-cloud' mode!
                 if (
+                  speechEngineRef.current === 'gemini-cloud' &&
                   silenceMs >= 280 &&
                   !speculativeSttPromiseRef.current &&
                   currentKeyForTurn &&
-                  livePcmCaptureRef.current &&
-                  (speechEngineRef.current === 'gemini-cloud' || !browserSttAlive)
+                  livePcmCaptureRef.current
                 ) {
                   const snap = livePcmCaptureRef.current.peekWav();
                   if (snap) {
@@ -1672,13 +1904,19 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                 }
 
                 const liveText = (finalBufferRef.current + ' ' + interimBufferRef.current).trim();
-                const silenceBudget =
-                  liveText && DANGLING_PAUSE_WORDS.test(liveText)
-                    ? 1250
-                    : 680;
-                if (silenceMs >= silenceBudget) {
-                  void finalizeCapturedTurn('vad');
-                  return;
+                const isLiveWebMode = speechEngineRef.current === 'live-solo';
+                // In Live Web Speech mode, wait until live words appear on screen so SpeechRecognition never gets cut off early!
+                if (!isLiveWebMode || liveText.length > 0) {
+                  const silenceBudget =
+                    liveText && DANGLING_PAUSE_WORDS.test(liveText)
+                      ? 1350
+                      : isLiveWebMode
+                      ? 950
+                      : 680;
+                  if (silenceMs >= silenceBudget) {
+                    void finalizeCapturedTurn('vad');
+                    return;
+                  }
                 }
               }
             }
@@ -1817,6 +2055,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     setSpeechEngine(eng);
     setStatusNotice(null);
     try {
+      localStorage.setItem('lingo_buddy_stt_engine_v4', eng);
       localStorage.setItem('lingo_buddy_stt_engine_v3', eng);
       localStorage.setItem('lingo_buddy_stt_engine_v2', eng);
       localStorage.setItem('ielts_speaking_stt_engine', eng);
@@ -2191,97 +2430,214 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
               </div>
             </div>
 
-            {/* Row 2: Primary Free Unlimited Neural HD Voice Output (Zero Quota!) */}
-            <div className="max-w-6xl mx-auto pt-3 border-t border-slate-100 grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
-              <div className="md:col-span-3 space-y-1.5">
-                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
-                  Buddy Voice Engine
-                </span>
-                <div className="grid grid-cols-2 gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200/80">
-                  <button
-                    type="button"
-                    onClick={() => updateBuddyVoiceConfig({ provider: 'neural-free' })}
-                    className={`py-1.5 px-2 rounded-lg text-[11px] font-semibold transition-all cursor-pointer ${
-                      buddyVoiceConfig.provider === 'neural-free'
-                        ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-xs'
-                        : 'text-slate-600 hover:text-slate-900'
-                    }`}
-                    title="100% Free Unlimited Neural HD Voices (no quota limit)"
-                  >
-                    Neural HD
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => updateBuddyVoiceConfig({ provider: 'standard' })}
-                    className={`py-1.5 px-2 rounded-lg text-[11px] font-semibold transition-all cursor-pointer ${
-                      buddyVoiceConfig.provider === 'standard'
-                        ? 'bg-slate-800 text-white shadow-xs'
-                        : 'text-slate-600 hover:text-slate-900'
-                    }`}
-                  >
-                    OS Voice
-                  </button>
-                </div>
-              </div>
-
-              <div className="md:col-span-6 space-y-1.5">
-                <span className="text-[11px] font-bold text-emerald-700 uppercase tracking-wider block">
-                  {buddyVoiceConfig.provider === 'neural-free'
-                    ? 'Primary Neural Voice (Free & Unlimited)'
-                    : 'Browser / OS Standard Voice'}
-                </span>
-                <select
-                  value={buddyVoiceConfig.freeNeuralVoice}
-                  disabled={buddyVoiceConfig.provider !== 'neural-free'}
-                  onChange={(e) =>
-                    updateBuddyVoiceConfig({
-                      freeNeuralVoice: e.target.value as FreeNeuralVoiceName
-                    })
-                  }
-                  className="w-full bg-emerald-50/70 disabled:opacity-50 border border-emerald-200 rounded-xl px-3 py-2 text-xs font-semibold text-emerald-900 focus:outline-none focus:border-emerald-500 cursor-pointer"
-                >
-                  {FREE_NEURAL_VOICES.map(v => (
-                    <option key={v.id} value={v.id}>
-                      {v.label} · {v.trait}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="md:col-span-3 flex items-center gap-2">
-                <div className="flex-1 space-y-1">
-                  <div className="flex items-center justify-between text-[10px] font-bold text-slate-500 uppercase">
-                    <span>Speed</span>
-                    <span className="font-mono text-blue-600">{buddyVoiceConfig.rate.toFixed(2)}×</span>
+            {/* Row 2: 3-Engine Voice Picker (Kokoro-82M Natural AI · Edge Neural HD · OS Voice) + Live Tester */}
+            <div className="max-w-6xl mx-auto pt-3 border-t border-slate-100 space-y-2.5">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
+                <div className="md:col-span-4 space-y-1.5">
+                  <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
+                    Buddy Voice Engine (Choose What Works Best)
+                  </span>
+                  <div className="grid grid-cols-3 gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200/80">
+                    <button
+                      type="button"
+                      onClick={() => updateBuddyVoiceConfig({ provider: 'kokoro' })}
+                      className={`py-1.5 px-2 rounded-lg text-[11px] font-semibold transition-all cursor-pointer ${
+                        buddyVoiceConfig.provider === 'kokoro'
+                          ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-xs'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                      title="Kokoro-82M Local Natural Neural Voices (12 US & UK voices via WebGPU / WASM)"
+                    >
+                      Kokoro AI
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => updateBuddyVoiceConfig({ provider: 'neural-free' })}
+                      className={`py-1.5 px-2 rounded-lg text-[11px] font-semibold transition-all cursor-pointer ${
+                        buddyVoiceConfig.provider === 'neural-free'
+                          ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-xs'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                      title="Microsoft Edge Neural HD Voices (Ava, Emma, Sonia, Ryan)"
+                    >
+                      Edge Neural
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => updateBuddyVoiceConfig({ provider: 'standard' })}
+                      className={`py-1.5 px-2 rounded-lg text-[11px] font-semibold transition-all cursor-pointer ${
+                        buddyVoiceConfig.provider === 'standard'
+                          ? 'bg-slate-800 text-white shadow-xs'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                      title="Offline built-in Windows / Mac / Browser voices"
+                    >
+                      OS Voice
+                    </button>
                   </div>
-                  <input
-                    type="range"
-                    min={0.85}
-                    max={1.2}
-                    step={0.05}
-                    value={buddyVoiceConfig.rate}
-                    onChange={(e) =>
-                      updateBuddyVoiceConfig({ rate: parseFloat(e.target.value) })
-                    }
-                    className="w-full accent-blue-600 cursor-pointer"
-                  />
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    unlockAudioOutput();
-                    speakBuddyMessage(
-                      "Hey there! Ready to chat? Tell me what's been the highlight of your day so far!",
-                      false
-                    );
-                  }}
-                  className="py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs cursor-pointer shrink-0"
-                  title="Hear Lingo Buddy speak with this voice"
-                >
-                  <Volume2 className="w-3.5 h-3.5" />
-                  <span>Preview</span>
-                </button>
+
+                <div className="md:col-span-5 space-y-1.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <span
+                      className={`text-[11px] font-bold uppercase tracking-wider ${
+                        buddyVoiceConfig.provider === 'kokoro'
+                          ? 'text-violet-700'
+                          : buddyVoiceConfig.provider === 'neural-free'
+                          ? 'text-emerald-700'
+                          : 'text-slate-600'
+                      }`}
+                    >
+                      {buddyVoiceConfig.provider === 'kokoro'
+                        ? 'Kokoro-82M Natural Voice (12 US & UK Voices)'
+                        : buddyVoiceConfig.provider === 'neural-free'
+                        ? 'Edge Neural HD Voice (6 Voices)'
+                        : 'Installed Browser / OS Voice'}
+                    </span>
+                    {buddyVoiceConfig.provider === 'kokoro' && (
+                      <span
+                        className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                          kokoroStatus.state === 'ready'
+                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                            : kokoroStatus.state === 'loading'
+                            ? 'bg-violet-50 text-violet-700 border-violet-200 animate-pulse'
+                            : kokoroStatus.state === 'error'
+                            ? 'bg-rose-50 text-rose-700 border-rose-200'
+                            : 'bg-slate-50 text-slate-600 border-slate-200'
+                        }`}
+                      >
+                        {kokoroStatus.state === 'ready'
+                          ? `✓ Ready (${kokoroStatus.backend === 'webgpu' ? 'WebGPU' : 'WASM'})`
+                          : kokoroStatus.state === 'loading'
+                          ? `Loading ${kokoroStatus.progress}%`
+                          : kokoroStatus.state === 'error'
+                          ? 'Load Error'
+                          : 'On-Demand'}
+                      </span>
+                    )}
+                  </div>
+
+                  {buddyVoiceConfig.provider === 'kokoro' ? (
+                    <select
+                      value={buddyVoiceConfig.kokoroVoice}
+                      onChange={(e) =>
+                        updateBuddyVoiceConfig({
+                          kokoroVoice: e.target.value as KokoroVoiceId
+                        })
+                      }
+                      aria-label="Kokoro Natural Voice"
+                      className="w-full bg-violet-50/70 border border-violet-200 rounded-xl px-3 py-2 text-xs font-semibold text-violet-950 focus:outline-none focus:border-violet-500 cursor-pointer"
+                    >
+                      {KOKORO_NATURAL_VOICES.map(v => (
+                        <option key={v.id} value={v.id}>
+                          {v.label} · {v.gender} · {v.trait}
+                        </option>
+                      ))}
+                    </select>
+                  ) : buddyVoiceConfig.provider === 'neural-free' ? (
+                    <select
+                      value={buddyVoiceConfig.freeNeuralVoice}
+                      onChange={(e) =>
+                        updateBuddyVoiceConfig({
+                          freeNeuralVoice: e.target.value as FreeNeuralVoiceName
+                        })
+                      }
+                      aria-label="Edge Neural HD Voice"
+                      className="w-full bg-emerald-50/70 border border-emerald-200 rounded-xl px-3 py-2 text-xs font-semibold text-emerald-900 focus:outline-none focus:border-emerald-500 cursor-pointer"
+                    >
+                      {FREE_NEURAL_VOICES.map(v => (
+                        <option key={v.id} value={v.id}>
+                          {v.label} · {v.trait}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <select
+                      value={buddyVoiceConfig.osVoiceURI || ''}
+                      onChange={(e) =>
+                        updateBuddyVoiceConfig({
+                          osVoiceURI: e.target.value
+                        })
+                      }
+                      aria-label="OS Standard Voice"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-slate-500 cursor-pointer"
+                    >
+                      <option value="">Auto Best Installed English Voice</option>
+                      {osVoiceOptions.map(v => (
+                        <option key={v.voiceURI} value={v.voiceURI}>
+                          {v.flag} {v.name} ({v.badge})
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </div>
+
+                <div className="md:col-span-3 flex items-center gap-2">
+                  <div className="flex-1 space-y-1">
+                    <div className="flex items-center justify-between text-[10px] font-bold text-slate-500 uppercase">
+                      <span>Speed</span>
+                      <span className="font-mono text-blue-600">{buddyVoiceConfig.rate.toFixed(2)}×</span>
+                    </div>
+                    <input
+                      type="range"
+                      min={0.85}
+                      max={1.2}
+                      step={0.05}
+                      value={buddyVoiceConfig.rate}
+                      onChange={(e) =>
+                        updateBuddyVoiceConfig({ rate: parseFloat(e.target.value) })
+                      }
+                      className="w-full accent-blue-600 cursor-pointer"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleTestSelectedVoice}
+                    className="py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs cursor-pointer shrink-0"
+                    title="Test this exact voice engine & speaker right now"
+                  >
+                    <Volume2 className="w-3.5 h-3.5" />
+                    <span>Test Voice</span>
+                  </button>
+                </div>
               </div>
+
+              {/* Live Kokoro Download Progress Bar or Voice Test Verification Banner */}
+              {(buddyVoiceConfig.provider === 'kokoro' && kokoroStatus.state === 'loading') && (
+                <div className="space-y-1 bg-violet-50/80 border border-violet-200 rounded-xl px-3 py-2 text-[11px] text-violet-900">
+                  <div className="flex items-center justify-between font-semibold">
+                    <span>{kokoroStatus.detail}</span>
+                    <span>{kokoroStatus.progress}%</span>
+                  </div>
+                  <div className="w-full h-1.5 rounded-full bg-violet-200/70 overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-violet-600 to-fuchsia-600 transition-all duration-300"
+                      style={{ width: `${Math.max(4, kokoroStatus.progress)}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {voiceTestFeedback && (
+                <div
+                  className={`px-3 py-1.5 rounded-xl border text-[11px] font-semibold flex items-center justify-between gap-2 ${
+                    voiceTestFeedback.tone === 'ok'
+                      ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                      : voiceTestFeedback.tone === 'error'
+                      ? 'bg-rose-50 border-rose-200 text-rose-800'
+                      : 'bg-blue-50 border-blue-200 text-blue-800'
+                  }`}
+                >
+                  <span>{voiceTestFeedback.message}</span>
+                  <button
+                    type="button"
+                    onClick={() => setVoiceTestFeedback(null)}
+                    className="opacity-70 hover:opacity-100 cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -2365,7 +2721,13 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
                     >
                       <Volume2 className="w-3 h-3" />
                       <span>
-                        {buddyVoiceConfig.provider === 'standard'
+                        {buddyVoiceConfig.provider === 'kokoro'
+                          ? `Kokoro AI · ${
+                              KOKORO_NATURAL_VOICES.find(
+                                v => v.id === buddyVoiceConfig.kokoroVoice
+                              )?.label || 'Heart (US)'
+                            }`
+                          : buddyVoiceConfig.provider === 'standard'
                           ? 'OS Standard Voice'
                           : `Neural HD · ${
                               FREE_NEURAL_VOICES.find(
@@ -3513,9 +3875,6 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
         onKeyUpdated={(newKey, newModel) => {
           setApiKey(newKey);
           setSelectedModel(newModel);
-          if (newKey && speechEngineRef.current === 'live-solo') {
-            handleSelectEngine('gemini-cloud');
-          }
           setIsApiModalOpen(false);
         }}
       />

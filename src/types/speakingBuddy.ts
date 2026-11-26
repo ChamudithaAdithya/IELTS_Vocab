@@ -24,12 +24,34 @@ export type BuddyOrbState =
 /** Stage A — Transcription Coherence Status (separates mic/STT garbage from grammar evaluation) */
 export type TranscriptQuality = 'clear' | 'partially_unclear' | 'unclear';
 
+/** 5-Way Diagnostic Distinction (+ clean & unclear) so STT/pronunciation/incomplete speech are NEVER misclassified as grammar errors */
+export type BuddyUtteranceCategory =
+  | 'clean'
+  | 'grammar_mistake'
+  | 'stt_error'
+  | 'pronunciation_difficulty'
+  | 'incomplete_speech'
+  | 'unusual_but_correct'
+  | 'unclear_speech';
+
+export interface ContextualWordInterpretation {
+  heardWord: string;
+  intendedWord: string;
+  kind: 'stt_error' | 'pronunciation_difficulty';
+  confidence: number;
+  phoneticNote: string;
+  phoneticNoteSi?: string;
+  ipaComparison?: string;
+}
+
 export interface TranscriptCoherenceResult {
   quality: TranscriptQuality;
   reason?: string;
   suspiciousSpans?: string[];
   incompleteFragment?: string;
   clarificationHint?: string;
+  utteranceCategory?: BuddyUtteranceCategory;
+  contextualWord?: ContextualWordInterpretation;
 }
 
 export type BuddyLifecyclePhase =
@@ -175,6 +197,10 @@ export interface BuddyGrammarAnalysis {
   learning_recommendation: string | null;
   /** Stage A coherence result — 'unclear' blocks false "Clean English" badges */
   transcriptQuality: TranscriptQuality;
+  /** Explicit 5-way distinction: grammar_mistake vs stt_error vs pronunciation_difficulty vs incomplete_speech vs unusual_but_correct */
+  utteranceCategory?: BuddyUtteranceCategory;
+  /** Contextually inferred intended word when STT heard a homophone or pronunciation minimal-pair neighbor */
+  contextualWord?: ContextualWordInterpretation;
   clarificationNote?: string;
   isProvisional?: boolean;
   tryAgainResult?: TryAgainAttemptResult;

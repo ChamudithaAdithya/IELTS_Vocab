@@ -1,9 +1,29 @@
 /**
- * Web Speech API & Cloud Natural Audio Engine
- * Provides studio-quality Natural British/American speech streaming
- * as well as browser SpeechSynthesis with custom voice selection,
- * voice persistence, Windows/Edge/iPhone/Android guides, and speed control.
+ * Web Speech API, Kokoro-82M Local Neural TTS & Cloud Natural Audio Engine
+ * Provides studio-quality Kokoro-82M WebGPU/WASM voices, Edge Neural HD streaming,
+ * and browser SpeechSynthesis with custom voice selection, persistence, and speed control.
  */
+
+import {
+  KOKORO_NATURAL_VOICES,
+  getKokoroStatus,
+  subscribeKokoroStatus,
+  synthesizeKokoroWavBlob,
+  warmUpKokoroTts,
+  type KokoroEngineStatus,
+  type KokoroVoiceDescriptor,
+  type KokoroVoiceId
+} from './kokoroClient';
+
+export {
+  KOKORO_NATURAL_VOICES,
+  getKokoroStatus,
+  subscribeKokoroStatus,
+  warmUpKokoroTts,
+  type KokoroEngineStatus,
+  type KokoroVoiceDescriptor,
+  type KokoroVoiceId
+};
 
 export interface VoiceSettings {
   voiceURI: string;
@@ -756,8 +776,10 @@ export type FreeNeuralVoiceName =
   | 'en-AU-NatashaNeural';
 
 export interface BuddyVoiceConfig {
-  provider: 'neural-free' | 'standard';
+  provider: 'kokoro' | 'neural-free' | 'standard';
+  kokoroVoice: KokoroVoiceId;
   freeNeuralVoice: FreeNeuralVoiceName;
+  osVoiceURI?: string;
   rate: number;
 }
 
@@ -778,7 +800,9 @@ const BUDDY_VOICE_CONFIG_KEY = 'lingo_buddy_voice_config_v1';
 
 export const DEFAULT_BUDDY_VOICE_CONFIG: BuddyVoiceConfig = {
   provider: 'neural-free',
+  kokoroVoice: 'af_heart',
   freeNeuralVoice: 'en-US-AvaMultilingualNeural',
+  osVoiceURI: '',
   rate: 1.0
 };
 
@@ -788,12 +812,21 @@ export function loadBuddyVoiceConfig(): BuddyVoiceConfig {
     const raw = localStorage.getItem(BUDDY_VOICE_CONFIG_KEY);
     if (!raw) return DEFAULT_BUDDY_VOICE_CONFIG;
     const parsed = JSON.parse(raw);
+    const resolvedProvider: 'kokoro' | 'neural-free' | 'standard' =
+      parsed.provider === 'kokoro'
+        ? 'kokoro'
+        : parsed.provider === 'standard'
+        ? 'standard'
+        : 'neural-free';
     return {
-      // Automatically migrate any legacy 'gemini' setting to primary 'neural-free'
-      provider: parsed.provider === 'standard' ? 'standard' : 'neural-free',
+      provider: resolvedProvider,
+      kokoroVoice: KOKORO_NATURAL_VOICES.some(v => v.id === parsed.kokoroVoice)
+        ? parsed.kokoroVoice
+        : DEFAULT_BUDDY_VOICE_CONFIG.kokoroVoice,
       freeNeuralVoice: FREE_NEURAL_VOICES.some(v => v.id === parsed.freeNeuralVoice)
         ? parsed.freeNeuralVoice
         : DEFAULT_BUDDY_VOICE_CONFIG.freeNeuralVoice,
+      osVoiceURI: typeof parsed.osVoiceURI === 'string' ? parsed.osVoiceURI : '',
       rate:
         typeof parsed.rate === 'number' && parsed.rate >= 0.75 && parsed.rate <= 1.3
           ? parsed.rate
@@ -862,6 +895,7 @@ export async function playFreeNeuralSpeech(
   options: {
     voice?: FreeNeuralVoiceName;
     rate?: number;
+    strictNoFallback?: boolean;
     onStart?: () => void;
     onEnd?: () => void;
     onError?: (err: any) => void;
@@ -884,7 +918,11 @@ export async function playFreeNeuralSpeech(
   const sessionId = ++currentSpeechSessionId;
   isCloudAudioCancelled = false;
 
-  const fallbackToBrowser = () => {
+  const fallbackToBrowser = (errMsg?: string) => {
+    if (options.strictNoFallback) {
+      options.onError?.(new Error(errMsg || 'Edge Neural HD audio stream unavailable.'));
+      return;
+    }
     playSpeech(cleanText, {
       rate: effectiveRate,
       onStart: options.onStart,
@@ -997,7 +1035,117 @@ export async function playFreeNeuralSpeech(
   } catch (err: any) {
     if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) return;
     if (err && (err.name === 'AbortError' || err.message?.includes('interrupted'))) return;
-    fallbackToBrowser();
+    fallbackToBrowser(err?.message);
+  }
+}
+
+/**
+ * Play Kokoro-82M Natural Local Neural Voices (Heart, Bella, Nicole, Sarah, Michael, Emma UK, George UK, etc.)
+ * via WebGPU / WASM background worker with live Crystal Orb waveform sync!
+ */
+export async function playKokoroSpeech(
+  text: string,
+  options: {
+    voice?: KokoroVoiceId;
+    fallbackEdgeVoice?: FreeNeuralVoiceName;
+    rate?: number;
+    strictNoFallback?: boolean;
+    onStart?: () => void;
+    onEnd?: () => void;
+    onError?: (err: any) => void;
+    onAudioLevel?: (level: number) => void;
+  } = {}
+): Promise<void> {
+  stopAllSpeech();
+
+  const cleanText = text.replace(/[*_#`~[\]]/g, '').trim();
+  if (!cleanText) {
+    options.onEnd?.();
+    return;
+  }
+
+  const voice: KokoroVoiceId = options.voice || 'af_heart';
+  const effectiveRate = Math.max(0.75, Math.min(1.3, options.rate ?? 1.0));
+  const sessionId = ++currentSpeechSessionId;
+  isCloudAudioCancelled = false;
+
+  const controller = new AbortController();
+  currentTtsAbortController = controller;
+
+  const handleFallback = (reason?: string) => {
+    if (options.strictNoFallback) {
+      options.onError?.(new Error(reason || 'Kokoro-82M voice failed to synthesize.'));
+      return;
+    }
+    void playFreeNeuralSpeech(cleanText, {
+      voice: options.fallbackEdgeVoice || 'en-US-AvaMultilingualNeural',
+      rate: effectiveRate,
+      onStart: options.onStart,
+      onEnd: options.onEnd,
+      onError: options.onError,
+      onAudioLevel: options.onAudioLevel
+    });
+  };
+
+  const wavBlob = await synthesizeKokoroWavBlob(cleanText, voice, effectiveRate, controller.signal);
+  if (currentTtsAbortController === controller) currentTtsAbortController = null;
+  if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) return;
+
+  if (!wavBlob) {
+    handleFallback('Kokoro-82M model could not be loaded on this browser/network.');
+    return;
+  }
+
+  const blobUrl = URL.createObjectURL(wavBlob);
+  currentBlobUrl = blobUrl;
+
+  const audio = new Audio();
+  audio.volume = 1.0;
+  audio.muted = false;
+  audio.preload = 'auto';
+  audio.src = blobUrl;
+  currentAudioElement = audio;
+
+  audio.onplay = () => {
+    if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) {
+      audio.pause();
+      return;
+    }
+    attachAudioWaveformAnalyser(audio, options.onAudioLevel);
+    options.onStart?.();
+  };
+
+  audio.onended = () => {
+    cleanupTtsAnalyser();
+    options.onAudioLevel?.(0);
+    if (currentBlobUrl === blobUrl) {
+      try { URL.revokeObjectURL(blobUrl); } catch {}
+      currentBlobUrl = null;
+    }
+    if (currentAudioElement === audio) currentAudioElement = null;
+    if (sessionId === currentSpeechSessionId && !isCloudAudioCancelled) {
+      options.onEnd?.();
+    }
+  };
+
+  audio.onerror = () => {
+    cleanupTtsAnalyser();
+    options.onAudioLevel?.(0);
+    if (currentBlobUrl === blobUrl) {
+      try { URL.revokeObjectURL(blobUrl); } catch {}
+      currentBlobUrl = null;
+    }
+    if (sessionId === currentSpeechSessionId && !isCloudAudioCancelled) {
+      handleFallback('Audio playback error.');
+    }
+  };
+
+  try {
+    await audio.play();
+  } catch (err: any) {
+    if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) return;
+    if (err && (err.name === 'AbortError' || err.message?.includes('interrupted'))) return;
+    handleFallback(err?.message);
   }
 }
 
@@ -1225,7 +1373,7 @@ export function createRealtimeTtsQueue(options: {
       const utt = new SpeechSynthesisUtterance(text);
       utt.rate = options.voiceConfig.rate || 1.0;
       utt.volume = 1.0;
-      const chosen = resolveVoice();
+      const chosen = resolveVoice(options.voiceConfig.osVoiceURI || undefined);
       if (chosen) {
         utt.voice = chosen;
         utt.lang = chosen.lang;
@@ -1317,6 +1465,23 @@ export function createRealtimeTtsQueue(options: {
       const promise =
         options.voiceConfig.provider === 'standard'
           ? Promise.resolve(null)
+          : options.voiceConfig.provider === 'kokoro'
+          ? synthesizeKokoroWavBlob(
+              clean,
+              options.voiceConfig.kokoroVoice,
+              options.voiceConfig.rate,
+              controller.signal,
+              idx === 0 ? (d) => markFirstAudio(d) : undefined
+            ).then(async (kokoroBlob) => {
+              if (kokoroBlob || !isAlive()) return kokoroBlob;
+              return fetchFreeNeuralAudioBlob(
+                clean,
+                options.voiceConfig.freeNeuralVoice,
+                options.voiceConfig.rate,
+                controller.signal,
+                idx === 0 ? (d) => markFirstAudio(d) : undefined
+              );
+            })
           : fetchFreeNeuralAudioBlob(
               clean,
               options.voiceConfig.freeNeuralVoice,

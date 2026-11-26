@@ -22,6 +22,10 @@ import {
   DEFAULT_GEMINI_MODEL,
   listAvailableGeminiModels
 } from '../../utils/tutorEngine';
+import {
+  markDeadGeminiModel,
+  markVerifiedFastVoiceModel
+} from '../../utils/speakingEngine';
 
 interface ApiSettingsModalProps {
   isOpen: boolean;
@@ -52,45 +56,37 @@ export const ApiSettingsModal: React.FC<ApiSettingsModalProps> = ({
     setTestMessage('Discovering authorized models on your Google AI Studio account...');
 
     try {
-      // 1. Query available models authorized for this key
+      // 1. Query available models authorized for this key & build prioritized probe order
+      //    (Note: Google AI Studio's /models list still shows retired 2.x models that return 404 to new users,
+      //     so we actively ping candidates until we lock onto a verified HTTP 200 model!)
       const availableModels = await listAvailableGeminiModels(apiKey.trim());
-      
-      let candidateToTest = model.trim() || DEFAULT_GEMINI_MODEL;
-      let switchedModelNotice = '';
-
-      // If user selected a model that is not in their authorized list, or if testing gemini-1.5-pro which returned 404
-      if (availableModels.length > 0 && !availableModels.includes(candidateToTest)) {
-        // Pick best available: prefer gemini-2.0-flash or gemini-1.5-flash
-        const preferred = availableModels.find(m => m.includes('2.0-flash')) || 
-                          availableModels.find(m => m.includes('1.5-flash')) || 
-                          availableModels[0];
-        if (preferred) {
-          switchedModelNotice = ` (Model "${candidateToTest}" was unavailable; auto-switched to verified model "${preferred}")`;
-          candidateToTest = preferred;
-          setModel(preferred);
-          saveModel(preferred);
-          onKeyUpdated?.(apiKey.trim(), preferred);
-        }
-      }
-
-      // 2. Test ping with candidate model
-      setTestMessage(`Connecting to Google Gemini (${candidateToTest})...`);
-      
-      let res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(candidateToTest)}:generateContent?key=${encodeURIComponent(apiKey.trim())}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{ role: 'user', parts: [{ text: 'Respond with the single word: OK' }] }]
-          })
-        }
+      const cleanDiscovered = availableModels.filter(
+        m => m.startsWith('gemini-') && !/(-tts|-image|imagen|embedding|robotics|1\.0|1\.5)/.test(m)
       );
 
-      // Try v1 if v1beta returned 404
-      if (res.status === 404) {
-        res = await fetch(
-          `https://generativelanguage.googleapis.com/v1/models/${encodeURIComponent(candidateToTest)}:generateContent?key=${encodeURIComponent(apiKey.trim())}`,
+      const probeOrder = Array.from(
+        new Set(
+          [
+            model.trim() || DEFAULT_GEMINI_MODEL,
+            'gemini-3-flash-preview',
+            'gemini-3.1-flash-lite-preview',
+            'gemini-flash-latest',
+            'gemini-2.5-flash-lite',
+            ...cleanDiscovered,
+            'gemini-2.5-flash',
+            'gemini-2.0-flash'
+          ].filter(Boolean)
+        )
+      );
+
+      let verifiedModel: string | null = null;
+      let replyText = '';
+      let lastErrMsg = 'No authorized Gemini model responded.';
+
+      for (const candidateToTest of probeOrder) {
+        setTestMessage(`Connecting to Google Gemini (${candidateToTest})...`);
+        const res = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(candidateToTest)}:generateContent?key=${encodeURIComponent(apiKey.trim())}`,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -99,37 +95,57 @@ export const ApiSettingsModal: React.FC<ApiSettingsModalProps> = ({
             })
           }
         );
-      }
 
-      if (!res.ok) {
-        let errMsg = `Google API returned HTTP ${res.status}`;
-        try {
-          const data = await res.json();
-          if (data?.error?.message) {
-            errMsg = data.error.message;
+        if (!res.ok) {
+          try {
+            const errBody = await res.json();
+            if (errBody?.error?.message) lastErrMsg = errBody.error.message;
+          } catch {}
+          if (res.status === 404) {
+            markDeadGeminiModel(candidateToTest, apiKey.trim());
+            continue;
           }
-        } catch { /* ignore */ }
-        throw new Error(errMsg);
+          if (res.status === 400 || res.status === 429 || res.status === 503) {
+            continue;
+          }
+          throw new Error(lastErrMsg);
+        }
+
+        const data = await res.json();
+        const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (text) {
+          verifiedModel = candidateToTest;
+          replyText = text;
+          break;
+        }
       }
 
-      const data = await res.json();
-      const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (reply) {
-        setTestStatus('success');
-        const modelListDisplay = availableModels.length > 0 
-          ? ` Available on your key: ${availableModels.slice(0, 3).join(', ')}.` 
-          : '';
-        setTestMessage(`Connection verified! Google Gemini (${candidateToTest}) is active and responding.${switchedModelNotice}${modelListDisplay}`);
-      } else {
-        throw new Error('API returned an empty response.');
+      if (!verifiedModel || !replyText) {
+        throw new Error(lastErrMsg);
       }
+
+      const initialSelected = model.trim() || DEFAULT_GEMINI_MODEL;
+      const switchedModelNotice =
+        verifiedModel !== initialSelected
+          ? ` (Auto-switched from unavailable "${initialSelected}" to active "${verifiedModel}")`
+          : '';
+
+      setModel(verifiedModel);
+      saveModel(verifiedModel);
+      markVerifiedFastVoiceModel(verifiedModel, apiKey.trim());
+      onKeyUpdated?.(apiKey.trim(), verifiedModel);
+
+      setTestStatus('success');
+      setTestMessage(
+        `Connection verified! Google Gemini (${verifiedModel}) is active and responding.${switchedModelNotice}`
+      );
     } catch (err: any) {
       setTestStatus('error');
       const msg = err.message || 'Failed to connect to Google Gemini.';
       if (msg.includes('403') || msg.includes('PERMISSION_DENIED') || msg.includes('API_KEY_INVALID')) {
         setTestMessage(`Invalid API Key or permission denied (HTTP 403). Make sure your key is copied correctly from https://aistudio.google.com/app/apikey.`);
-      } else if (msg.includes('404') || msg.includes('not found')) {
-        setTestMessage(`Model "${model}" was not found (HTTP 404). Switch to "2.0 Flash" above — it is 100% active on all free Google AI Studio keys.`);
+      } else if (msg.includes('404') || msg.includes('not found') || msg.includes('no longer available')) {
+        setTestMessage(`Model "${model}" is unavailable on new Google AI Studio keys (HTTP 404). Select "3 Flash" or "Flash Latest" below and click Test Connection.`);
       } else {
         setTestMessage(msg);
       }
@@ -315,9 +331,9 @@ export const ApiSettingsModal: React.FC<ApiSettingsModalProps> = ({
             </label>
             <div className="grid grid-cols-3 gap-2">
               {[
-                { id: 'gemini-2.0-flash', label: '2.0 Flash', badge: 'Recommended' },
-                { id: 'gemini-1.5-flash', label: '1.5 Flash', badge: 'Stable' },
-                { id: 'gemini-1.5-pro', label: '1.5 Pro', badge: 'Deep Reasoning' }
+                { id: 'gemini-3-flash-preview', label: '3 Flash', badge: 'Recommended' },
+                { id: 'gemini-3.1-flash-lite-preview', label: '3.1 Flash-Lite', badge: 'Fastest Voice' },
+                { id: 'gemini-flash-latest', label: 'Flash Latest', badge: 'Auto-Updated' }
               ].map((m) => (
                 <button
                   key={m.id}

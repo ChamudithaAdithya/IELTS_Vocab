@@ -93,10 +93,15 @@ export function buildFinalizedTurnPacket(params: {
     : normalizedTranscript;
 
   // Stage A Coherence runs ONCE here and is shared by BOTH Friend Engine & Grammar Coach
+  const recentCtxText = params.priorHistory
+    .slice(-3)
+    .map(m => m.text)
+    .join(' ');
   const coherence = validateTranscriptCoherence(
     analysisTranscript,
     params.uncertainWords,
-    params.sttConfidence
+    params.sttConfidence,
+    recentCtxText
   );
 
   return {
@@ -151,6 +156,10 @@ export interface OrchestratedTurnCallbacks {
   /** Fires the moment each sentence/safe-clause finishes streaming so TTS begins speaking immediately */
   onFriendSentenceReady?: (sentence: string, packet: FinalizedTurnPacket) => void;
   onFriendReplyReady: (result: OrchestratedFriendPayload, packet: FinalizedTurnPacket) => void;
+  /** Fires if Deep Grammar (Live Feedback) detects mistakes that were not yet in Buddy's initial spoken reply */
+  onFriendReplyUpdated?: (result: OrchestratedFriendPayload, packet: FinalizedTurnPacket) => void;
+  /** Enqueues a spoken correction aloud when Live Feedback detects a mistake that Brain 1 omitted */
+  onLateSpokenCorrection?: (spokenSentence: string, packet: FinalizedTurnPacket) => void;
   onGrammarAnalysisReady: (
     analysis: BuddyGrammarAnalysis,
     updatedAnalytics: BuddyLearningAnalytics,
@@ -240,11 +249,29 @@ export async function orchestrateBuddyTurn(params: {
     precomputedIntent.intent === 'repeat_last_buddy' ||
     precomputedIntent.intent === 'explain_earlier_mistake' ||
     precomputedIntent.intent === 'unclear_speech' ||
-    precomputedIntent.intent === 'incomplete_sentence';
+    precomputedIntent.intent === 'incomplete_sentence' ||
+    quickLocalGrammar.utteranceCategory === 'incomplete_speech' ||
+    quickLocalGrammar.utteranceCategory === 'stt_error' ||
+    quickLocalGrammar.utteranceCategory === 'pronunciation_difficulty' ||
+    quickLocalGrammar.utteranceCategory === 'unusual_but_correct';
 
-  const quickRecast = suppressInlineRecast
+  const hasCloudKey = Boolean(apiKey && apiKey.trim());
+  const turnWordCount = packet.analysisTranscript.split(/\s+/).filter(Boolean).length;
+  const rawQuickRecast = suppressInlineRecast
     ? { spokenCorrection: '', correctionRequired: false, correctionType: 'none' as const }
     : buildSpokenCorrection(quickLocalGrammar, intensity);
+
+  // When Gemini Cloud is connected, only pre-emit Tier-1 regex recasts on short (<= 6 words), high-confidence turns
+  // so multi-clause sentences let Gemini speak the COMPLETE corrected sentence instead of a partial regex fix!
+  const useTier1PreEmit =
+    !hasCloudKey ||
+    (rawQuickRecast.correctionRequired &&
+      turnWordCount <= 6 &&
+      quickLocalGrammar.mistakes.every(m => m.confidence >= 0.95));
+
+  const quickRecast = useTier1PreEmit
+    ? rawQuickRecast
+    : { spokenCorrection: '', correctionRequired: false, correctionType: 'none' as const };
 
   let aiFirstTokenFired = false;
   let aiFirstTokenLatencyMs: number | undefined;
@@ -260,6 +287,7 @@ export async function orchestrateBuddyTurn(params: {
   let activeCorrectionType: 'none' | 'grammar' | 'naturalness' | 'vocabulary' =
     quickRecast.correctionType;
   let latestFriendPartial = '';
+  let emittedAnyFriendSentence = false;
 
   const emitCombinedPartial = () => {
     const combined = [activeSpokenCorrection, latestFriendPartial]
@@ -279,6 +307,7 @@ export async function orchestrateBuddyTurn(params: {
   // If Tier-1 already detected a clear spoken recast, display AND start synthesizing it at t=1ms!
   if (activeSpokenCorrection) {
     emitCombinedPartial();
+    emittedAnyFriendSentence = true;
     callbacks.onFriendSentenceReady?.(activeSpokenCorrection, packet);
   }
 
@@ -321,6 +350,9 @@ export async function orchestrateBuddyTurn(params: {
     history: packet.priorHistory,
     personality,
     mode,
+    intensity,
+    precomputedSpokenCorrection: activeSpokenCorrection || undefined,
+    suppressSpokenCorrection: suppressInlineRecast,
     coherence: packet.coherence,
     context: sessionCtx,
     precomputedIntent,
@@ -331,17 +363,32 @@ export async function orchestrateBuddyTurn(params: {
     onFirstToken: () => {
       markFirstToken();
     },
-    onPartialReply: (partialText) => {
-      latestFriendPartial = partialText;
+    onPartialReply: (partialText, recastMeta) => {
+      if (!useTier1PreEmit && recastMeta) {
+        activeSpokenCorrection = recastMeta.spokenCorrection;
+        activeCorrectionType = recastMeta.correctionType;
+        latestFriendPartial = recastMeta.conversationalResponse;
+      } else {
+        latestFriendPartial = partialText;
+      }
       emitCombinedPartial();
     },
     onSentenceReady: (sentence) => {
+      emittedAnyFriendSentence = true;
       callbacks.onFriendSentenceReady?.(sentence, packet);
     }
   });
 
-  // 5. Finalize Friend Reply IMMEDIATELY when Friend SSE completes (NEVER waits on slow JSON grammar!)
-  const conversationalResponse = baseFriendResult.reply.trim();
+  // Adopt inline spoken recast from Gemini SSE if Tier-1 hadn't pre-emitted one!
+  if (!activeSpokenCorrection && baseFriendResult.spokenCorrection) {
+    activeSpokenCorrection = baseFriendResult.spokenCorrection;
+    activeCorrectionType = baseFriendResult.correctionType || 'grammar';
+  }
+
+  // 5. Finalize Friend Reply IMMEDIATELY when Friend SSE completes
+  const conversationalResponse = (
+    baseFriendResult.conversationalResponse ?? baseFriendResult.reply
+  ).trim();
   const combinedReply = [activeSpokenCorrection, conversationalResponse]
     .filter(Boolean)
     .join(' ')
@@ -354,40 +401,66 @@ export async function orchestrateBuddyTurn(params: {
       .reverse()
       .find(s => s.endsWith('?')) || null;
 
-  const initialStructuredTurn: BuddyStructuredTurnResponse = {
-    originalTranscript: packet.finalizedVerbatimTranscript,
-    intendedMeaning:
-      quickLocalGrammar.intendedMeaning ||
-      quickLocalGrammar.corrected_sentence ||
-      packet.analysisTranscript,
-    correctionRequired: Boolean(activeSpokenCorrection),
-    correctedSentence: quickLocalGrammar.corrected_sentence,
-    correctionType: activeCorrectionType,
-    mistakes: quickLocalGrammar.mistakes
-      .filter(m => m.severity === 'GRAMMAR_ERROR' || m.severity === 'UNNATURAL')
-      .map(m => ({
-        original: m.original,
-        corrected: m.correction,
-        explanation: m.explanation
-      })),
-    spokenCorrection: activeSpokenCorrection,
-    conversationalResponse,
-    followUpQuestion
+  const buildPayload = (
+    grammarSourceForTurn: BuddyGrammarAnalysis
+  ): OrchestratedFriendPayload => {
+    const structured: BuddyStructuredTurnResponse = {
+      originalTranscript: packet.finalizedVerbatimTranscript,
+      intendedMeaning:
+        grammarSourceForTurn.intendedMeaning ||
+        grammarSourceForTurn.corrected_sentence ||
+        packet.analysisTranscript,
+      correctionRequired: Boolean(activeSpokenCorrection),
+      correctedSentence: grammarSourceForTurn.corrected_sentence,
+      correctionType: activeCorrectionType,
+      mistakes: grammarSourceForTurn.mistakes
+        .filter(m => m.severity === 'GRAMMAR_ERROR' || m.severity === 'UNNATURAL')
+        .map(m => ({
+          original: m.original,
+          corrected: m.correction,
+          explanation: m.explanation
+        })),
+      spokenCorrection: activeSpokenCorrection,
+      conversationalResponse,
+      followUpQuestion
+    };
+    return {
+      ...baseFriendResult,
+      reply: [activeSpokenCorrection, conversationalResponse].filter(Boolean).join(' ').trim(),
+      spokenCorrection: activeSpokenCorrection,
+      conversationalResponse,
+      correctionType: activeCorrectionType,
+      structuredTurn: structured
+    };
   };
 
-  const friendResult: OrchestratedFriendPayload = {
-    ...baseFriendResult,
-    reply: combinedReply,
-    spokenCorrection: activeSpokenCorrection,
-    conversationalResponse,
-    correctionType: activeCorrectionType,
-    structuredTurn: initialStructuredTurn
-  };
+  let friendResult = buildPayload(quickLocalGrammar);
 
   callbacks.onFriendReplyReady(friendResult, packet);
 
-  // 6. Await background deep grammar ONLY for final trace & outer return value (UI + TTS already running!)
+  // 6. Await background deep grammar (Live Feedback) — and if Live Feedback detected mistakes that
+  //    neither Tier-1 nor Brain 1 spoke yet, IMMEDIATELY sync them to Buddy's bubble & voice!
   const { analysis: grammarAnalysis, latencyMs: grammarLatencyMs } = await grammarPromise;
+
+  const verifiedDeepRecast = suppressInlineRecast
+    ? { spokenCorrection: '', correctionRequired: false, correctionType: 'none' as const }
+    : buildSpokenCorrection(grammarAnalysis, intensity);
+
+  if (!activeSpokenCorrection && verifiedDeepRecast.correctionRequired) {
+    activeSpokenCorrection = verifiedDeepRecast.spokenCorrection;
+    activeCorrectionType = verifiedDeepRecast.correctionType;
+    friendResult = buildPayload(grammarAnalysis);
+    callbacks.onFriendReplyUpdated?.(friendResult, packet);
+
+    const naturalVoiceAddendum = emittedAnyFriendSentence
+      ? `By the way, ${verifiedDeepRecast.spokenCorrection.charAt(0).toLowerCase()}${verifiedDeepRecast.spokenCorrection.slice(1)}`
+      : verifiedDeepRecast.spokenCorrection;
+    callbacks.onLateSpokenCorrection?.(naturalVoiceAddendum, packet);
+  } else if (activeSpokenCorrection && grammarAnalysis.mistakes.length > 0) {
+    // Refresh structuredTurn metadata with full deep grammar mistakes
+    friendResult = buildPayload(grammarAnalysis);
+    callbacks.onFriendReplyUpdated?.(friendResult, packet);
+  }
 
   const trace: BuddyTurnTrace = {
     turnId: packet.turnId,
@@ -411,7 +484,7 @@ export async function orchestrateBuddyTurn(params: {
     grammarSource: grammarAnalysis.analyzerSource,
     mistakesCount: grammarAnalysis.mistakes.length,
     spokenCorrection: activeSpokenCorrection || undefined,
-    replyPreview: combinedReply.slice(0, 110)
+    replyPreview: friendResult.reply.slice(0, 110)
   };
 
   if (callbacks.onTraceReady) {

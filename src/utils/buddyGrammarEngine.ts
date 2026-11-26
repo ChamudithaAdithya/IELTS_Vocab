@@ -8,7 +8,9 @@ import type {
   BuddyGrammarAnalysis,
   BuddyMistake,
   BuddyMode,
+  BuddyUtteranceCategory,
   BuddyVocabUpgrade,
+  ContextualWordInterpretation,
   CorrectionIntensity,
   FeedbackSeverity,
   GrammarCategoryCode,
@@ -20,7 +22,9 @@ import {
   extractPronunciationSpotlights
 } from './buddySpeechCoach';
 import {
+  discoverFastVoiceModelsForKey,
   getFastVoiceModelCandidates,
+  markDeadGeminiModel,
   markVerifiedFastVoiceModel
 } from './speakingEngine';
 
@@ -63,15 +67,377 @@ const VALID_COMPOUND_PAIRS = new Set([
   'lemon tea', 'green tea', 'black coffee', 'iced coffee'
 ]);
 
+/**
+ * Detects unfinished / trailing learner thoughts (e.g. "About my...", "I was thinking...", "Let's talk about...")
+ * so Lingo Buddy encourages the learner to continue naturally instead of flagging false grammar mistakes!
+ * Preserves complete dependent fragments like "Because I was tired." (no ellipsis, complete predicate) for grammar coaching.
+ */
+export function detectIncompleteSpeech(transcript: string): {
+  isIncomplete: boolean;
+  fragment?: string;
+  starterKind?: 'about' | 'thinking' | 'wanting' | 'trailing';
+} {
+  const clean = transcript.trim();
+  if (!clean || /\?\s*$/.test(clean)) {
+    return { isIncomplete: false };
+  }
+
+  // 1. Explicit trailing ellipsis ("About my...", "I was thinking...", "Well, yesterday I...")
+  if (/(?:\.\.\.|…)\s*$/.test(clean)) {
+    const core = clean.replace(/(?:\.\.\.|…)+\s*$/, '').trim();
+    const starterKind = /\b(thinking|wondering)\b/i.test(core)
+      ? 'thinking'
+      : /^(?:well[,\s]+|so[,\s]+|actually[,\s]+)*(?:about|regarding|talking\s+about)\b/i.test(core)
+      ? 'about'
+      : /\b(want|wanted|like|trying|going|planning)\s+to\b/i.test(core)
+      ? 'wanting'
+      : 'trailing';
+    return { isIncomplete: true, fragment: core || clean, starterKind };
+  }
+
+  const stripped = clean.replace(/[.!]+\s*$/, '').trim();
+  const words = stripped.split(/\s+/).filter(Boolean);
+  if (words.length === 0 || words.length > 10) {
+    return { isIncomplete: false };
+  }
+
+  // 2. Classic unfinished topic / thought starters even if STT ended them with a period
+  if (
+    /^(?:well[,\s]+|so[,\s]+|actually[,\s]+|umm?[,\s]+|uh[,\s]+)*(?:about|regarding|concerning|talking\s+about|speaking\s+of)(?:\s+(?:my|your|our|his|her|their|the|a|an|this|that))?$/i.test(
+      stripped
+    )
+  ) {
+    return { isIncomplete: true, fragment: stripped, starterKind: 'about' };
+  }
+
+  if (
+    /^(?:well[,\s]+|so[,\s]+|actually[,\s]+|umm?[,\s]+|uh[,\s]+)*(?:I|we)\s+(?:was|were|am|'m|have\s+been)\s+(?:just\s+)?(?:thinking|wondering|planning|trying|hoping)(?:\s+(?:about|of|to|that))?$/i.test(
+      stripped
+    ) ||
+    /^(?:I'm|I\s+am|I\s+was)\s+(?:just\s+)?(?:thinking|wondering|going\s+to|about\s+to)$/i.test(stripped)
+  ) {
+    return { isIncomplete: true, fragment: stripped, starterKind: 'thinking' };
+  }
+
+  if (
+    /^(?:well[,\s]+|so[,\s]+|actually[,\s]+)*(?:I|we)\s+(?:want|wanted|would\s+like|'d\s+like|need|needed)\s+to(?:\s+(?:talk|say|ask|tell\s+you)(?:\s+about)?)?$/i.test(
+      stripped
+    ) ||
+    /^(?:let'?s|can\s+we)\s+(?:talk|chat|speak)\s+about(?:\s+(?:my|the|a|an))?$/i.test(stripped)
+  ) {
+    return { isIncomplete: true, fragment: stripped, starterKind: 'wanting' };
+  }
+
+  // 3. Trailing open syntactic slot at the end of a short statement (possessive, article, subordinator, bare "to")
+  // Exclude valid standalone replies like "I think so", "I hope so", "Me too", "Not at all", "Nothing much"
+  const VALID_COMPLETE_ENDINGS =
+    /^(?:(?:I|we)\s+(?:don'?t\s+)?(?:think|hope|guess|suppose|believe)\s+so|me\s+too|you\s+too|same\s+here|not\s+at\s+all|nothing\s+much|not\s+much|of\s+course|for\s+sure|all\s+right)$/i;
+  if (
+    !VALID_COMPLETE_ENDINGS.test(stripped) &&
+    words.length <= 7 &&
+    /\b(?:my|your|our|his|her|their|the|a|an|because|although|while|when|if|into|about|from|with)\s*$/i.test(
+      stripped
+    )
+  ) {
+    return { isIncomplete: true, fragment: stripped, starterKind: 'trailing' };
+  }
+
+  return { isIncomplete: false };
+}
+
+interface ContextualWordRule {
+  id: string;
+  kind: 'stt_error' | 'pronunciation_difficulty';
+  regex: RegExp;
+  excludeRegex?: RegExp;
+  requireContextRegex?: RegExp;
+  extractHeard: (m: RegExpMatchArray) => string;
+  intendedWord: string;
+  confidence: number;
+  phoneticNote: string;
+  phoneticNoteSi: string;
+  ipaComparison?: string;
+}
+
+const CONTEXTUAL_WORD_RULES: ContextualWordRule[] = [
+  {
+    id: 'stt-carrier-career',
+    kind: 'stt_error',
+    regex:
+      /\b(?:talk\s+about|discuss|about|my|your|our|his|her|their|future|good|great|new|successful|change|switch|build\s+a|choose\s+a|start\s+a|in\s+my)\s+(carrier)\b|\b(carrier)\s+(?:path|goals?|plan|growth|change|development|choice|opportunities)\b/i,
+    excludeRegex:
+      /\b(aircraft|airline|mobile|network|sim|shipping|cargo|mail|baby|pet|bike|bicycle|luggage|mosquito|disease|water)\b/i,
+    extractHeard: m => m[1] || m[2] || 'carrier',
+    intendedWord: 'career',
+    confidence: 0.96,
+    phoneticNote:
+      'The transcript captured "carrier", though in this context you almost certainly meant "career" (stress the second syllable: ca-REER).',
+    phoneticNoteSi:
+      'මයික්‍රෆෝනය "carrier" ලෙස සටහන් කළත්, මෙහි අදහස "career" (වෘත්තීය ජීවිතය — ca-REER ලෙස දෙවන කොටසට බර තබා උච්චාරණය කරන්න) විය හැකියි.',
+    ipaComparison: 'career /kəˈrɪər/ vs. carrier /ˈkæriər/'
+  },
+  {
+    id: 'stt-recording-coding',
+    kind: 'stt_error',
+    regex:
+      /\b(?:move\s+(?:on\s+)?to\s+(?:the\s+)?(recording)(?:\s+part|\s+section|\s+shops?)?|(recording)\s+(?:shops?|projects?|languages?|bootcamp|interview|skills?))\b/i,
+    excludeRegex: /\b(studio|microphone|audio|song|album|music|voice|camera|video)\b/i,
+    extractHeard: m => m[1] || m[2] || 'recording',
+    intendedWord: 'coding',
+    confidence: 0.94,
+    phoneticNote:
+      'Speech recognition heard "recording", which in a tech/topic-switch context usually means "coding".',
+    phoneticNoteSi:
+      'මයික්‍රෆෝනය "recording" ලෙස හඳුනා ගත්තද, මෙම සංවාදයේදී ඔබ අදහස් කළේ "coding" විය හැකියි.',
+    ipaComparison: 'coding /ˈkoʊdɪŋ/ vs. recording /rɪˈkɔːrdɪŋ/'
+  },
+  {
+    id: 'stt-coarse-course',
+    kind: 'stt_error',
+    regex:
+      /\b(?:university|college|online|english|coding|degree|training|short|crash|new|taking\s+a|finished\s+a)\s+(coarse)\b/i,
+    extractHeard: m => m[1] || 'coarse',
+    intendedWord: 'course',
+    confidence: 0.98,
+    phoneticNote:
+      '"Coarse" and "course" sound identical in speech — speech-to-text simply picked the homophone spelling instead of "course".',
+    phoneticNoteSi:
+      '"Coarse" සහ "course" එකම ලෙස උච්චාරණය වන බැවින් මෙය ව්‍යාකරණ වරදක් නොව හඬ හඳුනාගැනීමේ අක්ෂර වෙනසකි.'
+  },
+  {
+    id: 'stt-desert-dessert',
+    kind: 'stt_error',
+    regex:
+      /\b(?:after\s+(?:dinner|lunch)|for\s+(desert)|sweet\s+(desert)|chocolate\s+(desert)|(?:eat|ate|had|ordered)\s+(?:a\s+|some\s+)?(desert))\b/i,
+    excludeRegex: /\b(sahara|sand|camel|arid|oasis)\b/i,
+    extractHeard: m => m[1] || m[2] || m[3] || m[4] || 'desert',
+    intendedWord: 'dessert',
+    confidence: 0.95,
+    phoneticNote:
+      'In a food context, "desert" is a speech-recognition / stress slip for "dessert" (sweet dish after a meal, stressed on the second syllable: de-ZERT).',
+    phoneticNoteSi:
+      'ආහාර ගැන කතා කරන විට අතුරුපස සඳහා "dessert" (de-ZERT) යෙදේ — "desert" යනු කාන්තාරයයි.',
+    ipaComparison: 'dessert /dɪˈzɜːrt/ vs. desert /ˈdezərt/'
+  },
+  {
+    id: 'stt-board-bored',
+    kind: 'stt_error',
+    regex: /\b(?:I\s+am|I'm|I\s+was|feel|feeling|got|so|really|very)\s+(board)\b/i,
+    excludeRegex: /\b(game|games|member|directors|white|chalk|cutting|exam|notice|room)\b/i,
+    extractHeard: m => m[1] || 'board',
+    intendedWord: 'bored',
+    confidence: 0.98,
+    phoneticNote:
+      '"Board" and "bored" are exact homophones in spoken English — speech recognition wrote the wrong spelling, not a grammar error.',
+    phoneticNoteSi: '"Board" සහ "bored" එකම ශබ්දය ඇති වචන දෙකකි — මෙය ඔබේ ව්‍යාකරණ වරදක් නොවේ.'
+  },
+  {
+    id: 'stt-roll-role',
+    kind: 'stt_error',
+    regex: /\b(?:my|new|current|job|team|leadership)\s+(roll)\s+(?:at|in|as|on)\b/i,
+    excludeRegex: /\b(bread|egg|spring|sushi|cinnamon|paper|drum)\b/i,
+    extractHeard: m => m[1] || 'roll',
+    intendedWord: 'role',
+    confidence: 0.98,
+    phoneticNote:
+      '"Roll" and "role" sound identical aloud — speech recognition picked "roll" where you meant "role".',
+    phoneticNoteSi: '"Roll" සහ "role" එකම ලෙස ශබ්ද වන බැවින් මෙය හඬ පිටපත් කිරීමේ වෙනසක් පමණි.'
+  },
+  {
+    id: 'stt-quiet-quite',
+    kind: 'stt_error',
+    regex:
+      /\b(quiet)\s+(?:busy|tired|interesting|difficult|hard|easy|expensive|good|happy|excited|stressful|fun|late|early|often|a\s+lot|different)\b/i,
+    extractHeard: m => m[1] || 'quiet',
+    intendedWord: 'quite',
+    confidence: 0.95,
+    phoneticNote:
+      'Before an adjective like "busy" or "interesting", "quiet" (/ˈkwaɪət/, two syllables) is a common STT/pronunciation swap for "quite" (/kwaɪt/, one syllable).',
+    phoneticNoteSi:
+      'විශේෂණ පදයකට පෙර "තරමක් / බොහෝ දුරට" යන අර්ථයට "quite" (/kwaɪt/) යෙදේ — "quiet" යනු නිශ්ශබ්ද යන්නයි.',
+    ipaComparison: 'quite /kwaɪt/ vs. quiet /ˈkwaɪət/'
+  },
+  {
+    id: 'stt-peace-piece',
+    kind: 'stt_error',
+    regex: /\ba\s+(peace)\s+of\s+(?:cake|advice|work|paper|news|information|bread|pizza|music)\b/i,
+    extractHeard: m => m[1] || 'peace',
+    intendedWord: 'piece',
+    confidence: 0.99,
+    phoneticNote: '"Peace" and "piece" sound identical in speech — this is purely an STT homophone spelling.',
+    phoneticNoteSi: '"Peace" සහ "piece" එකම ශබ්දය ඇති බැවින් මෙය හඬ හඳුනාගැනීමේ අක්ෂර වෙනසකි.'
+  },
+  {
+    id: 'stt-waist-waste',
+    kind: 'stt_error',
+    regex: /\b(waist)\s+(?:of\s+time|of\s+money|my\s+time|time|money)\b/i,
+    extractHeard: m => m[1] || 'waist',
+    intendedWord: 'waste',
+    confidence: 0.99,
+    phoneticNote: '"Waist" and "waste" are exact homophones — STT wrote the wrong spelling.',
+    phoneticNoteSi: '"Waist" සහ "waste" එකම ලෙස උච්චාරණය වන බැවින් මෙය ව්‍යාකරණ වරදක් නොවේ.'
+  },
+  {
+    id: 'pron-leave-live',
+    kind: 'pronunciation_difficulty',
+    regex:
+      /\b(?:I|we|they|my\s+parents|my\s+family)\s+(leave)\s+(?:in|at|near|with\s+my)\s+[A-Za-z]{3,}\b|\bwhere\s+do\s+you\s+(leave)\b/i,
+    excludeRegex:
+      /\bleave\s+(?:in\s+(?:five|ten|fifteen|twenty|\d+|a\s+few|an?)\s+(?:minutes?|hours?|days?|weeks?)|at\s+\d|for\s+work|home|school|the\s+house)\b/i,
+    extractHeard: m => m[1] || m[2] || 'leave',
+    intendedWord: 'live',
+    confidence: 0.95,
+    phoneticNote:
+      'It sounds like you meant "live" (short /ɪ/ vowel, like "sit") rather than "leave" (long /iː/ vowel, like "see").',
+    phoneticNoteSi:
+      '"ජීවත් වෙනවා" යන්නට "live" (/lɪv/ — කෙටි "ඉ" ශබ්දය) යෙදේ. දිගු "ඊ" ශබ්දය යෙදූ විට එය "leave" (පිටත් වෙනවා) ලෙස ඇසේ.',
+    ipaComparison: 'live /lɪv/ (short i) vs. leave /liːv/ (long ee)'
+  },
+  {
+    id: 'pron-snake-snack',
+    kind: 'pronunciation_difficulty',
+    regex:
+      /\b(?:eat|ate|eating|had|have|grab|grabbed|quick|light|evening|afternoon|midnight|healthy|sweet)\s+(?:a\s+|some\s+|an\s+)?(snake)\b/i,
+    excludeRegex: /\b(venom|cobra|python|bite|bitten|jungle|garden|zoo|reptile)\b/i,
+    extractHeard: m => m[1] || 'snake',
+    intendedWord: 'snack',
+    confidence: 0.96,
+    phoneticNote:
+      'In a food context, "snake" (/sneɪk/) is a classic vowel slip for "snack" (/snæk/ — open short "a" as in "cat").',
+    phoneticNoteSi:
+      'කෙටි ආහාරයකට "snack" (/snæk/ — "cat" හි මෙන් කෙටි "ඇ" ශබ්දය) යෙදේ; "snake" (/sneɪk/) යනු සර්පයායි.',
+    ipaComparison: 'snack /snæk/ vs. snake /sneɪk/'
+  },
+  {
+    id: 'pron-copy-coffee',
+    kind: 'pronunciation_difficulty',
+    regex:
+      /\b(?:cup\s+of|mug\s+of|drink|drinking|drank|hot|iced|black|morning|fresh)\s+(copy)\b/i,
+    extractHeard: m => m[1] || 'copy',
+    intendedWord: 'coffee',
+    confidence: 0.96,
+    phoneticNote:
+      'The mic heard "copy" (/p/), though with drinks you likely meant "coffee" (/f/ — touch your top teeth gently to your lower lip for the "f" sound).',
+    phoneticNoteSi:
+      'පානයක් ගැන කතා කරන බැවින් ඔබ අදහස් කළේ "coffee" (/f/ ශබ්දය — උඩු දත් යටි තොලේ ස්පර්ශ කරමින්) විය හැකියි.',
+    ipaComparison: 'coffee /ˈkɒfi/ (/f/) vs. copy /ˈkɒpi/ (/p/)'
+  },
+  {
+    id: 'pron-walk-work',
+    kind: 'pronunciation_difficulty',
+    regex:
+      /\b(walk)\s+(?:from\s+home|as\s+an?\s+[a-z]+|at\s+(?:a\s+company|an?\s+office|a\s+bank|a\s+hospital|a\s+startup))|\blot\s+of\s+(walk)\s+at\s+(?:the\s+)?office\b/i,
+    extractHeard: m => m[1] || m[2] || 'walk',
+    intendedWord: 'work',
+    confidence: 0.94,
+    phoneticNote:
+      'In an office/job context, "walk" (/wɔːk/) was likely meant as "work" (/wɜːrk/ — central vowel as in "bird").',
+    phoneticNoteSi:
+      'රැකියාව ගැන කතා කරන විට "work" (/wɜːrk/ — "bird" හි මෙන් ශබ්දය) සහ "walk" (/wɔːk/ — ඇවිදිනවා) අතර ශබ්ද වෙනස ගැන සැලකිලිමත් වන්න.',
+    ipaComparison: 'work /wɜːrk/ vs. walk /wɔːk/'
+  },
+  {
+    id: 'pron-tank-thank',
+    kind: 'pronunciation_difficulty',
+    regex: /\b(tank)\s+you\b|\b(tanks)\s+(?:a\s+lot|so\s+much)\b/i,
+    extractHeard: m => m[1] || m[2] || 'tank',
+    intendedWord: 'thank',
+    confidence: 0.97,
+    phoneticNote:
+      'The mic heard "tank" (/t/) for "thank" (/θ/ — place your tongue tip lightly between your teeth for soft "th").',
+    phoneticNoteSi:
+      '"Thank" උච්චාරණයේදී දිවේ අග දත් අතර මෘදුව තබා /θ/ ("ත" මෘදු ශබ්දය) පිට කරන්න.',
+    ipaComparison: 'thank /θæŋk/ vs. tank /tæŋk/'
+  },
+  {
+    id: 'pron-tree-three',
+    kind: 'pronunciation_difficulty',
+    regex: /\b(tree)\s+(?:years?|months?|weeks?|days?|hours?|minutes?|times?|people|friends|brothers|sisters)\b/i,
+    extractHeard: m => m[1] || 'tree',
+    intendedWord: 'three',
+    confidence: 0.95,
+    phoneticNote:
+      'Before a number unit, "tree" (/t/) was likely meant as "three" (/θr/ — soft "th" with air flowing past the tongue tip).',
+    phoneticNoteSi:
+      'සංඛ්‍යාවක් කීමේදී "three" (/θriː/) සහ "tree" (/triː/ — ගස) අතර "th" ශබ්ද වෙනස හුරු වන්න.',
+    ipaComparison: 'three /θriː/ vs. tree /triː/'
+  }
+];
+
+export function detectContextualWordInterpretation(
+  transcript: string,
+  conversationContext: string = ''
+): ContextualWordInterpretation | undefined {
+  const clean = transcript.trim();
+  if (!clean) return undefined;
+  const combinedCtx = `${conversationContext} ${clean}`;
+
+  for (const rule of CONTEXTUAL_WORD_RULES) {
+    if (rule.excludeRegex && rule.excludeRegex.test(combinedCtx)) continue;
+    if (rule.requireContextRegex && !rule.requireContextRegex.test(conversationContext)) continue;
+    const match = clean.match(rule.regex);
+    if (match) {
+      const heardWord = rule.extractHeard(match);
+      const intendedWord =
+        heardWord.toLowerCase() === 'tanks' ? 'thanks' : rule.intendedWord;
+      return {
+        heardWord,
+        intendedWord,
+        kind: rule.kind,
+        confidence: rule.confidence,
+        phoneticNote: rule.phoneticNote,
+        phoneticNoteSi: rule.phoneticNoteSi,
+        ipaComparison: rule.ipaComparison
+      };
+    }
+  }
+  return undefined;
+}
+
+/**
+ * Recognizes grammatically valid formal, literary, inverted, or creative expressions
+ * so Lingo Buddy celebrates valid unusual phrasing instead of over-correcting it.
+ */
+export function detectUnusualButCorrectExpression(transcript: string): boolean {
+  const clean = transcript.trim();
+  if (!clean) return false;
+  return (
+    /^(?:seldom|rarely|scarcely|hardly\s+ever|never\s+before)\s+(?:do|did|have|had|am|is|are|was|were)\s+(?:I|we|they|he|she)\b/i.test(
+      clean
+    ) ||
+    /\b(thrice|fortnight|partake|fondness\s+for|my\s+abode|solitude\s+(?:suits|rejuvenates)|commence|endeavou?r\s+to|whilst|ought\s+to|shan't|peruse)\b/i.test(
+      clean
+    )
+  );
+}
+
 export function validateTranscriptCoherence(
   transcript: string,
   uncertainWords: string[] = [],
-  sttConfidence?: number
+  sttConfidence?: number,
+  conversationContext: string = ''
 ): TranscriptCoherenceResult {
   const clean = transcript.trim();
   if (!clean) {
-    return { quality: 'unclear', reason: 'Empty transcript.' };
+    return { quality: 'unclear', reason: 'Empty transcript.', utteranceCategory: 'unclear_speech' };
   }
+
+  // Stage A0: Check for natural unfinished/trailing speech FIRST (e.g. "About my...", "I was thinking...")
+  // Incomplete speech is NOT garbled noise and NOT a grammatical error!
+  const incompleteCheck = detectIncompleteSpeech(clean);
+  if (incompleteCheck.isIncomplete) {
+    const frag = incompleteCheck.fragment || clean;
+    return {
+      quality: 'partially_unclear',
+      utteranceCategory: 'incomplete_speech',
+      incompleteFragment: frag,
+      reason: 'Incomplete sentence — learner paused or trailed off mid-thought.',
+      clarificationHint:
+        'No grammar mistake here — it sounds like you were still finishing your thought. Go ahead and continue!'
+    };
+  }
+
+  const contextualWord = detectContextualWordInterpretation(clean, conversationContext);
 
   const lower = clean.toLowerCase();
   const tokens = lower
@@ -286,6 +652,8 @@ export function validateTranscriptCoherence(
   if (hardGarbleScore === 2) {
     return {
       quality: 'partially_unclear',
+      utteranceCategory: detectedIncompleteFragment ? 'incomplete_speech' : undefined,
+      contextualWord,
       reason: detectedIncompleteFragment
         ? `The fragment "${detectedIncompleteFragment}" looks incomplete or cut off.`
         : `Part of the sentence (${suspiciousSpans.join(', ')}) sounded unclear.`,
@@ -297,7 +665,11 @@ export function validateTranscriptCoherence(
     };
   }
 
-  return { quality: 'clear' };
+  return {
+    quality: 'clear',
+    utteranceCategory: contextualWord ? contextualWord.kind : undefined,
+    contextualWord
+  };
 }
 
 interface LocalGrammarPattern {
@@ -1836,9 +2208,10 @@ export function analyzeBuddyGrammarLocally(params: {
   } = params;
   const clean = originalTranscript.trim();
   const coherence =
-    providedCoherence || validateTranscriptCoherence(clean, uncertainWords, sttConfidence);
+    providedCoherence ||
+    validateTranscriptCoherence(clean, uncertainWords, sttConfidence, conversationContext);
 
-  // Stage A Gate: If transcript is incoherent / garbled STT, NEVER pretend it's "Clean, natural English"!
+  // Stage A Gate 1: If transcript is incoherent / garbled STT, NEVER pretend it's "Clean, natural English"!
   if (coherence.quality === 'unclear') {
     return {
       original_sentence: clean,
@@ -1847,6 +2220,7 @@ export function analyzeBuddyGrammarLocally(params: {
       natural_expression: null,
       learning_recommendation: null,
       transcriptQuality: 'unclear',
+      utteranceCategory: 'unclear_speech',
       clarificationNote:
         coherence.clarificationHint ||
         coherence.reason ||
@@ -1857,7 +2231,34 @@ export function analyzeBuddyGrammarLocally(params: {
     };
   }
 
+  // Stage A Gate 2: Incomplete / trailing learner speech ("About my...", "I was thinking...")
+  // NEVER generate unnecessary grammar corrections for an unfinished thought!
+  if (coherence.utteranceCategory === 'incomplete_speech') {
+    return {
+      original_sentence: clean,
+      corrected_sentence: clean,
+      mistakes: [],
+      natural_expression: null,
+      learning_recommendation: null,
+      transcriptQuality: 'partially_unclear',
+      utteranceCategory: 'incomplete_speech',
+      clarificationNote:
+        coherence.clarificationHint ||
+        'No grammar mistake here — it sounds like you were still finishing your thought. Keep going whenever you are ready!',
+      isProvisional: true,
+      analyzerSource: 'local',
+      analyzedAt: Date.now()
+    };
+  }
+
+  const contextualWord =
+    coherence.contextualWord || detectContextualWordInterpretation(clean, conversationContext);
+  const phoneticExemptWord = contextualWord?.heardWord.toLowerCase();
+
   const uncertainSet = new Set(uncertainWords.map(w => w.toLowerCase()));
+  if (phoneticExemptWord) {
+    uncertainSet.add(phoneticExemptWord);
+  }
   const skippedUncertain = new Set<string>();
 
   interface SpanMatch {
@@ -2114,6 +2515,19 @@ export function analyzeBuddyGrammarLocally(params: {
   const fluency = wordCount >= 6 ? analyzeBuddyFluency(clean, durationSec) : undefined;
   const pronunciationSpotlights = extractPronunciationSpotlights(clean, uncertainWords);
 
+  const hasActionableGrammarMistake = mistakes.some(
+    m => m.severity === 'GRAMMAR_ERROR' || m.severity === 'UNNATURAL'
+  );
+  const utteranceCategory: BuddyUtteranceCategory = hasActionableGrammarMistake
+    ? 'grammar_mistake'
+    : contextualWord
+    ? contextualWord.kind
+    : coherence.incompleteFragment
+    ? 'incomplete_speech'
+    : detectUnusualButCorrectExpression(clean)
+    ? 'unusual_but_correct'
+    : 'clean';
+
   return {
     original_sentence: clean,
     corrected_sentence: correctedSentence,
@@ -2122,15 +2536,26 @@ export function analyzeBuddyGrammarLocally(params: {
     natural_expression: naturalExpression,
     learning_recommendation: topCat
       ? `Focus area: ${topCat} — keep practising this pattern in your next few turns.`
+      : contextualWord
+      ? `${contextualWord.kind === 'pronunciation_difficulty' ? 'Sound tip' : 'Context note'}: "${contextualWord.intendedWord}"${contextualWord.ipaComparison ? ` (${contextualWord.ipaComparison})` : ''}.`
       : vocabUpgrades.length > 0
       ? `Vocabulary boost: try swapping "${vocabUpgrades[0].original}" for "${vocabUpgrades[0].upgrades[0].word}".`
       : null,
     transcriptQuality: coherence.quality,
-    clarificationNote: coherence.clarificationHint || coherence.reason,
+    utteranceCategory,
+    contextualWord,
+    clarificationNote:
+      contextualWord?.phoneticNote || coherence.clarificationHint || coherence.reason,
     isProvisional: hasProvisional || undefined,
     fluency,
     pronunciationSpotlights: pronunciationSpotlights.length > 0 ? pronunciationSpotlights : undefined,
     skippedUncertainWords: skippedUncertain.size > 0 ? Array.from(skippedUncertain) : undefined,
+    intendedMeaning: contextualWord
+      ? clean.replace(
+          new RegExp(`\\b${contextualWord.heardWord.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i'),
+          contextualWord.intendedWord
+        )
+      : undefined,
     analyzerSource: 'local',
     analyzedAt: Date.now()
   };
@@ -2153,10 +2578,14 @@ export function buildSpokenCorrection(
   correctionRequired: boolean;
   correctionType: 'none' | 'grammar' | 'naturalness' | 'vocabulary';
 } {
-  // Never invent grammar corrections on unclear speech OR incomplete broken fragments!
+  // Never invent grammar corrections on unclear speech, incomplete thoughts, STT homophones, pronunciation slips, or valid unusual expressions!
   if (
     !analysis ||
     analysis.transcriptQuality === 'unclear' ||
+    analysis.utteranceCategory === 'incomplete_speech' ||
+    analysis.utteranceCategory === 'stt_error' ||
+    analysis.utteranceCategory === 'pronunciation_difficulty' ||
+    analysis.utteranceCategory === 'unusual_but_correct' ||
     (analysis.transcriptQuality === 'partially_unclear' && analysis.mistakes.length === 0)
   ) {
     return { spokenCorrection: '', correctionRequired: false, correctionType: 'none' };
@@ -2287,7 +2716,8 @@ export async function analyzeBuddyGrammar(params: {
   }
 
   const coherence =
-    providedCoherence || validateTranscriptCoherence(clean, uncertainWords, sttConfidence);
+    providedCoherence ||
+    validateTranscriptCoherence(clean, uncertainWords, sttConfidence, conversationContext);
 
   const localFallback =
     precomputedLocalFallback ||
@@ -2302,9 +2732,13 @@ export async function analyzeBuddyGrammar(params: {
       coherence
     });
 
-  // If Stage A already flagged clear STT garbage and no API key is present (or even with API key),
-  // avoid misreporting garbled STT as clean grammar.
-  if (!apiKey || !apiKey.trim()) {
+  // Fast-path guard: never call Gemini to invent grammar errors on incomplete speech ("About my...", "I was thinking...")
+  // or when no API key is configured!
+  if (
+    !apiKey ||
+    !apiKey.trim() ||
+    localFallback.utteranceCategory === 'incomplete_speech'
+  ) {
     return localFallback;
   }
 
@@ -2314,6 +2748,10 @@ export async function analyzeBuddyGrammar(params: {
       : intensity === 'detailed'
       ? 'Detailed mode: identify every meaningful grammar error, unnatural expression, and high-value vocabulary upgrade with clear rules and multiple examples.'
       : 'Balanced mode: identify meaningful grammar mistakes and clear unnatural expressions, plus at most 1 optional vocabulary upgrade if genuinely helpful.';
+
+  const phoneticGuardClause = localFallback.contextualWord
+    ? `CRITICAL STT/PRONUNCIATION GUARD: Transcript contains "${localFallback.contextualWord.heardWord}", which is a ${localFallback.contextualWord.kind} for "${localFallback.contextualWord.intendedWord}". NEVER mark "${localFallback.contextualWord.heardWord}" as a GRAMMAR_ERROR!`
+    : 'CRITICAL: Distinguish between (1) genuine grammar mistakes, (2) STT homophone errors (e.g. "my carrier" for "career", "board" for "bored", "coarse" for "course"), (3) pronunciation minimal-pair slips ("I leave in Colombo" for "live"), (4) incomplete sentences ("About my...", "I was thinking..."), and (5) correct but unusual/formal expressions ("Seldom do I..."). NEVER mark STT errors, pronunciation slips, incomplete sentences, or valid unusual expressions as GRAMMAR_ERROR!';
 
   const uncertainClause =
     uncertainWords.length > 0
@@ -2342,7 +2780,8 @@ STAGE B — DEEP SPOKEN GRAMMAR & NATURALNESS ANALYSIS (when quality is "clear" 
 5. ONLY when the sentence is genuinely clear AND natural, correct English, return "transcript_quality": "clear", "mistakes": [], and keep "corrected_sentence" identical to "original_transcript".
 6. ${intensityInstruction}
 7. ${uncertainClause}
-8. For each mistake, include a clear plain-English "explanation" AND a conceptual Sinhala "explanationSi".
+8. ${phoneticGuardClause}
+9. For each genuine grammar mistake, include a clear plain-English "explanation" AND a conceptual Sinhala "explanationSi".
 
 INPUT:
 ${JSON.stringify({
@@ -2379,9 +2818,14 @@ Respond STRICTLY in valid JSON matching this schema:
   "learning_recommendation": "Short actionable focus tip or null"
 }`;
 
-  const candidateModels = getFastVoiceModelCandidates(model);
+  const candidateModels = getFastVoiceModelCandidates(model, apiKey);
+  if (candidateModels.length === 0) {
+    candidateModels.push(...(await discoverFastVoiceModelsForKey(apiKey)));
+  }
+  let didLiveDiscovery = false;
 
-  for (const candidateModel of candidateModels) {
+  for (let idx = 0; idx < candidateModels.length; idx++) {
+    const candidateModel = candidateModels[idx];
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 4800);
@@ -2390,7 +2834,7 @@ Respond STRICTLY in valid JSON matching this schema:
         temperature: 0.12,
         responseMimeType: 'application/json'
       };
-      if (candidateModel.startsWith('gemini-2.5')) {
+      if (candidateModel.startsWith('gemini-2.5-flash')) {
         generationConfig.thinkingConfig = { thinkingBudget: 0 };
       }
 
@@ -2407,11 +2851,21 @@ Respond STRICTLY in valid JSON matching this schema:
 
       clearTimeout(timeoutId);
       if (!response.ok) {
+        if (response.status === 404) {
+          markDeadGeminiModel(candidateModel, apiKey);
+        }
+        if (idx === candidateModels.length - 1 && !didLiveDiscovery) {
+          didLiveDiscovery = true;
+          const discovered = await discoverFastVoiceModelsForKey(apiKey);
+          for (const dm of discovered) {
+            if (!candidateModels.includes(dm)) candidateModels.push(dm);
+          }
+        }
         if ([400, 404, 429, 500, 503].includes(response.status)) continue;
         return localFallback;
       }
 
-      markVerifiedFastVoiceModel(candidateModel);
+      markVerifiedFastVoiceModel(candidateModel, apiKey);
 
       const data = await response.json();
       const rawJson = data?.candidates?.[0]?.content?.parts?.[0]?.text;
@@ -2437,6 +2891,7 @@ Respond STRICTLY in valid JSON matching this schema:
       resolvedQuality = 'unclear';
     }
 
+    const exemptHeardLower = localFallback.contextualWord?.heardWord.toLowerCase();
     const seenOriginals = new Set<string>();
     const mistakes: BuddyMistake[] =
       resolvedQuality === 'unclear'
@@ -2448,6 +2903,8 @@ Respond STRICTLY in valid JSON matching this schema:
               const origKey = String(item.original).trim().toLowerCase();
               const corrKey = String(item.correction).trim().toLowerCase();
               if (!origKey || origKey === corrKey || seenOriginals.has(origKey)) return false;
+              // Never blame the learner with a grammar mistake for an STT homophone or pronunciation minimal-pair word!
+              if (exemptHeardLower && origKey.includes(exemptHeardLower)) return false;
               seenOriginals.add(origKey);
               return true;
             })
@@ -2495,11 +2952,23 @@ Respond STRICTLY in valid JSON matching this schema:
     }
 
     const resolvedCorrected =
-      resolvedQuality === 'unclear'
+      resolvedQuality === 'unclear' || mistakes.length === 0
         ? clean
         : typeof parsed.corrected_sentence === 'string' && parsed.corrected_sentence.trim()
         ? parsed.corrected_sentence.trim()
         : clean;
+
+    const hasActionable = mistakes.some(
+      m => m.severity === 'GRAMMAR_ERROR' || m.severity === 'UNNATURAL'
+    );
+    const resolvedUtteranceCategory: BuddyUtteranceCategory =
+      resolvedQuality === 'unclear'
+        ? 'unclear_speech'
+        : hasActionable
+        ? 'grammar_mistake'
+        : localFallback.contextualWord
+        ? localFallback.contextualWord.kind
+        : localFallback.utteranceCategory || 'clean';
 
     const vocabUpgrades =
       resolvedQuality === 'unclear'
@@ -2525,12 +2994,15 @@ Respond STRICTLY in valid JSON matching this schema:
           ? null
           : typeof parsed.learning_recommendation === 'string' && parsed.learning_recommendation.trim()
           ? parsed.learning_recommendation.trim()
-          : null,
+          : localFallback.learning_recommendation,
       transcriptQuality: resolvedQuality,
+      utteranceCategory: resolvedUtteranceCategory,
+      contextualWord: localFallback.contextualWord,
       clarificationNote:
-        typeof parsed.clarification_note === 'string' && parsed.clarification_note.trim()
+        localFallback.contextualWord?.phoneticNote ||
+        (typeof parsed.clarification_note === 'string' && parsed.clarification_note.trim()
           ? parsed.clarification_note.trim()
-          : coherence.clarificationHint || coherence.reason,
+          : coherence.clarificationHint || coherence.reason),
       isProvisional:
         Boolean(parsed.is_provisional) ||
         resolvedQuality === 'partially_unclear' ||

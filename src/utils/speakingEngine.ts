@@ -11,7 +11,7 @@ import type {
   MicroImprovementTask,
 } from '../types/speakingTutor';
 import type { EssaySegment, MainProblem, TutorIssue } from '../types/tutor';
-import { roundIeltsBand, formatBand } from './tutorEngine';
+import { roundIeltsBand, formatBand, listAvailableGeminiModels } from './tutorEngine';
 import { playSpeech, stopSpeech } from './speech';
 import { prepareStudioWavFromBlob } from './audioConditioner';
 
@@ -1035,70 +1035,73 @@ Respond strictly in valid JSON format matching this schema:
   "nextFollowUpQuestion": "A natural follow-up question for the next conversational turn..."
 }`;
 
-  // Normalize model name (fallback to verified working Gemini models)
-  let candidateModel = (model || '').trim().replace(/^models\//, '');
-  if (!candidateModel || candidateModel.includes('3.8')) {
-    candidateModel = 'gemini-1.5-flash';
+  const candidates = [
+    ...getFastVoiceModelCandidates(model, apiKey),
+    ...(await discoverFastVoiceModelsForKey(apiKey))
+  ].filter((m, idx, arr) => Boolean(m) && arr.indexOf(m) === idx);
+
+  for (const candidateModel of candidates) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 6000);
+
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(candidateModel)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
+        body: JSON.stringify({
+          contents: [{ role: 'user', parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.2, responseMimeType: 'application/json' }
+        })
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        if (response.status === 404) {
+          markDeadGeminiModel(candidateModel, apiKey);
+        }
+        if ([400, 404, 429, 500, 503].includes(response.status)) continue;
+        break;
+      }
+
+      markVerifiedFastVoiceModel(candidateModel, apiKey);
+
+      const data = await response.json();
+      const candidateText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!candidateText) continue;
+
+      const parsed = JSON.parse(candidateText);
+      const localFallback = evaluateSpokenTurnLocally(question, spokenText, topicContext, audioDurationSec);
+
+      return {
+        id: `gemini-spk-${Date.now()}`,
+        turnIndex: 1,
+        question,
+        spokenText,
+        overallBand: typeof parsed.overallBand === 'number' ? parsed.overallBand : localFallback.overallBand,
+        confidence: 'High',
+        criteria: Array.isArray(parsed.criteria) ? parsed.criteria : localFallback.criteria,
+        mainProblems: Array.isArray(parsed.mainProblems) ? parsed.mainProblems : localFallback.mainProblems,
+        markedSpeech: localFallback.markedSpeech,
+        issues: Array.isArray(parsed.issues) && parsed.issues.length > 0 ? parsed.issues : localFallback.issues,
+        band8Edits: localFallback.band8Edits,
+        stage2Criteria: localFallback.stage2Criteria,
+        stage2Band: localFallback.stage2Band,
+        band8ModelAnswer: parsed.band8ModelAnswer || localFallback.band8ModelAnswer,
+        band8AudioTips: topicContext?.examinerTips || localFallback.band8AudioTips,
+        examinerSpokenFeedback: parsed.examinerSpokenFeedback || localFallback.examinerSpokenFeedback,
+        examinerSpokenFeedbackSi: localFallback.examinerSpokenFeedbackSi,
+        nextFollowUpQuestion: parsed.nextFollowUpQuestion || localFallback.nextFollowUpQuestion,
+        fluencyMetrics: localFallback.fluencyMetrics
+      };
+    } catch {
+      continue;
+    }
   }
 
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 6000); // 6s strict max timeout
-
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(candidateModel)}:generateContent?key=${encodeURIComponent(apiKey)}`;
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      signal: controller.signal,
-      body: JSON.stringify({
-        contents: [{ role: 'user', parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.2, responseMimeType: 'application/json' }
-      })
-    });
-
-    clearTimeout(timeoutId);
-
-    if (!response.ok) {
-      console.warn('Gemini API call failed, falling back to local evaluator', response.statusText);
-      return evaluateSpokenTurnLocally(question, spokenText, topicContext, audioDurationSec);
-    }
-
-    const data = await response.json();
-    const candidateText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!candidateText) {
-      return evaluateSpokenTurnLocally(question, spokenText, topicContext, audioDurationSec);
-    }
-
-    const parsed = JSON.parse(candidateText);
-
-    // Compute local Stage 2 & 3 diff segments for interactive UI compatibility
-    const localFallback = evaluateSpokenTurnLocally(question, spokenText, topicContext, audioDurationSec);
-
-    return {
-      id: `gemini-spk-${Date.now()}`,
-      turnIndex: 1,
-      question,
-      spokenText,
-      overallBand: typeof parsed.overallBand === 'number' ? parsed.overallBand : localFallback.overallBand,
-      confidence: 'High',
-      criteria: Array.isArray(parsed.criteria) ? parsed.criteria : localFallback.criteria,
-      mainProblems: Array.isArray(parsed.mainProblems) ? parsed.mainProblems : localFallback.mainProblems,
-      markedSpeech: localFallback.markedSpeech,
-      issues: Array.isArray(parsed.issues) && parsed.issues.length > 0 ? parsed.issues : localFallback.issues,
-      band8Edits: localFallback.band8Edits,
-      stage2Criteria: localFallback.stage2Criteria,
-      stage2Band: localFallback.stage2Band,
-      band8ModelAnswer: parsed.band8ModelAnswer || localFallback.band8ModelAnswer,
-      band8AudioTips: topicContext?.examinerTips || localFallback.band8AudioTips,
-      examinerSpokenFeedback: parsed.examinerSpokenFeedback || localFallback.examinerSpokenFeedback,
-      examinerSpokenFeedbackSi: localFallback.examinerSpokenFeedbackSi,
-      nextFollowUpQuestion: parsed.nextFollowUpQuestion || localFallback.nextFollowUpQuestion,
-      fluencyMetrics: localFallback.fluencyMetrics
-    };
-  } catch (err) {
-    console.warn('Error during Gemini spoken evaluation, using local fallback:', err);
-    return evaluateSpokenTurnLocally(question, spokenText, topicContext, audioDurationSec);
-  }
+  return evaluateSpokenTurnLocally(question, spokenText, topicContext, audioDurationSec);
 }
 
 /* ------------------------------------------------------------------ */
@@ -1216,41 +1219,173 @@ async function blobToBase64Fast(blob: Blob): Promise<string> {
 }
 
 /**
- * Sticky Fast Voice Model Resolver:
- * Prevents Lingo Buddy from inheriting slow essay-grading models (`gemini-2.5-pro`) or retired `gemini-1.5-*` models
- * (which added a ~1,000-2,500ms 404/thinking penalty to AI First Token and Audio STT!).
+ * Self-Healing Multimodal Gemini Voice Model Resolver (2026+ Google AI Studio Compatible):
+ * - Prioritizes active Gemini 3 Flash / 3.1 Flash-Lite / Rolling `gemini-flash-latest` models (authorized for ALL new & existing users).
+ * - Immediately blacklists any retired/blocked model returning HTTP 404 (e.g. `gemini-2.5-flash` / `gemini-2.0-flash` on new keys) so it is NEVER retried!
+ * - Dynamically queries `/v1beta/models` for multimodal `generateContent` models if static candidates fail.
  */
-let stickyVerifiedFastVoiceModel: string | null = null;
+const VERIFIED_VOICE_MODEL_STORAGE = 'ielts_verified_fast_voice_model_v2';
+const DEAD_MODELS_STORAGE = 'ielts_dead_gemini_models_v1';
 
-export function getFastVoiceModelCandidates(requestedModel?: string): string[] {
+const verifiedByKeySuffix = new Map<string, string>();
+const deadModelsByKeySuffix = new Map<string, Set<string>>();
+const discoveredModelsByKeySuffix = new Map<string, string[]>();
+
+function keySuffixId(apiKey?: string): string {
+  const clean = (apiKey || '').trim();
+  return clean ? clean.slice(-8) : 'default';
+}
+
+function getDeadSet(apiKey?: string): Set<string> {
+  const k = keySuffixId(apiKey);
+  let set = deadModelsByKeySuffix.get(k);
+  if (!set) {
+    set = new Set<string>();
+    if (typeof window !== 'undefined') {
+      try {
+        const raw = sessionStorage.getItem(`${DEAD_MODELS_STORAGE}_${k}`);
+        if (raw) {
+          const arr = JSON.parse(raw);
+          if (Array.isArray(arr)) arr.forEach(m => set!.add(String(m)));
+        }
+      } catch {}
+    }
+    deadModelsByKeySuffix.set(k, set);
+  }
+  return set;
+}
+
+export function markDeadGeminiModel(modelId: string, apiKey?: string): void {
+  const cleanModel = (modelId || '').trim().replace(/^models\//, '');
+  if (!cleanModel) return;
+  const k = keySuffixId(apiKey);
+  const dead = getDeadSet(apiKey);
+  dead.add(cleanModel);
+  if (verifiedByKeySuffix.get(k) === cleanModel) {
+    verifiedByKeySuffix.delete(k);
+    if (typeof window !== 'undefined') {
+      try { localStorage.removeItem(`${VERIFIED_VOICE_MODEL_STORAGE}_${k}`); } catch {}
+    }
+  }
+  if (typeof window !== 'undefined') {
+    try {
+      sessionStorage.setItem(`${DEAD_MODELS_STORAGE}_${k}`, JSON.stringify(Array.from(dead)));
+    } catch {}
+  }
+}
+
+function getStickyVerifiedModel(apiKey?: string): string | null {
+  const k = keySuffixId(apiKey);
+  const mem = verifiedByKeySuffix.get(k);
+  const dead = getDeadSet(apiKey);
+  if (mem && !dead.has(mem)) return mem;
+  if (typeof window !== 'undefined') {
+    try {
+      const stored = localStorage.getItem(`${VERIFIED_VOICE_MODEL_STORAGE}_${k}`);
+      if (stored && !dead.has(stored)) {
+        verifiedByKeySuffix.set(k, stored);
+        return stored;
+      }
+    } catch {}
+  }
+  return null;
+}
+
+export function markVerifiedFastVoiceModel(modelId: string, apiKey?: string): void {
+  const cleanModel = (modelId || '').trim().replace(/^models\//, '');
+  if (!cleanModel || cleanModel.includes('pro')) return;
+  const k = keySuffixId(apiKey);
+  verifiedByKeySuffix.set(k, cleanModel);
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.setItem(`${VERIFIED_VOICE_MODEL_STORAGE}_${k}`, cleanModel);
+    } catch {}
+  }
+}
+
+function isMultimodalCapableGeminiModel(modelId: string): boolean {
+  const m = modelId.toLowerCase();
+  if (!m.startsWith('gemini-')) return false;
+  if (
+    /(-tts|-image|imagen|embedding|robotics|computer-use|deep-research|thinking-exp|learnlm|aqa|vision|1\.0|1\.5|3\.8)/.test(
+      m
+    )
+  ) {
+    return false;
+  }
+  return true;
+}
+
+function scoreVoiceModelSpeed(modelId: string): number {
+  const m = modelId.toLowerCase();
+  if (m.includes('3.1-flash-lite')) return 100;
+  if (m.includes('3-flash')) return 96;
+  if (m.includes('3.1-flash')) return 95;
+  if (m.includes('flash-lite-latest')) return 92;
+  if (m.includes('flash-latest')) return 90;
+  if (m.includes('2.5-flash-lite')) return 86;
+  if (m.includes('flash-lite')) return 84;
+  if (m.includes('flash')) return 75;
+  if (m.includes('pro')) return 25;
+  return 40;
+}
+
+export async function discoverFastVoiceModelsForKey(apiKey?: string): Promise<string[]> {
+  const cleanKey = (apiKey || '').trim();
+  if (!cleanKey) return [];
+  const k = keySuffixId(cleanKey);
+  const dead = getDeadSet(cleanKey);
+  const cached = discoveredModelsByKeySuffix.get(k);
+  if (cached && cached.length > 0) {
+    return cached.filter(m => !dead.has(m));
+  }
+  try {
+    const all = await listAvailableGeminiModels(cleanKey);
+    const ranked = all
+      .map(m => m.replace(/^models\//, '').trim())
+      .filter(isMultimodalCapableGeminiModel)
+      .sort((a, b) => scoreVoiceModelSpeed(b) - scoreVoiceModelSpeed(a));
+    if (ranked.length > 0) {
+      discoveredModelsByKeySuffix.set(k, ranked);
+    }
+    return ranked.filter(m => !dead.has(m));
+  } catch {
+    return [];
+  }
+}
+
+export function getFastVoiceModelCandidates(requestedModel?: string, apiKey?: string): string[] {
+  const dead = getDeadSet(apiKey);
+  const sticky = getStickyVerifiedModel(apiKey);
   const cleaned = (requestedModel || '').trim().replace(/^models\//, '');
-  // Never start real-time voice turns on retired 1.5 models or heavy Pro reasoning models!
-  const isFastFlash =
+  const isFastUserSelected =
     cleaned &&
-    !cleaned.startsWith('gemini-1.5') &&
+    isMultimodalCapableGeminiModel(cleaned) &&
     !cleaned.includes('pro') &&
-    !cleaned.includes('3.8');
+    !dead.has(cleaned);
+
+  const discovered = discoveredModelsByKeySuffix.get(keySuffixId(apiKey)) || [];
 
   const ordered = [
-    stickyVerifiedFastVoiceModel,
-    'gemini-2.0-flash',
+    sticky,
+    'gemini-3-flash-preview',
+    'gemini-3.1-flash-lite-preview',
+    'gemini-flash-latest',
+    'gemini-flash-lite-latest',
     'gemini-2.5-flash-lite',
-    isFastFlash ? cleaned : null,
-    'gemini-2.5-flash'
-  ].filter((m): m is string => Boolean(m));
+    isFastUserSelected ? cleaned : null,
+    ...discovered.filter(m => !m.includes('pro')),
+    'gemini-2.5-flash',
+    'gemini-2.0-flash',
+    ...discovered.filter(m => m.includes('pro'))
+  ].filter((m): m is string => typeof m === 'string' && m.length > 0 && !dead.has(m));
 
   return Array.from(new Set(ordered));
 }
 
-export function markVerifiedFastVoiceModel(modelId: string): void {
-  if (modelId && !modelId.includes('pro')) {
-    stickyVerifiedFastVoiceModel = modelId;
-  }
-}
-
 /**
- * Pre-warms HTTPS / HTTP2 TLS connection and verifies the fastest Flash model for this API key
- * BEFORE the user finishes speaking so Turn 1 skips TLS + model-discovery latency!
+ * Pre-warms HTTPS / HTTP2 TLS connection, discovers authorized `/v1beta/models`, and locks onto
+ * the fastest verified `200 OK` Flash model BEFORE the user finishes speaking!
  */
 let geminiWarmupDoneForKey = '';
 export function warmUpGeminiVoiceConnection(apiKey?: string): void {
@@ -1258,12 +1393,13 @@ export function warmUpGeminiVoiceConnection(apiKey?: string): void {
   if (!cleanKey || geminiWarmupDoneForKey === cleanKey || typeof window === 'undefined') return;
   geminiWarmupDoneForKey = cleanKey;
 
-  const candidates = getFastVoiceModelCandidates();
   (async () => {
+    await discoverFastVoiceModelsForKey(cleanKey);
+    const candidates = getFastVoiceModelCandidates(undefined, cleanKey);
     for (const candidate of candidates) {
       try {
         const generationConfig: Record<string, any> = { temperature: 0, maxOutputTokens: 2 };
-        if (candidate.startsWith('gemini-2.5')) {
+        if (candidate.startsWith('gemini-2.5-flash')) {
           generationConfig.thinkingConfig = { thinkingBudget: 0 };
         }
         const res = await fetch(
@@ -1278,8 +1414,11 @@ export function warmUpGeminiVoiceConnection(apiKey?: string): void {
           }
         );
         if (res.ok) {
-          markVerifiedFastVoiceModel(candidate);
+          markVerifiedFastVoiceModel(candidate, cleanKey);
           return;
+        }
+        if (res.status === 404) {
+          markDeadGeminiModel(candidate, cleanKey);
         }
       } catch {}
     }
@@ -1332,7 +1471,10 @@ export async function transcribeAudioBlobWithGemini(
   }
 
   const base64Audio = await blobToBase64Fast(uploadBlob);
-  const candidateModels = getFastVoiceModelCandidates(model);
+  let candidateModels = getFastVoiceModelCandidates(model, apiKey);
+  if (candidateModels.length === 0) {
+    candidateModels = await discoverFastVoiceModelsForKey(apiKey);
+  }
 
   // Ultra-compact prompt for rolling live micro-chunks vs full turn verbatim prompt
   const prompt = options?.isLiveRollingChunk
@@ -1347,8 +1489,10 @@ RULES:
 
   let lastError: Error | null = null;
   const perAttemptTimeout = options?.timeoutMs || (options?.isLiveRollingChunk ? 2400 : 4200);
+  let didLiveDiscoveryRetry = false;
 
-  for (const candidateModel of candidateModels) {
+  for (let idx = 0; idx < candidateModels.length; idx++) {
+    const candidateModel = candidateModels[idx];
     if (options?.signal?.aborted) return '';
     const controller = new AbortController();
     const onExternalAbort = () => controller.abort();
@@ -1359,7 +1503,7 @@ RULES:
       temperature: 0.0,
       maxOutputTokens: options?.isLiveRollingChunk ? 64 : 160
     };
-    if (candidateModel.startsWith('gemini-2.5')) {
+    if (candidateModel.startsWith('gemini-2.5-flash')) {
       generationConfig.thinkingConfig = { thinkingBudget: 0 };
     }
 
@@ -1387,16 +1531,27 @@ RULES:
         clearTimeout(timeoutId);
         options?.signal?.removeEventListener('abort', onExternalAbort);
         const errText = await response.text().catch(() => response.statusText);
+        if (response.status === 404) {
+          markDeadGeminiModel(candidateModel, apiKey);
+        }
         lastError = new Error(
           `Gemini audio transcription error (${response.status}): ${errText.slice(0, 120)}`
         );
+        // If we hit the end of static candidates due to 404s, dynamically discover authorized models on this key!
+        if (idx === candidateModels.length - 1 && !didLiveDiscoveryRetry && !options?.isLiveRollingChunk) {
+          didLiveDiscoveryRetry = true;
+          const discovered = await discoverFastVoiceModelsForKey(apiKey);
+          for (const dm of discovered) {
+            if (!candidateModels.includes(dm)) candidateModels.push(dm);
+          }
+        }
         if ([400, 404, 429, 500, 503].includes(response.status)) {
           continue;
         }
         throw lastError;
       }
 
-      markVerifiedFastVoiceModel(candidateModel);
+      markVerifiedFastVoiceModel(candidateModel, apiKey);
 
       let accumulated = '';
       if (response.body && typeof response.body.getReader === 'function') {

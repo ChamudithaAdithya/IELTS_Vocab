@@ -25,9 +25,18 @@ import {
   classifyBuddyIntent,
   extractSessionContext,
   generateLocalFriendReply,
-  processBuddyTranscript
+  processBuddyTranscript,
+  splitLeadingSpokenRecast
 } from './speakingBuddyEngine';
-import { analyzeBuddyFluency } from './buddySpeechCoach';
+import {
+  analyzeBuddyFluency
+} from './buddySpeechCoach';
+import {
+  KOKORO_NATURAL_VOICES,
+  FREE_NEURAL_VOICES,
+  loadBuddyVoiceConfig,
+  saveBuddyVoiceConfig
+} from './speech';
 import {
   buildWeeklyEnglishReport,
   computeNormalizedErrorRate,
@@ -1259,6 +1268,207 @@ export function runAll13BuddyQaScenarios(): BuddyQaSuiteReport {
           }
         }
         return 'All 4 tutor responses contain 1 brief reaction + 1 simple related question.';
+      }
+    ),
+    // -----------------------------------------------------------------------
+    // INCOMPLETE SPEECH & CONTEXTUAL STT / PRONUNCIATION / UNUSUAL EXPRESSIONS (TESTS 45 TO 48)
+    // -----------------------------------------------------------------------
+    runScenario(
+      45,
+      'Incomplete speech ("About my..." & "I was thinking...") — zero false grammar errors + natural continuation',
+      'Incomplete Speech Flow',
+      () => {
+        const cases = ['About my...', 'I was thinking...', 'About my.'];
+        const careerHistory: BuddyMessage[] = [
+          { id: 'u-c1', role: 'user', timestamp: 1, text: 'I work as a software developer.' },
+          { id: 'b-c1', role: 'buddy', timestamp: 2, text: 'Nice! What kind of projects do you build?' }
+        ];
+        for (const text of cases) {
+          const pkt = buildFinalizedTurnPacket({
+            sessionId: 's-inc',
+            rawTranscript: text,
+            engine: 'gemini-cloud',
+            priorHistory: careerHistory
+          });
+          const gram = analyzeBuddyGrammarLocally({
+            originalTranscript: pkt.analysisTranscript,
+            coherence: pkt.coherence,
+            intensity: 'detailed'
+          });
+          const recast = buildSpokenCorrection(gram, 'gentle');
+          const reply = generateLocalFriendReply(
+            pkt.analysisTranscript,
+            careerHistory,
+            'friendly',
+            'friendly',
+            pkt.coherence
+          );
+          if (
+            gram.utteranceCategory !== 'incomplete_speech' ||
+            gram.mistakes.length !== 0 ||
+            recast.correctionRequired
+          ) {
+            throw new Error(`Falsely penalized incomplete speech "${text}": cat=${gram.utteranceCategory}, mistakes=${gram.mistakes.length}`);
+          }
+          if (/take your time|all ears/i.test(reply) || !/\?$/.test(reply.trim())) {
+            throw new Error(`Invalid incomplete continuation for "${text}": "${reply}"`);
+          }
+        }
+        return 'Incomplete phrases ("About my...", "I was thinking...") get 0 grammar penalties + natural topic-aware encouragement.';
+      },
+      true
+    ),
+    runScenario(
+      46,
+      'Contextual Word Interpretation ("Let\'s talk about my carrier." → gently confirms "career", 0 grammar error)',
+      'Contextual STT Disambiguation',
+      () => {
+        const pkt = buildFinalizedTurnPacket({
+          sessionId: 's-carrier',
+          rawTranscript: "Let's talk about my carrier.",
+          engine: 'gemini-cloud',
+          priorHistory: []
+        });
+        const gram = analyzeBuddyGrammarLocally({
+          originalTranscript: pkt.analysisTranscript,
+          coherence: pkt.coherence,
+          intensity: 'detailed'
+        });
+        const recast = buildSpokenCorrection(gram, 'gentle');
+        const ctx = extractSessionContext([], pkt.analysisTranscript);
+        const reply = generateLocalFriendReply(
+          pkt.analysisTranscript,
+          [],
+          'friendly',
+          'friendly',
+          pkt.coherence,
+          ctx
+        );
+        if (
+          gram.utteranceCategory !== 'stt_error' ||
+          gram.contextualWord?.intendedWord !== 'career' ||
+          gram.mistakes.length !== 0 ||
+          recast.correctionRequired
+        ) {
+          throw new Error(
+            `Expected stt_error -> "career" with 0 grammar mistakes, got cat=${gram.utteranceCategory}, mistakes=${gram.mistakes.length}`
+          );
+        }
+        if (
+          ctx.activeTopic !== 'career_work' ||
+          reply !== "Sure! Do you mean your career? I'd love to hear about it."
+        ) {
+          throw new Error(`Unexpected carrier confirmation reply: topic=${ctx.activeTopic} | "${reply}"`);
+        }
+        return `Confirmed naturally: "${reply}" (topic=${ctx.activeTopic}, 0 false grammar penalties).`;
+      },
+      true
+    ),
+    runScenario(
+      47,
+      '5-Way Diagnostic Distinction (Grammar vs STT Error vs Pronunciation vs Incomplete vs Unusual-but-Correct)',
+      '5-Way Utterance Classifier',
+      () => {
+        const gMistake = analyzeBuddyGrammarLocally({ originalTranscript: "I'm going to gym." });
+        const sttSlip = analyzeBuddyGrammarLocally({ originalTranscript: 'I felt really board this afternoon.' });
+        const pronSlip = analyzeBuddyGrammarLocally({ originalTranscript: 'I leave in Colombo with my parents.' });
+        const incSpeech = analyzeBuddyGrammarLocally({ originalTranscript: 'I was thinking...' });
+        const unusualOk = analyzeBuddyGrammarLocally({
+          originalTranscript: 'Seldom do I watch horror movies at night.',
+          intensity: 'detailed'
+        });
+
+        if (gMistake.utteranceCategory !== 'grammar_mistake' || gMistake.mistakes.length === 0) {
+          throw new Error(`Expected grammar_mistake, got ${gMistake.utteranceCategory}`);
+        }
+        if (sttSlip.utteranceCategory !== 'stt_error' || sttSlip.contextualWord?.intendedWord !== 'bored' || sttSlip.mistakes.length !== 0) {
+          throw new Error(`Expected stt_error ("bored"), got ${sttSlip.utteranceCategory}`);
+        }
+        if (pronSlip.utteranceCategory !== 'pronunciation_difficulty' || pronSlip.contextualWord?.intendedWord !== 'live' || pronSlip.mistakes.length !== 0) {
+          throw new Error(`Expected pronunciation_difficulty ("live"), got ${pronSlip.utteranceCategory}`);
+        }
+        if (incSpeech.utteranceCategory !== 'incomplete_speech' || incSpeech.mistakes.length !== 0) {
+          throw new Error(`Expected incomplete_speech, got ${incSpeech.utteranceCategory}`);
+        }
+        if (unusualOk.utteranceCategory !== 'unusual_but_correct' || unusualOk.mistakes.length !== 0) {
+          throw new Error(`Expected unusual_but_correct, got ${unusualOk.utteranceCategory}`);
+        }
+        return 'Verified all 5 categories: grammar_mistake, stt_error, pronunciation_difficulty, incomplete_speech, unusual_but_correct.';
+      },
+      true
+    ),
+    runScenario(
+      48,
+      'Zero banned clichés ("Take your time" / "I\'m all ears") & natural pronoun flip on user-selected topics',
+      'Conversational Naturalness',
+      () => {
+        const calmReply = generateLocalFriendReply('I watching movies.', [], 'calm', 'friendly');
+        const howAreYou = generateLocalFriendReply('How are you doing today?', [], 'friendly', 'friendly');
+        const famTopic = generateLocalFriendReply("Let's talk about my family.", [], 'friendly', 'friendly');
+        if (/take your time|all ears/i.test(`${calmReply} ${howAreYou} ${famTopic}`)) {
+          throw new Error(`Found banned cliché in replies: "${calmReply}" | "${howAreYou}"`);
+        }
+        if (/talk about my family/i.test(famTopic) || !/your family/i.test(famTopic)) {
+          throw new Error(`Failed pronoun flip on topic switch: "${famTopic}"`);
+        }
+        return `Pronoun flipped ("your family") & 0 cliché fillers across Calm/Friendly modes.`;
+      }
+    ),
+    runScenario(
+      49,
+      'Spoken Grammar Recast Extraction & Redundant Echo Stripper ("You can say, \'...\'")',
+      'Spoken Recast Parity',
+      () => {
+        const realFix = splitLeadingSpokenRecast(
+          'You can say, "Yesterday my friend told me about his job." That sounds great! What kind of job is it?',
+          'Yesterday my friend tell me about his job.'
+        );
+        const falseEcho = splitLeadingSpokenRecast(
+          'You can say, "I like action movies." Nice! Do you have a favourite one?',
+          'I like action movies.'
+        );
+        if (
+          realFix.spokenCorrection !== 'You can say, "Yesterday my friend told me about his job."' ||
+          realFix.conversationalResponse !== 'That sounds great! What kind of job is it?' ||
+          realFix.correctionType !== 'grammar'
+        ) {
+          throw new Error(`Failed real spoken recast split: ${JSON.stringify(realFix)}`);
+        }
+        if (
+          falseEcho.spokenCorrection !== '' ||
+          falseEcho.conversationalResponse !== 'Nice! Do you have a favourite one?'
+        ) {
+          throw new Error(`Failed to strip redundant unchanged echo: ${JSON.stringify(falseEcho)}`);
+        }
+        return `Extracted "${realFix.spokenCorrection}" + stripped unchanged self-echo cleanly.`;
+      },
+      true
+    ),
+    runScenario(
+      50,
+      'Kokoro-82M Natural Voices & 3-Engine Voice Selector Persistence (Kokoro · Edge Neural · OS Voice)',
+      'Voice Engine Registry',
+      () => {
+        if (KOKORO_NATURAL_VOICES.length < 10 || FREE_NEURAL_VOICES.length < 6) {
+          throw new Error('Expected >=10 Kokoro voices and >=6 Edge Neural voices');
+        }
+        const hasUsAndUk =
+          KOKORO_NATURAL_VOICES.some(v => v.id === 'af_heart' && v.accent === 'US') &&
+          KOKORO_NATURAL_VOICES.some(v => v.id === 'bf_emma' && v.accent === 'UK');
+        if (!hasUsAndUk) {
+          throw new Error('Missing flagship US (af_heart) or UK (bf_emma) Kokoro voices');
+        }
+        saveBuddyVoiceConfig({
+          provider: 'kokoro',
+          kokoroVoice: 'bf_emma',
+          freeNeuralVoice: 'en-US-AvaMultilingualNeural',
+          rate: 1.05
+        });
+        const loaded = loadBuddyVoiceConfig();
+        if (typeof window !== 'undefined' && (loaded.provider !== 'kokoro' || loaded.kokoroVoice !== 'bf_emma')) {
+          throw new Error(`Failed to persist Kokoro voice selection: ${JSON.stringify(loaded)}`);
+        }
+        return `Verified ${KOKORO_NATURAL_VOICES.length} Kokoro-82M US/UK voices + ${FREE_NEURAL_VOICES.length} Edge Neural voices + Settings persistence.`;
       }
     )
   ];

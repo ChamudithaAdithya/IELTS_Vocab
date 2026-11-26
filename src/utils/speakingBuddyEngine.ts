@@ -14,11 +14,21 @@ import type {
   BuddyPersonalityConfig,
   BuddySession,
   BuddyTurnIntent,
+  CorrectionIntensity,
   GrammarCategoryCode,
   TranscriptCoherenceResult
 } from '../types/speakingBuddy';
-import { validateTranscriptCoherence } from './buddyGrammarEngine';
-import { getFastVoiceModelCandidates, markVerifiedFastVoiceModel } from './speakingEngine';
+import {
+  detectContextualWordInterpretation,
+  detectIncompleteSpeech,
+  validateTranscriptCoherence
+} from './buddyGrammarEngine';
+import {
+  discoverFastVoiceModelsForKey,
+  getFastVoiceModelCandidates,
+  markDeadGeminiModel,
+  markVerifiedFastVoiceModel
+} from './speakingEngine';
 
 export const BUDDY_PERSONALITIES: BuddyPersonalityConfig[] = [
   {
@@ -64,7 +74,7 @@ export const BUDDY_PERSONALITIES: BuddyPersonalityConfig[] = [
     tagline: 'Speaks slowly and patiently',
     speechRate: 0.86,
     systemTone: 'calm, gentle, unhurried, and reassuring — giving the speaker plenty of space to express themselves',
-    greeting: "Hi there. Take your time — there's no rush at all. How has your day been going?"
+    greeting: "Hi there — glad we get to chat today. How has your day been going so far?"
   },
   {
     id: 'motivational',
@@ -446,12 +456,20 @@ function extractActiveSubjectFromHistory(
     if (/\b(movies?|films?|series|netflix)\b/i.test(lower)) return 'the movie or show you watched';
     if (/\b(university|lecture|exam|class|assignment)\b/i.test(lower)) return 'your university classes';
     if (/\b(shop|shopping|clothes|shoes)\b/i.test(lower)) return 'your shopping trip';
+    if (/\b(my\s+career|my\s+carrier|career\s+path|carrier\s+path|my\s+job|software\s+engineer|developer)\b/i.test(lower)) {
+      return 'your career';
+    }
+    if (/\b(my\s+family|my\s+parents|my\s+brother|my\s+sister)\b/i.test(lower)) return 'your family';
+    if (/\b(my\s+hobbies|my\s+hobby)\b/i.test(lower)) return 'your hobbies';
   }
 
   if (lastBuddyMessage) {
     const lb = lastBuddyMessage.toLowerCase();
     if (/\b(ai|artificial intelligence|software|project|coding|react|application)\b/.test(lb)) {
       return 'your project';
+    }
+    if (/\b(career|job|role|work)\b/.test(lb)) {
+      return 'your career';
     }
     if (/\b(gym|workout|exercise)\b/.test(lb)) {
       return 'your workout';
@@ -564,7 +582,7 @@ export function extractSessionContext(
   ) {
     activeTopic = 'fitness_gym';
   } else if (
-    /\b(software\s+engineer|engineer|developer|programmer|designer|doctor|nurse|teacher|lawyer|accountant|architect|consultant|my\s+job|my\s+career|promotion|interview|colleagues|client)\b/i.test(
+    /\b(software\s+engineer|engineer|developer|programmer|designer|doctor|nurse|teacher|lawyer|accountant|architect|consultant|my\s+job|my\s+career|my\s+carrier|talk\s+about\s+career|promotion|interview|colleagues|client)\b/i.test(
       activeClauseLower
     )
   ) {
@@ -1097,6 +1115,30 @@ export function classifyBuddyIntent(
  * ZERO generic chatbot fillers — uses explicit intent classification, activeSubject memory,
  * accurate term/question clarification, off-topic recovery, empathy, and session entity continuity.
  */
+/**
+ * Strips overused chatbot clichés ("Take your time", "I'm all ears") so Lingo Buddy always sounds varied and human.
+ */
+function stripRepetitiveCliches(text: string): string {
+  if (!text) return text;
+  let out = text
+    .replace(/\btake\s+your\s+time[!.,—\-\s]*/gi, '')
+    .replace(/\bi'?m\s+all\s+ears[!.,—\-\s]*/gi, '')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+  if (out) {
+    out = out.charAt(0).toUpperCase() + out.slice(1);
+  }
+  return out || 'Go ahead — what were you going to share?';
+}
+
+function flipFirstPersonTopicPronouns(topic: string): string {
+  return topic
+    .replace(/\bmy\b/gi, 'your')
+    .replace(/\bour\b/gi, 'your')
+    .replace(/\bme\b/gi, 'you')
+    .trim();
+}
+
 export function generateLocalFriendReply(
   userText: string,
   history: BuddyMessage[],
@@ -1107,9 +1149,14 @@ export function generateLocalFriendReply(
 ): string {
   const clean = userText.trim();
   const lower = clean.toLowerCase();
-  const coherence = providedCoherence || validateTranscriptCoherence(clean);
   const ctx = providedContext || extractSessionContext(history, clean);
+  const coherence =
+    providedCoherence ||
+    validateTranscriptCoherence(clean, [], undefined, ctx.lastBuddyMessage || '');
   const { intent, extractedTerm } = classifyBuddyIntent(clean, ctx, coherence);
+  const contextualWord =
+    coherence.contextualWord ||
+    detectContextualWordInterpretation(clean, ctx.lastBuddyMessage || '');
 
   const pickNonRepeating = (options: string[]): string => {
     const fresh = options.filter(
@@ -1138,10 +1185,55 @@ export function generateLocalFriendReply(
 
   if (intent === 'incomplete_sentence') {
     const frag = extractedTerm || coherence.incompleteFragment || clean;
+    // Preserve multi-clause early-cutoff check (e.g. "Much into. Nothing much.")
     if (/\bnothing\s+much\b/i.test(lower)) {
       return `It sounded like the first part cut off ("${frag}") — did you just mean "nothing much" happened today, or were you starting to say what you're into?`;
     }
-    return `It sounded like part of your sentence got cut off ("${frag}"). Could you finish that thought or repeat it so I make sure I follow you?`;
+    const incDetail = detectIncompleteSpeech(clean);
+    if (!incDetail.isIncomplete && clean.split(/[.!?]+/).filter(s => s.trim()).length > 1) {
+      return `It sounded like part of your sentence got cut off ("${frag}"). Could you finish that thought or repeat it so I follow you?`;
+    }
+
+    const subj = ctx.activeSubject;
+    if (incDetail.starterKind === 'thinking') {
+      return subj
+        ? pickNonRepeating([
+            `Ooh, go ahead — what were you thinking about ${subj}?`,
+            `Tell me! What idea crossed your mind about ${subj}?`,
+            `Keep going — what were you thinking of doing with ${subj}?`
+          ])
+        : pickNonRepeating([
+            'Ooh, go ahead — what were you thinking about?',
+            'Tell me! What idea just crossed your mind?',
+            'Go on and finish that thought — what were you thinking of?'
+          ]);
+    }
+
+    if (incDetail.starterKind === 'about') {
+      return subj
+        ? pickNonRepeating([
+            `Go ahead! What were you going to share about ${subj}?`,
+            `Ooh, go on — what part of ${subj} were you about to mention?`,
+            `Yes, keep going! What did you want to say about ${subj}?`
+          ])
+        : pickNonRepeating([
+            'Ooh, go ahead and finish your thought — about your work, your studies, or something else?',
+            'Go on! What were you about to share?',
+            'Yes, keep going — what were you going to say about it?'
+          ]);
+    }
+
+    return subj
+      ? pickNonRepeating([
+          `Go ahead and finish that sentence — what were you going to say about ${subj}?`,
+          `Ooh, don't stop there! What happened next with ${subj}?`,
+          `Keep going — how does the rest of that thought about ${subj} go?`
+        ])
+      : pickNonRepeating([
+          'Go ahead and finish your thought — what were you about to say?',
+          "Ooh, keep going! How does the rest of that sentence go?",
+          'Go on — what happened next?'
+        ]);
   }
 
   if (intent === 'correcting_ai') {
@@ -1195,10 +1287,22 @@ export function generateLocalFriendReply(
       }
       return 'Did you mean "coding"? Sure, let\'s talk about coding! What are you currently developing?';
     }
+    if (contextualWord && contextualWord.intendedWord === 'career') {
+      return pickNonRepeating([
+        "Sure! Do you mean your career? I'd love to hear about it.",
+        'Of course! Do you mean your career? Tell me what kind of work you do!'
+      ]);
+    }
+    if (contextualWord) {
+      return `Sure! Do you mean "${contextualWord.intendedWord}"? I'd love to hear about it.`;
+    }
     if (extractedTerm) {
       const tLow = extractedTerm.toLowerCase().trim();
       if (/\b(coding|programming|software|development|code|tech|ai)\b/.test(tLow)) {
         return "Sure! Let's talk about coding. What are you currently developing?";
+      }
+      if (/\b(career|job|work|profession)\b/.test(tLow)) {
+        return "Sure! Let's talk about your career. What kind of work are you doing right now?";
       }
       if (/\b(travel|travelling|traveling|trips?|holidays?|vacations?)\b/.test(tLow)) {
         return "Sure! Let's talk about travel. Where would you like to visit next?";
@@ -1212,12 +1316,60 @@ export function generateLocalFriendReply(
       if (/\b(education|studies|university|school|college)\b/.test(tLow)) {
         return "Sure! Let's talk about your studies. What subject are you focusing on right now?";
       }
-      return `Sure! Let's talk about ${extractedTerm}. What interests you most about it?`;
+      if (/\b(family|parents|siblings)\b/.test(tLow)) {
+        return "Sure! Let's talk about your family. Tell me — who are you closest to at home?";
+      }
+      const naturalTopic = flipFirstPersonTopicPronouns(extractedTerm);
+      return `Sure! Let's talk about ${naturalTopic}. What interests you most about ${/^(?:your|the)\s+/i.test(naturalTopic) ? 'that' : 'it'}?`;
     }
     return pickNonRepeating([
       'Of course! What would you like to talk about?',
       'Sure! What topic would you like to talk about next?'
     ]);
+  }
+
+  // Contextual Word Interpretation in everyday statements (gently confirm intended word + continue on topic!)
+  if (contextualWord) {
+    const iw = contextualWord.intendedWord.toLowerCase();
+    if (iw === 'career') {
+      return pickNonRepeating([
+        "Sure! Do you mean your career? I'd love to hear about it.",
+        'Nice! Assuming you mean your career — what kind of work are you aiming for?'
+      ]);
+    }
+    if (iw === 'live') {
+      const placeMatch = clean.match(/\bleave\s+(?:in|at|near)\s+([A-Z][a-zA-Z]+(?:\s+[A-Z][a-zA-Z]+)?)/);
+      const placeStr = placeMatch ? ` in ${placeMatch[1]}` : ' there';
+      return `Oh nice! Do you mean you live${placeStr}? I'd love to hear what life is like there.`;
+    }
+    if (iw === 'snack') {
+      return 'Haha, do you mean a quick snack? Tell me what you ended up having!';
+    }
+    if (iw === 'coffee') {
+      return 'Nice! Do you mean a cup of coffee? Tell me how you usually like to drink it!';
+    }
+    if (iw === 'work') {
+      return 'Gotcha — do you mean work? Tell me what kind of projects keep you busy!';
+    }
+    if (iw === 'dessert') {
+      return 'Ooh, do you mean dessert? Tell me what sweet treat you had!';
+    }
+    if (iw === 'course') {
+      return 'Nice! Do you mean a course? Tell me what subject you are studying!';
+    }
+    if (iw === 'bored') {
+      return 'Aw, do you mean you felt bored? Tell me how you usually pass the time on slow days!';
+    }
+    if (iw === 'thank' || iw === 'thanks') {
+      const tie = ctx.activeSubject
+        ? ` Want to share more about ${ctx.activeSubject}?`
+        : ' What would you like to talk about next?';
+      return `You're very welcome! (Just checking — you meant "${iw} you", right?)${tie.replace(/\?$/, '!')} What's on your mind next?`.replace(
+        /!\s+What's on your mind next\?$/,
+        '?'
+      );
+    }
+    return `Got it — do you mean "${contextualWord.intendedWord}"? I'd love to hear more about that.`;
   }
 
   if (intent === 'clarify_specific_term' || intent === 'clarify_last_question') {
@@ -1459,7 +1611,7 @@ export function generateLocalFriendReply(
   } else if (/\b(how are you|what about you|and you\?|who are you|your name)\b/i.test(lower)) {
     coreReply = pickNonRepeating([
       "I'm doing great, thanks for asking! Always happy to hang out and chat with you. How has your day been treating you so far?",
-      "Doing really well! I'm all ears today — anything fun planned for later, or just taking it easy?"
+      'Doing really well, thanks! Anything fun planned for later today, or just relaxing?'
     ]);
   } else if (intent === 'greeting_or_ack') {
     if (/^(hi|hello|hey|good morning|good evening|good afternoon|yo|sup)[!.,\s]*$/i.test(lower)) {
@@ -1508,7 +1660,7 @@ export function generateLocalFriendReply(
   }
 
   if (personality === 'calm') {
-    return `Take your time — ${coreReply.charAt(0).toLowerCase()}${coreReply.slice(1)}`;
+    return coreReply;
   }
   if (personality === 'motivational' && !coreReply.includes('great')) {
     return `${coreReply} You're doing well keeping the conversation moving!`;
@@ -1520,8 +1672,96 @@ export function generateLocalFriendReply(
   return coreReply;
 }
 
+function unwrapWholeOuterQuotes(s: string): string {
+  const t = s.trim();
+  if ((t.startsWith('"') && t.endsWith('"') && t.slice(1, -1).indexOf('"') === -1) ||
+      (t.startsWith("'") && t.endsWith("'") && t.slice(1, -1).indexOf("'") === -1)) {
+    return t.slice(1, -1).trim();
+  }
+  return t;
+}
+
+/**
+ * Parses a leading spoken correction (`You can say, "..."` or `A more natural way to say that is, "..."`)
+ * from Lingo Buddy's streamed or completed response, and automatically strips false self-echoes
+ * where the quoted sentence is identical to what the learner already said!
+ */
+export function splitLeadingSpokenRecast(
+  rawText: string,
+  originalUserText?: string
+): {
+  cleanedFullText: string;
+  spokenCorrection: string;
+  conversationalResponse: string;
+  correctionType: 'none' | 'grammar' | 'naturalness';
+  correctedSentence?: string;
+} {
+  const clean = unwrapWholeOuterQuotes(rawText.replace(/\*\*/g, '').trim());
+  if (!clean) {
+    return {
+      cleanedFullText: '',
+      spokenCorrection: '',
+      conversationalResponse: '',
+      correctionType: 'none'
+    };
+  }
+
+  const recastMatch = clean.match(
+    /^((?:you\s+can\s+say|a\s+more\s+natural\s+way\s+to\s+say\s+that\s+is),?\s*["'“]([^"'”]+)["'”][.!?]*)\s*([\s\S]*)$/i
+  );
+  if (!recastMatch) {
+    return {
+      cleanedFullText: clean,
+      spokenCorrection: '',
+      conversationalResponse: clean,
+      correctionType: 'none'
+    };
+  }
+
+  const fullRecastSpan = recastMatch[1].trim();
+  const quotedSentence = recastMatch[2].trim();
+  const rest = recastMatch[3].trim();
+
+  const normTokens = (str: string) =>
+    str
+      .toLowerCase()
+      .replace(/[^a-z0-9'\s]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+  // Guard: If the model echoed the exact words the user already said, strip the redundant recast!
+  if (originalUserText && normTokens(quotedSentence) === normTokens(originalUserText)) {
+    const fallbackRest = rest || clean;
+    return {
+      cleanedFullText: fallbackRest,
+      spokenCorrection: '',
+      conversationalResponse: fallbackRest,
+      correctionType: 'none'
+    };
+  }
+
+  const correctionType: 'grammar' | 'naturalness' = /^a\s+more\s+natural/i.test(fullRecastSpan)
+    ? 'naturalness'
+    : 'grammar';
+
+  // Ensure canonical punctuation inside the recast badge
+  const normalizedRecast = /["'”][.!?]*$/.test(fullRecastSpan) ? fullRecastSpan : `${fullRecastSpan}.`;
+  const combined = [normalizedRecast, rest].filter(Boolean).join(' ').trim();
+
+  return {
+    cleanedFullText: combined,
+    spokenCorrection: normalizedRecast,
+    conversationalResponse: rest,
+    correctionType,
+    correctedSentence: quotedSentence
+  };
+}
+
 export interface BuddyFriendReplyResult {
   reply: string;
+  spokenCorrection?: string;
+  conversationalResponse?: string;
+  correctionType?: 'none' | 'grammar' | 'naturalness' | 'vocabulary';
   source: 'gemini' | 'local';
   providerRequested: 'gemini' | 'local';
   fallbackReason?: string;
@@ -1534,7 +1774,7 @@ export interface BuddyFriendReplyResult {
 }
 
 /**
- * Generates the AI Friend's natural spoken response (Phase 05A — independent from Grammar Analysis).
+ * Generates the AI Friend's natural spoken response (Phase 05A — with inline spoken recast when Tier-1 didn't pre-emit one!).
  * Uses Gemini SSE streaming with `thinkingBudget: 0` for < 450ms TTFT, falling back transparently to Local Friend Engine.
  */
 export async function generateBuddyFriendReply(params: {
@@ -1542,6 +1782,11 @@ export async function generateBuddyFriendReply(params: {
   history: BuddyMessage[];
   personality: BuddyPersonality;
   mode: BuddyMode;
+  intensity?: CorrectionIntensity;
+  /** Non-empty when Tier-1 already emitted an instant spoken correction before SSE started */
+  precomputedSpokenCorrection?: string;
+  /** True on incomplete speech, unclear speech, STT homophones, pronunciation minimal pairs, or meta-commands */
+  suppressSpokenCorrection?: boolean;
   coherence?: TranscriptCoherenceResult;
   context?: BuddySessionContext;
   precomputedIntent?: {
@@ -1556,7 +1801,14 @@ export async function generateBuddyFriendReply(params: {
   /** Fires once when the very first text token arrives */
   onFirstToken?: () => void;
   /** Real-time token streaming callback — fires as soon as each chunk arrives */
-  onPartialReply?: (fullTextSoFar: string) => void;
+  onPartialReply?: (
+    fullTextSoFar: string,
+    recastMeta?: {
+      spokenCorrection: string;
+      conversationalResponse: string;
+      correctionType: 'none' | 'grammar' | 'naturalness';
+    }
+  ) => void;
   /** Real-time sentence/safe-clause boundary callback — enables TTS to start speaking immediately! */
   onSentenceReady?: (sentence: string) => void;
 }): Promise<BuddyFriendReplyResult> {
@@ -1567,6 +1819,9 @@ export async function generateBuddyFriendReply(params: {
     history,
     personality,
     mode,
+    intensity = 'gentle',
+    precomputedSpokenCorrection,
+    suppressSpokenCorrection = false,
     coherence,
     context,
     precomputedIntent,
@@ -1688,9 +1943,22 @@ export async function generateBuddyFriendReply(params: {
         })()
       : null;
 
+  const contextualWord =
+    resolvedCoherence.contextualWord ||
+    detectContextualWordInterpretation(userText, ctx.lastBuddyMessage || '');
+  const contextualWordHint = contextualWord
+    ? `CONTEXTUAL WORD INTERPRETATION: Transcript says "${contextualWord.heardWord}", likely meaning "${contextualWord.intendedWord}" (${contextualWord.kind}). Respond naturally while gently confirming "${contextualWord.intendedWord}" (e.g., "Sure! Do you mean your ${contextualWord.intendedWord}? I'd love to hear about it.") and stay on that topic!`
+    : null;
+  const incompleteHint =
+    resolvedCoherence.utteranceCategory === 'incomplete_speech'
+      ? `INCOMPLETE SPEECH: The learner paused mid-thought ("${userText}"). Encourage them naturally to finish their sentence${ctx.activeSubject ? ` about ${ctx.activeSubject}` : ''} with ONE relevant question. NEVER say "Take your time" or "I'm all ears"!`
+      : null;
+
   const entityMemory = [
     `Detected Conversational Intention: ${conversationalIntent} (${intent})`,
     wordMeaningHint,
+    contextualWordHint,
+    incompleteHint,
     ctx.activeTopic !== 'general' ? `Active Topic: ${ctx.activeTopic}` : null,
     ctx.activeSubject ? `Active Subject / Project (for "it" / "that"): ${ctx.activeSubject}` : null,
     ctx.activePlace ? `Active Place / Location (for "there"): ${ctx.activePlace}` : null,
@@ -1704,37 +1972,59 @@ export async function generateBuddyFriendReply(params: {
     .filter(Boolean)
     .join('\n');
 
-  // Ultra-compact, low-prefill-latency tutor prompt (~175 tokens -> cuts Gemini TTFT in half!)
+  const shouldGeminiSpeakCorrection =
+    !precomputedSpokenCorrection &&
+    !suppressSpokenCorrection &&
+    resolvedCoherence.quality !== 'unclear' &&
+    resolvedCoherence.utteranceCategory !== 'incomplete_speech' &&
+    resolvedCoherence.utteranceCategory !== 'stt_error' &&
+    resolvedCoherence.utteranceCategory !== 'pronunciation_difficulty' &&
+    resolvedCoherence.utteranceCategory !== 'unusual_but_correct';
+
+  const rule1CorrectionInstruction = shouldGeminiSpeakCorrection
+    ? intensity === 'detailed'
+      ? '1. SPOKEN GRAMMAR COACHING: If the User\'s latest message has ANY grammatical, verb-tense, article, preposition, plural, word-order, or unnatural-phrasing mistake, you MUST tell them first by starting your reply with: You can say, "<natural corrected sentence>." followed by 1 brief plain-English reason, and THEN continue the conversation naturally! If their English is already correct, do NOT output "You can say...".'
+      : intensity === 'balanced'
+      ? '1. SPOKEN GRAMMAR COACHING: If the User\'s latest message has ANY grammatical, verb-tense, article, preposition, plural, word-order, or unnatural-phrasing mistake, you MUST tell them first by starting your reply with: You can say, "<natural corrected sentence>." (plus at most a 6-word tip if helpful), and THEN immediately continue the conversation! If their English is already correct, do NOT output "You can say...".'
+      : '1. SPOKEN GRAMMAR COACHING: If the User\'s latest message has ANY grammatical, verb-tense, article, preposition, plural, word-order, or unnatural-phrasing mistake, you MUST tell them first by starting your reply with: You can say, "<natural corrected sentence>." (no long grammar lecture), and THEN immediately react and ask 1 related follow-up question! If their English is already correct, do NOT output "You can say...".'
+    : '1. Do NOT output "You can say..." (either no grammar correction is needed or it was already spoken right before your text). Write ONLY your natural reaction + 1 follow-up question.';
+
+  // Ultra-compact, low-prefill-latency tutor prompt
   const prompt = `You are Lingo Buddy, a friendly, patient English conversation partner for beginner/intermediate learners (${personalityCfg.label}, ${mode}).
 Context: ${coherenceNotice}
 ${entityMemory}
 Rules:
-1. Do NOT output "You can say..." (any spoken correction is automatically added right before your text). Write ONLY your natural reaction + follow-up.
+${rule1CorrectionInstruction}
 2. Use simple, everyday English (no complex idioms or lectures). Ask ONLY ONE simple, relevant follow-up question.
-3. Focus on intended meaning & disambiguate STT slips via context (e.g. "recording part/shops" -> coding).
-4. On "I didn't understand" / "What do you mean?" / "Can you explain?", rephrase your last question in simpler English + short example (never repeat verbatim).
-5. Follow topic changes immediately ("Let's move to coding" -> "Sure! Let's talk about coding. What are you currently developing?"). If corrected ("not what I meant"), apologize warmly.
-6. Reply in 1 short reaction + 1 related question, plain text only.
+3. Interpret potentially misheard homophones using context (e.g. "my carrier" -> gently confirm "Do you mean your career? I'd love to hear about it."; "recording part/shops" -> coding). Do NOT treat STT homophones as grammar mistakes.
+4. If the learner's sentence is incomplete ("About my...", "I was thinking..."), encourage them naturally to finish their thought without correcting grammar. NEVER say "Take your time" or "I'm all ears".
+5. On "I didn't understand" / "What do you mean?" / "Can you explain?", rephrase your last question in simpler English + short example (never repeat verbatim).
+6. Follow topic changes immediately and maintain the learner's chosen topic. Plain text only.
 
 History:
 ${recentTurns}
 User: ${userText}
 Buddy:`;
 
-  const candidateModels = getFastVoiceModelCandidates(model);
+  const candidateModels = getFastVoiceModelCandidates(model, apiKey);
+  if (candidateModels.length === 0) {
+    candidateModels.push(...(await discoverFastVoiceModelsForKey(apiKey)));
+  }
 
   let lastFailReason = 'Gemini unavailable';
+  let didLiveDiscovery = false;
 
-  for (const candidateModel of candidateModels) {
+  for (let idx = 0; idx < candidateModels.length; idx++) {
+    const candidateModel = candidateModels[idx];
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 4500);
 
       const generationConfig: Record<string, any> = {
-        temperature: 0.65,
-        maxOutputTokens: 90
+        temperature: 0.55,
+        maxOutputTokens: shouldGeminiSpeakCorrection ? 135 : 95
       };
-      if (candidateModel.startsWith('gemini-2.5')) {
+      if (candidateModel.startsWith('gemini-2.5-flash')) {
         generationConfig.thinkingConfig = { thinkingBudget: 0 };
       }
 
@@ -1751,50 +2041,100 @@ Buddy:`;
 
       if (!response.ok) {
         clearTimeout(timeoutId);
+        if (response.status === 404) {
+          markDeadGeminiModel(candidateModel, apiKey);
+        }
         lastFailReason = `Gemini API HTTP ${response.status} on ${candidateModel}`;
+        if (idx === candidateModels.length - 1 && !didLiveDiscovery) {
+          didLiveDiscovery = true;
+          const discovered = await discoverFastVoiceModelsForKey(apiKey);
+          for (const dm of discovered) {
+            if (!candidateModels.includes(dm)) candidateModels.push(dm);
+          }
+        }
         if ([400, 404, 429, 500, 503].includes(response.status)) continue;
         return finishLocal('gemini', `${lastFailReason} — fell back to Local Engine`);
       }
 
-      markVerifiedFastVoiceModel(candidateModel);
+      markVerifiedFastVoiceModel(candidateModel, apiKey);
 
       let accumulated = '';
       let emittedCursor = 0;
 
+      const emitSentenceSafely = (rawSent: string) => {
+        if (!onSentenceReady) return;
+        const s = rawSent.trim();
+        if (!s) return;
+        // Never speak a duplicate recast if Tier-1 already spoke one, or if Gemini echoed the exact input unchanged!
+        if (/^(?:you\s+can\s+say|a\s+more\s+natural\s+way\s+to\s+say\s+that\s+is)\b/i.test(s)) {
+          if (!shouldGeminiSpeakCorrection) return;
+          const check = splitLeadingSpokenRecast(s, userText);
+          if (!check.spokenCorrection) return;
+        }
+        onSentenceReady(stripRepetitiveCliches(s));
+      };
+
       const flushReadySentences = (forceAll: boolean = false) => {
         if (!onSentenceReady) return;
-        const cleaned = accumulated.replace(/^["']|["']$/g, '').replace(/\*\*/g, '');
+        const cleaned = unwrapWholeOuterQuotes(accumulated.replace(/\*\*/g, ''));
         let remaining = cleaned.slice(emittedCursor);
         if (!remaining.trim()) return;
 
         if (forceAll) {
           const tail = remaining.trim();
           if (tail) {
-            onSentenceReady(tail);
+            emitSentenceSafely(tail);
             emittedCursor = cleaned.length;
           }
           return;
         }
 
-        // Dispatch the very first short sentence ("Sure!", "Nice!", "That's interesting!") immediately (>= 4 chars)
+        // Quote-aware sentence splitter so `You can say, "Yesterday I went shopping." Nice!` flushes Sentence 1 cleanly at `." `!
         while (true) {
           remaining = cleaned.slice(emittedCursor);
-          const sentMatch = remaining.match(/^([\s\S]*?[.!?])(?:\s+|$)/);
+          const sentMatch = remaining.match(/^([\s\S]*?[.!?]+["'”’)]*)(?:\s+|$)/);
           if (sentMatch && sentMatch[1].trim().length >= 4) {
-            onSentenceReady(sentMatch[1].trim());
+            // Wait if an opening quote after "You can say," has not closed yet!
+            const candidate = sentMatch[1].trim();
+            const doubleQuotes = (candidate.match(/["“”]/g) || []).length;
+            if (doubleQuotes === 1 && /^you\s+can\s+say|^a\s+more\s+natural/i.test(candidate)) {
+              break;
+            }
+            emitSentenceSafely(candidate);
             emittedCursor += sentMatch[0].length;
             continue;
           }
-          if (emittedCursor === 0) {
+          if (emittedCursor === 0 && !/^(?:you\s+can\s+say|a\s+more\s+natural)/i.test(remaining.trim())) {
             const clauseMatch = remaining.match(/^((?:\S+\s+){7,}\S+[,;—])\s+/);
             if (clauseMatch && clauseMatch[1].trim().length >= 28) {
-              onSentenceReady(clauseMatch[1].trim());
+              emitSentenceSafely(clauseMatch[1].trim());
               emittedCursor += clauseMatch[0].length;
               continue;
             }
           }
           break;
         }
+      };
+
+      const notifyLivePartial = (rawSoFar: string) => {
+        const cleanSoFar = unwrapWholeOuterQuotes(rawSoFar.replace(/\*\*/g, '')).trim();
+        if (!cleanSoFar) return;
+        if (!shouldGeminiSpeakCorrection) {
+          const stripped = cleanSoFar
+            .replace(
+              /^(?:you\s+can\s+say|a\s+more\s+natural\s+way\s+to\s+say\s+that\s+is),?\s*["'“][^"'”]+["'”][.!?]*\s*/i,
+              ''
+            )
+            .trim();
+          if (stripped) onPartialReply?.(stripped);
+          return;
+        }
+        const split = splitLeadingSpokenRecast(cleanSoFar, userText);
+        onPartialReply?.(split.cleanedFullText, {
+          spokenCorrection: split.spokenCorrection,
+          conversationalResponse: split.conversationalResponse,
+          correctionType: split.correctionType
+        });
       };
 
       if (response.body && typeof response.body.getReader === 'function') {
@@ -1824,14 +2164,8 @@ Buddy:`;
                   onFirstToken?.();
                 }
                 accumulated += delta;
-                const cleanDisplay = accumulated
-                  .replace(/^["']|["']$/g, '')
-                  .replace(/\*\*/g, '')
-                  .trim();
-                if (cleanDisplay) {
-                  onPartialReply?.(cleanDisplay);
-                  flushReadySentences(false);
-                }
+                notifyLivePartial(accumulated);
+                flushReadySentences(false);
               }
             } catch {
               // Partial JSON chunk — wait for next SSE line
@@ -1844,32 +2178,52 @@ Buddy:`;
         const data = await response.json();
         clearTimeout(timeoutId);
         accumulated = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-        const cleanDisplay = accumulated.replace(/^["']|["']$/g, '').replace(/\*\*/g, '').trim();
-        if (cleanDisplay) {
+        if (accumulated.trim()) {
           if (firstTokenAt === null) {
             firstTokenAt = typeof performance !== 'undefined' ? performance.now() : Date.now();
             onFirstToken?.();
           }
-          onPartialReply?.(cleanDisplay);
+          notifyLivePartial(accumulated);
           flushReadySentences(true);
         }
       }
 
-      // Safety strip if model ever echoed a duplicate "You can say..." recast
-      const rawReply = accumulated
-        .replace(/^["']|["']$/g, '')
-        .replace(/\*\*/g, '')
-        .replace(/^(?:you\s+can\s+say|a\s+more\s+natural\s+way\s+to\s+say\s+that\s+is),?\s*["'][^"']+["'][.!?]?\s*/i, '')
-        .trim();
+      const cleanedAccumulated = stripRepetitiveCliches(
+        unwrapWholeOuterQuotes(accumulated.replace(/\*\*/g, ''))
+      );
 
-      if (!rawReply) {
+      let finalReply = cleanedAccumulated;
+      let extractedSpokenCorrection = '';
+      let extractedConversational = cleanedAccumulated;
+      let extractedCorrType: 'none' | 'grammar' | 'naturalness' = 'none';
+
+      if (!shouldGeminiSpeakCorrection) {
+        finalReply = cleanedAccumulated
+          .replace(
+            /^(?:you\s+can\s+say|a\s+more\s+natural\s+way\s+to\s+say\s+that\s+is),?\s*["'“][^"'”]+["'”][.!?]*\s*/i,
+            ''
+          )
+          .trim();
+        extractedConversational = finalReply;
+      } else {
+        const split = splitLeadingSpokenRecast(cleanedAccumulated, userText);
+        finalReply = split.cleanedFullText;
+        extractedSpokenCorrection = split.spokenCorrection;
+        extractedConversational = split.conversationalResponse;
+        extractedCorrType = split.correctionType;
+      }
+
+      if (!finalReply) {
         lastFailReason = 'Gemini returned empty text';
         continue;
       }
 
       const t1 = typeof performance !== 'undefined' ? performance.now() : Date.now();
       return {
-        reply: rawReply,
+        reply: finalReply,
+        spokenCorrection: extractedSpokenCorrection || undefined,
+        conversationalResponse: extractedConversational || finalReply,
+        correctionType: extractedCorrType,
         source: 'gemini',
         providerRequested: 'gemini',
         intent,

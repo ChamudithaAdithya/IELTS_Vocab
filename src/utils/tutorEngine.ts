@@ -506,7 +506,7 @@ export function generateAcademicUpgradeSegments(
 const STATE_KEY = 'ielts_tutor_state_v1';
 const API_KEY_STORAGE = 'ielts_tutor_gemini_key_v1';
 const MODEL_STORAGE = 'ielts_tutor_gemini_model_v1';
-export const DEFAULT_GEMINI_MODEL = 'gemini-2.0-flash';
+export const DEFAULT_GEMINI_MODEL = 'gemini-3-flash-preview';
 
 export const initialTutorState: TutorState = {
   assessments: [],
@@ -546,7 +546,13 @@ export const saveApiKey = (key: string) => {
 export const loadModel = () => {
   if (typeof window === 'undefined') return DEFAULT_GEMINI_MODEL;
   const stored = localStorage.getItem(MODEL_STORAGE);
-  if (!stored || stored === 'gemini-3.8-flash' || stored === 'gemini-2.5-flash') {
+  if (
+    !stored ||
+    stored === 'gemini-3.8-flash' ||
+    stored === 'gemini-2.5-flash' ||
+    stored === 'gemini-2.0-flash' ||
+    stored.startsWith('gemini-1.5')
+  ) {
     localStorage.setItem(MODEL_STORAGE, DEFAULT_GEMINI_MODEL);
     return DEFAULT_GEMINI_MODEL;
   }
@@ -603,15 +609,15 @@ async function callGemini(
   externalSignal?: AbortSignal,
   imageDataUrl?: string | null
 ): Promise<any> {
-  // Candidate models prioritized for Google AI Studio
+  // Candidate models prioritized for Google AI Studio (including active 2026+ Gemini 3 & rolling Flash aliases)
   const candidateModels = [
     model,
-    'gemini-2.0-flash',
-    'gemini-1.5-flash',
+    'gemini-3-flash-preview',
+    'gemini-3.1-flash-lite-preview',
+    'gemini-flash-latest',
+    'gemini-2.5-flash-lite',
     'gemini-2.5-flash',
-    'gemini-2.0-flash-lite',
-    'gemini-1.5-pro-latest',
-    'gemini-1.5-pro',
+    'gemini-2.0-flash',
   ].filter((m, idx, arr) => Boolean(m) && arr.indexOf(m) === idx);
 
   let lastError: any = null;
