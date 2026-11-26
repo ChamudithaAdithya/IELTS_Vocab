@@ -1119,6 +1119,147 @@ export function runAll13BuddyQaScenarios(): BuddyQaSuiteReport {
         return `T1: ${recast1.spokenCorrection} ${reply1} | T2: ${recast2.spokenCorrection} ${reply2}`;
       },
       true
+    ),
+    // -----------------------------------------------------------------------
+    // LINGO BUDDY — ENGLISH CONVERSATION TUTOR SPECIFICATION (TESTS 41 TO 44)
+    // -----------------------------------------------------------------------
+    runScenario(
+      41,
+      'Tutor Flow — Habitual free-time ("I watching movies." → "I watch movies." → "I like action movies.")',
+      'Tutor Grammar & Flow',
+      () => {
+        const hFree: BuddyMessage[] = [
+          {
+            id: 'b-free',
+            role: 'buddy',
+            timestamp: 1,
+            text: 'What do you usually do in your free time?'
+          }
+        ];
+        const gram1 = analyzeBuddyGrammarLocally({
+          originalTranscript: 'I watching movies.',
+          conversationContext: 'Buddy: What do you usually do in your free time?',
+          intensity: 'gentle'
+        });
+        const recast1 = buildSpokenCorrection(gram1, 'gentle');
+        const reply1 = generateLocalFriendReply(
+          'I watching movies.',
+          hFree,
+          'friendly',
+          'friendly'
+        );
+
+        const hMovies: BuddyMessage[] = [
+          ...hFree,
+          { id: 'u-m1', role: 'user', timestamp: 2, text: 'I watching movies.' },
+          { id: 'b-m1', role: 'buddy', timestamp: 3, text: `${recast1.spokenCorrection} ${reply1}` }
+        ];
+        const gram2 = analyzeBuddyGrammarLocally({
+          originalTranscript: 'I like action movies.',
+          intensity: 'gentle'
+        });
+        const recast2 = buildSpokenCorrection(gram2, 'gentle');
+        const reply2 = generateLocalFriendReply(
+          'I like action movies.',
+          hMovies,
+          'friendly',
+          'friendly'
+        );
+
+        if (
+          recast1.spokenCorrection !== 'You can say, "I watch movies."' ||
+          reply1 !== 'What kind of movies do you enjoy watching?'
+        ) {
+          throw new Error(`Unexpected Turn 1: ${recast1.spokenCorrection} | ${reply1}`);
+        }
+        if (
+          recast2.correctionRequired ||
+          reply2 !== "That's interesting! Do you have a favourite action movie?"
+        ) {
+          throw new Error(`Unexpected Turn 2: recast=${recast2.spokenCorrection} | ${reply2}`);
+        }
+        return `${recast1.spokenCorrection} ${reply1} → "${reply2}"`;
+      },
+      true
+    ),
+    runScenario(
+      42,
+      'Directed Topic Switch & STT Context Guard ("Let\'s move to the coding part." vs "recording shops")',
+      'Topic Pivot & STT Context',
+      () => {
+        const replyCoding = generateLocalFriendReply(
+          "Let's move to the coding part.",
+          [],
+          'friendly',
+          'friendly'
+        );
+        const techHistory: BuddyMessage[] = [
+          { id: 'u-t1', role: 'user', timestamp: 1, text: 'I am working on a software project.' },
+          { id: 'b-t1', role: 'buddy', timestamp: 2, text: 'Nice! Tell me about it.' }
+        ];
+        const replySttSlip = generateLocalFriendReply(
+          "Let's move to the recording shops.",
+          techHistory,
+          'friendly',
+          'friendly'
+        );
+
+        if (replyCoding !== "Sure! Let's talk about coding. What are you currently developing?") {
+          throw new Error(`Unexpected coding pivot reply: ${replyCoding}`);
+        }
+        if (/buy|store|mall|music shop/i.test(replySttSlip) || !/coding|developing/i.test(replySttSlip)) {
+          throw new Error(`Failed STT homophone guard ("recording shops"): ${replySttSlip}`);
+        }
+        return `Pivot: "${replyCoding}" | STT slip resolved cleanly to coding.`;
+      },
+      true
+    ),
+    runScenario(
+      43,
+      'Simple-English Clarification ("Can you explain?" & "I didn\'t understand." — never repeats verbatim)',
+      'Simple Rephrasing',
+      () => {
+        const originalQ = 'What aspect of metropolitan architecture appeals to you?';
+        const history: BuddyMessage[] = [
+          { id: 'b-orig', role: 'buddy', timestamp: 1, text: originalQ }
+        ];
+        const ctx = extractSessionContext(history, 'Can you explain?');
+        const cls = classifyBuddyIntent('Can you explain?', ctx, { quality: 'clear' });
+        const replyExplain = generateLocalFriendReply(
+          'Can you explain?',
+          history,
+          'friendly',
+          'friendly'
+        );
+
+        if (cls.conversationalIntent !== 'ASKING_FOR_CLARIFICATION') {
+          throw new Error(`"Can you explain?" missed ASKING_FOR_CLARIFICATION: ${cls.conversationalIntent}`);
+        }
+        if (replyExplain.includes(originalQ) || !/simpler|for example/i.test(replyExplain)) {
+          throw new Error(`Failed simple rephrasing without verbatim repeat: ${replyExplain}`);
+        }
+        return `Rephrased simply with example: "${replyExplain}"`;
+      }
+    ),
+    runScenario(
+      44,
+      'One-Simple-Question-At-A-Time Rule across everyday learner turns',
+      'Tutor Response Length',
+      () => {
+        const samples = [
+          generateLocalFriendReply('I watching movies.', [], 'friendly', 'friendly'),
+          generateLocalFriendReply('I like action movies.', [], 'friendly', 'friendly'),
+          generateLocalFriendReply('I have developed an AI tool.', [], 'friendly', 'friendly'),
+          generateLocalFriendReply("Let's move to the coding part.", [], 'friendly', 'friendly')
+        ];
+        for (const s of samples) {
+          const qMarks = (s.match(/\?/g) || []).length;
+          if (qMarks !== 1) {
+            throw new Error(`Expected exactly 1 simple question, got ${qMarks} in: "${s}"`);
+          }
+        }
+        return 'All 4 tutor responses contain 1 brief reaction + 1 simple related question.';
+      }
     )
   ];
 
@@ -1130,9 +1271,9 @@ export function runAll13BuddyQaScenarios(): BuddyQaSuiteReport {
 
   // Compute quantitative subsystem metrics
   const byId = (id: number) => results.find(r => r.id === id)?.passed ?? false;
-  const contextIds = [10, 12, 14, 15, 16, 17, 19, 20, 27, 28, 30, 31, 34, 35, 39, 40];
-  const intentIds = [10, 14, 15, 16, 17, 19, 20, 21, 22, 30, 31, 34, 35, 36, 37, 38, 39];
-  const precisionIds = [8, 9, 13, 26, 29, 36, 37, 38];
+  const contextIds = [10, 12, 14, 15, 16, 17, 19, 20, 27, 28, 30, 31, 34, 35, 39, 40, 41, 42, 43];
+  const intentIds = [10, 14, 15, 16, 17, 19, 20, 21, 22, 30, 31, 34, 35, 36, 37, 38, 39, 42, 43];
+  const precisionIds = [8, 9, 13, 26, 29, 36, 37, 38, 41, 44];
   const recallIds = [1, 4, 7, 17, 18, 24, 25, 27, 28, 32, 33, 34, 35, 40];
 
   const pct = (ids: number[]) =>

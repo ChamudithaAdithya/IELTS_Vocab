@@ -87,7 +87,10 @@ import {
   saveVocabItemToCollection,
   setMemoryPersonalizationEnabled
 } from '../../utils/buddyLearningStore';
-import { transcribeAudioBlobWithGemini } from '../../utils/speakingEngine';
+import {
+  transcribeAudioBlobWithGemini,
+  warmUpGeminiVoiceConnection
+} from '../../utils/speakingEngine';
 import {
   createLive16kPcmCapture,
   type Live16kPcmCaptureHandle
@@ -319,10 +322,14 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
   const confidenceSumRef = useRef<{ total: number; count: number }>({ total: 0, count: 0 });
   const listenStartedAtRef = useRef<number>(0);
   const activeSpeechPerfRef = useRef<{
-    speech_start: number | null;
-    first_partial_transcript: number | null;
-    speech_end: number | null;
-  }>({ speech_start: null, first_partial_transcript: null, speech_end: null });
+    speechStart: number | null;
+    firstPartialSTT: number | null;
+    lastPartialSTT: number | null;
+    speechEnd: number | null;
+  }>({ speechStart: null, firstPartialSTT: null, lastPartialSTT: null, speechEnd: null });
+  const speculativeSttAbortRef = useRef<AbortController | null>(null);
+  const speculativeSttPromiseRef = useRef<Promise<string> | null>(null);
+  const rollingChunkTimerRef = useRef<any>(null);
   const inFlightTurnSigRef = useRef<string>('');
   const activeTtsQueueRef = useRef<RealtimeTtsQueue | null>(null);
   const isListeningRef = useRef<boolean>(false);
@@ -360,11 +367,22 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
   }, [showKeyboardInput]);
 
   useEffect(() => {
-    // Pre-warm Neural TTS socket pool immediately on mount
+    // Pre-warm BOTH Neural TTS socket pool AND Gemini HTTP/2 fast Flash model on mount!
     if (buddyVoiceConfigRef.current.provider !== 'standard') {
       warmUpNeuralTts(buddyVoiceConfigRef.current.freeNeuralVoice);
     }
+    const existingKey = apiKey || loadApiKey();
+    if (existingKey) {
+      warmUpGeminiVoiceConnection(existingKey);
+    }
+    // Keep Edge Neural WSS sockets warm every 11s while Lingo Buddy view is open
+    const keepWarmInterval = setInterval(() => {
+      if (buddyVoiceConfigRef.current.provider !== 'standard') {
+        warmUpNeuralTts(buddyVoiceConfigRef.current.freeNeuralVoice);
+      }
+    }, 11000);
     return () => {
+      clearInterval(keepWarmInterval);
       stopAllAudioAndCapture(true);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -381,6 +399,15 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
       clearTimeout(vadPauseTimerRef.current);
       vadPauseTimerRef.current = null;
     }
+    if (rollingChunkTimerRef.current) {
+      clearInterval(rollingChunkTimerRef.current);
+      rollingChunkTimerRef.current = null;
+    }
+    if (speculativeSttAbortRef.current) {
+      try { speculativeSttAbortRef.current.abort(); } catch {}
+      speculativeSttAbortRef.current = null;
+    }
+    speculativeSttPromiseRef.current = null;
     if (rafRef.current) {
       cancelAnimationFrame(rafRef.current);
       rafRef.current = null;
@@ -700,10 +727,11 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     durationSec?: number;
     autoResumeAfter?: boolean;
     speechPerf?: {
-      speech_start: number | null;
-      first_partial_transcript: number | null;
-      speech_end: number | null;
-      final_transcript: number | null;
+      speechStart: number | null;
+      firstPartialSTT: number | null;
+      lastPartialSTT: number | null;
+      speechEnd: number | null;
+      finalTranscript: number | null;
     };
   }) => {
     const cleanRaw = params.rawTranscript.trim();
@@ -723,19 +751,25 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     }
     inFlightTurnSigRef.current = dedupSig;
 
+    // Re-warm Neural TTS right as AI request begins so socket is 100% OPEN (< 13s old) when token 1 arrives!
+    if (voiceOutputEnabledRef.current && buddyVoiceConfigRef.current.provider !== 'standard') {
+      warmUpNeuralTts(buddyVoiceConfigRef.current.freeNeuralVoice);
+    }
+
+    const speechEndAnchor = params.speechPerf?.speechEnd ?? nowPerf();
     const pMarks: BuddyTurnPerfTimestamps = {
-      speech_start: params.speechPerf?.speech_start ?? null,
-      first_partial_transcript: params.speechPerf?.first_partial_transcript ?? null,
-      speech_end: params.speechPerf?.speech_end ?? nowPerf(),
-      final_transcript: params.speechPerf?.final_transcript ?? nowPerf(),
-      ai_request_start: null,
-      ai_first_token: null,
-      grammar_ready: null,
-      ai_response_complete: null,
-      tts_request_start: null,
-      tts_first_audio: null,
-      playback_start: null,
-      response_complete: null
+      speechStart: params.speechPerf?.speechStart ?? speechEndAnchor,
+      firstPartialSTT: params.speechPerf?.firstPartialSTT ?? null,
+      lastPartialSTT: params.speechPerf?.lastPartialSTT ?? null,
+      finalTranscript: params.speechPerf?.finalTranscript ?? nowPerf(),
+      aiRequestStart: null,
+      aiFirstToken: null,
+      grammarStart: null,
+      grammarComplete: null,
+      ttsRequestStart: null,
+      ttsFirstByte: null,
+      playbackStart: null,
+      turnComplete: null
     };
     let ttsDeliveryUsed: 'neural-stream' | 'neural-cache' | 'browser-speech' | 'muted' =
       voiceOutputEnabledRef.current ? 'neural-stream' : 'muted';
@@ -762,8 +796,8 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     const commitPerfSnapshot = (bargeInInterrupted?: boolean) => {
       if (perfCommitted) return;
       perfCommitted = true;
-      if (pMarks.response_complete === null) {
-        pMarks.response_complete = nowPerf();
+      if (pMarks.turnComplete === null) {
+        pMarks.turnComplete = nowPerf();
       }
       const diff = (b: number | null, a: number | null) =>
         b !== null && a !== null ? Math.max(0, Math.round(b - a)) : null;
@@ -779,13 +813,14 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
         bargeInInterrupted,
         timestamps: { ...pMarks },
         durations: {
-          timeToFirstTranscriptMs: diff(pMarks.first_partial_transcript, pMarks.speech_start),
-          finalTranscriptionLatencyMs: diff(pMarks.final_transcript, pMarks.speech_end),
-          aiTimeToFirstTokenMs: diff(pMarks.ai_first_token, pMarks.ai_request_start),
-          grammarAnalysisLatencyMs: diff(pMarks.grammar_ready, pMarks.ai_request_start),
-          ttsTimeToFirstAudioMs: diff(pMarks.tts_first_audio, pMarks.tts_request_start),
-          userEndToFirstAudioMs: diff(pMarks.playback_start, pMarks.speech_end),
-          totalResponseCompletionMs: diff(pMarks.response_complete, pMarks.speech_end)
+          timeToFirstTranscriptMs: diff(pMarks.firstPartialSTT, pMarks.speechStart),
+          partialWindowSpanMs: diff(pMarks.lastPartialSTT, pMarks.firstPartialSTT),
+          finalTranscriptionLatencyMs: diff(pMarks.finalTranscript, speechEndAnchor),
+          aiTimeToFirstTokenMs: diff(pMarks.aiFirstToken, pMarks.aiRequestStart),
+          grammarAnalysisLatencyMs: diff(pMarks.grammarComplete, pMarks.grammarStart),
+          ttsTimeToFirstAudioMs: diff(pMarks.ttsFirstByte, pMarks.ttsRequestStart),
+          userEndToFirstAudioMs: diff(pMarks.playbackStart, speechEndAnchor),
+          totalResponseCompletionMs: diff(pMarks.turnComplete, speechEndAnchor)
         }
       };
 
@@ -855,21 +890,21 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
           audioLevelRef.current = lvl;
         },
         onTtsRequestStart: () => {
-          if (pMarks.tts_request_start === null) pMarks.tts_request_start = nowPerf();
+          if (pMarks.ttsRequestStart === null) pMarks.ttsRequestStart = nowPerf();
         },
         onTtsFirstAudio: (delivery) => {
           ttsDeliveryUsed = delivery;
-          if (pMarks.tts_first_audio === null) pMarks.tts_first_audio = nowPerf();
+          if (pMarks.ttsFirstByte === null) pMarks.ttsFirstByte = nowPerf();
         },
         onFirstStart: () => {
-          if (pMarks.playback_start === null) pMarks.playback_start = nowPerf();
+          if (pMarks.playbackStart === null) pMarks.playbackStart = nowPerf();
           setIsBuddySpeaking(true);
           setOrbState('speaking');
           setLifecyclePhase('PHASE_06_SPEAKING');
         },
         onAllEnd: () => {
           activeTtsQueueRef.current = null;
-          pMarks.response_complete = nowPerf();
+          pMarks.turnComplete = nowPerf();
           commitPerfSnapshot(false);
           audioLevelRef.current = 0;
           setIsBuddySpeaking(false);
@@ -903,16 +938,19 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
       model: selectedModel || loadModel(),
       callbacks: {
         onAiRequestStart: () => {
-          pMarks.ai_request_start = nowPerf();
+          pMarks.aiRequestStart = nowPerf();
         },
         onAiFirstToken: () => {
-          if (pMarks.ai_first_token === null) pMarks.ai_first_token = nowPerf();
+          if (pMarks.aiFirstToken === null) pMarks.aiFirstToken = nowPerf();
+        },
+        onGrammarStart: () => {
+          pMarks.grammarStart = nowPerf();
         },
         onMemoryUpdated: (nextMem) => {
           setBuddyMemory(nextMem);
         },
         onFriendPartialReply: (partialText, pkt, meta) => {
-          if (pMarks.ai_first_token === null) pMarks.ai_first_token = nowPerf();
+          if (pMarks.aiFirstToken === null) pMarks.aiFirstToken = nowPerf();
           if (meta?.spokenCorrection && !isBuddySpeaking && !isListeningRef.current) {
             setOrbState(curr => (curr === 'thinking' || curr === 'understanding' ? 'correcting' : curr));
           }
@@ -944,7 +982,6 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
           }
         },
         onFriendReplyReady: (friendResult, pkt) => {
-          pMarks.ai_response_complete = nowPerf();
           aiProviderUsed = friendResult.source;
           setStreamingBuddyMsgId(curr => (curr === buddyPlaceholderId ? null : curr));
 
@@ -979,7 +1016,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
               }
               ttsQueue.markStreamDone();
             } else if (!voiceOutputEnabledRef.current) {
-              pMarks.response_complete = nowPerf();
+              pMarks.turnComplete = nowPerf();
               commitPerfSnapshot(false);
               setOrbState('idle');
               setLifecyclePhase('PHASE_07_SAVED');
@@ -992,7 +1029,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
           }
         },
         onGrammarAnalysisReady: (analysis, updatedAnalytics, updatedLib, pkt) => {
-          pMarks.grammar_ready = nowPerf();
+          pMarks.grammarComplete = nowPerf();
           setLearningAnalytics(updatedAnalytics);
           setGrammarLibrary(updatedLib);
 
@@ -1085,13 +1122,22 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     setIsListening(false);
 
     const nowPerf = () => (typeof performance !== 'undefined' ? performance.now() : Date.now());
-    const speechEndPerf = nowPerf();
-    activeSpeechPerfRef.current.speech_end = speechEndPerf;
+    const speechEndPerf = activeSpeechPerfRef.current.speechEnd ?? nowPerf();
+    activeSpeechPerfRef.current.speechEnd = speechEndPerf;
 
     if (vadPauseTimerRef.current) {
       clearTimeout(vadPauseTimerRef.current);
       vadPauseTimerRef.current = null;
     }
+    if (rollingChunkTimerRef.current) {
+      clearInterval(rollingChunkTimerRef.current);
+      rollingChunkTimerRef.current = null;
+    }
+
+    // Grab any already in-flight speculative pause STT promise BEFORE cleanup!
+    const inFlightSpeculativeStt = speculativeSttPromiseRef.current;
+    speculativeSttPromiseRef.current = null;
+    speculativeSttAbortRef.current = null;
 
     // Snapshot live streaming recognition buffers BEFORE stopping recognition
     const liveStreamedTranscript = [finalBufferRef.current.trim(), interimBufferRef.current.trim()]
@@ -1127,7 +1173,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
       const rec = mediaRecorderRef.current;
       mediaRecorderRef.current = null;
       await new Promise<void>((resolve) => {
-        const safety = setTimeout(resolve, 140);
+        const safety = setTimeout(resolve, 60);
         rec.onstop = () => {
           clearTimeout(safety);
           if (audioChunksRef.current.length > 0) {
@@ -1151,13 +1197,13 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     const rawElapsedSec = (Date.now() - listenStartedAtRef.current) / 1000;
     const durationSec =
       conditionedPcmResult?.durationSec ||
-      Math.max(1, Math.round(rawElapsedSec - (reason === 'vad' ? 0.9 : 0)));
+      Math.max(1, Math.round(rawElapsedSec - (reason === 'vad' ? 0.7 : 0)));
 
     const activeEngine = speechEngineRef.current;
     const currentKey = apiKey || loadApiKey();
 
     // PATH A: Real-Time Streaming STT ('live-solo') -> 0ms post-speech finalization when words streamed!
-    if (activeEngine === 'live-solo' && liveStreamedTranscript.length > 0) {
+    if (activeEngine === 'live-solo' && liveStreamedTranscript.length > 0 && !inFlightSpeculativeStt) {
       const finalPerf = nowPerf();
       await processFinalizedUserTurn({
         rawTranscript: liveStreamedTranscript,
@@ -1169,39 +1215,44 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
         durationSec,
         autoResumeAfter: continuousModeRef.current,
         speechPerf: {
-          speech_start: activeSpeechPerfRef.current.speech_start,
-          first_partial_transcript: activeSpeechPerfRef.current.first_partial_transcript,
-          speech_end: speechEndPerf,
-          final_transcript: finalPerf
+          speechStart: activeSpeechPerfRef.current.speechStart ?? speechEndPerf,
+          firstPartialSTT: activeSpeechPerfRef.current.firstPartialSTT ?? finalPerf,
+          lastPartialSTT: activeSpeechPerfRef.current.lastPartialSTT ?? finalPerf,
+          speechEnd: speechEndPerf,
+          finalTranscript: finalPerf
         }
       });
       return;
     }
 
-    // PATH B: Either 'gemini-cloud' Verbatim Mode OR automatic fallback when browser streaming STT disconnected/missed audio!
-    if (conditionedPcmResult && currentKey) {
+    // PATH B: Reuse already-running Speculative Pause STT (~380ms head-start!) OR run fast 16kHz WAV Gemini SSE!
+    if ((inFlightSpeculativeStt || conditionedPcmResult) && currentKey) {
       setOrbState('transcribing');
       setLifecyclePhase('PHASE_03_TRANSCRIBING');
       if (liveStreamedTranscript) {
         setLiveInterimText(liveStreamedTranscript);
       }
       try {
-        const geminiText = await transcribeAudioBlobWithGemini(
-          currentKey,
-          selectedModel || loadModel(),
-          conditionedPcmResult.wavBlob,
-          recognitionLangRef.current,
-          {
-            isPreConditionedWav: true,
-            timeoutMs: liveStreamedTranscript ? 3600 : 5200,
-            onPartialTranscript: (partial) => {
-              if (activeSpeechPerfRef.current.first_partial_transcript === null) {
-                activeSpeechPerfRef.current.first_partial_transcript = nowPerf();
+        const geminiText = inFlightSpeculativeStt
+          ? await inFlightSpeculativeStt
+          : await transcribeAudioBlobWithGemini(
+              currentKey,
+              selectedModel || loadModel(),
+              conditionedPcmResult!.wavBlob,
+              recognitionLangRef.current,
+              {
+                isPreConditionedWav: true,
+                timeoutMs: liveStreamedTranscript ? 3200 : 4200,
+                onPartialTranscript: (partial) => {
+                  const ts = nowPerf();
+                  if (activeSpeechPerfRef.current.firstPartialSTT === null) {
+                    activeSpeechPerfRef.current.firstPartialSTT = ts;
+                  }
+                  activeSpeechPerfRef.current.lastPartialSTT = ts;
+                  setLiveInterimText(partial);
+                }
               }
-              setLiveInterimText(partial);
-            }
-          }
-        );
+            );
         setLiveInterimText('');
         const resolvedText = (geminiText && geminiText.trim()) || liveStreamedTranscript;
         if (!resolvedText) {
@@ -1215,24 +1266,25 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
         await processFinalizedUserTurn({
           rawTranscript: resolvedText,
           engine: activeEngine === 'gemini-cloud' ? 'gemini-cloud' : 'live-solo',
-          sttEngineDetail:
-            activeEngine === 'gemini-cloud'
-              ? 'gemini-sse-16k-wav'
-              : 'gemini-fallback-16k-wav',
+          sttEngineDetail: inFlightSpeculativeStt
+            ? 'speculative-live-16k-wav'
+            : activeEngine === 'gemini-cloud'
+            ? 'gemini-sse-16k-wav'
+            : 'gemini-fallback-16k-wav',
           recordedAudioUrl,
           durationSec,
           autoResumeAfter: continuousModeRef.current,
           speechPerf: {
-            speech_start: activeSpeechPerfRef.current.speech_start,
-            first_partial_transcript: activeSpeechPerfRef.current.first_partial_transcript,
-            speech_end: speechEndPerf,
-            final_transcript: finalPerf
+            speechStart: activeSpeechPerfRef.current.speechStart ?? speechEndPerf,
+            firstPartialSTT: activeSpeechPerfRef.current.firstPartialSTT ?? finalPerf,
+            lastPartialSTT: activeSpeechPerfRef.current.lastPartialSTT ?? finalPerf,
+            speechEnd: speechEndPerf,
+            finalTranscript: finalPerf
           }
         });
         return;
       } catch (err: any) {
         setLiveInterimText('');
-        // Graceful fallback: if Gemini network timed out/disconnected, use the live streamed transcript immediately!
         if (liveStreamedTranscript) {
           const finalPerf = nowPerf();
           await processFinalizedUserTurn({
@@ -1245,10 +1297,11 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
             durationSec,
             autoResumeAfter: continuousModeRef.current,
             speechPerf: {
-              speech_start: activeSpeechPerfRef.current.speech_start,
-              first_partial_transcript: activeSpeechPerfRef.current.first_partial_transcript,
-              speech_end: speechEndPerf,
-              final_transcript: finalPerf
+              speechStart: activeSpeechPerfRef.current.speechStart ?? speechEndPerf,
+              firstPartialSTT: activeSpeechPerfRef.current.firstPartialSTT ?? finalPerf,
+              lastPartialSTT: activeSpeechPerfRef.current.lastPartialSTT ?? finalPerf,
+              speechEnd: speechEndPerf,
+              finalTranscript: finalPerf
             }
           });
           return;
@@ -1296,16 +1349,24 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
 
     cleanupMediaCapture(false);
     const nowPerf = () => (typeof performance !== 'undefined' ? performance.now() : Date.now());
+    const currentKeyForTurn = apiKey || loadApiKey();
+    if (currentKeyForTurn) {
+      warmUpGeminiVoiceConnection(currentKeyForTurn);
+    }
+
     finalBufferRef.current = '';
     interimBufferRef.current = '';
     uncertainWordsRef.current = new Set();
     confidenceSumRef.current = { total: 0, count: 0 };
     listenStartedAtRef.current = Date.now();
+    // Section 4 Row 1: `speechStart` stamps actual voice onset (NOT pre-speech silence after clicking mic!)
     activeSpeechPerfRef.current = {
-      speech_start: nowPerf(),
-      first_partial_transcript: null,
-      speech_end: null
+      speechStart: null,
+      firstPartialSTT: null,
+      lastPartialSTT: null,
+      speechEnd: null
     };
+    let browserSttAlive = false;
     isListeningRef.current = true;
     setIsListening(true);
     setLiveFinalText('');
@@ -1325,15 +1386,15 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
         .trim();
       if (!preview) return;
       const wordCount = preview.split(/\s+/).filter(Boolean).length;
-      // Adaptive pause: 1,500ms if pausing mid-clause ("...because", "...and"), else crisp 900ms!
       const waitMs =
-        DANGLING_PAUSE_WORDS.test(preview) || wordCount < 2 ? 1500 : 900;
+        DANGLING_PAUSE_WORDS.test(preview) || wordCount < 2 ? 1200 : 720;
       vadPauseTimerRef.current = setTimeout(() => {
+        activeSpeechPerfRef.current.speechEnd = nowPerf();
         void finalizeCapturedTurn('vad');
       }, waitMs);
     };
 
-    // 1. Start Live Streaming SpeechRecognition (displays interim words in < 300ms in BOTH engines!)
+    // 1. Start Live Browser SpeechRecognition (when supported & reachable)
     const SpeechRecognition =
       typeof window !== 'undefined'
         ? (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
@@ -1347,11 +1408,23 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
         rec.maxAlternatives = 3;
         rec.lang = recognitionLangRef.current || 'en-GB';
 
+        rec.onspeechstart = () => {
+          if (activeSpeechPerfRef.current.speechStart === null) {
+            activeSpeechPerfRef.current.speechStart = nowPerf();
+          }
+        };
+
         rec.onresult = (event: any) => {
           if (!isListeningRef.current) return;
-          if (activeSpeechPerfRef.current.first_partial_transcript === null) {
-            activeSpeechPerfRef.current.first_partial_transcript = nowPerf();
+          browserSttAlive = true;
+          const ts = nowPerf();
+          if (activeSpeechPerfRef.current.speechStart === null) {
+            activeSpeechPerfRef.current.speechStart = Math.max(0, ts - 180);
           }
+          if (activeSpeechPerfRef.current.firstPartialSTT === null) {
+            activeSpeechPerfRef.current.firstPartialSTT = ts;
+          }
+          activeSpeechPerfRef.current.lastPartialSTT = ts;
 
           let fin = '';
           let inter = '';
@@ -1407,10 +1480,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
             }
             return;
           }
-          // Network/service hiccup on SpeechRecognition: keep recording seamlessly via live 16kHz PCM + acoustic VAD!
-          if (e.error === 'network' && !(apiKey || loadApiKey()) && speechEngineRef.current === 'live-solo') {
-            setStatusNotice('Browser live speech disconnected — connect a Gemini API key in Audio Settings for offline-resilient cloud audio.');
-          }
+          browserSttAlive = false;
         };
 
         rec.onend = () => {
@@ -1418,7 +1488,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
           const hasWords = (finalBufferRef.current + interimBufferRef.current).trim().length > 0;
           if (hasWords && continuousModeRef.current && speechEngineRef.current === 'live-solo') {
             void finalizeCapturedTurn('stt-end');
-          } else if (isListeningRef.current && recognitionRef.current === rec) {
+          } else if (isListeningRef.current && recognitionRef.current === rec && browserSttAlive) {
             try { rec.start(); } catch {}
           }
         };
@@ -1426,11 +1496,11 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
         rec.start();
         recognitionRef.current = rec;
       } catch {
-        // Fallback smoothly to WebAudio PCM + MediaRecorder below
+        // Fallback smoothly to WebAudio Live Rolling PCM Streamer below!
       }
     }
 
-    // 2. Simultaneously attach Warm Mic Stream + Incremental 16kHz PCM Collector + Acoustic Energy VAD
+    // 2. Attach Warm Mic Stream + Incremental 16kHz PCM + Rolling Live Partial Streamer + Speculative Pause STT!
     try {
       const stream = await acquireWarmMicStream();
       if (!isListeningRef.current) return;
@@ -1441,7 +1511,6 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
         audioCtxRef.current = ctx;
         const source = ctx.createMediaStreamSource(stream);
 
-        // Incremental 16kHz PCM collector (~0.04ms per frame, ready in < 1.5ms at speech_end!)
         livePcmCaptureRef.current = createLive16kPcmCapture(ctx, source);
 
         const analyser = ctx.createAnalyser();
@@ -1457,6 +1526,62 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
         let activeSpeechMs = 0;
         let hasSpokenInTurn = false;
         let silenceStartedAt = 0;
+        let rollingChunkInFlight = false;
+        let lastRollingSentAt = 0;
+
+        // Helper: fires a rolling 16kHz micro-window to Gemini Flash while user is STILL SPEAKING
+        // whenever browser SpeechRecognition is unavailable/blocked (eliminates the 7.99s blind wait!)
+        const triggerRollingLivePartial = () => {
+          if (
+            rollingChunkInFlight ||
+            browserSttAlive ||
+            !currentKeyForTurn ||
+            !isListeningRef.current ||
+            !livePcmCaptureRef.current
+          ) {
+            return;
+          }
+          const snap = livePcmCaptureRef.current.peekWav(5.5);
+          if (!snap) return;
+          rollingChunkInFlight = true;
+          lastRollingSentAt = nowPerf();
+          transcribeAudioBlobWithGemini(
+            currentKeyForTurn,
+            selectedModel || loadModel(),
+            snap.wavBlob,
+            recognitionLangRef.current,
+            {
+              isPreConditionedWav: true,
+              isLiveRollingChunk: true,
+              timeoutMs: 2200,
+              onPartialTranscript: (partial) => {
+                if (!isListeningRef.current || browserSttAlive || !partial) return;
+                const ts = nowPerf();
+                if (activeSpeechPerfRef.current.firstPartialSTT === null) {
+                  activeSpeechPerfRef.current.firstPartialSTT = ts;
+                }
+                activeSpeechPerfRef.current.lastPartialSTT = ts;
+                interimBufferRef.current = partial;
+                setLiveInterimText(partial);
+              }
+            }
+          )
+            .then(txt => {
+              if (isListeningRef.current && !browserSttAlive && txt) {
+                const ts = nowPerf();
+                if (activeSpeechPerfRef.current.firstPartialSTT === null) {
+                  activeSpeechPerfRef.current.firstPartialSTT = ts;
+                }
+                activeSpeechPerfRef.current.lastPartialSTT = ts;
+                interimBufferRef.current = txt;
+                setLiveInterimText(txt);
+              }
+            })
+            .catch(() => {})
+            .finally(() => {
+              rollingChunkInFlight = false;
+            });
+        };
 
         const tick = () => {
           if (!isListeningRef.current) return;
@@ -1470,31 +1595,88 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
           const dt = Math.min(80, Math.max(0, now - lastFrameMs));
           lastFrameMs = now;
 
-          if (now - vadStartMs < 240 && !hasSpokenInTurn) {
+          if (now - vadStartMs < 200 && !hasSpokenInTurn) {
             noiseSum += level;
             noiseCount += 1;
             noiseFloor = Math.min(24, Math.round(noiseSum / Math.max(1, noiseCount)));
-          } else if (continuousModeRef.current) {
+          } else {
             const speechThreshold = Math.max(13, noiseFloor + 8);
             const silenceThreshold = Math.max(7, noiseFloor + 3);
             if (level >= speechThreshold) {
+              // User resumed speaking -> cancel any speculative pause transcription!
+              if (speculativeSttAbortRef.current) {
+                try { speculativeSttAbortRef.current.abort(); } catch {}
+                speculativeSttAbortRef.current = null;
+                speculativeSttPromiseRef.current = null;
+              }
+              if (activeSpeechPerfRef.current.speechStart === null) {
+                // Backdate by 90ms so initial plosive consonant onset is accurately captured
+                activeSpeechPerfRef.current.speechStart = Math.max(0, nowPerf() - 90);
+              }
               activeSpeechMs += dt;
-              if (activeSpeechMs >= 260) {
+              if (activeSpeechMs >= 220) {
                 hasSpokenInTurn = true;
               }
               silenceStartedAt = 0;
+
+              // Stream rolling live words while speaking if browser SpeechRecognition hasn't responded!
+              const sinceSpeechStart =
+                nowPerf() - (activeSpeechPerfRef.current.speechStart ?? nowPerf());
+              if (
+                !browserSttAlive &&
+                hasSpokenInTurn &&
+                sinceSpeechStart >= 300 &&
+                nowPerf() - lastRollingSentAt >= 950
+              ) {
+                triggerRollingLivePartial();
+              }
             } else if (hasSpokenInTurn && level <= silenceThreshold) {
               if (!silenceStartedAt) {
                 silenceStartedAt = now;
-              } else {
+                activeSpeechPerfRef.current.speechEnd = nowPerf();
+              } else if (continuousModeRef.current) {
+                const silenceMs = now - silenceStartedAt;
+                // Speculative Pause Head-Start: at 280ms of silence, start final 16kHz WAV STT in background!
+                if (
+                  silenceMs >= 280 &&
+                  !speculativeSttPromiseRef.current &&
+                  currentKeyForTurn &&
+                  livePcmCaptureRef.current &&
+                  (speechEngineRef.current === 'gemini-cloud' || !browserSttAlive)
+                ) {
+                  const snap = livePcmCaptureRef.current.peekWav();
+                  if (snap) {
+                    const specAbort = new AbortController();
+                    speculativeSttAbortRef.current = specAbort;
+                    speculativeSttPromiseRef.current = transcribeAudioBlobWithGemini(
+                      currentKeyForTurn,
+                      selectedModel || loadModel(),
+                      snap.wavBlob,
+                      recognitionLangRef.current,
+                      {
+                        isPreConditionedWav: true,
+                        signal: specAbort.signal,
+                        timeoutMs: 3600,
+                        onPartialTranscript: (partial) => {
+                          if (!partial) return;
+                          const ts = nowPerf();
+                          if (activeSpeechPerfRef.current.firstPartialSTT === null) {
+                            activeSpeechPerfRef.current.firstPartialSTT = ts;
+                          }
+                          activeSpeechPerfRef.current.lastPartialSTT = ts;
+                          if (isListeningRef.current) setLiveInterimText(partial);
+                        }
+                      }
+                    );
+                  }
+                }
+
                 const liveText = (finalBufferRef.current + ' ' + interimBufferRef.current).trim();
                 const silenceBudget =
                   liveText && DANGLING_PAUSE_WORDS.test(liveText)
-                    ? 1550
-                    : liveText
-                    ? 920
-                    : 1150;
-                if (now - silenceStartedAt >= silenceBudget) {
+                    ? 1250
+                    : 680;
+                if (silenceMs >= silenceBudget) {
                   void finalizeCapturedTurn('vad');
                   return;
                 }

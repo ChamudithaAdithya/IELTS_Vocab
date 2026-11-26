@@ -370,25 +370,26 @@ export interface FinalizedTurnPacket {
   priorHistory: BuddyMessage[];
 }
 
-/** Section 6 — 12-Stage Real-Time Voice Performance Timestamps (performance.now() ms) */
+/** Section 4 — 12 Independent Real-Time Voice Pipeline Timestamps (performance.now() ms) */
 export interface BuddyTurnPerfTimestamps {
-  speech_start: number | null;
-  first_partial_transcript: number | null;
-  speech_end: number | null;
-  final_transcript: number | null;
-  ai_request_start: number | null;
-  ai_first_token: number | null;
-  grammar_ready: number | null;
-  ai_response_complete: number | null;
-  tts_request_start: number | null;
-  tts_first_audio: number | null;
-  playback_start: number | null;
-  response_complete: number | null;
+  speechStart: number | null;
+  firstPartialSTT: number | null;
+  lastPartialSTT: number | null;
+  finalTranscript: number | null;
+  aiRequestStart: number | null;
+  aiFirstToken: number | null;
+  grammarStart: number | null;
+  grammarComplete: number | null;
+  ttsRequestStart: number | null;
+  ttsFirstByte: number | null;
+  playbackStart: number | null;
+  turnComplete: number | null;
 }
 
-/** Section 6 — 7 Derived End-to-End Voice Latency Metrics (ms) */
+/** Derived End-to-End Voice Latency Metrics (ms) */
 export interface BuddyTurnPerfDurations {
   timeToFirstTranscriptMs: number | null;
+  partialWindowSpanMs: number | null;
   finalTranscriptionLatencyMs: number | null;
   aiTimeToFirstTokenMs: number | null;
   grammarAnalysisLatencyMs: number | null;

@@ -322,9 +322,9 @@ export const BuddySystemModal: React.FC<BuddySystemModalProps> = ({
                   <div className="space-y-2.5">
                     {perfRecords.map((rec, idx) => {
                       const baseT0 =
-                        rec.timestamps.speech_start ??
-                        rec.timestamps.speech_end ??
-                        rec.timestamps.ai_request_start ??
+                        rec.timestamps.speechStart ??
+                        rec.timestamps.finalTranscript ??
+                        rec.timestamps.aiRequestStart ??
                         0;
                       const rel = (t: number | null) =>
                         t === null ? '—' : `+${Math.max(0, Math.round(t - baseT0))}ms`;
@@ -354,7 +354,7 @@ export const BuddySystemModal: React.FC<BuddySystemModalProps> = ({
                             </span>
                           </div>
 
-                          {/* 7 Derived Durations */}
+                          {/* Derived Durations */}
                           <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[10px]">
                             <div className="rounded-lg bg-slate-50 px-2 py-1 border border-slate-100">
                               <span className="text-slate-400 block">1st Partial STT</span>
@@ -375,13 +375,13 @@ export const BuddySystemModal: React.FC<BuddySystemModalProps> = ({
                               </strong>
                             </div>
                             <div className="rounded-lg bg-slate-50 px-2 py-1 border border-slate-100">
-                              <span className="text-slate-400 block">TTS 1st Audio</span>
+                              <span className="text-slate-400 block">TTS 1st Byte</span>
                               <strong className="font-mono text-slate-800">
                                 {fmtMs(rec.durations.ttsTimeToFirstAudioMs)}
                               </strong>
                             </div>
                             <div className="rounded-lg bg-slate-50 px-2 py-1 border border-slate-100">
-                              <span className="text-slate-400 block">Bg Grammar Ready</span>
+                              <span className="text-slate-400 block">Grammar Span</span>
                               <strong className="font-mono text-slate-800">
                                 {fmtMs(rec.durations.grammarAnalysisLatencyMs)}
                               </strong>
@@ -393,31 +393,31 @@ export const BuddySystemModal: React.FC<BuddySystemModalProps> = ({
                               </strong>
                             </div>
                             <div className="rounded-lg bg-slate-50 px-2 py-1 border border-slate-100 sm:col-span-2">
-                              <span className="text-slate-400 block">Total Turn Completion</span>
+                              <span className="text-slate-400 block">Turn Completion</span>
                               <strong className="font-mono text-slate-800">
                                 {fmtMs(rec.durations.totalResponseCompletionMs)}
                               </strong>
                             </div>
                           </div>
 
-                          {/* Raw 12-Point Timestamp Waterfall */}
+                          {/* Exact 12 Independent Section-4 Timestamps */}
                           <details className="text-[10px] text-slate-500">
                             <summary className="cursor-pointer font-semibold text-blue-600 hover:underline">
-                              Inspect all 12 `performance.now()` stage marks
+                              Inspect all 12 independent `performance.now()` timestamps
                             </summary>
-                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 pt-1.5 font-mono text-[10px]">
-                              <span>speech_start: {rel(rec.timestamps.speech_start)}</span>
-                              <span>1st_partial: {rel(rec.timestamps.first_partial_transcript)}</span>
-                              <span>speech_end: {rel(rec.timestamps.speech_end)}</span>
-                              <span>final_stt: {rel(rec.timestamps.final_transcript)}</span>
-                              <span>ai_req_start: {rel(rec.timestamps.ai_request_start)}</span>
-                              <span>ai_1st_token: {rel(rec.timestamps.ai_first_token)}</span>
-                              <span>grammar_ready: {rel(rec.timestamps.grammar_ready)}</span>
-                              <span>ai_complete: {rel(rec.timestamps.ai_response_complete)}</span>
-                              <span>tts_req_start: {rel(rec.timestamps.tts_request_start)}</span>
-                              <span>tts_1st_audio: {rel(rec.timestamps.tts_first_audio)}</span>
-                              <span>playback_start: {rel(rec.timestamps.playback_start)}</span>
-                              <span>resp_complete: {rel(rec.timestamps.response_complete)}</span>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 pt-1.5 font-mono text-[10px]">
+                              <span>1. speechStart: {rel(rec.timestamps.speechStart)}</span>
+                              <span>2. firstPartialSTT: {rel(rec.timestamps.firstPartialSTT)}</span>
+                              <span>3. lastPartialSTT: {rel(rec.timestamps.lastPartialSTT)}</span>
+                              <span>4. finalTranscript: {rel(rec.timestamps.finalTranscript)}</span>
+                              <span>5. aiRequestStart: {rel(rec.timestamps.aiRequestStart)}</span>
+                              <span>6. aiFirstToken: {rel(rec.timestamps.aiFirstToken)}</span>
+                              <span>7. grammarStart: {rel(rec.timestamps.grammarStart)}</span>
+                              <span>8. grammarComplete: {rel(rec.timestamps.grammarComplete)}</span>
+                              <span>9. ttsRequestStart: {rel(rec.timestamps.ttsRequestStart)}</span>
+                              <span>10. ttsFirstByte: {rel(rec.timestamps.ttsFirstByte)}</span>
+                              <span>11. playbackStart: {rel(rec.timestamps.playbackStart)}</span>
+                              <span>12. turnComplete: {rel(rec.timestamps.turnComplete)}</span>
                             </div>
                           </details>
                         </div>

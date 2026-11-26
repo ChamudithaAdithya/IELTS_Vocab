@@ -136,6 +136,8 @@ export interface OrchestratedTurnCallbacks {
   onAiRequestStart?: (packet: FinalizedTurnPacket) => void;
   /** Fires on the very first response token (either instant recast or first SSE token) */
   onAiFirstToken?: (packet: FinalizedTurnPacket) => void;
+  /** Fires when asynchronous grammar analysis starts */
+  onGrammarStart?: (packet: FinalizedTurnPacket) => void;
   /** Fires live as tokens stream so the Buddy chat bubble renders in real time */
   onFriendPartialReply?: (
     partialText: string,
@@ -282,6 +284,7 @@ export async function orchestrateBuddyTurn(params: {
 
   // 3. Launch Brain 2 (Deep Grammar, Sinhala Notes & Analytics) asynchronously in background
   const gramStart = nowPerf();
+  callbacks.onGrammarStart?.(packet);
   const grammarPromise = analyzeBuddyGrammar({
     originalTranscript: packet.analysisTranscript,
     conversationContext: contextSnippet,

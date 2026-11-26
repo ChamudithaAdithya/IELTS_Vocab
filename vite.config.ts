@@ -26,10 +26,17 @@ interface WarmEdgeSocket {
   createdAt: number;
 }
 
-const WARM_POOL_PER_VOICE = 2;
-const WARM_SOCKET_MAX_AGE_MS = 42_000;
+const WARM_POOL_PER_VOICE = 3;
+// Bing Edge TTS closes idle WebSockets around ~15-20s; keep TTL strictly under 13s and verify readyState === 1 (OPEN)!
+const WARM_SOCKET_MAX_AGE_MS = 13_000;
 const warmVoicePools = new Map<string, WarmEdgeSocket[]>();
 const warmingInFlight = new Map<string, number>();
+
+function isEdgeSocketOpen(client: MsEdgeTTS): boolean {
+  const ws = (client as any)?._ws;
+  // If internal _ws is exposed, require WebSocket.OPEN (1); otherwise rely on strict 13s age check
+  return ws ? ws.readyState === 1 : true;
+}
 
 const SERVER_TTS_CACHE_MAX = 120;
 const serverMp3Cache = new Map<string, Buffer>();
@@ -55,7 +62,9 @@ function replenishWarmPool(voiceName: string): void {
     : 'en-US-AvaMultilingualNeural';
   const now = Date.now();
   const pool = (warmVoicePools.get(safeVoice) || []).filter(item => {
-    if (now - item.createdAt < WARM_SOCKET_MAX_AGE_MS) return true;
+    if (now - item.createdAt < WARM_SOCKET_MAX_AGE_MS && isEdgeSocketOpen(item.client)) {
+      return true;
+    }
     try { item.client.close(); } catch {}
     return false;
   });
@@ -86,7 +95,7 @@ async function acquireEdgeClient(safeVoice: string): Promise<MsEdgeTTS> {
   const pool = warmVoicePools.get(safeVoice) || [];
   while (pool.length > 0) {
     const entry = pool.shift()!;
-    if (now - entry.createdAt < WARM_SOCKET_MAX_AGE_MS) {
+    if (now - entry.createdAt < WARM_SOCKET_MAX_AGE_MS && isEdgeSocketOpen(entry.client)) {
       replenishWarmPool(safeVoice);
       return entry.client;
     }

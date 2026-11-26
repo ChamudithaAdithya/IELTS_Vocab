@@ -1010,7 +1010,8 @@ async function fetchFreeNeuralAudioBlob(
   text: string,
   voice: FreeNeuralVoiceName,
   rate: number,
-  signal: AbortSignal
+  signal: AbortSignal,
+  onFirstByte?: (delivery: 'neural-stream' | 'neural-cache') => void
 ): Promise<Blob | null> {
   const cleanText = text.replace(/[*_#`~[\]]/g, '').trim();
   if (!cleanText) return null;
@@ -1018,7 +1019,10 @@ async function fetchFreeNeuralAudioBlob(
   const rateParam = `${ratePctNum >= 0 ? '+' : ''}${ratePctNum}%`;
   const cacheKey = `${voice}|${rateParam}|${cleanText}`;
   const cached = freeNeuralAudioCache.get(cacheKey);
-  if (cached) return cached;
+  if (cached) {
+    onFirstByte?.('neural-cache');
+    return cached;
+  }
 
   let url = `/api/neural-tts?voice=${encodeURIComponent(voice)}&rate=${encodeURIComponent(
     rateParam
@@ -1027,22 +1031,50 @@ async function fetchFreeNeuralAudioBlob(
     url = `${window.location.origin}${url}`;
   }
 
-  try {
-    const res = await fetch(url, { signal });
-    if (!res.ok) return null;
-    const ct = (res.headers.get('content-type') || '').toLowerCase();
-    if (!ct.includes('audio')) return null;
-    const blob = await res.blob();
-    if (!blob || blob.size < 256) return null;
-    if (freeNeuralAudioCache.size >= MAX_NEURAL_TTS_CACHE) {
-      const oldest = freeNeuralAudioCache.keys().next().value;
-      if (oldest) freeNeuralAudioCache.delete(oldest);
+  for (let attempt = 0; attempt < 2; attempt++) {
+    if (signal.aborted) return null;
+    try {
+      const res = await fetch(url, { signal });
+      if (!res.ok) continue;
+      const ct = (res.headers.get('content-type') || '').toLowerCase();
+      if (!ct.includes('audio')) continue;
+      const delivery =
+        res.headers.get('x-tts-delivery') === 'memory-cache' ? 'neural-cache' : 'neural-stream';
+
+      let blob: Blob;
+      if (res.body && typeof res.body.getReader === 'function') {
+        const reader = res.body.getReader();
+        const parts: Uint8Array[] = [];
+        let gotByte = false;
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          if (value && value.byteLength > 0) {
+            if (!gotByte) {
+              gotByte = true;
+              onFirstByte?.(delivery);
+            }
+            parts.push(value);
+          }
+        }
+        blob = new Blob(parts as unknown as BlobPart[], { type: 'audio/mpeg' });
+      } else {
+        blob = await res.blob();
+        if (blob.size >= 256) onFirstByte?.(delivery);
+      }
+
+      if (!blob || blob.size < 256) continue;
+      if (freeNeuralAudioCache.size >= MAX_NEURAL_TTS_CACHE) {
+        const oldest = freeNeuralAudioCache.keys().next().value;
+        if (oldest) freeNeuralAudioCache.delete(oldest);
+      }
+      freeNeuralAudioCache.set(cacheKey, blob);
+      return blob;
+    } catch {
+      if (signal.aborted) return null;
     }
-    freeNeuralAudioCache.set(cacheKey, blob);
-    return blob;
-  } catch {
-    return null;
   }
+  return null;
 }
 
 /**
@@ -1065,11 +1097,12 @@ export interface RealtimeTtsQueue {
 }
 
 /**
- * Low-Latency Progressive Streaming TTS Queue:
- *  - Streams Segment 0 progressively via `MediaSource('audio/mpeg')` so audio begins playing as soon as
- *    the first ~2KB of MP3 frames arrive (without waiting for the entire sentence MP3!).
- *  - Prefetches Segment 1+ in parallel while Segment 0 plays.
- *  - Supports instant barge-in cancellation, zero overlapping audio, and graceful OS speech fallback.
+ * Low-Latency Consistent Neural HD TTS Queue:
+ *  - Every segment (Segment 0, 1, 2...) uses the warm-pooled `/api/neural-tts` stream (~290ms)
+ *    and decodes cleanly as a frame-valid `<audio>` MP3 Blob — preventing Chromium `MediaSource`
+ *    mid-MP3-frame split errors that previously caused Segment 0 to fall back to a robotic OS voice!
+ *  - Prefetches Segment 1+ in parallel while Segment 0 plays so both sentences use the exact same
+ *    Natural Neural HD voice with zero voice switching.
  */
 export function createRealtimeTtsQueue(options: {
   voiceConfig: BuddyVoiceConfig;
@@ -1089,7 +1122,7 @@ export function createRealtimeTtsQueue(options: {
   interface QueueItem {
     text: string;
     index: number;
-    prefetchPromise: Promise<Blob | null> | null;
+    promise: Promise<Blob | null>;
   }
 
   const items: QueueItem[] = [];
@@ -1127,245 +1160,12 @@ export function createRealtimeTtsQueue(options: {
     }
   };
 
-  const buildNeuralUrl = (cleanText: string): { url: string; cacheKey: string } => {
-    const voice = options.voiceConfig.freeNeuralVoice || 'en-US-AvaMultilingualNeural';
-    const ratePct = Math.round(((options.voiceConfig.rate || 1.0) - 1.0) * 100);
-    const rateParam = `${ratePct >= 0 ? '+' : ''}${ratePct}%`;
-    const cacheKey = `${voice}|${rateParam}|${cleanText}`;
-    let url = `/api/neural-tts?voice=${encodeURIComponent(voice)}&rate=${encodeURIComponent(
-      rateParam
-    )}&q=${encodeURIComponent(cleanText)}`;
-    if (typeof window !== 'undefined' && window.location.origin && window.location.origin !== 'null') {
-      url = `${window.location.origin}${url}`;
-    }
-    return { url, cacheKey };
-  };
-
-  const canUseMseMp3 = (): boolean => {
-    try {
-      return (
-        typeof window !== 'undefined' &&
-        typeof MediaSource !== 'undefined' &&
-        typeof MediaSource.isTypeSupported === 'function' &&
-        MediaSource.isTypeSupported('audio/mpeg')
-      );
-    } catch {
-      return false;
-    }
-  };
-
-  /**
-   * True Progressive MediaSource('audio/mpeg') Stream Player:
-   * Appends incoming MP3 frames directly to HTMLAudioElement's SourceBuffer and starts playback
-   * as soon as >= 1,536 bytes arrive — saving 600–1,400ms vs waiting for full sentence MP3!
-   */
-  const playProgressiveMseOnce = (cleanText: string): Promise<boolean> =>
-    new Promise((resolve) => {
-      if (!isAlive()) {
-        resolve(false);
-        return;
-      }
-      const { url, cacheKey } = buildNeuralUrl(cleanText);
-      const cached = freeNeuralAudioCache.get(cacheKey);
-      if (cached) {
-        markFirstAudio('neural-cache');
-        playBlobOnce(cached).then(resolve);
-        return;
-      }
-
-      if (!canUseMseMp3()) {
-        fetchFreeNeuralAudioBlob(
-          cleanText,
-          options.voiceConfig.freeNeuralVoice,
-          options.voiceConfig.rate,
-          controller.signal
-        ).then(blob => {
-          if (!blob || !isAlive()) {
-            resolve(false);
-            return;
-          }
-          markFirstAudio('neural-stream');
-          playBlobOnce(blob).then(resolve);
-        });
-        return;
-      }
-
-      const mediaSource = new MediaSource();
-      const mseUrl = URL.createObjectURL(mediaSource);
-      currentBlobUrl = mseUrl;
-
-      const audio = new Audio();
-      audio.volume = 1.0;
-      audio.muted = false;
-      audio.src = mseUrl;
-      currentAudioElement = audio;
-
-      let settled = false;
-      let playTriggered = false;
-
-      const cleanupMse = () => {
-        cleanupTtsAnalyser();
-        options.onAudioLevel?.(0);
-        if (currentBlobUrl === mseUrl) {
-          try { URL.revokeObjectURL(mseUrl); } catch {}
-          currentBlobUrl = null;
-        }
-        if (currentAudioElement === audio) currentAudioElement = null;
-      };
-
-      const finish = (ok: boolean) => {
-        if (settled) return;
-        settled = true;
-        cleanupMse();
-        resolve(ok);
-      };
-
-      const abortCleanup = () => {
-        try { audio.pause(); } catch {}
-        finish(false);
-      };
-      controller.signal.addEventListener('abort', abortCleanup, { once: true });
-
-      audio.onplay = () => {
-        if (!isAlive()) {
-          abortCleanup();
-          return;
-        }
-        attachAudioWaveformAnalyser(audio, options.onAudioLevel);
-        if (!startedOnce) {
-          startedOnce = true;
-          options.onFirstStart?.();
-        }
-      };
-
-      audio.onended = () => finish(true);
-      audio.onerror = () => finish(false);
-
-      mediaSource.addEventListener(
-        'sourceopen',
-        async () => {
-          if (!isAlive() || settled) {
-            finish(false);
-            return;
-          }
-          let sb: SourceBuffer;
-          try {
-            sb = mediaSource.addSourceBuffer('audio/mpeg');
-            sb.mode = 'sequence';
-          } catch {
-            finish(false);
-            return;
-          }
-
-          const appendChunk = (chunk: Uint8Array): Promise<void> =>
-            new Promise((resAppend, rejAppend) => {
-              if (!isAlive() || mediaSource.readyState !== 'open') {
-                rejAppend(new Error('MSE closed'));
-                return;
-              }
-              const onEnd = () => {
-                sb.removeEventListener('updateend', onEnd);
-                sb.removeEventListener('error', onErr);
-                resAppend();
-              };
-              const onErr = () => {
-                sb.removeEventListener('updateend', onEnd);
-                sb.removeEventListener('error', onErr);
-                rejAppend(new Error('SourceBuffer append error'));
-              };
-              sb.addEventListener('updateend', onEnd);
-              sb.addEventListener('error', onErr);
-              try {
-                sb.appendBuffer(chunk as unknown as BufferSource);
-              } catch (e) {
-                sb.removeEventListener('updateend', onEnd);
-                sb.removeEventListener('error', onErr);
-                rejAppend(e);
-              }
-            });
-
-          // First-byte watchdog (3,500ms) so slow networks fall back cleanly instead of hanging
-          let gotFirstByte = false;
-          const firstByteTimer = setTimeout(() => {
-            if (!gotFirstByte && !settled) {
-              finish(false);
-            }
-          }, 3500);
-
-          try {
-            const res = await fetch(url, { signal: controller.signal });
-            if (!res.ok || !res.body) {
-              clearTimeout(firstByteTimer);
-              finish(false);
-              return;
-            }
-            const deliveryHeader = res.headers.get('x-tts-delivery');
-            const reader = res.body.getReader();
-            const collected: Uint8Array[] = [];
-            let bytesReceived = 0;
-
-            while (isAlive() && !settled) {
-              const { done, value } = await reader.read();
-              if (done) break;
-              if (value && value.byteLength > 0) {
-                if (!gotFirstByte) {
-                  gotFirstByte = true;
-                  clearTimeout(firstByteTimer);
-                  markFirstAudio(
-                    deliveryHeader === 'memory-cache' ? 'neural-cache' : 'neural-stream'
-                  );
-                }
-                collected.push(value);
-                bytesReceived += value.byteLength;
-                await appendChunk(value);
-
-                if (!playTriggered && bytesReceived >= 1536) {
-                  playTriggered = true;
-                  audio.play().catch(() => finish(false));
-                }
-              }
-            }
-            clearTimeout(firstByteTimer);
-
-            if (!isAlive() || settled) return;
-            if (bytesReceived < 256) {
-              finish(false);
-              return;
-            }
-
-            // Cache assembled MP3 Blob for instant zero-network replay
-            const fullBlob = new Blob(collected as unknown as BlobPart[], { type: 'audio/mpeg' });
-            if (freeNeuralAudioCache.size >= MAX_NEURAL_TTS_CACHE) {
-              const oldest = freeNeuralAudioCache.keys().next().value;
-              if (oldest) freeNeuralAudioCache.delete(oldest);
-            }
-            freeNeuralAudioCache.set(cacheKey, fullBlob);
-
-            if (mediaSource.readyState === 'open') {
-              try { mediaSource.endOfStream(); } catch {}
-            }
-            if (!playTriggered) {
-              playTriggered = true;
-              audio.play().catch(() => finish(false));
-            }
-          } catch {
-            clearTimeout(firstByteTimer);
-            if (!playTriggered) {
-              finish(false);
-            }
-          }
-        },
-        { once: true }
-      );
-    });
-
   const playBlobOnce = (blob: Blob): Promise<boolean> =>
     new Promise((resolve) => {
       if (!isAlive()) {
         resolve(false);
         return;
       }
-      markFirstAudio('neural-stream');
       const blobUrl = URL.createObjectURL(blob);
       currentBlobUrl = blobUrl;
 
@@ -1491,16 +1291,7 @@ export function createRealtimeTtsQueue(options: {
           continue;
         }
 
-        // Segment 0 uses Progressive MediaSource Streaming for minimum time-to-first-audio!
-        if (idxNow === 0 && !current.prefetchPromise) {
-          const ok = await playProgressiveMseOnce(current.text);
-          if (!ok && isAlive()) {
-            await playBrowserOnce(current.text);
-          }
-          continue;
-        }
-
-        const blob = current.prefetchPromise ? await current.prefetchPromise : null;
+        const blob = await current.promise;
         if (!isAlive()) return;
         if (blob) {
           const ok = await playBlobOnce(blob);
@@ -1523,17 +1314,17 @@ export function createRealtimeTtsQueue(options: {
       if (!clean || !isAlive()) return;
       markReqStart();
       const idx = items.length;
-      // Segment 0 streams directly via Progressive MSE; Segment 1+ prefetches in parallel while Segment 0 plays!
-      const prefetchPromise =
-        options.voiceConfig.provider === 'standard' || idx === 0
-          ? null
+      const promise =
+        options.voiceConfig.provider === 'standard'
+          ? Promise.resolve(null)
           : fetchFreeNeuralAudioBlob(
               clean,
               options.voiceConfig.freeNeuralVoice,
               options.voiceConfig.rate,
-              controller.signal
+              controller.signal,
+              idx === 0 ? (d) => markFirstAudio(d) : undefined
             );
-      items.push({ text: clean, index: idx, prefetchPromise });
+      items.push({ text: clean, index: idx, promise });
       void pump();
     },
     markStreamDone() {

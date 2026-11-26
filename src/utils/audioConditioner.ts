@@ -159,6 +159,8 @@ export async function prepareStudioWavFromBlob(
 }
 
 export interface Live16kPcmCaptureHandle {
+  /** Non-destructively snapshots the last `maxRecentSec` of live 16kHz PCM as a conditioned WAV while recording continues! */
+  peekWav: (maxRecentSec?: number) => { wavBlob: Blob; durationSec: number; byteLength: number } | null;
   /** Synchronously builds the conditioned, silence-trimmed 16kHz mono WAV in ~1ms (zero decodeAudioData / OfflineAudioContext!) */
   finalizeWav: () => { wavBlob: Blob; durationSec: number; byteLength: number } | null;
   stop: () => void;
@@ -166,8 +168,9 @@ export interface Live16kPcmCaptureHandle {
 
 /**
  * Incremental Real-Time 16kHz Mono PCM Frame Collector.
- * Downsamples small live mic frames on the fly while the user speaks so `finalizeWav()`
- * executes in < 1.5ms at `speech_end` without waiting for MediaRecorder WebM flush or OfflineAudioContext!
+ * Downsamples small live mic frames on the fly while the user speaks so:
+ *  1. `peekWav()` can stream rolling live micro-windows for real-time partial STT even when browser SpeechRecognition is blocked!
+ *  2. `finalizeWav()` executes in < 2ms at `speechEnd` without waiting for MediaRecorder WebM flush or OfflineAudioContext!
  */
 export function createLive16kPcmCapture(
   audioCtx: AudioContext,
@@ -223,21 +226,38 @@ export function createLive16kPcmCapture(
     try { muteGain.disconnect(); } catch {}
   };
 
-  const finalizeWav = () => {
-    stop();
+  const buildConditionedSnapshot = (maxRecentSec?: number, clearAfter: boolean = false) => {
     if (totalSamples < Math.round(TARGET_SAMPLE_RATE * 0.16)) {
       return null;
     }
-    const merged = new Float32Array(totalSamples);
-    let offset = 0;
-    for (const c of chunks16k) {
-      merged.set(c, offset);
-      offset += c.length;
+    const maxSamples = maxRecentSec
+      ? Math.min(totalSamples, Math.round(TARGET_SAMPLE_RATE * maxRecentSec))
+      : totalSamples;
+
+    const merged = new Float32Array(maxSamples);
+    if (maxSamples === totalSamples) {
+      let offset = 0;
+      for (const c of chunks16k) {
+        merged.set(c, offset);
+        offset += c.length;
+      }
+    } else {
+      let writePos = maxSamples;
+      for (let i = chunks16k.length - 1; i >= 0 && writePos > 0; i--) {
+        const c = chunks16k[i];
+        const take = Math.min(writePos, c.length);
+        merged.set(c.subarray(c.length - take), writePos - take);
+        writePos -= take;
+      }
     }
-    chunks16k.length = 0;
+
+    if (clearAfter) {
+      chunks16k.length = 0;
+      totalSamples = 0;
+    }
 
     const conditioned = conditionVoicePcm16k(merged);
-    if (!conditioned || conditioned.length < Math.round(TARGET_SAMPLE_RATE * 0.18)) {
+    if (!conditioned || conditioned.length < Math.round(TARGET_SAMPLE_RATE * 0.16)) {
       return null;
     }
     const wavBlob = encodePcm16kToWavBlob(conditioned);
@@ -248,5 +268,12 @@ export function createLive16kPcmCapture(
     };
   };
 
-  return { finalizeWav, stop };
+  const peekWav = (maxRecentSec?: number) => buildConditionedSnapshot(maxRecentSec, false);
+
+  const finalizeWav = () => {
+    stop();
+    return buildConditionedSnapshot(undefined, true);
+  };
+
+  return { peekWav, finalizeWav, stop };
 }

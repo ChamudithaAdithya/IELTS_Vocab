@@ -1215,12 +1215,87 @@ async function blobToBase64Fast(blob: Blob): Promise<string> {
   return btoa(binary);
 }
 
+/**
+ * Sticky Fast Voice Model Resolver:
+ * Prevents Lingo Buddy from inheriting slow essay-grading models (`gemini-2.5-pro`) or retired `gemini-1.5-*` models
+ * (which added a ~1,000-2,500ms 404/thinking penalty to AI First Token and Audio STT!).
+ */
+let stickyVerifiedFastVoiceModel: string | null = null;
+
+export function getFastVoiceModelCandidates(requestedModel?: string): string[] {
+  const cleaned = (requestedModel || '').trim().replace(/^models\//, '');
+  // Never start real-time voice turns on retired 1.5 models or heavy Pro reasoning models!
+  const isFastFlash =
+    cleaned &&
+    !cleaned.startsWith('gemini-1.5') &&
+    !cleaned.includes('pro') &&
+    !cleaned.includes('3.8');
+
+  const ordered = [
+    stickyVerifiedFastVoiceModel,
+    'gemini-2.0-flash',
+    'gemini-2.5-flash-lite',
+    isFastFlash ? cleaned : null,
+    'gemini-2.5-flash'
+  ].filter((m): m is string => Boolean(m));
+
+  return Array.from(new Set(ordered));
+}
+
+export function markVerifiedFastVoiceModel(modelId: string): void {
+  if (modelId && !modelId.includes('pro')) {
+    stickyVerifiedFastVoiceModel = modelId;
+  }
+}
+
+/**
+ * Pre-warms HTTPS / HTTP2 TLS connection and verifies the fastest Flash model for this API key
+ * BEFORE the user finishes speaking so Turn 1 skips TLS + model-discovery latency!
+ */
+let geminiWarmupDoneForKey = '';
+export function warmUpGeminiVoiceConnection(apiKey?: string): void {
+  const cleanKey = (apiKey || '').trim();
+  if (!cleanKey || geminiWarmupDoneForKey === cleanKey || typeof window === 'undefined') return;
+  geminiWarmupDoneForKey = cleanKey;
+
+  const candidates = getFastVoiceModelCandidates();
+  (async () => {
+    for (const candidate of candidates) {
+      try {
+        const generationConfig: Record<string, any> = { temperature: 0, maxOutputTokens: 2 };
+        if (candidate.startsWith('gemini-2.5')) {
+          generationConfig.thinkingConfig = { thinkingBudget: 0 };
+        }
+        const res = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(candidate)}:generateContent?key=${encodeURIComponent(cleanKey)}`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ role: 'user', parts: [{ text: 'hi' }] }],
+              generationConfig
+            })
+          }
+        );
+        if (res.ok) {
+          markVerifiedFastVoiceModel(candidate);
+          return;
+        }
+      } catch {}
+    }
+  })();
+}
+
 export interface GeminiAudioTranscribeOptions {
   /** Set true when audioBlob is ALREADY a conditioned 16kHz mono WAV from createLive16kPcmCapture (skips duplicate decode/resample!) */
   isPreConditionedWav?: boolean;
+  /** Lightweight rolling partial mode while the user is still speaking */
+  isLiveRollingChunk?: boolean;
+  /** Optional external AbortSignal (used to cancel speculative pause STT if user resumes speaking!) */
+  signal?: AbortSignal;
   /** Fires live as streaming transcription tokens arrive */
   onPartialTranscript?: (partial: string) => void;
-  /** Optional custom timeout in ms (defaults to fast 5200ms) */
+  /** Optional custom timeout in ms (defaults to fast 4200ms) */
   timeoutMs?: number;
 }
 
@@ -1257,18 +1332,12 @@ export async function transcribeAudioBlobWithGemini(
   }
 
   const base64Audio = await blobToBase64Fast(uploadBlob);
+  const candidateModels = getFastVoiceModelCandidates(model);
 
-  let primaryModel = (model || '').trim().replace(/^models\//, '');
-  if (!primaryModel || primaryModel.includes('3.8')) {
-    primaryModel = 'gemini-2.5-flash';
-  }
-
-  const candidateModels = Array.from(
-    new Set([primaryModel, 'gemini-2.5-flash', 'gemini-2.0-flash'])
-  );
-
-  // Compact, zero-overhead 0%-autocorrect acoustic prompt supporting Sri Lankan, South Asian, UK & US accents
-  const prompt = `STRICT 0%-AUTOCORRECT ENGLISH ACOUSTIC TRANSCRIBER (speaker accent: ${lang}, including Sri Lankan / South Asian / British / US English).
+  // Ultra-compact prompt for rolling live micro-chunks vs full turn verbatim prompt
+  const prompt = options?.isLiveRollingChunk
+    ? `Transcribe ONLY exact spoken English words heard (${lang}, 0% grammar correction, empty if silence):`
+    : `STRICT 0%-AUTOCORRECT ENGLISH ACOUSTIC TRANSCRIBER (speaker accent: ${lang}, including Sri Lankan / South Asian / British / US English).
 RULES:
 1. Output ONLY spoken English words heard in the audio. NEVER output Hindi/Indic words ("main hun","ek","amma","kya") for noise/mumbles.
 2. Transcribe EVERY word literally as spoken with 0% grammar correction, 0% word substitution, 0% added/deleted words:
@@ -1277,15 +1346,18 @@ RULES:
 4. If silent, breathing, or unintelligible noise, output empty string. Output ONLY raw transcript text.`;
 
   let lastError: Error | null = null;
-  const perAttemptTimeout = options?.timeoutMs || 5200;
+  const perAttemptTimeout = options?.timeoutMs || (options?.isLiveRollingChunk ? 2400 : 4200);
 
   for (const candidateModel of candidateModels) {
+    if (options?.signal?.aborted) return '';
     const controller = new AbortController();
+    const onExternalAbort = () => controller.abort();
+    options?.signal?.addEventListener('abort', onExternalAbort, { once: true });
     const timeoutId = setTimeout(() => controller.abort(), perAttemptTimeout);
 
     const generationConfig: Record<string, any> = {
       temperature: 0.0,
-      maxOutputTokens: 180
+      maxOutputTokens: options?.isLiveRollingChunk ? 64 : 160
     };
     if (candidateModel.startsWith('gemini-2.5')) {
       generationConfig.thinkingConfig = { thinkingBudget: 0 };
@@ -1313,6 +1385,7 @@ RULES:
 
       if (!response.ok) {
         clearTimeout(timeoutId);
+        options?.signal?.removeEventListener('abort', onExternalAbort);
         const errText = await response.text().catch(() => response.statusText);
         lastError = new Error(
           `Gemini audio transcription error (${response.status}): ${errText.slice(0, 120)}`
@@ -1322,6 +1395,8 @@ RULES:
         }
         throw lastError;
       }
+
+      markVerifiedFastVoiceModel(candidateModel);
 
       let accumulated = '';
       if (response.body && typeof response.body.getReader === 'function') {
@@ -1354,6 +1429,7 @@ RULES:
         accumulated = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
       }
       clearTimeout(timeoutId);
+      options?.signal?.removeEventListener('abort', onExternalAbort);
 
       const rawTranscript = accumulated
         .replace(/^["'“”`]+|["'“”`]+$/g, '')
@@ -1367,6 +1443,8 @@ RULES:
       return rawTranscript;
     } catch (err: any) {
       clearTimeout(timeoutId);
+      options?.signal?.removeEventListener('abort', onExternalAbort);
+      if (options?.signal?.aborted) return '';
       lastError = err instanceof Error ? err : new Error(String(err));
     }
   }

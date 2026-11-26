@@ -18,6 +18,7 @@ import type {
   TranscriptCoherenceResult
 } from '../types/speakingBuddy';
 import { validateTranscriptCoherence } from './buddyGrammarEngine';
+import { getFastVoiceModelCandidates, markVerifiedFastVoiceModel } from './speakingEngine';
 
 export const BUDDY_PERSONALITIES: BuddyPersonalityConfig[] = [
   {
@@ -442,7 +443,7 @@ function extractActiveSubjectFromHistory(
     if (ings.length > 0) return `cooking with ${formatNaturalList(ings.slice(0, 2))}`;
 
     if (/\b(cook|cooking|recipe)\b/i.test(lower)) return 'what you are cooking';
-    if (/\b(movie|film|series|netflix)\b/i.test(lower)) return 'the movie or show you watched';
+    if (/\b(movies?|films?|series|netflix)\b/i.test(lower)) return 'the movie or show you watched';
     if (/\b(university|lecture|exam|class|assignment)\b/i.test(lower)) return 'your university classes';
     if (/\b(shop|shopping|clothes|shoes)\b/i.test(lower)) return 'your shopping trip';
   }
@@ -576,7 +577,7 @@ export function extractSessionContext(
     activeTopic = 'work_stress';
   } else if (/\b(travel|trip|colombo|kandy|galle|beach|country|abroad|vacation|holiday|flight)\b/i.test(activeClauseLower)) {
     activeTopic = 'travel';
-  } else if (/\b(movie|film|series|netflix|music|song|book|game|gaming|cricket|football)\b/i.test(activeClauseLower)) {
+  } else if (/\b(movies?|films?|series|netflix|music|songs?|books?|games?|gaming|cricket|football)\b/i.test(activeClauseLower)) {
     activeTopic = 'entertainment';
   } else if (/\b(friend|friends|family|parents|brother|sister|party|hang out)\b/i.test(activeClauseLower)) {
     activeTopic = 'social';
@@ -855,13 +856,26 @@ function reExplainLastBuddyQuestion(
   const questionSentence =
     [...sentences].reverse().find(s => s.endsWith('?')) || sentences[sentences.length - 1];
 
-  // Paraphrase simple "Did you..." / "What did you..." questions directly
+  // Paraphrase simple "Did you..." / "What did you..." / "Do you..." questions directly in simpler English + short example (NEVER repeat exact sentence!)
   const didYouMatch = questionSentence.match(/^did\s+you\s+(.+?)\?$/i);
   if (didYouMatch) {
     return `Sorry! I was asking whether you ${didYouMatch[1].trim()}.`;
   }
+  const doYouMatch = questionSentence.match(/^do\s+you\s+(.+?)\?$/i);
+  if (doYouMatch) {
+    return `Let me say that more simply — I wanted to know if you ${doYouMatch[1].trim()}.`;
+  }
+  const whatKindMatch = questionSentence.match(/^what\s+(?:kind|type|sort)\s+of\s+([a-z\s]+?)\s+do\s+you\s+(.+?)\?$/i);
+  if (whatKindMatch) {
+    return `Sorry! In simple words, I was asking which ${whatKindMatch[1].trim()} you like most — for example, your favourite style or type.`;
+  }
 
-  return `Oh, let me put that more simply! I was asking: "${questionSentence}"`;
+  // General simple-English paraphrase (never parrot the exact same sentence word-for-word!)
+  const keyWords = extractKeyContentWords(questionSentence);
+  if (keyWords.length > 0) {
+    return `Let me put that in simpler words! I was asking about ${keyWords[0]} and what your experience with it is — for example, what you like or do with it.`;
+  }
+  return 'Let me explain that more simply! I just wanted to hear your thoughts about what we were talking about — for example, what you enjoy or think about it.';
 }
 
 /**
@@ -930,13 +944,41 @@ export function classifyBuddyIntent(
     return { intent: 'correcting_ai', conversationalIntent: 'CORRECTING_AI' };
   }
 
-  // 7. CHANGING_TOPIC ("Let's talk about something else.")
+  // 7A. CHANGING_TOPIC — Generic switch ("Let's talk about something else.")
   if (
     /\b(let'?s\s+(?:discuss|talk\s+about)\s+something\s+else|change\s+(?:the\s+)?topic|talk\s+about\s+something\s+else|switch\s+(?:the\s+)?topic|different\s+topic)\b/i.test(
       lower
     )
   ) {
     return { intent: 'topic_change', conversationalIntent: 'CHANGING_TOPIC' };
+  }
+
+  // 7B. Context-Aware STT Homophone Guard ("recording shops" / "move to the recording part" -> "coding")
+  if (
+    /\b(recording\s+shops?|move\s+to\s+(?:the\s+)?recording(?:\s+part|\s+section)?|talk\s+about\s+recording\s+shops?)\b/i.test(
+      lower
+    )
+  ) {
+    return {
+      intent: 'topic_change',
+      conversationalIntent: 'CHANGING_TOPIC',
+      extractedTerm: '__stt_coding_disambig__'
+    };
+  }
+
+  // 7C. CHANGING_TOPIC — Directed topic switch ("Let's move to the coding part.", "Let's talk about travel.")
+  const directedTopicMatch = clean.match(
+    /\b(?:let'?s\s+(?:move\s+(?:on\s+)?to|talk\s+about|discuss|switch\s+to)|can\s+we\s+(?:talk\s+about|move\s+to|discuss))\s+(?:the\s+)?([a-zA-Z0-9\s-]{2,34}?)(?:\s+(?:part|topic|section|side))?[.!?,]*$/i
+  );
+  if (directedTopicMatch && directedTopicMatch[1].trim()) {
+    const requestedTopic = directedTopicMatch[1].trim();
+    if (!/^(?:something\s+else|another\s+topic|it|that|this)$/i.test(requestedTopic)) {
+      return {
+        intent: 'topic_change',
+        conversationalIntent: 'CHANGING_TOPIC',
+        extractedTerm: requestedTopic
+      };
+    }
   }
 
   // 8. ASKING_WORD_MEANING ("What is the meaning of low-key?", "What does X mean?", "What you mean by X?")
@@ -953,9 +995,9 @@ export function classifyBuddyIntent(
     };
   }
 
-  // 9. ASKING_FOR_CLARIFICATION (including learner errors like "No, I didn't got you" / "didn't understand what you mean")
+  // 9. ASKING_FOR_CLARIFICATION ("I didn't understand", "What do you mean?", "Can you explain?", "No, I didn't got you")
   if (
-    /\b(didn'?t\s+(?:get|got|understand|understood|catch|caught)\s+you|didn'?t\s+(?:get|understand|catch)|don'?t\s+(?:get|understand)|not\s+sure\s+what\s+you|what\s+(?:are|were|do|did)?\s*you\s+(?:asking|saying|mean|meant)|i'?m\s+confused|pardon\??|sorry\s+what)\b/i.test(
+    /\b(didn'?t\s+(?:get|got|understand|understood|catch|caught)\s+you|didn'?t\s+(?:get|understand|catch)|don'?t\s+(?:get|understand)|not\s+sure\s+what\s+you|what\s+(?:are|were|do|did)?\s*you\s+(?:asking|saying|mean|meant)|(?:can|could)\s+you\s+explain(?:\s+(?:that|it|again|more\s+simply))?|please\s+explain|i'?m\s+confused|pardon\??|sorry\s+what)\b/i.test(
       lower
     )
   ) {
@@ -1147,9 +1189,34 @@ export function generateLocalFriendReply(
   }
 
   if (intent === 'topic_change') {
+    if (extractedTerm === '__stt_coding_disambig__') {
+      if (ctx.activeSubject && /project|ai|app|software|code|coding/i.test(ctx.activeSubject)) {
+        return "Sure! Let's talk about coding. What are you currently developing?";
+      }
+      return 'Did you mean "coding"? Sure, let\'s talk about coding! What are you currently developing?';
+    }
+    if (extractedTerm) {
+      const tLow = extractedTerm.toLowerCase().trim();
+      if (/\b(coding|programming|software|development|code|tech|ai)\b/.test(tLow)) {
+        return "Sure! Let's talk about coding. What are you currently developing?";
+      }
+      if (/\b(travel|travelling|traveling|trips?|holidays?|vacations?)\b/.test(tLow)) {
+        return "Sure! Let's talk about travel. Where would you like to visit next?";
+      }
+      if (/\b(daily\s+routines?|routines?)\b/.test(tLow)) {
+        return "Sure! Let's talk about your daily routine. What do you usually do in the morning?";
+      }
+      if (/\b(hobbies|hobby|free\s+time)\b/.test(tLow)) {
+        return "Sure! Let's talk about your hobbies. What do you enjoy doing in your free time?";
+      }
+      if (/\b(education|studies|university|school|college)\b/.test(tLow)) {
+        return "Sure! Let's talk about your studies. What subject are you focusing on right now?";
+      }
+      return `Sure! Let's talk about ${extractedTerm}. What interests you most about it?`;
+    }
     return pickNonRepeating([
       'Of course! What would you like to talk about?',
-      "Sure thing, let's switch gears! What would you like to talk about instead?"
+      'Sure! What topic would you like to talk about next?'
     ]);
   }
 
@@ -1317,49 +1384,66 @@ export function generateLocalFriendReply(
     if (/\b(developed|built|building|created|made)\b.*\b(ai\s+application|application|app)\b/i.test(lower)) {
       coreReply = pickNonRepeating([
         "That's exciting! What does your application do?",
-        "Whoa, building your own application is awesome! What does it do, and who did you build it for?"
+        'Nice! Who did you build your application for?'
       ]);
     } else if (/\b(developed|built|building|created|made)\b.*\b(ai|tool|website|project|system|platform)\b/i.test(lower)) {
       coreReply = pickNonRepeating([
-        'Whoa, building your own AI tool is awesome! What problem does it solve, and what stack are you using for it?',
-        "That's super cool! What's the favourite feature you've built into it so far?"
+        "That's great! What problem does your AI tool solve?",
+        'Nice work! What is your favourite feature in it so far?'
       ]);
     } else if (/\b(university\s+experience|college\s+experience)\b/i.test(lower)) {
       coreReply = pickNonRepeating([
-        "I'd love to hear about your university experience! What's been the most memorable part so far — the people you've met, the classes, or the independence?",
-        "University life always has great stories! What are you studying, and how has the experience felt compared to what you expected?"
+        "I'd love to hear about your university experience! What has been the best part so far?",
+        'University life has great stories! What subject are you studying?'
       ]);
     } else if (/\b(ai|artificial intelligence|software|coding|programming|react|typescript|computer|tech)\b/i.test(lower)) {
       coreReply = pickNonRepeating([
-        "Oh, tech and AI topics can get super absorbing! Are you building a hands-on project right now, or mostly studying theory in university?",
-        "Nice! Which part of what you're working on in tech has been the trickiest — or the most fun — so far?"
+        'Nice! Are you building a coding project right now, or mostly studying in class?',
+        'Which part of tech do you enjoy learning the most?'
       ]);
     } else {
       coreReply = pickNonRepeating([
-        "University schedules can get pretty full! Which class or topic took up most of your energy today?",
-        "Sounds like you've been busy with studies. Are you preparing for an upcoming exam or working on an assignment?"
+        'Sounds like a busy schedule! Which class took most of your time today?',
+        'Are you preparing for an exam or working on an assignment right now?'
       ]);
     }
   } else if (ctx.activeTopic === 'work_stress') {
     coreReply = pickNonRepeating([
-      "Whew, sounds like a draining day! What kept you so tied up — deadlines, classes, or just everything piling up at once?",
-      "You definitely earned some downtime after that. Are you going to take it easy tonight, or do you still have things to wrap up?"
+      'That sounds like a tiring day! What kept you so busy today?',
+      'You earned some rest! Are you planning to relax tonight?'
     ]);
   } else if (ctx.activeTopic === 'travel') {
     coreReply = pickNonRepeating([
-      "That sounds like a refreshing getaway! What part of the trip are you looking forward to most — the scenery, the food, or just unwinding?",
-      "Getting out for a trip always clears the head. Are you going with friends or family, and how long are you staying?"
+      'That sounds like a lovely trip! What part of the trip are you looking forward to most?',
+      'Nice! Are you planning to travel with friends or family?'
     ]);
   } else if (ctx.activeTopic === 'entertainment') {
-    if (/\b(movie|film)\b/i.test(lower)) {
+    const genreMatch = lower.match(
+      /\b(action|comedy|horror|sci-fi|science\s+fiction|thriller|romance|romantic|animated|drama|adventure|mystery|documentary)\s+(?:movies?|films?)\b/i
+    );
+    if (genreMatch) {
+      const genre = genreMatch[1].toLowerCase();
+      coreReply = pickNonRepeating([
+        `That's interesting! Do you have a favourite ${genre} movie?`,
+        `Nice choice! What was the last ${genre} movie you watched?`
+      ]);
+    } else if (
+      /\b(movies|films)\b/i.test(lower) &&
+      !/\b(yesterday|last\s+night|last\s+week|ago)\b/i.test(lower)
+    ) {
+      coreReply = pickNonRepeating([
+        'What kind of movies do you enjoy watching?',
+        'Nice! Do you prefer watching movies at home or at the cinema?'
+      ]);
+    } else if (/\b(movie|film)\b/i.test(lower)) {
       coreReply = pickNonRepeating([
         'Nice! What kind of movie was it?',
-        'Ooh, nice! What movie did you watch, and was it worth watching?'
+        'Nice! What movie did you watch?'
       ]);
     } else {
       coreReply = pickNonRepeating([
-        'Ooh, nice pick! What pulled you in the most — the storyline, the action, or just the overall vibe?',
-        'Sounds like a solid way to unwind! Would you actually recommend it to a friend?'
+        'That sounds fun! What do you enjoy most about it?',
+        'Nice! How often do you do that in your free time?'
       ]);
     }
   } else if (ctx.activeTopic === 'social') {
@@ -1620,63 +1704,40 @@ export async function generateBuddyFriendReply(params: {
     .filter(Boolean)
     .join('\n');
 
-  const prompt = `You are "Lingo Buddy", a friendly, curious, supportive, intelligent English-speaking companion (NOT an interviewer, examiner, or generic chatbot).
-Personality: ${personalityCfg.label} (${personalityCfg.systemTone}).
-Active Mode: ${modeHint}
-
-CONVERSATION MEMORY & COHERENCE:
-${coherenceNotice}
+  // Ultra-compact, low-prefill-latency tutor prompt (~175 tokens -> cuts Gemini TTFT in half!)
+  const prompt = `You are Lingo Buddy, a friendly, patient English conversation partner for beginner/intermediate learners (${personalityCfg.label}, ${mode}).
+Context: ${coherenceNotice}
 ${entityMemory}
+Rules:
+1. Do NOT output "You can say..." (any spoken correction is automatically added right before your text). Write ONLY your natural reaction + follow-up.
+2. Use simple, everyday English (no complex idioms or lectures). Ask ONLY ONE simple, relevant follow-up question.
+3. Focus on intended meaning & disambiguate STT slips via context (e.g. "recording part/shops" -> coding).
+4. On "I didn't understand" / "What do you mean?" / "Can you explain?", rephrase your last question in simpler English + short example (never repeat verbatim).
+5. Follow topic changes immediately ("Let's move to coding" -> "Sure! Let's talk about coding. What are you currently developing?"). If corrected ("not what I meant"), apologize warmly.
+6. Reply in 1 short reaction + 1 related question, plain text only.
 
-CRITICAL CONVERSATIONAL CONTINUATION RULES:
-1. NOTE ON GRAMMAR RECASTS: Any short spoken correction ("You can say, '...'") is automatically prepended right BEFORE your reply by the unified coaching layer when needed. Therefore, DO NOT write "You can say..." yourself — write ONLY the natural conversational reaction and continuation so the two parts flow together seamlessly as ONE single human voice!
-   - Example: If the user says "I'm going to gym", your part is simply: "What do you usually work on when you're there?"
-   - Example: If the user says "Yesterday I go to shopping", your part is simply: "What did you end up buying?"
-   - Example: If the user says "I developed an AI application", your part is: "That's exciting! What does your application do?"
-2. TOPIC & CONTEXT CONTINUITY:
-   - Stay anchored to what the user is actually talking about right now. Never generate random unrelated questions.
-   - Understand references like "it", "that", "there", and "the same thing" using Active Subject / Active Place & Recent Conversation below.
-   - Never repeat generic praise ("That's really interesting!", "I'd love to hear more!") or repeat questions you already asked.
-   - You don't have to end EVERY single turn with a question if a warm, natural observation fits better — avoid sounding like an interrogator!
-3. SELF-AWARENESS & META-INTENTS:
-   - If the user says "No, that's not what I meant" or corrects a misunderstanding, NEVER defend your mistake — say "Oh, sorry! I misunderstood you. What did you mean?"
-   - If the user asks the meaning of an expression you just used (like "low-key", or a phonetic near-miss like "Locky"), explain that exact expression simply and connect back to the conversation.
-   - If the user says "I don't understand what you are asking" or "No, I didn't got you", explain "Your exact previous message" in simpler everyday English!
-   - If the user says "You're going off-topic", acknowledge it ("You're right!") and immediately return to the Active Subject / Project they mentioned.
-   - If the user asks to talk about something else ("Let's talk about something else"), agree warmly ("Of course! What would you like to talk about?") and drop the old topic.
-   - If the user challenges or disagrees with you, engage thoughtfully with their viewpoint.
-4. Length: Keep your spoken continuation crisp and natural — 1 to 2 short conversational sentences max (ideal for real-time voice conversation).
-5. Output ONLY your spoken continuation text (no quotes, no speaker labels, no markdown).
-
-Recent conversation:
+History:
 ${recentTurns}
-Friend (User): ${userText}
-Lingo Buddy:`;
+User: ${userText}
+Buddy:`;
 
-  let primaryModel = (model || '').trim().replace(/^models\//, '');
-  if (!primaryModel || primaryModel.includes('3.8')) {
-    primaryModel = 'gemini-2.5-flash';
-  }
-  const candidateModels = Array.from(
-    new Set([primaryModel, 'gemini-2.5-flash', 'gemini-2.0-flash'])
-  );
+  const candidateModels = getFastVoiceModelCandidates(model);
 
   let lastFailReason = 'Gemini unavailable';
 
   for (const candidateModel of candidateModels) {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5800);
+      const timeoutId = setTimeout(() => controller.abort(), 4500);
 
       const generationConfig: Record<string, any> = {
         temperature: 0.65,
-        maxOutputTokens: 115
+        maxOutputTokens: 90
       };
       if (candidateModel.startsWith('gemini-2.5')) {
         generationConfig.thinkingConfig = { thinkingBudget: 0 };
       }
 
-      // Real-time Server-Sent Events (SSE) streaming with thinkingBudget:0 so first words arrive in ~300-480ms!
       const streamUrl = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(candidateModel)}:streamGenerateContent?alt=sse&key=${encodeURIComponent(apiKey)}`;
       const response = await fetch(streamUrl, {
         method: 'POST',
@@ -1694,6 +1755,8 @@ Lingo Buddy:`;
         if ([400, 404, 429, 500, 503].includes(response.status)) continue;
         return finishLocal('gemini', `${lastFailReason} — fell back to Local Engine`);
       }
+
+      markVerifiedFastVoiceModel(candidateModel);
 
       let accumulated = '';
       let emittedCursor = 0;
@@ -1713,20 +1776,18 @@ Lingo Buddy:`;
           return;
         }
 
-        // 1. Emit any complete sentences (. ! ?) immediately
+        // Dispatch the very first short sentence ("Sure!", "Nice!", "That's interesting!") immediately (>= 4 chars)
         while (true) {
           remaining = cleaned.slice(emittedCursor);
           const sentMatch = remaining.match(/^([\s\S]*?[.!?])(?:\s+|$)/);
-          if (sentMatch && sentMatch[1].trim().length >= 6) {
+          if (sentMatch && sentMatch[1].trim().length >= 4) {
             onSentenceReady(sentMatch[1].trim());
             emittedCursor += sentMatch[0].length;
             continue;
           }
-          // 2. If the very first segment is long (>= 10 words) and hits a natural clause break (, / — / ;),
-          // emit that safe clause early so TTS begins speaking without waiting for a 20-word sentence!
           if (emittedCursor === 0) {
-            const clauseMatch = remaining.match(/^((?:\S+\s+){9,}\S+[,;—])\s+/);
-            if (clauseMatch && clauseMatch[1].trim().length >= 38) {
+            const clauseMatch = remaining.match(/^((?:\S+\s+){7,}\S+[,;—])\s+/);
+            if (clauseMatch && clauseMatch[1].trim().length >= 28) {
               onSentenceReady(clauseMatch[1].trim());
               emittedCursor += clauseMatch[0].length;
               continue;

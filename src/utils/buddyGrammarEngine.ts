@@ -19,6 +19,10 @@ import {
   analyzeBuddyFluency,
   extractPronunciationSpotlights
 } from './buddySpeechCoach';
+import {
+  getFastVoiceModelCandidates,
+  markVerifiedFastVoiceModel
+} from './speakingEngine';
 
 export const CATEGORY_LABELS: Record<GrammarCategoryCode, string> = {
   VERB_TENSE: 'Verb Tense',
@@ -367,6 +371,41 @@ const LOCAL_BUDDY_PATTERNS: LocalGrammarPattern[] = [
     example: 'I watched a movie yesterday.',
     learning_tip: 'Never use an "-ing" verb without am/is/are/was/were — and with "yesterday", prefer simple past ("watched").',
     confidence: 0.99
+  },
+  {
+    id: 'vt-bare-ing-habitual',
+    regex: /(?:^|[.!?]\s+|\b(?:and|but|so|because)\s+)(I|we|they|you|he|she)\s+(?:(usually|often|always|normally|sometimes)\s+)?(watching|playing|reading|cooking|studying|eating|drinking|listening)\s+(?!(?:a|an|the|this|that|my|your|his|her|our|their)\b)([a-z]{3,})\b(?!\s*(?:yesterday|last\s+(?:night|week|month|year|weekend)|ago|right\s+now|at\s+the\s+moment))/gi,
+    category: 'VERB_TENSE',
+    severity: 'GRAMMAR_ERROR',
+    getSpan: (m) => {
+      const sub = m[2] ? `${m[1]} ${m[2]} ${m[3]}` : `${m[1]} ${m[3]}`;
+      const subIdx = m[0].indexOf(m[1]);
+      return { startOffset: subIdx, endOffset: subIdx + sub.length, original: sub };
+    },
+    getCorrection: (m) => {
+      const subj = m[1];
+      const adv = m[2] ? `${m[2]} ` : '';
+      const isThirdSing = /^(he|she)$/i.test(subj);
+      const baseMap: Record<string, [string, string]> = {
+        watching: ['watch', 'watches'],
+        playing: ['play', 'plays'],
+        reading: ['read', 'reads'],
+        cooking: ['cook', 'cooks'],
+        studying: ['study', 'studies'],
+        eating: ['eat', 'eats'],
+        drinking: ['drink', 'drinks'],
+        listening: ['listen', 'listens']
+      };
+      const forms = baseMap[m[3].toLowerCase()] || [m[3], m[3]];
+      return `${subj} ${adv}${isThirdSing ? forms[1] : forms[0]}`;
+    },
+    explanation: 'For general habits, hobbies, or things you usually do in your free time, use the simple present tense ("I watch movies") instead of "-ing".',
+    simpleExplanation: 'Use "I watch" (not "I watching") when talking about things you usually do.',
+    explanationSi: 'සාමාන්‍යයෙන් හෝ විවේක කාලයේදී කරන පුරුදු ගැන කතා කිරීමේදී "-ing" වෙනුවට සරල වර්තමාන කාලය ("I watch movies") භාවිත කරන්න.',
+    grammar_rule: 'Habits & Routines: Subject + Simple Present Verb (I watch / She watches)',
+    example: 'I watch movies in my free time.',
+    learning_tip: 'Use "I watch movies" for a habit, and "I\'m watching a movie" only when doing it right now.',
+    confidence: 0.98
   },
   {
     id: 'vf-bare-ing-present',
@@ -1954,6 +1993,48 @@ export function analyzeBuddyGrammarLocally(params: {
     }
   }
 
+  // Contextual Habitual Present-Simple Agreement:
+  // If the AI's preceding question asked about a habit/routine ("What do you usually do in your free time?")
+  // and vf-bare-ing-present turned "I watching..." into "I'm watching...", prefer simple present ("I watch...")!
+  const aiAskedHabitQuestion =
+    /\b(?:what|where|how)\s+do\s+you\s+(?:usually|normally|often|like\s+to)\b|\bin\s+your\s+free\s+time\b|\bon\s+weekends\b/i.test(
+      lastBuddyPart
+    );
+  if (aiAskedHabitQuestion && !/\b(right\s+now|at\s+the\s+moment|currently|today|tonight|yesterday)\b/i.test(clean)) {
+    const habitBaseMap: Record<string, string> = {
+      watching: 'watch',
+      going: 'go',
+      doing: 'do',
+      eating: 'eat',
+      playing: 'play',
+      working: 'work',
+      studying: 'study',
+      staying: 'stay',
+      reading: 'read',
+      cooking: 'cook',
+      walking: 'walk',
+      running: 'run',
+      sleeping: 'sleep'
+    };
+    for (const item of rawMatches) {
+      if (item.mistake.id.startsWith('vf-bare-ing-present-')) {
+        const parts = item.mistake.original.trim().split(/\s+/);
+        const subj = parts[0];
+        const ing = (parts[1] || '').toLowerCase();
+        if (/^(i|we|they|you)$/i.test(subj) && habitBaseMap[ing]) {
+          item.mistake.correction = `${subj} ${habitBaseMap[ing]}`;
+          item.mistake.category = 'VERB_TENSE';
+          item.mistake.categoryLabel = CATEGORY_LABELS.VERB_TENSE;
+          item.mistake.explanation =
+            'Because the question asks what you usually do, use the simple present tense ("' +
+            `${subj} ${habitBaseMap[ing]}` +
+            '").';
+          item.mistake.simpleExplanation = `Use "${subj} ${habitBaseMap[ing]}" for things you usually do.`;
+        }
+      }
+    }
+  }
+
   // Deduplicate overlapping spans (prefer earlier match, then higher severity, preserving pattern priority order)
   const sevRank = (s: FeedbackSeverity) => (s === 'GRAMMAR_ERROR' ? 0 : s === 'UNNATURAL' ? 1 : 2);
   rawMatches.sort((a, b) => a.start - b.start || sevRank(a.mistake.severity) - sevRank(b.mistake.severity));
@@ -2298,18 +2379,12 @@ Respond STRICTLY in valid JSON matching this schema:
   "learning_recommendation": "Short actionable focus tip or null"
 }`;
 
-  let primaryModel = (model || '').trim().replace(/^models\//, '');
-  if (!primaryModel || primaryModel.includes('3.8')) {
-    primaryModel = 'gemini-2.5-flash';
-  }
-  const candidateModels = Array.from(
-    new Set([primaryModel, 'gemini-2.5-flash', 'gemini-2.0-flash'])
-  );
+  const candidateModels = getFastVoiceModelCandidates(model);
 
   for (const candidateModel of candidateModels) {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5800);
+      const timeoutId = setTimeout(() => controller.abort(), 4800);
 
       const generationConfig: Record<string, any> = {
         temperature: 0.12,
@@ -2335,6 +2410,8 @@ Respond STRICTLY in valid JSON matching this schema:
         if ([400, 404, 429, 500, 503].includes(response.status)) continue;
         return localFallback;
       }
+
+      markVerifiedFastVoiceModel(candidateModel);
 
       const data = await response.json();
       const rawJson = data?.candidates?.[0]?.content?.parts?.[0]?.text;
