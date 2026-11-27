@@ -63,6 +63,8 @@ import {
 } from '../../utils/speakingEngine';
 import {
   createLive16kPcmCapture,
+  getMicrophoneUnavailableReason,
+  requestMicrophoneStream,
   type Live16kPcmCaptureHandle
 } from '../../utils/audioConditioner';
 import {
@@ -309,8 +311,12 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
   const audioCtxRef = useRef<AudioContext | null>(null);
   const rafRef = useRef<number | null>(null);
   const vadPauseTimerRef = useRef<any>(null);
+  const sttRestartTimerRef = useRef<any>(null);
+  const orbPulseDecayTimerRef = useRef<any>(null);
+  const lockedTurnPrefixRef = useRef<string>('');
   const finalBufferRef = useRef<string>('');
   const interimBufferRef = useRef<string>('');
+  const lastSttActivityMsRef = useRef<number>(0);
   const uncertainWordsRef = useRef<Set<string>>(new Set());
   const confidenceSumRef = useRef<{ total: number; count: number }>({ total: 0, count: 0 });
   const listenStartedAtRef = useRef<number>(0);
@@ -403,6 +409,14 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     if (vadPauseTimerRef.current) {
       clearTimeout(vadPauseTimerRef.current);
       vadPauseTimerRef.current = null;
+    }
+    if (sttRestartTimerRef.current) {
+      clearTimeout(sttRestartTimerRef.current);
+      sttRestartTimerRef.current = null;
+    }
+    if (orbPulseDecayTimerRef.current) {
+      clearTimeout(orbPulseDecayTimerRef.current);
+      orbPulseDecayTimerRef.current = null;
     }
     if (rollingChunkTimerRef.current) {
       clearInterval(rollingChunkTimerRef.current);
@@ -1258,8 +1272,9 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
   };
 
   /**
-   * Acquires or reuses a warm echo-cancelled, noise-suppressed microphone MediaStream
-   * so consecutive turns start in < 5ms instead of paying 250-450ms OS hardware cold-start!
+   * Acquires or reuses a clean microphone MediaStream for Gemini 16kHz WAV mode.
+   * Disables aggressive Windows echoCancellation/noiseSuppression APOs (matching SpeakingTutorView)
+   * so neural ASR hears crisp consonant endings ("-ed", "-s", "t", "d") without muffling.
    */
   const acquireWarmMicStream = async (): Promise<MediaStream> => {
     const desiredDevice = selectedMicDeviceIdRef.current || 'default';
@@ -1277,8 +1292,8 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     }
 
     const constraints: MediaTrackConstraints = {
-      echoCancellation: true,
-      noiseSuppression: true,
+      echoCancellation: false,
+      noiseSuppression: false,
       autoGainControl: true,
       channelCount: 1
     };
@@ -1286,18 +1301,22 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
       constraints.deviceId = { exact: selectedMicDeviceIdRef.current };
     }
 
-    let stream: MediaStream;
-    try {
-      stream = await navigator.mediaDevices.getUserMedia({ audio: constraints });
-    } catch {
-      stream = await navigator.mediaDevices.getUserMedia({
-        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
-      });
-    }
+    const stream = await requestMicrophoneStream(constraints);
     mediaStreamRef.current = stream;
     warmMicDeviceRef.current = desiredDevice;
     return stream;
   };
+
+  const getCombinedLiveTranscript = (): string =>
+    [
+      lockedTurnPrefixRef.current.trim(),
+      finalBufferRef.current.trim(),
+      interimBufferRef.current.trim()
+    ]
+      .filter(Boolean)
+      .join(' ')
+      .replace(/\s+/g, ' ')
+      .trim();
 
   const finalizeCapturedTurn = async (reason: 'vad' | 'manual' | 'stt-end') => {
     if (!isListeningRef.current) return;
@@ -1312,6 +1331,14 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
       clearTimeout(vadPauseTimerRef.current);
       vadPauseTimerRef.current = null;
     }
+    if (sttRestartTimerRef.current) {
+      clearTimeout(sttRestartTimerRef.current);
+      sttRestartTimerRef.current = null;
+    }
+    if (orbPulseDecayTimerRef.current) {
+      clearTimeout(orbPulseDecayTimerRef.current);
+      orbPulseDecayTimerRef.current = null;
+    }
     if (rollingChunkTimerRef.current) {
       clearInterval(rollingChunkTimerRef.current);
       rollingChunkTimerRef.current = null;
@@ -1322,29 +1349,57 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     speculativeSttPromiseRef.current = null;
     speculativeSttAbortRef.current = null;
 
-    // Snapshot live streaming recognition buffers BEFORE stopping recognition
-    const liveStreamedTranscript = [finalBufferRef.current.trim(), interimBufferRef.current.trim()]
-      .filter(Boolean)
-      .join(' ')
-      .replace(/\s+/g, ' ')
-      .trim();
+    // Stop SpeechRecognition gracefully: when manually stopped or while provisional interim words
+    // are still settling, keep `onresult` alive briefly (up to 360ms or until `onend`) so Chrome's
+    // final cloud STT packet is NEVER discarded!
+    if (recognitionRef.current) {
+      const rec = recognitionRef.current;
+      recognitionRef.current = null;
+      const needsFinalFlush =
+        reason === 'manual' || interimBufferRef.current.trim().length > 0;
+
+      if (needsFinalFlush) {
+        await new Promise<void>((resolve) => {
+          let settled = false;
+          const finishFlush = () => {
+            if (settled) return;
+            settled = true;
+            clearTimeout(flushGuard);
+            try {
+              rec.onresult = null;
+              rec.onerror = null;
+              rec.onend = null;
+            } catch {}
+            resolve();
+          };
+          const flushGuard = setTimeout(finishFlush, 360);
+          rec.onend = finishFlush;
+          rec.onerror = finishFlush;
+          try {
+            rec.stop();
+          } catch {
+            finishFlush();
+          }
+        });
+      } else {
+        try {
+          rec.onresult = null;
+          rec.onerror = null;
+          rec.onend = null;
+          rec.stop();
+        } catch {}
+      }
+    }
+
+    // Snapshot complete live streaming transcript AFTER final SpeechRecognition flush!
+    const liveStreamedTranscript = getCombinedLiveTranscript();
     const capturedUncertainWords = Array.from(uncertainWordsRef.current);
     const avgConf =
       confidenceSumRef.current.count > 0
         ? Number((confidenceSumRef.current.total / confidenceSumRef.current.count).toFixed(2))
         : undefined;
 
-    if (recognitionRef.current) {
-      try {
-        recognitionRef.current.onresult = null;
-        recognitionRef.current.onerror = null;
-        recognitionRef.current.onend = null;
-        recognitionRef.current.stop();
-      } catch {}
-      recognitionRef.current = null;
-    }
-
-    // Finalize incremental 16kHz conditioned WAV in ~1ms (zero decodeAudioData / OfflineAudioContext!)
+    // Finalize incremental 16kHz conditioned WAV in ~1ms (when Gemini/backup WebAudio capture was active)
     const conditionedPcmResult = livePcmCaptureRef.current
       ? livePcmCaptureRef.current.finalizeWav()
       : null;
@@ -1373,23 +1428,20 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
       recordedAudioUrl = URL.createObjectURL(conditionedPcmResult.wavBlob);
     }
 
-    cleanupMediaCapture(false); // Keep warm mic stream alive for instant next turn!
+    cleanupMediaCapture(false);
     setLiveFinalText('');
     setLiveInterimText('');
 
     const rawElapsedSec = (Date.now() - listenStartedAtRef.current) / 1000;
     const durationSec =
       conditionedPcmResult?.durationSec ||
-      Math.max(1, Math.round(rawElapsedSec - (reason === 'vad' ? 0.7 : 0)));
+      Math.max(1, Math.round(rawElapsedSec - (reason === 'vad' ? 1.5 : 0)));
 
     const activeEngine = speechEngineRef.current;
     const currentKey = apiKey || loadApiKey();
 
     // PATH A: Real-Time Live Web Speech ('live-solo') -> 0ms instant turn handoff with ZERO "Transcribing" delay!
     if (activeEngine === 'live-solo') {
-      if (inFlightSpeculativeStt) {
-        // Never block live-solo on background WAV promises
-      }
       if (liveStreamedTranscript.length > 0) {
         const finalPerf = nowPerf();
         await processFinalizedUserTurn({
@@ -1411,14 +1463,16 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
         });
         return;
       }
-      // In live-solo, if nothing was spoken (silence), return straight to idle without entering "Transcribing"!
-      if (recordedAudioUrl) { try { URL.revokeObjectURL(recordedAudioUrl); } catch {} }
-      setOrbState('idle');
-      setLifecyclePhase('PHASE_01_IDLE');
-      return;
+      // If browser STT had to fall back to backup WAV capture (e.g. network block) and captured speech, allow Path B rescue; otherwise return cleanly to idle
+      if (!conditionedPcmResult || !currentKey) {
+        if (recordedAudioUrl) { try { URL.revokeObjectURL(recordedAudioUrl); } catch {} }
+        setOrbState('idle');
+        setLifecyclePhase('PHASE_01_IDLE');
+        return;
+      }
     }
 
-    // PATH B: Reuse already-running Speculative Pause STT (~380ms head-start!) OR run fast 16kHz WAV Gemini SSE!
+    // PATH B: Reuse already-running Speculative Pause STT OR run fast 16kHz WAV Gemini SSE!
     if ((inFlightSpeculativeStt || conditionedPcmResult) && currentKey) {
       setOrbState('transcribing');
       setLifecyclePhase('PHASE_03_TRANSCRIBING');
@@ -1527,11 +1581,25 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
       warmUpNeuralTts(buddyVoiceConfigRef.current.freeNeuralVoice);
     }
 
+    const SpeechRecognition =
+      typeof window !== 'undefined'
+        ? (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+        : null;
+
+    // Early guard on mobile LAN plain HTTP (`http://192.168.x.x:3000`) where browsers disable all mic APIs
+    if (typeof window !== 'undefined' && window.isSecureContext === false) {
+      const insecureReason = getMicrophoneUnavailableReason();
+      setOrbState('error');
+      setStatusNotice(
+        insecureReason ||
+          'Mobile browsers require HTTPS (or localhost) for microphone access. Run "npm run dev:https" or type below.'
+      );
+      setTimeout(() => typedInputRef.current?.focus(), 60);
+      return;
+    }
+
     if (speechEngineRef.current === 'gemini-cloud' && !(apiKey || loadApiKey())) {
-      const hasSpeechRec =
-        typeof window !== 'undefined' &&
-        Boolean((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition);
-      if (hasSpeechRec) {
+      if (SpeechRecognition) {
         handleSelectEngine('live-solo');
       } else {
         setStatusNotice('Connect a Gemini API key for Gemini Verbatim Audio.');
@@ -1540,26 +1608,36 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
       }
     }
 
-    cleanupMediaCapture(false);
+    // In 'live-solo' mode, release any open getUserMedia tracks so browser SpeechRecognition has
+    // 100% exclusive, distortion-free access to the microphone (eliminates Windows APO contention!).
+    const usePureSoloBrowserStt =
+      speechEngineRef.current === 'live-solo' && Boolean(SpeechRecognition);
+    cleanupMediaCapture(usePureSoloBrowserStt);
+
     const nowPerf = () => (typeof performance !== 'undefined' ? performance.now() : Date.now());
     const currentKeyForTurn = apiKey || loadApiKey();
     if (currentKeyForTurn) {
       warmUpGeminiVoiceConnection(currentKeyForTurn);
     }
 
+    lockedTurnPrefixRef.current = '';
     finalBufferRef.current = '';
     interimBufferRef.current = '';
+    lastSttActivityMsRef.current = 0;
     uncertainWordsRef.current = new Set();
     confidenceSumRef.current = { total: 0, count: 0 };
     listenStartedAtRef.current = Date.now();
-    // Section 4 Row 1: `speechStart` stamps actual voice onset (NOT pre-speech silence after clicking mic!)
     activeSpeechPerfRef.current = {
       speechStart: null,
       firstPartialSTT: null,
       lastPartialSTT: null,
       speechEnd: null
     };
+
     let browserSttAlive = false;
+    let sttFatalError = false;
+    let backupCaptureStarted = false;
+
     isListeningRef.current = true;
     setIsListening(true);
     setLiveFinalText('');
@@ -1568,48 +1646,284 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     setLifecyclePhase('PHASE_02_LISTENING');
 
     const DANGLING_PAUSE_WORDS =
-      /\b(and|but|because|so|or|to|the|a|an|my|your|our|his|her|their|this|that|in|on|at|with|about|for|if|when|while|although|thinking|wondering|planning|trying|going|wanting|talking|was|were|am|is|are|um|uh)\s*$/i;
+      /\b(and|but|because|so|or|to|the|a|an|my|your|our|his|her|their|this|that|in|on|at|with|about|for|if|when|while|although|thinking|wondering|planning|trying|going|wanting|talking|was|were|am|is|are|have|has|had|will|would|can|could|should|um|uh|well|like)\s*$/i;
+
+    const pulseOrbForSoloStt = (level: number) => {
+      if (!usePureSoloBrowserStt || backupCaptureStarted) return;
+      audioLevelRef.current = level;
+      if (orbPulseDecayTimerRef.current) clearTimeout(orbPulseDecayTimerRef.current);
+      orbPulseDecayTimerRef.current = setTimeout(() => {
+        if (isListeningRef.current && usePureSoloBrowserStt && !backupCaptureStarted) {
+          audioLevelRef.current = 12;
+        }
+      }, 280);
+    };
 
     const scheduleSmartVadCommit = () => {
       if (vadPauseTimerRef.current) clearTimeout(vadPauseTimerRef.current);
       if (!continuousModeRef.current || !isListeningRef.current) return;
-      const preview = [finalBufferRef.current.trim(), interimBufferRef.current.trim()]
-        .filter(Boolean)
-        .join(' ')
-        .trim();
+      const preview = getCombinedLiveTranscript();
       if (!preview) return;
       const wordCount = preview.split(/\s+/).filter(Boolean).length;
+      // Learner-friendly pause budgets (~1.75s normal / ~2.45s on incomplete clauses or <3 words)
+      // so ESL speakers can breathe and think without getting cut off mid-sentence!
       const waitMs =
-        DANGLING_PAUSE_WORDS.test(preview) || wordCount < 2 ? 1350 : 720;
+        DANGLING_PAUSE_WORDS.test(preview) || wordCount < 3 ? 2450 : 1750;
       vadPauseTimerRef.current = setTimeout(() => {
+        if (!isListeningRef.current) return;
         activeSpeechPerfRef.current.speechEnd = nowPerf();
         void finalizeCapturedTurn('vad');
       }, waitMs);
     };
 
-    // 1. Start Live Browser SpeechRecognition (when supported & reachable)
-    const SpeechRecognition =
-      typeof window !== 'undefined'
-        ? (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
-        : null;
-
-    if (SpeechRecognition) {
+    // Helper: starts clean WebAudio 16kHz PCM + MediaRecorder capture (used in 'gemini-cloud' mode,
+    // or as automatic fallback if browser SpeechRecognition is unavailable / blocked by network).
+    const startWebAudioCapture = async (enable16kPcm: boolean) => {
+      if (backupCaptureStarted || !isListeningRef.current) return;
+      backupCaptureStarted = true;
       try {
+        const stream = await acquireWarmMicStream();
+        if (!isListeningRef.current) return;
+
+        const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+        if (AudioCtx) {
+          const ctx = new AudioCtx();
+          if (ctx.state === 'suspended') {
+            void ctx.resume().catch(() => {});
+          }
+          audioCtxRef.current = ctx;
+          const source = ctx.createMediaStreamSource(stream);
+
+          if (enable16kPcm) {
+            livePcmCaptureRef.current = createLive16kPcmCapture(ctx, source);
+          }
+
+          const analyser = ctx.createAnalyser();
+          analyser.fftSize = 128;
+          source.connect(analyser);
+          const buf = new Uint8Array(analyser.frequencyBinCount);
+
+          const vadStartMs = Date.now();
+          let lastFrameMs = vadStartMs;
+          let noiseSum = 0;
+          let noiseCount = 0;
+          let noiseFloor = 5;
+          let activeSpeechMs = 0;
+          let hasSpokenInTurn = false;
+          let silenceStartedAt = 0;
+          let rollingChunkInFlight = false;
+          let lastRollingSentAt = 0;
+
+          const triggerRollingLivePartial = () => {
+            if (
+              rollingChunkInFlight ||
+              browserSttAlive ||
+              !currentKeyForTurn ||
+              !isListeningRef.current ||
+              !livePcmCaptureRef.current
+            ) {
+              return;
+            }
+            const snap = livePcmCaptureRef.current.peekWav(5.5);
+            if (!snap) return;
+            rollingChunkInFlight = true;
+            lastRollingSentAt = nowPerf();
+            transcribeAudioBlobWithGemini(
+              currentKeyForTurn,
+              selectedModel || loadModel(),
+              snap.wavBlob,
+              recognitionLangRef.current,
+              {
+                isPreConditionedWav: true,
+                isLiveRollingChunk: true,
+                timeoutMs: 2200,
+                onPartialTranscript: (partial) => {
+                  if (!isListeningRef.current || browserSttAlive || !partial) return;
+                  const ts = nowPerf();
+                  if (activeSpeechPerfRef.current.firstPartialSTT === null) {
+                    activeSpeechPerfRef.current.firstPartialSTT = ts;
+                  }
+                  activeSpeechPerfRef.current.lastPartialSTT = ts;
+                  interimBufferRef.current = partial;
+                  setLiveInterimText(partial);
+                }
+              }
+            )
+              .then(txt => {
+                if (isListeningRef.current && !browserSttAlive && txt) {
+                  const ts = nowPerf();
+                  if (activeSpeechPerfRef.current.firstPartialSTT === null) {
+                    activeSpeechPerfRef.current.firstPartialSTT = ts;
+                  }
+                  activeSpeechPerfRef.current.lastPartialSTT = ts;
+                  interimBufferRef.current = txt;
+                  setLiveInterimText(txt);
+                }
+              })
+              .catch(() => {})
+              .finally(() => {
+                rollingChunkInFlight = false;
+              });
+          };
+
+          const tick = () => {
+            if (!isListeningRef.current) return;
+            analyser.getByteFrequencyData(buf);
+            let sum = 0;
+            for (let i = 0; i < buf.length; i++) sum += buf[i];
+            const level = Math.min(100, Math.round((sum / buf.length / 128) * 100));
+            audioLevelRef.current = level;
+
+            const now = Date.now();
+            const dt = Math.min(80, Math.max(0, now - lastFrameMs));
+            lastFrameMs = now;
+
+            if (now - vadStartMs < 200 && !hasSpokenInTurn) {
+              noiseSum += level;
+              noiseCount += 1;
+              noiseFloor = Math.min(24, Math.round(noiseSum / Math.max(1, noiseCount)));
+            } else {
+              const speechThreshold = Math.max(13, noiseFloor + 8);
+              const silenceThreshold = Math.max(7, noiseFloor + 3);
+              if (level >= speechThreshold) {
+                if (speculativeSttAbortRef.current) {
+                  try { speculativeSttAbortRef.current.abort(); } catch {}
+                  speculativeSttAbortRef.current = null;
+                  speculativeSttPromiseRef.current = null;
+                }
+                if (activeSpeechPerfRef.current.speechStart === null) {
+                  activeSpeechPerfRef.current.speechStart = Math.max(0, nowPerf() - 90);
+                }
+                activeSpeechMs += dt;
+                if (activeSpeechMs >= 220) {
+                  hasSpokenInTurn = true;
+                }
+                silenceStartedAt = 0;
+
+                const sinceSpeechStart =
+                  nowPerf() - (activeSpeechPerfRef.current.speechStart ?? nowPerf());
+                if (
+                  enable16kPcm &&
+                  !browserSttAlive &&
+                  hasSpokenInTurn &&
+                  sinceSpeechStart >= 350 &&
+                  nowPerf() - lastRollingSentAt >= 950
+                ) {
+                  triggerRollingLivePartial();
+                }
+              } else if (hasSpokenInTurn && level <= silenceThreshold) {
+                if (!silenceStartedAt) {
+                  silenceStartedAt = now;
+                  activeSpeechPerfRef.current.speechEnd = nowPerf();
+                } else if (continuousModeRef.current && !browserSttAlive) {
+                  // Only drive turn cutoff from acoustic volume when browser SpeechRecognition is NOT active
+                  const silenceMs = now - silenceStartedAt;
+                  if (
+                    enable16kPcm &&
+                    silenceMs >= 420 &&
+                    !speculativeSttPromiseRef.current &&
+                    currentKeyForTurn &&
+                    livePcmCaptureRef.current
+                  ) {
+                    const snap = livePcmCaptureRef.current.peekWav();
+                    if (snap) {
+                      const specAbort = new AbortController();
+                      speculativeSttAbortRef.current = specAbort;
+                      speculativeSttPromiseRef.current = transcribeAudioBlobWithGemini(
+                        currentKeyForTurn,
+                        selectedModel || loadModel(),
+                        snap.wavBlob,
+                        recognitionLangRef.current,
+                        {
+                          isPreConditionedWav: true,
+                          signal: specAbort.signal,
+                          timeoutMs: 3600,
+                          onPartialTranscript: (partial) => {
+                            if (!partial) return;
+                            const ts = nowPerf();
+                            if (activeSpeechPerfRef.current.firstPartialSTT === null) {
+                              activeSpeechPerfRef.current.firstPartialSTT = ts;
+                            }
+                            activeSpeechPerfRef.current.lastPartialSTT = ts;
+                            if (isListeningRef.current) setLiveInterimText(partial);
+                          }
+                        }
+                      );
+                    }
+                  }
+
+                  const liveText = getCombinedLiveTranscript();
+                  const silenceBudget =
+                    liveText && DANGLING_PAUSE_WORDS.test(liveText) ? 2200 : 1550;
+                  if (silenceMs >= silenceBudget) {
+                    void finalizeCapturedTurn('vad');
+                    return;
+                  }
+                }
+              }
+            }
+
+            rafRef.current = requestAnimationFrame(tick);
+          };
+          rafRef.current = requestAnimationFrame(tick);
+        }
+
+        if (typeof MediaRecorder !== 'undefined') {
+          try {
+            const recorder = new MediaRecorder(stream);
+            audioChunksRef.current = [];
+            recorder.ondataavailable = (e) => {
+              if (e.data && e.data.size > 0) audioChunksRef.current.push(e.data);
+            };
+            recorder.start(250);
+            mediaRecorderRef.current = recorder;
+          } catch {
+            // Non-fatal on mobile WebViews where MediaRecorder codecs differ; 16kHz PCM capture still runs
+          }
+        }
+      } catch (err: any) {
+        if (!recognitionRef.current) {
+          isListeningRef.current = false;
+          setIsListening(false);
+          setOrbState('error');
+          setStatusNotice(err?.message || 'Microphone access denied.');
+        }
+      }
+    };
+
+    // 1. Start Live Browser SpeechRecognition (with automatic restart on `no-speech` & prefix locking)
+    const launchRecognitionInstance = () => {
+      if (!SpeechRecognition || !isListeningRef.current || sttFatalError) return;
+
+      try {
+        if (recognitionRef.current) {
+          try {
+            recognitionRef.current.onstart = null;
+            recognitionRef.current.onresult = null;
+            recognitionRef.current.onerror = null;
+            recognitionRef.current.onend = null;
+            recognitionRef.current.abort();
+          } catch {}
+          recognitionRef.current = null;
+        }
+
         const rec = new SpeechRecognition();
         rec.continuous = true;
         rec.interimResults = true;
-        rec.maxAlternatives = 3;
+        rec.maxAlternatives = 1;
         rec.lang = recognitionLangRef.current || 'en-GB';
 
         rec.onspeechstart = () => {
           if (activeSpeechPerfRef.current.speechStart === null) {
             activeSpeechPerfRef.current.speechStart = nowPerf();
           }
+          pulseOrbForSoloStt(52);
         };
 
         rec.onresult = (event: any) => {
           if (!isListeningRef.current) return;
           browserSttAlive = true;
+          lastSttActivityMsRef.current = Date.now();
           const ts = nowPerf();
           if (activeSpeechPerfRef.current.speechStart === null) {
             activeSpeechPerfRef.current.speechStart = Math.max(0, ts - 180);
@@ -1624,23 +1938,16 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
           for (let i = 0; i < event.results.length; i++) {
             const item = event.results[i];
             if (item && item.length > 0) {
-              let bestAlt = item[0];
-              for (let a = 1; a < item.length; a++) {
-                if (
-                  item[a]?.transcript &&
-                  typeof item[a].confidence === 'number' &&
-                  item[a].confidence > (bestAlt?.confidence || 0)
-                ) {
-                  bestAlt = item[a];
-                }
-              }
-              const txt = bestAlt?.transcript || '';
+              // Always use item[0] (Google's #1 contextual LM hypothesis) so interim confidence=0
+              // never overrides the primary transcript with lower-ranked homophone alternatives!
+              const primaryAlt = item[0];
+              const txt = primaryAlt?.transcript || '';
               if (item.isFinal) {
                 fin += txt + ' ';
-                if (typeof bestAlt?.confidence === 'number' && bestAlt.confidence > 0) {
-                  confidenceSumRef.current.total += bestAlt.confidence;
+                if (typeof primaryAlt?.confidence === 'number' && primaryAlt.confidence > 0) {
+                  confidenceSumRef.current.total += primaryAlt.confidence;
                   confidenceSumRef.current.count += 1;
-                  if (bestAlt.confidence < 0.72) {
+                  if (primaryAlt.confidence < 0.72) {
                     txt
                       .split(/\s+/)
                       .map((w: string) => w.replace(/[^a-zA-Z0-9']/g, ''))
@@ -1656,16 +1963,36 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
 
           finalBufferRef.current = fin;
           interimBufferRef.current = inter;
-          setLiveFinalText(fin.trim());
+
+          const fullLockedFinal = [lockedTurnPrefixRef.current.trim(), fin.trim()]
+            .filter(Boolean)
+            .join(' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+
+          setLiveFinalText(fullLockedFinal);
           setLiveInterimText(inter.trim());
+          pulseOrbForSoloStt(inter.trim() ? 66 : 44);
           scheduleSmartVadCommit();
         };
 
         rec.onerror = (e: any) => {
           if (!isListeningRef.current) return;
-          if (e.error === 'no-speech' || e.error === 'aborted') return;
-          if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
-            if (!mediaStreamRef.current) {
+          if (e.error === 'no-speech' || e.error === 'aborted') {
+            // Normal pause while learner thinks before/between sentences — `onend` will keep listening alive!
+            return;
+          }
+          if (e.error === 'language-not-supported') {
+            if (recognitionLangRef.current !== 'en-GB') {
+              recognitionLangRef.current = 'en-GB';
+              setRecognitionLang('en-GB');
+              setStatusNotice('Switched accent profile to British English (en-GB) for browser compatibility.');
+              return;
+            }
+          }
+          if (e.error === 'not-allowed') {
+            sttFatalError = true;
+            if (!backupCaptureStarted) {
               isListeningRef.current = false;
               setIsListening(false);
               setOrbState('error');
@@ -1673,239 +2000,106 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
             }
             return;
           }
+          if (e.error === 'audio-capture') {
+            sttFatalError = true;
+            if (!backupCaptureStarted) {
+              isListeningRef.current = false;
+              setIsListening(false);
+              setOrbState('error');
+              setStatusNotice('Could not access your default microphone. Check your mic or open Test Mic in Audio Settings.');
+            }
+            return;
+          }
+          if (e.error === 'network' || e.error === 'service-not-allowed') {
+            sttFatalError = true;
+            browserSttAlive = false;
+            recognitionRef.current = null;
+            const unavailableReason = getMicrophoneUnavailableReason();
+            if (currentKeyForTurn && !unavailableReason) {
+              setStatusNotice('Browser Live Speech unavailable on this network — using Gemini 16kHz Audio automatically.');
+              void startWebAudioCapture(true);
+            } else {
+              isListeningRef.current = false;
+              setIsListening(false);
+              setOrbState('error');
+              setStatusNotice(
+                unavailableReason ||
+                  'Browser Speech-to-Text hit a network/permission block. Connect a Gemini API key in Audio Settings or type below.'
+              );
+            }
+            return;
+          }
           browserSttAlive = false;
         };
 
         rec.onend = () => {
-          if (!isListeningRef.current) return;
-          const hasWords = (finalBufferRef.current + interimBufferRef.current).trim().length > 0;
-          if (hasWords && continuousModeRef.current && speechEngineRef.current === 'live-solo') {
-            void finalizeCapturedTurn('stt-end');
-          } else if (isListeningRef.current && recognitionRef.current === rec && browserSttAlive) {
-            try { rec.start(); } catch {}
+          if (!isListeningRef.current || sttFatalError || recognitionRef.current !== rec) return;
+
+          // Lock any spoken words from this recognition burst into `lockedTurnPrefixRef`
+          // BEFORE restarting so a mid-turn restart NEVER erases earlier words!
+          const burstWords = [finalBufferRef.current.trim(), interimBufferRef.current.trim()]
+            .filter(Boolean)
+            .join(' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+          if (burstWords) {
+            lockedTurnPrefixRef.current = [lockedTurnPrefixRef.current.trim(), burstWords]
+              .filter(Boolean)
+              .join(' ')
+              .replace(/\s+/g, ' ')
+              .trim();
+            finalBufferRef.current = '';
+            interimBufferRef.current = '';
+            setLiveFinalText(lockedTurnPrefixRef.current);
+            setLiveInterimText('');
           }
+
+          const totalWordsSoFar = getCombinedLiveTranscript();
+          const silentSinceLastWordMs =
+            lastSttActivityMsRef.current > 0 ? Date.now() - lastSttActivityMsRef.current : 0;
+
+          if (
+            totalWordsSoFar.length > 0 &&
+            continuousModeRef.current &&
+            speechEngineRef.current === 'live-solo' &&
+            silentSinceLastWordMs >= 1650 &&
+            !DANGLING_PAUSE_WORDS.test(totalWordsSoFar)
+          ) {
+            void finalizeCapturedTurn('stt-end');
+            return;
+          }
+
+          // Keep SpeechRecognition continuously alive (even after ~5s of pre-speech thinking silence!)
+          if (sttRestartTimerRef.current) clearTimeout(sttRestartTimerRef.current);
+          sttRestartTimerRef.current = setTimeout(() => {
+            if (isListeningRef.current && !sttFatalError) {
+              launchRecognitionInstance();
+            }
+          }, 80);
         };
 
         rec.start();
         recognitionRef.current = rec;
       } catch {
-        // Fallback smoothly to WebAudio Live Rolling PCM Streamer below!
+        sttFatalError = true;
+        if (currentKeyForTurn) {
+          void startWebAudioCapture(true);
+        } else {
+          isListeningRef.current = false;
+          setIsListening(false);
+          setOrbState('error');
+          setStatusNotice('Could not start browser Speech-to-Text. Check microphone permissions or connect a Gemini API key.');
+        }
       }
+    };
+
+    if (SpeechRecognition) {
+      launchRecognitionInstance();
     }
 
-    // 2. Attach Warm Mic Stream + Incremental 16kHz PCM + Rolling Live Partial Streamer + Speculative Pause STT!
-    try {
-      const stream = await acquireWarmMicStream();
-      if (!isListeningRef.current) return;
-
-      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
-      if (AudioCtx) {
-        const ctx = new AudioCtx();
-        audioCtxRef.current = ctx;
-        const source = ctx.createMediaStreamSource(stream);
-
-        if (speechEngineRef.current === 'gemini-cloud') {
-          livePcmCaptureRef.current = createLive16kPcmCapture(ctx, source);
-        }
-
-        const analyser = ctx.createAnalyser();
-        analyser.fftSize = 128;
-        source.connect(analyser);
-        const buf = new Uint8Array(analyser.frequencyBinCount);
-
-        const vadStartMs = Date.now();
-        let lastFrameMs = vadStartMs;
-        let noiseSum = 0;
-        let noiseCount = 0;
-        let noiseFloor = 5;
-        let activeSpeechMs = 0;
-        let hasSpokenInTurn = false;
-        let silenceStartedAt = 0;
-        let rollingChunkInFlight = false;
-        let lastRollingSentAt = 0;
-
-        // Helper: fires a rolling 16kHz micro-window to Gemini Flash while user is STILL SPEAKING
-        // whenever browser SpeechRecognition is unavailable/blocked (eliminates the 7.99s blind wait!)
-        const triggerRollingLivePartial = () => {
-          if (
-            rollingChunkInFlight ||
-            browserSttAlive ||
-            !currentKeyForTurn ||
-            !isListeningRef.current ||
-            !livePcmCaptureRef.current
-          ) {
-            return;
-          }
-          const snap = livePcmCaptureRef.current.peekWav(5.5);
-          if (!snap) return;
-          rollingChunkInFlight = true;
-          lastRollingSentAt = nowPerf();
-          transcribeAudioBlobWithGemini(
-            currentKeyForTurn,
-            selectedModel || loadModel(),
-            snap.wavBlob,
-            recognitionLangRef.current,
-            {
-              isPreConditionedWav: true,
-              isLiveRollingChunk: true,
-              timeoutMs: 2200,
-              onPartialTranscript: (partial) => {
-                if (!isListeningRef.current || browserSttAlive || !partial) return;
-                const ts = nowPerf();
-                if (activeSpeechPerfRef.current.firstPartialSTT === null) {
-                  activeSpeechPerfRef.current.firstPartialSTT = ts;
-                }
-                activeSpeechPerfRef.current.lastPartialSTT = ts;
-                interimBufferRef.current = partial;
-                setLiveInterimText(partial);
-              }
-            }
-          )
-            .then(txt => {
-              if (isListeningRef.current && !browserSttAlive && txt) {
-                const ts = nowPerf();
-                if (activeSpeechPerfRef.current.firstPartialSTT === null) {
-                  activeSpeechPerfRef.current.firstPartialSTT = ts;
-                }
-                activeSpeechPerfRef.current.lastPartialSTT = ts;
-                interimBufferRef.current = txt;
-                setLiveInterimText(txt);
-              }
-            })
-            .catch(() => {})
-            .finally(() => {
-              rollingChunkInFlight = false;
-            });
-        };
-
-        const tick = () => {
-          if (!isListeningRef.current) return;
-          analyser.getByteFrequencyData(buf);
-          let sum = 0;
-          for (let i = 0; i < buf.length; i++) sum += buf[i];
-          const level = Math.min(100, Math.round((sum / buf.length / 128) * 100));
-          audioLevelRef.current = level;
-
-          const now = Date.now();
-          const dt = Math.min(80, Math.max(0, now - lastFrameMs));
-          lastFrameMs = now;
-
-          if (now - vadStartMs < 200 && !hasSpokenInTurn) {
-            noiseSum += level;
-            noiseCount += 1;
-            noiseFloor = Math.min(24, Math.round(noiseSum / Math.max(1, noiseCount)));
-          } else {
-            const speechThreshold = Math.max(13, noiseFloor + 8);
-            const silenceThreshold = Math.max(7, noiseFloor + 3);
-            if (level >= speechThreshold) {
-              // User resumed speaking -> cancel any speculative pause transcription!
-              if (speculativeSttAbortRef.current) {
-                try { speculativeSttAbortRef.current.abort(); } catch {}
-                speculativeSttAbortRef.current = null;
-                speculativeSttPromiseRef.current = null;
-              }
-              if (activeSpeechPerfRef.current.speechStart === null) {
-                // Backdate by 90ms so initial plosive consonant onset is accurately captured
-                activeSpeechPerfRef.current.speechStart = Math.max(0, nowPerf() - 90);
-              }
-              activeSpeechMs += dt;
-              if (activeSpeechMs >= 220) {
-                hasSpokenInTurn = true;
-              }
-              silenceStartedAt = 0;
-
-              // Only stream rolling WAV chunks when explicitly using Gemini Cloud Audio mode
-              const sinceSpeechStart =
-                nowPerf() - (activeSpeechPerfRef.current.speechStart ?? nowPerf());
-              if (
-                speechEngineRef.current === 'gemini-cloud' &&
-                !browserSttAlive &&
-                hasSpokenInTurn &&
-                sinceSpeechStart >= 300 &&
-                nowPerf() - lastRollingSentAt >= 950
-              ) {
-                triggerRollingLivePartial();
-              }
-            } else if (hasSpokenInTurn && level <= silenceThreshold) {
-              if (!silenceStartedAt) {
-                silenceStartedAt = now;
-                activeSpeechPerfRef.current.speechEnd = nowPerf();
-              } else if (continuousModeRef.current) {
-                const silenceMs = now - silenceStartedAt;
-                // Speculative Pause Head-Start ONLY when user explicitly selected 'gemini-cloud' mode!
-                if (
-                  speechEngineRef.current === 'gemini-cloud' &&
-                  silenceMs >= 280 &&
-                  !speculativeSttPromiseRef.current &&
-                  currentKeyForTurn &&
-                  livePcmCaptureRef.current
-                ) {
-                  const snap = livePcmCaptureRef.current.peekWav();
-                  if (snap) {
-                    const specAbort = new AbortController();
-                    speculativeSttAbortRef.current = specAbort;
-                    speculativeSttPromiseRef.current = transcribeAudioBlobWithGemini(
-                      currentKeyForTurn,
-                      selectedModel || loadModel(),
-                      snap.wavBlob,
-                      recognitionLangRef.current,
-                      {
-                        isPreConditionedWav: true,
-                        signal: specAbort.signal,
-                        timeoutMs: 3600,
-                        onPartialTranscript: (partial) => {
-                          if (!partial) return;
-                          const ts = nowPerf();
-                          if (activeSpeechPerfRef.current.firstPartialSTT === null) {
-                            activeSpeechPerfRef.current.firstPartialSTT = ts;
-                          }
-                          activeSpeechPerfRef.current.lastPartialSTT = ts;
-                          if (isListeningRef.current) setLiveInterimText(partial);
-                        }
-                      }
-                    );
-                  }
-                }
-
-                const liveText = (finalBufferRef.current + ' ' + interimBufferRef.current).trim();
-                const isLiveWebMode = speechEngineRef.current === 'live-solo';
-                // In Live Web Speech mode, wait until live words appear on screen so SpeechRecognition never gets cut off early!
-                if (!isLiveWebMode || liveText.length > 0) {
-                  const silenceBudget =
-                    liveText && DANGLING_PAUSE_WORDS.test(liveText)
-                      ? 1350
-                      : isLiveWebMode
-                      ? 950
-                      : 680;
-                  if (silenceMs >= silenceBudget) {
-                    void finalizeCapturedTurn('vad');
-                    return;
-                  }
-                }
-              }
-            }
-          }
-
-          rafRef.current = requestAnimationFrame(tick);
-        };
-        rafRef.current = requestAnimationFrame(tick);
-      }
-
-      const recorder = new MediaRecorder(stream);
-      audioChunksRef.current = [];
-      recorder.ondataavailable = (e) => {
-        if (e.data && e.data.size > 0) audioChunksRef.current.push(e.data);
-      };
-      recorder.start(250); // 250ms timeslices so stop() flushes in < 15ms!
-      mediaRecorderRef.current = recorder;
-    } catch (err: any) {
-      // If SpeechRecognition is already running, let it continue; otherwise report mic error
-      if (!recognitionRef.current) {
-        isListeningRef.current = false;
-        setIsListening(false);
-        setOrbState('error');
-        setStatusNotice(err?.message || 'Microphone access denied.');
-      }
+    // 2. Only open concurrent WebAudio/MediaRecorder when in 'gemini-cloud' mode (or when SpeechRecognition is unsupported)
+    if (!usePureSoloBrowserStt) {
+      await startWebAudioCapture(true);
     }
   };
 

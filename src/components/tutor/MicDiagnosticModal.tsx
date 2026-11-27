@@ -12,6 +12,7 @@ import {
   RefreshCw
 } from 'lucide-react';
 import { transcribeAudioBlobWithGemini } from '../../utils/speakingEngine';
+import { requestMicrophoneStream } from '../../utils/audioConditioner';
 
 export type SpeechEngineMode = 'gemini-cloud' | 'live-solo';
 
@@ -203,7 +204,7 @@ export const MicDiagnosticModal: React.FC<MicDiagnosticModalProps> = ({
         audioConstraints.deviceId = { exact: selectedDeviceId };
       }
 
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: audioConstraints });
+      const stream = await requestMicrophoneStream(audioConstraints);
       streamRef.current = stream;
       loadAudioInputs(); // refresh labels now that permission is granted
 

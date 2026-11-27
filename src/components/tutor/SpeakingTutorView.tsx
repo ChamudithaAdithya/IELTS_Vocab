@@ -842,8 +842,13 @@ const SpeakingTutorViewInner: React.FC<SpeakingTutorViewProps> = ({
   // Gemini Audio: Single Clean Raw Audio Capture — ZERO Windows APO Distortion!
   const startCleanAudioCapture = async () => {
     try {
-      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        throw new Error('Microphone recording is not available in this browser.');
+      if (typeof window !== 'undefined' && window.isSecureContext === false) {
+        throw new Error(
+          `Mobile browsers block microphone access over plain HTTP (${window.location.host}). Run "npm run dev:https" and open https://${window.location.hostname}${window.location.port ? ':' + window.location.port : ''}.`
+        );
+      }
+      if (typeof navigator === 'undefined' || !navigator.mediaDevices || typeof navigator.mediaDevices.getUserMedia !== 'function') {
+        throw new Error('Microphone recording is not available in this browser or webview. Open in Safari/Chrome over HTTPS.');
       }
 
       // Disable aggressive Windows echoCancellation/noiseSuppression APOs so neural ASR receives clean speech

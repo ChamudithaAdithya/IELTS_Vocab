@@ -1,7 +1,81 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
+import { execFileSync } from 'node:child_process';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 import {defineConfig} from 'vite';
 import { MsEdgeTTS, OUTPUT_FORMAT } from 'msedge-tts';
+
+function resolveOptionalDevHttpsConfig(): { key: Buffer; cert: Buffer } | undefined {
+  if (process.env.VITE_HTTPS !== '1' && process.env.VITE_HTTPS !== 'true') {
+    return undefined;
+  }
+  const certDir = path.join(import.meta.dirname, 'node_modules', '.vite-https');
+  const keyPath = path.join(certDir, 'dev-key.pem');
+  const certPath = path.join(certDir, 'dev-cert.pem');
+
+  if (!fs.existsSync(keyPath) || !fs.existsSync(certPath)) {
+    fs.mkdirSync(certDir, { recursive: true });
+    const lanIps = new Set<string>(['127.0.0.1']);
+    const nets = os.networkInterfaces();
+    for (const list of Object.values(nets)) {
+      for (const info of list || []) {
+        if (info.family === 'IPv4' && !info.internal && info.address) {
+          lanIps.add(info.address);
+        }
+      }
+    }
+    const sanEntries = [
+      'DNS:localhost',
+      ...Array.from(lanIps).map((ip) => `IP:${ip}`),
+    ].join(',');
+
+    const opensslCandidates = [
+      'openssl',
+      'C:/Program Files/Git/usr/bin/openssl.exe',
+      'C:/Program Files (x86)/Git/usr/bin/openssl.exe',
+    ];
+    let generated = false;
+    for (const bin of opensslCandidates) {
+      try {
+        execFileSync(
+          bin,
+          [
+            'req',
+            '-x509',
+            '-newkey',
+            'rsa:2048',
+            '-nodes',
+            '-sha256',
+            '-days',
+            '365',
+            '-subj',
+            '/CN=localhost',
+            '-addext',
+            `subjectAltName=${sanEntries}`,
+            '-keyout',
+            keyPath,
+            '-out',
+            certPath,
+          ],
+          { stdio: 'ignore' }
+        );
+        generated = true;
+        break;
+      } catch {}
+    }
+    if (!generated) {
+      console.warn('[vite] OpenSSL not found; falling back to HTTP.');
+      return undefined;
+    }
+  }
+
+  return {
+    key: fs.readFileSync(keyPath),
+    cert: fs.readFileSync(certPath),
+  };
+}
 
 const ALLOWED_NEURAL_VOICES = new Set([
   'en-US-AvaMultilingualNeural',
@@ -21,20 +95,17 @@ function escapeSsmlText(input: string): string {
     .replace(/'/g, '&apos;');
 }
 
-interface WarmEdgeSocket {
-  client: MsEdgeTTS;
-  createdAt: number;
-}
-
-const WARM_POOL_PER_VOICE = 2;
-// Bing Edge TTS closes idle WebSockets quickly; keep TTL strictly under 9s and verify readyState === 1 (OPEN)!
-const WARM_SOCKET_MAX_AGE_MS = 9_000;
-const warmVoicePools = new Map<string, WarmEdgeSocket[]>();
-const warmingInFlight = new Map<string, number>();
+// Persistent multiplexed MsEdgeTTS clients (1 open WebSocket per voice reused across sentences & turns).
+// MsEdgeTTS natively multiplexes concurrent `toStream()` calls by `X-RequestId` over a single open socket,
+// eliminating the ~1.2s–1.8s TLS + WSS + speech.config handshake penalty on every sentence!
+const PERSISTENT_SOCKET_IDLE_TTL_MS = 25_000;
+const persistentVoiceClients = new Map<string, MsEdgeTTS>();
+const connectingVoiceClients = new Map<string, Promise<MsEdgeTTS>>();
+const clientLastActiveAt = new Map<string, number>();
 
 function isEdgeSocketOpen(client: MsEdgeTTS): boolean {
   const ws = (client as any)?._ws || (client as any)?.ws;
-  return ws ? ws.readyState === 1 : true;
+  return Boolean(ws && ws.readyState === 1);
 }
 
 const SERVER_TTS_CACHE_MAX = 120;
@@ -55,53 +126,65 @@ async function createConfiguredEdgeClient(safeVoice: string): Promise<MsEdgeTTS>
   return tts;
 }
 
-function replenishWarmPool(voiceName: string): void {
+function evictEdgeClient(safeVoice: string, target?: MsEdgeTTS): void {
+  const current = persistentVoiceClients.get(safeVoice);
+  if (!target || current === target) {
+    persistentVoiceClients.delete(safeVoice);
+    clientLastActiveAt.delete(safeVoice);
+  }
+  if (target) {
+    try { target.close(); } catch {}
+  } else if (current) {
+    try { current.close(); } catch {}
+  }
+}
+
+async function getPersistentEdgeClient(
+  voiceName: string,
+  forceFresh: boolean = false
+): Promise<MsEdgeTTS> {
   const safeVoice = ALLOWED_NEURAL_VOICES.has(voiceName)
     ? voiceName
     : 'en-US-AvaMultilingualNeural';
   const now = Date.now();
-  const pool = (warmVoicePools.get(safeVoice) || []).filter(item => {
-    if (now - item.createdAt < WARM_SOCKET_MAX_AGE_MS && isEdgeSocketOpen(item.client)) {
-      return true;
-    }
-    try { item.client.close(); } catch {}
-    return false;
-  });
-  warmVoicePools.set(safeVoice, pool);
 
-  const inFlight = warmingInFlight.get(safeVoice) || 0;
-  const needed = WARM_POOL_PER_VOICE - (pool.length + inFlight);
-  for (let i = 0; i < needed; i++) {
-    warmingInFlight.set(safeVoice, (warmingInFlight.get(safeVoice) || 0) + 1);
-    createConfiguredEdgeClient(safeVoice)
-      .then(client => {
-        const list = warmVoicePools.get(safeVoice) || [];
-        list.push({ client, createdAt: Date.now() });
-        warmVoicePools.set(safeVoice, list);
-      })
-      .catch(() => {})
-      .finally(() => {
-        warmingInFlight.set(
-          safeVoice,
-          Math.max(0, (warmingInFlight.get(safeVoice) || 1) - 1)
-        );
-      });
+  if (!forceFresh) {
+    const existing = persistentVoiceClients.get(safeVoice);
+    const lastActive = clientLastActiveAt.get(safeVoice) || 0;
+    if (existing && isEdgeSocketOpen(existing) && now - lastActive < PERSISTENT_SOCKET_IDLE_TTL_MS) {
+      clientLastActiveAt.set(safeVoice, now);
+      return existing;
+    }
+    if (existing) {
+      evictEdgeClient(safeVoice, existing);
+    }
+
+    const inFlight = connectingVoiceClients.get(safeVoice);
+    if (inFlight) {
+      return inFlight;
+    }
+  } else {
+    evictEdgeClient(safeVoice);
   }
+
+  const connectPromise = createConfiguredEdgeClient(safeVoice)
+    .then((client) => {
+      persistentVoiceClients.set(safeVoice, client);
+      clientLastActiveAt.set(safeVoice, Date.now());
+      return client;
+    })
+    .finally(() => {
+      if (connectingVoiceClients.get(safeVoice) === connectPromise) {
+        connectingVoiceClients.delete(safeVoice);
+      }
+    });
+
+  connectingVoiceClients.set(safeVoice, connectPromise);
+  return connectPromise;
 }
 
-async function acquireEdgeClient(safeVoice: string): Promise<MsEdgeTTS> {
-  const now = Date.now();
-  const pool = warmVoicePools.get(safeVoice) || [];
-  while (pool.length > 0) {
-    const entry = pool.shift()!;
-    if (now - entry.createdAt < WARM_SOCKET_MAX_AGE_MS && isEdgeSocketOpen(entry.client)) {
-      replenishWarmPool(safeVoice);
-      return entry.client;
-    }
-    try { entry.client.close(); } catch {}
-  }
-  replenishWarmPool(safeVoice);
-  return createConfiguredEdgeClient(safeVoice);
+function replenishWarmPool(voiceName: string): void {
+  void getPersistentEdgeClient(voiceName, false).catch(() => {});
 }
 
 async function synthesizeEdgeNeuralMp3(
@@ -118,10 +201,7 @@ async function synthesizeEdgeNeuralMp3(
   if (hit) return hit;
 
   for (let attempt = 0; attempt < 2; attempt++) {
-    const tts =
-      attempt === 0
-        ? await acquireEdgeClient(safeVoice)
-        : await createConfiguredEdgeClient(safeVoice);
+    const tts = await getPersistentEdgeClient(safeVoice, attempt > 0);
     try {
       const { audioStream } = tts.toStream(escapeSsmlText(text), { rate: rateOpt });
       const chunks: Buffer[] = [];
@@ -130,21 +210,22 @@ async function synthesizeEdgeNeuralMp3(
       }
       const full = Buffer.concat(chunks);
       if (full.length > 0) {
+        clientLastActiveAt.set(safeVoice, Date.now());
         cacheServerMp3(cacheKey, full);
         return full;
       }
+      evictEdgeClient(safeVoice, tts);
     } catch (err) {
+      evictEdgeClient(safeVoice, tts);
       if (attempt === 1) throw err;
-    } finally {
-      try { tts.close(); } catch {}
     }
   }
   return Buffer.alloc(0);
 }
 
 /**
- * Streams 24kHz MP3 chunks to the HTTP response IMMEDIATELY as frames arrive from Edge Neural TTS
- * (eliminating full-sentence buffering wait while still populating the in-memory LRU cache).
+ * Streams 24kHz MP3 chunks to the HTTP response IMMEDIATELY as frames arrive from the persistent
+ * Edge Neural WebSocket (~180-300ms first audio byte!) without closing the reusable socket.
  */
 async function streamEdgeNeuralMp3ToResponse(
   text: string,
@@ -168,10 +249,13 @@ async function streamEdgeNeuralMp3ToResponse(
   }
 
   for (let attempt = 0; attempt < 2; attempt++) {
-    const tts =
-      attempt === 0
-        ? await acquireEdgeClient(safeVoice)
-        : await createConfiguredEdgeClient(safeVoice);
+    let tts: MsEdgeTTS;
+    try {
+      tts = await getPersistentEdgeClient(safeVoice, attempt > 0);
+    } catch {
+      if (attempt === 1) return false;
+      continue;
+    }
     let headersSent = false;
     try {
       const { audioStream } = tts.toStream(escapeSsmlText(text), { rate: rateOpt });
@@ -191,18 +275,19 @@ async function streamEdgeNeuralMp3ToResponse(
         res.write(buf);
       }
       if (headersSent) {
+        clientLastActiveAt.set(safeVoice, Date.now());
         const full = Buffer.concat(chunks);
         cacheServerMp3(cacheKey, full);
         res.end();
         return true;
       }
+      evictEdgeClient(safeVoice, tts);
     } catch {
+      evictEdgeClient(safeVoice, tts);
       if (headersSent) {
         try { res.end(); } catch {}
         return true;
       }
-    } finally {
-      try { tts.close(); } catch {}
     }
   }
   return false;
@@ -346,6 +431,7 @@ export default defineConfig(() => {
       },
     },
     server: {
+      https: resolveOptionalDevHttpsConfig(),
       // HMR is disabled in AI Studio via DISABLE_HMR env var.
       // Do not modify—file watching is disabled to prevent flickering during agent edits.
       hmr: process.env.DISABLE_HMR !== 'true',

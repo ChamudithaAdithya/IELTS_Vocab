@@ -120,7 +120,20 @@ async function ensureKokoroLoaded(): Promise<any> {
       detail: 'Loading Kokoro-82M runtime...'
     });
 
-    const { KokoroTTS } = await loadKokoroModule();
+    const kokoroMod = await loadKokoroModule();
+    const { KokoroTTS } = kokoroMod;
+
+    // Enable maximum WASM SIMD acceleration (and multi-threading when Cross-Origin-Isolated)
+    try {
+      const wasmEnv = kokoroMod?.env?.backends?.onnx?.wasm;
+      if (wasmEnv) {
+        wasmEnv.simd = true;
+        if (typeof self !== 'undefined' && (self as any).crossOriginIsolated) {
+          const cores = typeof navigator !== 'undefined' ? navigator.hardwareConcurrency || 2 : 2;
+          wasmEnv.numThreads = Math.min(4, Math.max(1, cores - 1));
+        }
+      }
+    } catch {}
 
     const fileProgress = new Map<string, { loaded: number; total: number }>();
     const onProgress = (info: any) => {

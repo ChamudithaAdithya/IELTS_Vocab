@@ -837,7 +837,9 @@ export async function generateBuddyFriendReply(params: {
         .filter(Boolean);
       const mergedSentences: string[] = [];
       for (const s of localSentences) {
-        if (mergedSentences.length > 0 && mergedSentences[mergedSentences.length - 1].length < 22) {
+        // Only merge tiny 1-2 word interjections (< 12 chars like "Sure!" or "Nice!") so normal
+        // opening sentences ("That's interesting!") start speaking immediately without waiting!
+        if (mergedSentences.length > 0 && mergedSentences[mergedSentences.length - 1].length < 12) {
           mergedSentences[mergedSentences.length - 1] = `${mergedSentences[mergedSentences.length - 1]} ${s}`;
         } else {
           mergedSentences.push(s);
@@ -1064,8 +1066,8 @@ Buddy:`;
         }
 
         // Quote-aware sentence splitter so `You can say, "Yesterday I went shopping." Nice!` flushes Sentence 1 cleanly at `." `!
-        // Also avoids flushing ultra-short (< 22 char) opening interjections like "Sure!" or "Nice!" alone,
-        // which hit neural vocoder short-token style rows and cause a buzzing onset artifact.
+        // Only holds back tiny 1-2 word interjections (< 12 chars like "Sure!" or "Nice!") while flushing
+        // normal opening sentences ("That's interesting!") and 5+ word clauses immediately so TTS starts right away!
         while (true) {
           remaining = cleaned.slice(emittedCursor);
           const sentMatch = remaining.match(/^([\s\S]*?[.!?]+["'”’)]*)(?:\s+|$)/);
@@ -1076,7 +1078,7 @@ Buddy:`;
             if (doubleQuotes === 1 && isSpokenRecast) {
               break;
             }
-            if (!isSpokenRecast && candidate.length < 22) {
+            if (!isSpokenRecast && candidate.length < 12) {
               const afterFirst = remaining.slice(sentMatch[0].length);
               const secondSentMatch = afterFirst.match(/^([\s\S]*?[.!?]+["'”’)]*)(?:\s+|$)/);
               if (secondSentMatch && secondSentMatch[1].trim().length >= 4) {
@@ -1092,8 +1094,8 @@ Buddy:`;
             continue;
           }
           if (emittedCursor === 0 && !/^(?:you\s+can\s+say|a\s+more\s+natural)/i.test(remaining.trim())) {
-            const clauseMatch = remaining.match(/^((?:\S+\s+){7,}\S+[,;—])\s+/);
-            if (clauseMatch && clauseMatch[1].trim().length >= 28) {
+            const clauseMatch = remaining.match(/^((?:\S+\s+){4,}\S+[,;—])\s+/);
+            if (clauseMatch && clauseMatch[1].trim().length >= 20) {
               emitSentenceSafely(clauseMatch[1].trim());
               emittedCursor += clauseMatch[0].length;
               continue;

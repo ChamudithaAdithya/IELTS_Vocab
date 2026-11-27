@@ -277,3 +277,74 @@ export function createLive16kPcmCapture(
 
   return { peekWav, finalizeWav, stop };
 }
+
+/**
+ * Returns a human-readable reason when browser microphone APIs are blocked
+ * (for example, opening `http://192.168.x.x:3000` on iOS Safari / Android Chrome where
+ * `window.isSecureContext === false` causes `navigator.mediaDevices` to be `undefined`).
+ */
+export function getMicrophoneUnavailableReason(): string | null {
+  if (typeof window === 'undefined' || typeof navigator === 'undefined') {
+    return 'Microphone access is unavailable in this environment.';
+  }
+
+  const hasModernMediaDevices =
+    Boolean(navigator.mediaDevices) && typeof navigator.mediaDevices.getUserMedia === 'function';
+  const legacyGetUserMedia =
+    (navigator as any).getUserMedia ||
+    (navigator as any).webkitGetUserMedia ||
+    (navigator as any).mozGetUserMedia;
+
+  if (hasModernMediaDevices || typeof legacyGetUserMedia === 'function') {
+    return null;
+  }
+
+  if (window.isSecureContext === false) {
+    const host = window.location.hostname || 'your-computer-ip';
+    const port = window.location.port ? `:${window.location.port}` : '';
+    return `Mobile browsers block microphone access over plain HTTP (${window.location.host}). Start the server with "npm run dev:https" and open https://${host}${port}, or type your message below.`;
+  }
+
+  return 'Microphone capture is not supported in this browser or in-app webview. Open directly in Safari or Chrome over HTTPS, or type your message below.';
+}
+
+/**
+ * Cross-browser & mobile-safe wrapper around `getUserMedia` that never crashes with
+ * `TypeError: undefined is not an object (evaluating 'navigator.mediaDevices.getUserMedia')`.
+ */
+export async function requestMicrophoneStream(
+  constraints: MediaTrackConstraints | boolean = true
+): Promise<MediaStream> {
+  const unavailableReason = getMicrophoneUnavailableReason();
+  if (unavailableReason) {
+    throw new Error(unavailableReason);
+  }
+
+  if (navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') {
+    try {
+      return await navigator.mediaDevices.getUserMedia({ audio: constraints });
+    } catch (err: any) {
+      // If specific deviceId or constraint failed on mobile Safari, retry with basic audio constraint
+      if (typeof constraints === 'object') {
+        return await navigator.mediaDevices.getUserMedia({
+          audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: true }
+        });
+      }
+      throw err;
+    }
+  }
+
+  const legacyGetUserMedia =
+    (navigator as any).getUserMedia ||
+    (navigator as any).webkitGetUserMedia ||
+    (navigator as any).mozGetUserMedia;
+
+  return new Promise<MediaStream>((resolve, reject) => {
+    legacyGetUserMedia.call(
+      navigator,
+      { audio: constraints },
+      (stream: MediaStream) => resolve(stream),
+      (err: any) => reject(err instanceof Error ? err : new Error(err?.message || 'Microphone access denied.'))
+    );
+  });
+}

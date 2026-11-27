@@ -286,6 +286,12 @@ const SILENT_UNLOCK_WAV_URI =
 const cloudNaturalAudioCache = new Map<string, Blob>();
 const MAX_CLOUD_NATURAL_CACHE = 48;
 
+function isStaticHostWithoutTtsProxy(): boolean {
+  if (typeof window === 'undefined') return false;
+  const host = (window.location.hostname || '').toLowerCase();
+  return host.endsWith('.github.io') || host.endsWith('.pages.dev');
+}
+
 function cleanupTtsAnalyser(): void {
   if (ttsAnalyserRaf !== null) {
     cancelAnimationFrame(ttsAnalyserRaf);
@@ -469,6 +475,11 @@ function playNaturalCloudSpeech(
     onError?: (err: any) => void;
   }
 ): void {
+  if (isStaticHostWithoutTtsProxy()) {
+    playBrowserSpeech(text, voiceURI, options);
+    return;
+  }
+
   const sessionId = ++currentSpeechSessionId;
   isCloudAudioCancelled = false;
 
@@ -1084,83 +1095,80 @@ export async function playFreeNeuralSpeech(
   };
 
   const cacheKey = `${voice}|${rateParam}|${cleanText}`;
-  let audioBlob = freeNeuralAudioCache.get(cacheKey) || null;
+  const cachedBlob = freeNeuralAudioCache.get(cacheKey) || null;
 
-  if (!audioBlob) {
-    const controller = new AbortController();
-    currentTtsAbortController = controller;
-    const timeoutId = setTimeout(() => controller.abort(), 9000);
-
-    try {
-      let url = `/api/neural-tts?voice=${encodeURIComponent(voice)}&rate=${encodeURIComponent(
-        rateParam
-      )}&q=${encodeURIComponent(cleanText)}`;
-      if (typeof window !== 'undefined' && window.location.origin && window.location.origin !== 'null') {
-        url = `${window.location.origin}${url}`;
-      }
-
-      const res = await fetch(url, { signal: controller.signal });
-      clearTimeout(timeoutId);
-      if (currentTtsAbortController === controller) currentTtsAbortController = null;
-
-      if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) return;
-      if (!res.ok) {
-        fallbackToBrowser();
-        return;
-      }
-
-      const contentType = (res.headers.get('content-type') || '').toLowerCase();
-      if (!contentType.includes('audio')) {
-        fallbackToBrowser();
-        return;
-      }
-
-      const blob = await res.blob();
-      if (!blob || blob.size < 256) {
-        fallbackToBrowser();
-        return;
-      }
-      audioBlob = blob;
-
-      if (freeNeuralAudioCache.size >= MAX_NEURAL_TTS_CACHE) {
-        const oldestKey = freeNeuralAudioCache.keys().next().value;
-        if (oldestKey) freeNeuralAudioCache.delete(oldestKey);
-      }
-      freeNeuralAudioCache.set(cacheKey, audioBlob);
-    } catch {
-      clearTimeout(timeoutId);
-      if (currentTtsAbortController === controller) currentTtsAbortController = null;
-      if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) return;
-      fallbackToBrowser();
-      return;
-    }
+  if (!cachedBlob && isStaticHostWithoutTtsProxy()) {
+    fallbackToBrowser('Edge Neural proxy is local-server only on static GitHub Pages.');
+    return;
   }
 
-  if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled || !audioBlob) return;
+  let streamUrl = `/api/neural-tts?voice=${encodeURIComponent(voice)}&rate=${encodeURIComponent(
+    rateParam
+  )}&q=${encodeURIComponent(cleanText)}`;
+  if (typeof window !== 'undefined' && window.location.origin && window.location.origin !== 'null') {
+    streamUrl = `${window.location.origin}${streamUrl}`;
+  }
 
-  const blobUrl = URL.createObjectURL(audioBlob);
-  currentBlobUrl = blobUrl;
+  // Play cached Blob in 0ms if available; otherwise point `<audio>` directly at `/api/neural-tts`
+  // so progressive HTTP MP3 playback starts as soon as the FIRST ~2KB frames arrive (zero full-body wait!)
+  const blobUrl = cachedBlob ? URL.createObjectURL(cachedBlob) : null;
+  if (blobUrl) currentBlobUrl = blobUrl;
 
   const audio = new Audio();
   audio.volume = 1.0;
   audio.muted = false;
   audio.preload = 'auto';
-  audio.src = blobUrl;
+  audio.src = blobUrl || streamUrl;
   currentAudioElement = audio;
+
+  let hasStartedPlaying = false;
+  let fallbackFired = false;
+  const triggerSafeFallback = (msg?: string) => {
+    if (fallbackFired || sessionId !== currentSpeechSessionId || isCloudAudioCancelled) return;
+    fallbackFired = true;
+    clearSpeechTimers();
+    cleanupTtsAnalyser();
+    options.onAudioLevel?.(0);
+    try {
+      audio.onplay = null;
+      audio.onended = null;
+      audio.onerror = null;
+      audio.pause();
+      audio.removeAttribute('src');
+    } catch {}
+    if (blobUrl && currentBlobUrl === blobUrl) {
+      try { URL.revokeObjectURL(blobUrl); } catch {}
+      currentBlobUrl = null;
+    }
+    if (currentAudioElement === audio) currentAudioElement = null;
+    fallbackToBrowser(msg);
+  };
+
+  if (!cachedBlob) {
+    clearSpeechTimers();
+    speechStartTimer = setTimeout(() => {
+      if (!hasStartedPlaying) {
+        triggerSafeFallback('Edge Neural HD stream timed out.');
+      }
+    }, 3600);
+  }
 
   audio.onplay = () => {
     if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) {
       audio.pause();
       return;
     }
-    startSafeAudioLevelMonitor(audio, audioBlob, options.onAudioLevel);
+    hasStartedPlaying = true;
+    clearSpeechTimers();
+    startSafeAudioLevelMonitor(audio, cachedBlob, options.onAudioLevel);
     options.onStart?.();
   };
 
   audio.onended = () => {
+    clearSpeechTimers();
     cleanupTtsAnalyser();
     options.onAudioLevel?.(0);
-    if (currentBlobUrl === blobUrl) {
+    if (blobUrl && currentBlobUrl === blobUrl) {
       try { URL.revokeObjectURL(blobUrl); } catch {}
       currentBlobUrl = null;
     }
@@ -1171,15 +1179,7 @@ export async function playFreeNeuralSpeech(
   };
 
   audio.onerror = () => {
-    cleanupTtsAnalyser();
-    options.onAudioLevel?.(0);
-    if (currentBlobUrl === blobUrl) {
-      try { URL.revokeObjectURL(blobUrl); } catch {}
-      currentBlobUrl = null;
-    }
-    if (sessionId === currentSpeechSessionId && !isCloudAudioCancelled) {
-      fallbackToBrowser();
-    }
+    triggerSafeFallback();
   };
 
   try {
@@ -1187,7 +1187,7 @@ export async function playFreeNeuralSpeech(
   } catch (err: any) {
     if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) return;
     if (err && (err.name === 'AbortError' || err.message?.includes('interrupted'))) return;
-    fallbackToBrowser(err?.message);
+    triggerSafeFallback(err?.message);
   }
 }
 
@@ -1324,7 +1324,7 @@ async function fetchFreeNeuralAudioBlob(
   onFirstByte?: (delivery: 'neural-stream' | 'neural-cache') => void
 ): Promise<Blob | null> {
   const cleanText = text.replace(/[*_#`~[\]]/g, '').trim();
-  if (!cleanText) return null;
+  if (!cleanText || isStaticHostWithoutTtsProxy()) return null;
   const ratePctNum = Math.round((Math.max(0.75, Math.min(1.3, rate)) - 1.0) * 100);
   const rateParam = `${ratePctNum >= 0 ? '+' : ''}${ratePctNum}%`;
   const cacheKey = `${voice}|${rateParam}|${cleanText}`;
@@ -1392,7 +1392,7 @@ async function fetchFreeNeuralAudioBlob(
  * so `tts_request_start -> tts_first_audio` skips cold TLS/WSS setup!
  */
 export function warmUpNeuralTts(voice: FreeNeuralVoiceName = 'en-US-AvaMultilingualNeural'): void {
-  if (typeof window === 'undefined') return;
+  if (typeof window === 'undefined' || isStaticHostWithoutTtsProxy()) return;
   let url = `/api/neural-tts?warmup=1&voice=${encodeURIComponent(voice)}`;
   if (window.location.origin && window.location.origin !== 'null') {
     url = `${window.location.origin}${url}`;
@@ -1432,6 +1432,7 @@ export function createRealtimeTtsQueue(options: {
   interface QueueItem {
     text: string;
     index: number;
+    directStreamOnly: boolean;
     promise: Promise<Blob | null>;
   }
 
@@ -1469,6 +1470,110 @@ export function createRealtimeTtsQueue(options: {
       options.onAllEnd?.();
     }
   };
+
+  const buildNeuralStreamUrl = (cleanText: string): { url: string; cacheKey: string } => {
+    const voice = options.voiceConfig.freeNeuralVoice;
+    const rate = options.voiceConfig.rate;
+    const ratePctNum = Math.round((Math.max(0.75, Math.min(1.3, rate)) - 1.0) * 100);
+    const rateParam = `${ratePctNum >= 0 ? '+' : ''}${ratePctNum}%`;
+    const cacheKey = `${voice}|${rateParam}|${cleanText}`;
+    let url = `/api/neural-tts?voice=${encodeURIComponent(voice)}&rate=${encodeURIComponent(
+      rateParam
+    )}&q=${encodeURIComponent(cleanText)}`;
+    if (typeof window !== 'undefined' && window.location.origin && window.location.origin !== 'null') {
+      url = `${window.location.origin}${url}`;
+    }
+    return { url, cacheKey };
+  };
+
+  /**
+   * Plays `/api/neural-tts` progressively via native `<audio>` HTTP chunked streaming
+   * so Segment 0 starts speaking as soon as the FIRST ~2KB MP3 frames arrive (~250-380ms!)
+   * instead of waiting 2-5s for 100% of the sentence body to finish downloading!
+   */
+  const playDirectNeuralStreamOnce = (cleanText: string): Promise<boolean> =>
+    new Promise((resolve) => {
+      if (!isAlive()) {
+        resolve(false);
+        return;
+      }
+      const { url, cacheKey } = buildNeuralStreamUrl(cleanText);
+      const cached = freeNeuralAudioCache.get(cacheKey);
+      if (cached) {
+        markFirstAudio('neural-cache');
+        void playBlobOnce(cached).then(resolve);
+        return;
+      }
+      if (isStaticHostWithoutTtsProxy()) {
+        resolve(false);
+        return;
+      }
+
+      const audio = new Audio();
+      audio.volume = 1.0;
+      audio.muted = false;
+      audio.preload = 'auto';
+      audio.src = url;
+      currentAudioElement = audio;
+
+      let settled = false;
+      let started = false;
+
+      const finishStream = (ok: boolean) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(firstFrameGuard);
+        cleanupTtsAnalyser();
+        options.onAudioLevel?.(0);
+        if (currentAudioElement === audio) {
+          if (!ok) {
+            try {
+              audio.onplay = null;
+              audio.onended = null;
+              audio.onerror = null;
+              audio.pause();
+              audio.removeAttribute('src');
+            } catch {}
+          }
+          currentAudioElement = null;
+        }
+        resolve(ok);
+      };
+
+      const firstFrameGuard = setTimeout(() => {
+        if (!started) {
+          finishStream(false);
+        }
+      }, 3400);
+
+      audio.onplay = () => {
+        if (!isAlive()) {
+          audio.pause();
+          finishStream(false);
+          return;
+        }
+        started = true;
+        clearTimeout(firstFrameGuard);
+        markFirstAudio('neural-stream');
+        startSafeAudioLevelMonitor(audio, null, options.onAudioLevel);
+        if (!startedOnce) {
+          startedOnce = true;
+          options.onFirstStart?.();
+        }
+      };
+
+      audio.onended = () => {
+        finishStream(true);
+      };
+
+      audio.onerror = () => {
+        finishStream(false);
+      };
+
+      audio.play().catch(() => {
+        finishStream(false);
+      });
+    });
 
   const playBlobOnce = (blob: Blob): Promise<boolean> =>
     new Promise((resolve) => {
@@ -1638,12 +1743,21 @@ export function createRealtimeTtsQueue(options: {
         const current = items[playIdx++];
         if (idxNow > 0 && isAlive()) {
           const prevEndedComma = /[,;—]$/.test(items[idxNow - 1]?.text || '');
-          await waitPauseMs(prevEndedComma ? 70 : 180);
+          await waitPauseMs(prevEndedComma ? 20 : 45);
           if (!isAlive()) return;
         }
 
         if (options.voiceConfig.provider === 'standard') {
           await playBrowserOnce(current.text);
+          continue;
+        }
+
+        // Fast-Path Progressive Stream for Segment 0 (starts speaking on first ~2KB MP3 chunk!)
+        if (current.directStreamOnly) {
+          const streamedOk = await playDirectNeuralStreamOnce(current.text);
+          if (!streamedOk && isAlive()) {
+            await playBrowserOnce(current.text);
+          }
           continue;
         }
 
@@ -1655,7 +1769,11 @@ export function createRealtimeTtsQueue(options: {
             await playBrowserOnce(current.text);
           }
         } else if (isAlive()) {
-          await playBrowserOnce(current.text);
+          // If Kokoro timed out on Segment 0, stream directly via Edge Neural before falling back to OS speech
+          const streamedOk = await playDirectNeuralStreamOnce(current.text);
+          if (!streamedOk && isAlive()) {
+            await playBrowserOnce(current.text);
+          }
         }
       }
     } finally {
@@ -1670,47 +1788,86 @@ export function createRealtimeTtsQueue(options: {
       if (!clean || !isAlive()) return;
       markReqStart();
       const idx = items.length;
-      const promise =
-        options.voiceConfig.provider === 'standard'
-          ? Promise.resolve(null)
-          : options.voiceConfig.provider === 'kokoro'
-          ? (() => {
-              if (getKokoroStatus().state !== 'ready') {
-                warmUpKokoroTts();
-                return fetchFreeNeuralAudioBlob(
-                  clean,
-                  options.voiceConfig.freeNeuralVoice,
-                  options.voiceConfig.rate,
-                  controller.signal,
-                  idx === 0 ? (d) => markFirstAudio(d) : undefined
-                );
-              }
-              return synthesizeKokoroWithTimeout(
+      const isImmediateHead = idx === playIdx && !isPlayingLoop;
+
+      if (options.voiceConfig.provider === 'standard') {
+        items.push({
+          text: clean,
+          index: idx,
+          directStreamOnly: false,
+          promise: Promise.resolve(null)
+        });
+        void pump();
+        return;
+      }
+
+      if (options.voiceConfig.provider === 'kokoro') {
+        if (getKokoroStatus().state !== 'ready') {
+          warmUpKokoroTts();
+          if (isImmediateHead) {
+            items.push({
+              text: clean,
+              index: idx,
+              directStreamOnly: true,
+              promise: Promise.resolve(null)
+            });
+          } else {
+            items.push({
+              text: clean,
+              index: idx,
+              directStreamOnly: false,
+              promise: fetchFreeNeuralAudioBlob(
                 clean,
-                options.voiceConfig.kokoroVoice,
+                options.voiceConfig.freeNeuralVoice,
                 options.voiceConfig.rate,
-                controller.signal,
-                5500,
-                idx === 0 ? (d) => markFirstAudio(d) : undefined
-              ).then(async (kokoroBlob) => {
-                if (kokoroBlob || !isAlive()) return kokoroBlob;
-                return fetchFreeNeuralAudioBlob(
-                  clean,
-                  options.voiceConfig.freeNeuralVoice,
-                  options.voiceConfig.rate,
-                  controller.signal,
-                  idx === 0 ? (d) => markFirstAudio(d) : undefined
-                );
-              });
-            })()
-          : fetchFreeNeuralAudioBlob(
-              clean,
-              options.voiceConfig.freeNeuralVoice,
-              options.voiceConfig.rate,
-              controller.signal,
-              idx === 0 ? (d) => markFirstAudio(d) : undefined
-            );
-      items.push({ text: clean, index: idx, promise });
+                controller.signal
+              )
+            });
+          }
+          void pump();
+          return;
+        }
+
+        items.push({
+          text: clean,
+          index: idx,
+          directStreamOnly: false,
+          promise: synthesizeKokoroWithTimeout(
+            clean,
+            options.voiceConfig.kokoroVoice,
+            options.voiceConfig.rate,
+            controller.signal,
+            isImmediateHead ? 2400 : 4500,
+            idx === 0 ? (d) => markFirstAudio(d) : undefined
+          )
+        });
+        void pump();
+        return;
+      }
+
+      // Edge Neural HD ('neural-free'):
+      //  - Immediate head segment (`idx === 0` or empty queue) streams progressively via `<audio src>` (0 buffering wait!)
+      //  - Subsequent segments (`idx >= 1`) prefetch full MP3 Blobs in parallel while Segment 0 plays aloud!
+      if (isImmediateHead) {
+        items.push({
+          text: clean,
+          index: idx,
+          directStreamOnly: true,
+          promise: Promise.resolve(null)
+        });
+      } else {
+        items.push({
+          text: clean,
+          index: idx,
+          directStreamOnly: false,
+          promise: fetchFreeNeuralAudioBlob(
+            clean,
+            options.voiceConfig.freeNeuralVoice,
+            options.voiceConfig.rate,
+            controller.signal
+          )
+        });
+      }
       void pump();
     },
     markStreamDone() {
