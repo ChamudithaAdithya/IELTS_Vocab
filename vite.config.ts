@@ -26,15 +26,14 @@ interface WarmEdgeSocket {
   createdAt: number;
 }
 
-const WARM_POOL_PER_VOICE = 3;
-// Bing Edge TTS closes idle WebSockets around ~15-20s; keep TTL strictly under 13s and verify readyState === 1 (OPEN)!
-const WARM_SOCKET_MAX_AGE_MS = 13_000;
+const WARM_POOL_PER_VOICE = 2;
+// Bing Edge TTS closes idle WebSockets quickly; keep TTL strictly under 9s and verify readyState === 1 (OPEN)!
+const WARM_SOCKET_MAX_AGE_MS = 9_000;
 const warmVoicePools = new Map<string, WarmEdgeSocket[]>();
 const warmingInFlight = new Map<string, number>();
 
 function isEdgeSocketOpen(client: MsEdgeTTS): boolean {
-  const ws = (client as any)?._ws;
-  // If internal _ws is exposed, require WebSocket.OPEN (1); otherwise rely on strict 13s age check
+  const ws = (client as any)?._ws || (client as any)?.ws;
   return ws ? ws.readyState === 1 : true;
 }
 
@@ -184,7 +183,6 @@ async function streamEdgeNeuralMp3ToResponse(
           headersSent = true;
           res.statusCode = 200;
           res.setHeader('Content-Type', 'audio/mpeg');
-          res.setHeader('Transfer-Encoding', 'chunked');
           res.setHeader('Access-Control-Allow-Origin', '*');
           res.setHeader('Cache-Control', 'no-transform, public, max-age=86400');
           res.setHeader('X-TTS-Delivery', 'chunked-stream');
@@ -210,6 +208,94 @@ async function streamEdgeNeuralMp3ToResponse(
   return false;
 }
 
+function registerTtsMiddlewares(middlewares: any): void {
+  // Pre-warm primary voice pool on server startup so Turn 1 avoids cold WSS setup
+  replenishWarmPool('en-US-AvaMultilingualNeural');
+
+  // 1. Free Unlimited Microsoft Edge Neural HD Voice endpoint (Chunked Live Audio Streaming + Warm Socket Pool)
+  middlewares.use('/api/neural-tts', async (req: any, res: any) => {
+    try {
+      const url = new URL(req.url || '', 'http://localhost');
+      const voice = url.searchParams.get('voice') || 'en-US-AvaMultilingualNeural';
+      if (url.searchParams.get('warmup') === '1') {
+        replenishWarmPool(voice);
+        res.statusCode = 204;
+        res.end();
+        return;
+      }
+      const text = (url.searchParams.get('q') || '').trim();
+      const rate = url.searchParams.get('rate') || '+0%';
+      if (!text) {
+        res.statusCode = 400;
+        res.end('Missing text query');
+        return;
+      }
+      const ok = await streamEdgeNeuralMp3ToResponse(text, voice, rate, res);
+      if (!ok && !res.writableEnded) {
+        res.statusCode = 502;
+        res.end('Empty neural audio stream');
+      }
+    } catch (err: any) {
+      if (!res.writableEnded) {
+        res.statusCode = 502;
+        res.end(err?.message || 'Neural TTS error');
+      }
+    }
+  });
+
+  // 2. General /api/tts endpoint — upgrades to Edge Neural HD first, falls back to Google Translate TTS
+  middlewares.use('/api/tts', async (req: any, res: any) => {
+    try {
+      const url = new URL(req.url || '', 'http://localhost');
+      const text = (url.searchParams.get('q') || '').trim();
+      const lang = url.searchParams.get('tl') || 'en-GB';
+      if (!text) {
+        res.statusCode = 400;
+        res.end('Missing text query');
+        return;
+      }
+      try {
+        const defaultVoice =
+          lang === 'en-US'
+            ? 'en-US-AvaMultilingualNeural'
+            : lang === 'en-AU'
+            ? 'en-AU-NatashaNeural'
+            : 'en-GB-SoniaNeural';
+        const neuralBuf = await synthesizeEdgeNeuralMp3(text, defaultVoice);
+        if (neuralBuf && neuralBuf.length > 0) {
+          res.setHeader('Content-Type', 'audio/mpeg');
+          res.setHeader('Access-Control-Allow-Origin', '*');
+          res.setHeader('Cache-Control', 'public, max-age=86400');
+          res.end(neuralBuf);
+          return;
+        }
+      } catch {
+        // Fall through to Google Translate TTS if Edge WebSocket is blocked
+      }
+
+      const googleUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${encodeURIComponent(lang)}&client=tw-ob&q=${encodeURIComponent(text)}`;
+      const upstream = await fetch(googleUrl, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        }
+      });
+      if (!upstream.ok) {
+        res.statusCode = upstream.status;
+        res.end('Upstream error');
+        return;
+      }
+      const buffer = Buffer.from(await upstream.arrayBuffer());
+      res.setHeader('Content-Type', 'audio/mpeg');
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Cache-Control', 'public, max-age=86400');
+      res.end(buffer);
+    } catch (err: any) {
+      res.statusCode = 500;
+      res.end(err.message || 'Server error');
+    }
+  });
+}
+
 export default defineConfig(() => {
   return {
     // Relative asset URLs work both at a custom domain and under a
@@ -221,91 +307,10 @@ export default defineConfig(() => {
       {
         name: 'tts-proxy-middleware',
         configureServer(server) {
-          // Pre-warm primary voice pool on server startup so Turn 1 avoids cold WSS setup
-          replenishWarmPool('en-US-AvaMultilingualNeural');
-
-          // 1. Free Unlimited Microsoft Edge Neural HD Voice endpoint (Chunked Live Audio Streaming + Warm Socket Pool)
-          server.middlewares.use('/api/neural-tts', async (req, res) => {
-            try {
-              const url = new URL(req.url || '', 'http://localhost');
-              const voice = url.searchParams.get('voice') || 'en-US-AvaMultilingualNeural';
-              if (url.searchParams.get('warmup') === '1') {
-                replenishWarmPool(voice);
-                res.statusCode = 204;
-                res.end();
-                return;
-              }
-              const text = (url.searchParams.get('q') || '').trim();
-              const rate = url.searchParams.get('rate') || '+0%';
-              if (!text) {
-                res.statusCode = 400;
-                res.end('Missing text query');
-                return;
-              }
-              const ok = await streamEdgeNeuralMp3ToResponse(text, voice, rate, res);
-              if (!ok && !res.writableEnded) {
-                res.statusCode = 502;
-                res.end('Empty neural audio stream');
-              }
-            } catch (err: any) {
-              if (!res.writableEnded) {
-                res.statusCode = 502;
-                res.end(err?.message || 'Neural TTS error');
-              }
-            }
-          });
-
-          // 2. General /api/tts endpoint — upgrades to Edge Neural HD first, falls back to Google Translate TTS
-          server.middlewares.use('/api/tts', async (req, res) => {
-            try {
-              const url = new URL(req.url || '', 'http://localhost');
-              const text = (url.searchParams.get('q') || '').trim();
-              const lang = url.searchParams.get('tl') || 'en-GB';
-              if (!text) {
-                res.statusCode = 400;
-                res.end('Missing text query');
-                return;
-              }
-              try {
-                const defaultVoice =
-                  lang === 'en-US'
-                    ? 'en-US-AvaMultilingualNeural'
-                    : lang === 'en-AU'
-                    ? 'en-AU-NatashaNeural'
-                    : 'en-GB-SoniaNeural';
-                const neuralBuf = await synthesizeEdgeNeuralMp3(text, defaultVoice);
-                if (neuralBuf && neuralBuf.length > 0) {
-                  res.setHeader('Content-Type', 'audio/mpeg');
-                  res.setHeader('Access-Control-Allow-Origin', '*');
-                  res.setHeader('Cache-Control', 'public, max-age=86400');
-                  res.end(neuralBuf);
-                  return;
-                }
-              } catch {
-                // Fall through to Google Translate TTS if Edge WebSocket is blocked
-              }
-
-              const googleUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${encodeURIComponent(lang)}&client=tw-ob&q=${encodeURIComponent(text)}`;
-              const upstream = await fetch(googleUrl, {
-                headers: {
-                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-                }
-              });
-              if (!upstream.ok) {
-                res.statusCode = upstream.status;
-                res.end('Upstream error');
-                return;
-              }
-              const buffer = Buffer.from(await upstream.arrayBuffer());
-              res.setHeader('Content-Type', 'audio/mpeg');
-              res.setHeader('Access-Control-Allow-Origin', '*');
-              res.setHeader('Cache-Control', 'public, max-age=86400');
-              res.end(buffer);
-            } catch (err: any) {
-              res.statusCode = 500;
-              res.end(err.message || 'Server error');
-            }
-          });
+          registerTtsMiddlewares(server.middlewares);
+        },
+        configurePreviewServer(server) {
+          registerTtsMiddlewares(server.middlewares);
         }
       }
     ],
@@ -316,6 +321,29 @@ export default defineConfig(() => {
     },
     worker: {
       format: 'es',
+    },
+    build: {
+      chunkSizeWarningLimit: 2800,
+      rolldownOptions: {
+        output: {
+          codeSplitting: {
+            groups: [
+              {
+                name: 'vendor',
+                test: /node_modules/,
+              },
+              {
+                name: 'vocab-dictionary',
+                test: /academicVocabularyDictionary|importedVocabulary/,
+              },
+              {
+                name: 'vocab-lessons',
+                test: /src[\\/]data[\\/]lesson/,
+              },
+            ],
+          },
+        },
+      },
     },
     server: {
       // HMR is disabled in AI Studio via DISABLE_HMR env var.

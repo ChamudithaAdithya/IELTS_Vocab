@@ -133,12 +133,18 @@ export function getBrowserVoices(): SpeechSynthesisVoice[] {
   return cachedVoices;
 }
 
-// Listen for async voice population
+// Listen for async voice population without overwriting other listeners
 if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
   getBrowserVoices();
-  window.speechSynthesis.onvoiceschanged = () => {
-    getBrowserVoices();
-  };
+  if (typeof window.speechSynthesis.addEventListener === 'function') {
+    window.speechSynthesis.addEventListener('voiceschanged', () => {
+      getBrowserVoices();
+    });
+  } else {
+    window.speechSynthesis.onvoiceschanged = () => {
+      getBrowserVoices();
+    };
+  }
 }
 
 /**
@@ -264,23 +270,27 @@ let currentAudioElement: HTMLAudioElement | null = null;
 let currentBlobUrl: string | null = null;
 let currentTtsAbortController: AbortController | null = null;
 let ttsAnalyserRaf: number | null = null;
-let ttsAudioCtx: AudioContext | null = null;
 let isCloudAudioCancelled = false;
 /** Module-level anchor prevents Chrome/Edge from garbage-collecting active utterances mid-speech! */
 let activeUtterances: SpeechSynthesisUtterance[] = [];
 let speechStartTimer: ReturnType<typeof setTimeout> | null = null;
 let speechCancelDelayTimer: ReturnType<typeof setTimeout> | null = null;
+let lastSpeechCancelAt = 0;
 let audioUnlocked = false;
+let decodeEnvelopeCtx: AudioContext | null = null;
+
+// 44-byte valid silent 8kHz mono PCM WAV used once on first user gesture to unlock HTMLAudioElement autoplay
+const SILENT_UNLOCK_WAV_URI =
+  'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+
+const cloudNaturalAudioCache = new Map<string, Blob>();
+const MAX_CLOUD_NATURAL_CACHE = 48;
 
 function cleanupTtsAnalyser(): void {
   if (ttsAnalyserRaf !== null) {
     cancelAnimationFrame(ttsAnalyserRaf);
     ttsAnalyserRaf = null;
   }
-  if (ttsAudioCtx && ttsAudioCtx.state !== 'closed') {
-    try { ttsAudioCtx.close(); } catch {}
-  }
-  ttsAudioCtx = null;
 }
 
 function clearSpeechTimers(): void {
@@ -295,7 +305,7 @@ function clearSpeechTimers(): void {
 }
 
 /**
- * Call inside a user gesture (Orb tap / Speak click / Send) to warm up Audio & SpeechSynthesis
+ * Call inside a user gesture (Orb tap / Speak click / Send) to warm up HTMLAudioElement & SpeechSynthesis
  * so subsequent async/hands-free AI replies are never silently blocked by browser autoplay policy.
  */
 export function unlockAudioOutput(): void {
@@ -303,15 +313,26 @@ export function unlockAudioOutput(): void {
   if (!audioUnlocked) {
     audioUnlocked = true;
     try {
+      const silentAudio = new Audio(SILENT_UNLOCK_WAV_URI);
+      silentAudio.volume = 0.01;
+      const p = silentAudio.play();
+      if (p !== undefined) {
+        p.then(() => {
+          silentAudio.pause();
+        }).catch(() => {
+          audioUnlocked = false;
+        });
+      }
+    } catch {
+      audioUnlocked = false;
+    }
+    try {
       const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
-      if (AudioCtx) {
-        const ctx = new AudioCtx();
-        if (ctx.state === 'suspended') {
-          ctx.resume().catch(() => {});
-        }
-        setTimeout(() => {
-          try { ctx.close(); } catch {}
-        }, 300);
+      if (AudioCtx && !decodeEnvelopeCtx) {
+        decodeEnvelopeCtx = new AudioCtx();
+      }
+      if (decodeEnvelopeCtx && decodeEnvelopeCtx.state === 'suspended') {
+        decodeEnvelopeCtx.resume().catch(() => {});
       }
     } catch {}
   }
@@ -323,6 +344,21 @@ export function unlockAudioOutput(): void {
       }
     } catch {}
   }
+}
+
+// Automatically unlock audio output on the first pointer/key/touch gesture anywhere in the app
+if (typeof window !== 'undefined') {
+  const autoUnlock = () => {
+    unlockAudioOutput();
+    if (audioUnlocked) {
+      window.removeEventListener('pointerdown', autoUnlock);
+      window.removeEventListener('keydown', autoUnlock);
+      window.removeEventListener('touchstart', autoUnlock);
+    }
+  };
+  window.addEventListener('pointerdown', autoUnlock, { passive: true });
+  window.addEventListener('keydown', autoUnlock, { passive: true });
+  window.addEventListener('touchstart', autoUnlock, { passive: true });
 }
 
 export function stopAllSpeech(): void {
@@ -347,7 +383,8 @@ export function stopAllSpeech(): void {
       currentAudioElement.onstalled = null;
       currentAudioElement.pause();
       currentAudioElement.currentTime = 0;
-      currentAudioElement.src = '';
+      currentAudioElement.removeAttribute('src');
+      currentAudioElement.load();
     } catch {}
     currentAudioElement = null;
   }
@@ -361,7 +398,12 @@ export function stopAllSpeech(): void {
     try {
       // NEVER call speechSynthesis.pause() here — in Chrome/Edge on Windows it leaves
       // the speech queue stuck paused and causes subsequent speak() calls to play silently!
-      window.speechSynthesis.cancel();
+      if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+        lastSpeechCancelAt = Date.now();
+        window.speechSynthesis.cancel();
+      } else if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+      }
     } catch {}
   }
 }
@@ -445,7 +487,7 @@ function playNaturalCloudSpeech(
 
   let currentChunkIdx = 0;
 
-  const playChunk = () => {
+  const playChunk = async () => {
     // If user cancelled, recording started, or session superseded, bail immediately
     if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled || currentChunkIdx >= chunks.length) {
       if (currentAudioElement) {
@@ -461,59 +503,87 @@ function playNaturalCloudSpeech(
     }
 
     const chunk = chunks[currentChunkIdx++];
-    // Use local proxy /api/tts to avoid CORS and Google 404 external-origin blocking
-    let url = `/api/tts?tl=${encodeURIComponent(lang)}&q=${encodeURIComponent(chunk)}`;
-    if (typeof window !== 'undefined' && window.location.origin && window.location.origin !== 'null') {
-      url = `${window.location.origin}/api/tts?tl=${encodeURIComponent(lang)}&q=${encodeURIComponent(chunk)}`;
+    const cacheKey = `${lang}|${chunk}`;
+    let blob = cloudNaturalAudioCache.get(cacheKey) || null;
+
+    const triggerBrowserFallback = () => {
+      if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) return;
+      clearSpeechTimers();
+      const remainingText = chunks.slice(currentChunkIdx - 1).join(' ');
+      playBrowserSpeech(remainingText, voiceURI, options);
+    };
+
+    if (!blob) {
+      let url = `/api/tts?tl=${encodeURIComponent(lang)}&q=${encodeURIComponent(chunk)}`;
+      if (typeof window !== 'undefined' && window.location.origin && window.location.origin !== 'null') {
+        url = `${window.location.origin}/api/tts?tl=${encodeURIComponent(lang)}&q=${encodeURIComponent(chunk)}`;
+      }
+      const controller = new AbortController();
+      currentTtsAbortController = controller;
+      const fetchTimer = setTimeout(() => controller.abort(), 4200);
+      try {
+        const res = await fetch(url, { signal: controller.signal });
+        clearTimeout(fetchTimer);
+        if (currentTtsAbortController === controller) currentTtsAbortController = null;
+        if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) return;
+        const ct = (res.headers.get('content-type') || '').toLowerCase();
+        if (!res.ok || !ct.includes('audio')) {
+          triggerBrowserFallback();
+          return;
+        }
+        const fetchedBlob = await res.blob();
+        if (!fetchedBlob || fetchedBlob.size < 128) {
+          triggerBrowserFallback();
+          return;
+        }
+        blob = fetchedBlob;
+        if (cloudNaturalAudioCache.size >= MAX_CLOUD_NATURAL_CACHE) {
+          const oldest = cloudNaturalAudioCache.keys().next().value;
+          if (oldest) cloudNaturalAudioCache.delete(oldest);
+        }
+        cloudNaturalAudioCache.set(cacheKey, blob);
+      } catch {
+        clearTimeout(fetchTimer);
+        if (currentTtsAbortController === controller) currentTtsAbortController = null;
+        if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) return;
+        triggerBrowserFallback();
+        return;
+      }
     }
 
+    if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled || !blob) return;
+
+    const blobUrl = URL.createObjectURL(blob);
+    currentBlobUrl = blobUrl;
+
     const audio = new Audio();
-    // Do NOT set crossOrigin = 'anonymous' to avoid CORS restrictions on media playback
     audio.volume = 1.0;
     audio.muted = false;
     audio.preload = 'auto';
-    audio.src = url;
+    audio.src = blobUrl;
     currentAudioElement = audio;
 
     if (effectiveRate && effectiveRate !== 1.0) {
       audio.playbackRate = Math.max(0.7, Math.min(1.4, effectiveRate));
     }
 
-    let chunkStarted = false;
     let fallbackTriggered = false;
-
-    const triggerBrowserFallback = () => {
-      if (fallbackTriggered || sessionId !== currentSpeechSessionId || isCloudAudioCancelled) {
-        return;
-      }
+    const safeFallback = () => {
+      if (fallbackTriggered || sessionId !== currentSpeechSessionId || isCloudAudioCancelled) return;
       fallbackTriggered = true;
-      clearSpeechTimers();
-      try {
-        audio.onplay = null;
-        audio.onended = null;
-        audio.onerror = null;
-        audio.pause();
-        audio.src = '';
-      } catch {}
-      if (currentAudioElement === audio) currentAudioElement = null;
-      const remainingText = chunks.slice(currentChunkIdx - 1).join(' ');
-      playBrowserSpeech(remainingText, voiceURI, options);
-    };
-
-    // Watchdog: if Cloud /api/tts hangs or never starts playing within 3.2s, seamlessly switch to Browser Speech!
-    clearSpeechTimers();
-    speechStartTimer = setTimeout(() => {
-      if (!chunkStarted && sessionId === currentSpeechSessionId && !isCloudAudioCancelled) {
-        triggerBrowserFallback();
+      if (currentBlobUrl === blobUrl) {
+        try { URL.revokeObjectURL(blobUrl); } catch {}
+        currentBlobUrl = null;
       }
-    }, 3200);
+      if (currentAudioElement === audio) currentAudioElement = null;
+      triggerBrowserFallback();
+    };
 
     audio.onplay = () => {
       if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) {
         audio.pause();
         return;
       }
-      chunkStarted = true;
       clearSpeechTimers();
       if (currentChunkIdx === 1) {
         options.onStart?.();
@@ -525,31 +595,32 @@ function playNaturalCloudSpeech(
       audio.onplay = null;
       audio.onended = null;
       audio.onerror = null;
+      if (currentBlobUrl === blobUrl) {
+        try { URL.revokeObjectURL(blobUrl); } catch {}
+        currentBlobUrl = null;
+      }
+      if (currentAudioElement === audio) currentAudioElement = null;
       if (sessionId === currentSpeechSessionId && !isCloudAudioCancelled) {
-        playChunk();
+        void playChunk();
       }
     };
 
     audio.onerror = () => {
-      triggerBrowserFallback();
+      safeFallback();
     };
 
-    const playPromise = audio.play();
-    if (playPromise !== undefined) {
-      playPromise.catch((err) => {
-        // Do NOT fallback if speech was explicitly cancelled or superseded
-        if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) {
-          return;
-        }
-        if (err && (err.name === 'AbortError' || err.message?.includes('interrupted') || err.message?.includes('pause'))) {
-          return;
-        }
-        triggerBrowserFallback();
-      });
+    try {
+      await audio.play();
+    } catch (err: any) {
+      if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) return;
+      if (err && (err.name === 'AbortError' || err.message?.includes('interrupted') || err.message?.includes('pause'))) {
+        return;
+      }
+      safeFallback();
     }
   };
 
-  playChunk();
+  void playChunk();
 }
 
 function resolveGuaranteedLocalVoice(): SpeechSynthesisVoice | null {
@@ -595,10 +666,15 @@ function playBrowserSpeech(
   const effectiveRate = options.rate ?? storedSettings.rate ?? 0.94;
   const effectivePitch = options.pitch ?? storedSettings.pitch ?? 1.0;
 
-  // Cancel any stale Chrome speech queue, then wait 50ms so Chrome's async cancel()
-  // NEVER silently swallows our new utterance!
+  // Only cancel if speechSynthesis is actively speaking/pending, and wait 65ms after any cancel()
+  // so Chromium's async cancel IPC NEVER swallows our newly queued utterance!
   try {
-    window.speechSynthesis.cancel();
+    if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+      lastSpeechCancelAt = Date.now();
+      window.speechSynthesis.cancel();
+    } else if (window.speechSynthesis.paused) {
+      window.speechSynthesis.resume();
+    }
   } catch {}
 
   let chunkIdx = 0;
@@ -633,7 +709,7 @@ function playBrowserSpeech(
 
     let started = false;
 
-    // Watchdog: if a remote browser voice (e.g. Google UK) stalls silently for >2.6s,
+    // Watchdog: if a remote browser voice (e.g. Google UK) stalls silently for >1.9s,
     // automatically retry with a guaranteed local OS voice so the user ALWAYS hears audio!
     clearSpeechTimers();
     speechStartTimer = setTimeout(() => {
@@ -648,7 +724,7 @@ function playBrowserSpeech(
           options.onError?.(new Error('Browser speech failed to start'));
         }
       }
-    }, 2600);
+    }, 1900);
 
     utterance.onstart = () => {
       if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) {
@@ -695,11 +771,17 @@ function playBrowserSpeech(
     }
   };
 
-  speechCancelDelayTimer = setTimeout(() => {
-    if (sessionId === currentSpeechSessionId && !isCloudAudioCancelled) {
-      speakNextChunk();
-    }
-  }, 55);
+  const elapsedSinceCancel = Date.now() - lastSpeechCancelAt;
+  const settleWaitMs = elapsedSinceCancel < 70 ? 70 - elapsedSinceCancel : 0;
+  if (settleWaitMs > 0) {
+    speechCancelDelayTimer = setTimeout(() => {
+      if (sessionId === currentSpeechSessionId && !isCloudAudioCancelled) {
+        speakNextChunk();
+      }
+    }, settleWaitMs);
+  } else {
+    speakNextChunk();
+  }
 }
 
 export function playSpeech(
@@ -848,42 +930,112 @@ export function saveBuddyVoiceConfig(config: BuddyVoiceConfig): void {
 const freeNeuralAudioCache = new Map<string, Blob>();
 const MAX_NEURAL_TTS_CACHE = 32;
 
-function attachAudioWaveformAnalyser(
+/**
+ * Safe Non-Invasive Audio Waveform Envelope Monitor:
+ * NEVER calls `AudioContext.createMediaElementSource(audio)`!
+ * Creating a `MediaElementAudioSourceNode` inside an async `onplay` callback detaches `<audio>`
+ * from native speaker output and mutes it completely whenever the AudioContext is suspended.
+ * Instead, `<audio>` ALWAYS outputs directly to OS speakers while we read decoded RMS buckets
+ * from a passive copy of the Blob buffer (with smooth prosody fallback).
+ */
+function startSafeAudioLevelMonitor(
   audio: HTMLAudioElement,
+  blob: Blob | null,
   onAudioLevel?: (level: number) => void
 ): void {
   if (!onAudioLevel || typeof window === 'undefined') return;
-  try {
-    const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
-    if (!AudioCtx) return;
-    cleanupTtsAnalyser();
-    const ctx = new AudioCtx();
-    if (ctx.state === 'suspended') {
-      ctx.resume().catch(() => {});
-    }
-    const source = ctx.createMediaElementSource(audio);
-    const analyser = ctx.createAnalyser();
-    analyser.fftSize = 256;
-    analyser.smoothingTimeConstant = 0.72;
-    source.connect(analyser);
-    analyser.connect(ctx.destination);
-    ttsAudioCtx = ctx;
+  cleanupTtsAnalyser();
 
-    const data = new Uint8Array(analyser.frequencyBinCount);
-    const tick = () => {
-      if (!ttsAudioCtx || currentAudioElement !== audio) return;
-      analyser.getByteFrequencyData(data);
-      let sum = 0;
-      for (let i = 0; i < data.length; i++) sum += data[i];
-      const avg = sum / data.length;
-      const normalized = Math.min(100, Math.round(avg * 1.45));
-      onAudioLevel(normalized);
-      ttsAnalyserRaf = requestAnimationFrame(tick);
-    };
-    ttsAnalyserRaf = requestAnimationFrame(tick);
-  } catch {
-    // Non-fatal: audio still plays cleanly even if Web Audio graph is unavailable
+  let rmsBuckets: Float32Array | null = null;
+  const bucketHz = 50; // 20ms resolution
+
+  if (blob) {
+    blob
+      .arrayBuffer()
+      .then(async (buf) => {
+        if (currentAudioElement !== audio) return;
+        const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+        if (!AudioCtx) return;
+        if (!decodeEnvelopeCtx || decodeEnvelopeCtx.state === 'closed') {
+          decodeEnvelopeCtx = new AudioCtx();
+        }
+        const decoded = await decodeEnvelopeCtx.decodeAudioData(buf.slice(0));
+        if (currentAudioElement !== audio) return;
+        const ch = decoded.getChannelData(0);
+        const samplesPerBucket = Math.max(1, Math.floor(decoded.sampleRate / bucketHz));
+        const totalBuckets = Math.ceil(ch.length / samplesPerBucket);
+        const env = new Float32Array(totalBuckets);
+        for (let b = 0; b < totalBuckets; b++) {
+          const start = b * samplesPerBucket;
+          const end = Math.min(ch.length, start + samplesPerBucket);
+          let sumSq = 0;
+          for (let i = start; i < end; i++) {
+            sumSq += ch[i] * ch[i];
+          }
+          const rms = Math.sqrt(sumSq / Math.max(1, end - start));
+          env[b] = Math.min(100, Math.round(rms * 380));
+        }
+        rmsBuckets = env;
+      })
+      .catch(() => {
+        // Fallback cadence envelope below handles animation automatically
+      });
   }
+
+  const startedAt = performance.now();
+  const tick = () => {
+    if (currentAudioElement !== audio || audio.paused || audio.ended) {
+      onAudioLevel(0);
+      return;
+    }
+    if (rmsBuckets && rmsBuckets.length > 0) {
+      const idx = Math.min(
+        rmsBuckets.length - 1,
+        Math.max(0, Math.floor(audio.currentTime * bucketHz))
+      );
+      onAudioLevel(rmsBuckets[idx]);
+    } else {
+      const t = (performance.now() - startedAt) / 1000;
+      const synthetic = Math.round(
+        38 + 26 * Math.abs(Math.sin(t * 7.5)) + 16 * Math.abs(Math.cos(t * 13.2))
+      );
+      onAudioLevel(synthetic);
+    }
+    ttsAnalyserRaf = requestAnimationFrame(tick);
+  };
+  ttsAnalyserRaf = requestAnimationFrame(tick);
+}
+
+function synthesizeKokoroWithTimeout(
+  text: string,
+  voice: KokoroVoiceId,
+  rate: number,
+  signal: AbortSignal,
+  timeoutMs: number,
+  onFirstByte?: (delivery: 'neural-stream' | 'neural-cache') => void
+): Promise<Blob | null> {
+  return new Promise<Blob | null>((resolve) => {
+    let settled = false;
+    const timer = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      resolve(null);
+    }, timeoutMs);
+
+    synthesizeKokoroWavBlob(text, voice, rate, signal, onFirstByte)
+      .then((blob) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        resolve(blob);
+      })
+      .catch(() => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        resolve(null);
+      });
+  });
 }
 
 /**
@@ -1001,7 +1153,7 @@ export async function playFreeNeuralSpeech(
       audio.pause();
       return;
     }
-    attachAudioWaveformAnalyser(audio, options.onAudioLevel);
+    startSafeAudioLevelMonitor(audio, audioBlob, options.onAudioLevel);
     options.onStart?.();
   };
 
@@ -1087,7 +1239,17 @@ export async function playKokoroSpeech(
     });
   };
 
-  const wavBlob = await synthesizeKokoroWavBlob(cleanText, voice, effectiveRate, controller.signal);
+  // In normal conversation (non-strict), if Kokoro weights haven't finished downloading yet,
+  // warm Kokoro in the background and immediately speak via Edge Neural HD so Buddy is NEVER mute!
+  if (!options.strictNoFallback && getKokoroStatus().state !== 'ready') {
+    warmUpKokoroTts();
+    handleFallback('Kokoro-82M is still warming up in the background.');
+    return;
+  }
+
+  const wavBlob = options.strictNoFallback
+    ? await synthesizeKokoroWavBlob(cleanText, voice, effectiveRate, controller.signal)
+    : await synthesizeKokoroWithTimeout(cleanText, voice, effectiveRate, controller.signal, 5500);
   if (currentTtsAbortController === controller) currentTtsAbortController = null;
   if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) return;
 
@@ -1111,7 +1273,7 @@ export async function playKokoroSpeech(
       audio.pause();
       return;
     }
-    attachAudioWaveformAnalyser(audio, options.onAudioLevel);
+    startSafeAudioLevelMonitor(audio, wavBlob, options.onAudioLevel);
     options.onStart?.();
   };
 
@@ -1341,7 +1503,7 @@ export function createRealtimeTtsQueue(options: {
           resolve(false);
           return;
         }
-        attachAudioWaveformAnalyser(audio, options.onAudioLevel);
+        startSafeAudioLevelMonitor(audio, blob, options.onAudioLevel);
         if (!startedOnce) {
           startedOnce = true;
           options.onFirstStart?.();
@@ -1364,51 +1526,97 @@ export function createRealtimeTtsQueue(options: {
       });
     });
 
-  const playBrowserOnce = (text: string): Promise<void> =>
+  const playBrowserOnce = (text: string, forceLocal: boolean = false): Promise<void> =>
     new Promise((resolve) => {
       if (!isAlive() || typeof window === 'undefined' || !('speechSynthesis' in window)) {
         resolve();
         return;
       }
-      const utt = new SpeechSynthesisUtterance(text);
-      utt.rate = options.voiceConfig.rate || 1.0;
-      utt.volume = 1.0;
-      const chosen = resolveVoice(options.voiceConfig.osVoiceURI || undefined);
-      if (chosen) {
-        utt.voice = chosen;
-        utt.lang = chosen.lang;
-      } else {
-        utt.lang = 'en-GB';
-      }
-      activeUtterances = [utt];
-      let done = false;
-      const finish = () => {
-        if (done) return;
-        done = true;
-        resolve();
-      };
-      const watchdog = setTimeout(finish, 12000);
-      utt.onstart = () => {
-        markFirstAudio('browser-speech');
-        if (!startedOnce) {
-          startedOnce = true;
-          options.onFirstStart?.();
+
+      const runSpeak = () => {
+        if (!isAlive()) {
+          resolve();
+          return;
+        }
+        const utt = new SpeechSynthesisUtterance(text);
+        utt.rate = options.voiceConfig.rate || 1.0;
+        utt.volume = 1.0;
+        const chosen = forceLocal
+          ? resolveGuaranteedLocalVoice()
+          : resolveVoice(options.voiceConfig.osVoiceURI || undefined);
+        if (chosen) {
+          utt.voice = chosen;
+          utt.lang = chosen.lang;
+        } else {
+          utt.lang = 'en-GB';
+        }
+        activeUtterances = [utt];
+        let started = false;
+        let done = false;
+        const finish = () => {
+          if (done) return;
+          done = true;
+          options.onAudioLevel?.(0);
+          resolve();
+        };
+        const startGuard = setTimeout(() => {
+          if (!started && !done && isAlive()) {
+            if (!forceLocal) {
+              done = true;
+              try {
+                lastSpeechCancelAt = Date.now();
+                window.speechSynthesis.cancel();
+              } catch {}
+              void playBrowserOnce(text, true).then(resolve);
+            } else {
+              finish();
+            }
+          }
+        }, 2000);
+        const watchdog = setTimeout(() => {
+          clearTimeout(startGuard);
+          finish();
+        }, 14000);
+        utt.onstart = () => {
+          started = true;
+          clearTimeout(startGuard);
+          markFirstAudio('browser-speech');
+          if (!startedOnce) {
+            startedOnce = true;
+            options.onFirstStart?.();
+          }
+          options.onAudioLevel?.(48);
+        };
+        utt.onend = () => {
+          clearTimeout(startGuard);
+          clearTimeout(watchdog);
+          finish();
+        };
+        utt.onerror = (e) => {
+          clearTimeout(startGuard);
+          clearTimeout(watchdog);
+          if (!forceLocal && e.error !== 'canceled' && e.error !== 'interrupted' && isAlive()) {
+            done = true;
+            void playBrowserOnce(text, true).then(resolve);
+            return;
+          }
+          finish();
+        };
+        try {
+          if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+          window.speechSynthesis.speak(utt);
+        } catch {
+          clearTimeout(startGuard);
+          clearTimeout(watchdog);
+          finish();
         }
       };
-      utt.onend = () => {
-        clearTimeout(watchdog);
-        finish();
-      };
-      utt.onerror = () => {
-        clearTimeout(watchdog);
-        finish();
-      };
-      try {
-        if (window.speechSynthesis.paused) window.speechSynthesis.resume();
-        window.speechSynthesis.speak(utt);
-      } catch {
-        clearTimeout(watchdog);
-        finish();
+
+      const elapsed = Date.now() - lastSpeechCancelAt;
+      if (elapsed < 70) {
+        setTimeout(runSpeak, 70 - elapsed);
+      } else {
+        runSpeak();
       }
     });
 
@@ -1466,22 +1674,35 @@ export function createRealtimeTtsQueue(options: {
         options.voiceConfig.provider === 'standard'
           ? Promise.resolve(null)
           : options.voiceConfig.provider === 'kokoro'
-          ? synthesizeKokoroWavBlob(
-              clean,
-              options.voiceConfig.kokoroVoice,
-              options.voiceConfig.rate,
-              controller.signal,
-              idx === 0 ? (d) => markFirstAudio(d) : undefined
-            ).then(async (kokoroBlob) => {
-              if (kokoroBlob || !isAlive()) return kokoroBlob;
-              return fetchFreeNeuralAudioBlob(
+          ? (() => {
+              if (getKokoroStatus().state !== 'ready') {
+                warmUpKokoroTts();
+                return fetchFreeNeuralAudioBlob(
+                  clean,
+                  options.voiceConfig.freeNeuralVoice,
+                  options.voiceConfig.rate,
+                  controller.signal,
+                  idx === 0 ? (d) => markFirstAudio(d) : undefined
+                );
+              }
+              return synthesizeKokoroWithTimeout(
                 clean,
-                options.voiceConfig.freeNeuralVoice,
+                options.voiceConfig.kokoroVoice,
                 options.voiceConfig.rate,
                 controller.signal,
+                5500,
                 idx === 0 ? (d) => markFirstAudio(d) : undefined
-              );
-            })
+              ).then(async (kokoroBlob) => {
+                if (kokoroBlob || !isAlive()) return kokoroBlob;
+                return fetchFreeNeuralAudioBlob(
+                  clean,
+                  options.voiceConfig.freeNeuralVoice,
+                  options.voiceConfig.rate,
+                  controller.signal,
+                  idx === 0 ? (d) => markFirstAudio(d) : undefined
+                );
+              });
+            })()
           : fetchFreeNeuralAudioBlob(
               clean,
               options.voiceConfig.freeNeuralVoice,

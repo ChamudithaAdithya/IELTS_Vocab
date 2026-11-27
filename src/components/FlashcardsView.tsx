@@ -8,6 +8,7 @@ import {
   Bookmark
 } from 'lucide-react';
 import { Lesson, Word } from '../types';
+import { playSpeech } from '../utils/speech';
 
 interface FlashcardsViewProps {
   lesson: Lesson;
@@ -55,15 +56,11 @@ export const FlashcardsView: React.FC<FlashcardsViewProps> = ({
 
   const handlePronounce = (e: React.MouseEvent, text: string) => {
     e.stopPropagation();
-    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-GB';
-    utterance.rate = 0.9;
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => setIsSpeaking(false);
-    window.speechSynthesis.speak(utterance);
+    playSpeech(text, {
+      onStart: () => setIsSpeaking(true),
+      onEnd: () => setIsSpeaking(false),
+      onError: () => setIsSpeaking(false),
+    });
   };
 
   const handleNext = () => {

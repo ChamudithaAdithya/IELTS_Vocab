@@ -1,0 +1,1536 @@
+/**
+ * Declarative Spoken Grammar Pattern Catalog & Vocabulary Upgrade Rules.
+ * Extracted from buddyGrammarEngine.ts for clean modular maintainability.
+ */
+
+import type {
+  BuddyMode,
+  BuddyVocabUpgrade,
+  CorrectionIntensity,
+  FeedbackSeverity,
+  GrammarCategoryCode
+} from '../types/speakingBuddy';
+
+export const CATEGORY_LABELS: Record<GrammarCategoryCode, string> = {
+  VERB_TENSE: 'Verb Tense',
+  ARTICLES: 'Articles',
+  PREPOSITIONS: 'Prepositions',
+  SVA: 'Subject-Verb Agreement',
+  VERB_FORMS: 'Verb Forms',
+  PLURALS: 'Plurals & Uncountables',
+  SENTENCE_STRUCTURE: 'Sentence Structure',
+  WORD_CHOICE: 'Word Choice & Collocation',
+  WORD_ORDER: 'Word Order',
+  CONDITIONALS: 'Conditionals',
+  VOCABULARY: 'Vocabulary Upgrade',
+  REPETITION: 'Repetition'
+};
+
+export interface LocalGrammarPattern {
+  id: string;
+  regex: RegExp;
+  category: GrammarCategoryCode;
+  severity: FeedbackSeverity;
+  /** Optional precision sub-span targeting so adjacent errors (e.g. "go" + "to shopping") never overlap! */
+  getSpan?: (match: RegExpExecArray) => { startOffset: number; endOffset: number; original: string };
+  getCorrection: (match: RegExpExecArray, fullSentence: string) => string;
+  explanation: string;
+  simpleExplanation?: string;
+  explanationSi: string;
+  verbFormTable?: { v1: string; v2: string; v3: string };
+  sinhalaTransferNote?: string;
+  grammar_rule: string;
+  example: string;
+  more_examples?: string[];
+  learning_tip: string;
+  confidence: number;
+  isProvisional?: boolean;
+}
+
+export const LOCAL_BUDDY_PATTERNS: LocalGrammarPattern[] = [
+  {
+    id: 'ne-what-is-meaning-of',
+    regex: /^what\s+is\s+the\s+meaning\s+of\s+["']?([a-zA-Z0-9-]+(?:\s+[a-zA-Z0-9-]+)?)["']?\??$/gi,
+    category: 'WORD_CHOICE',
+    severity: 'UNNATURAL',
+    getCorrection: (m) => `What does '${m[1].trim()}' mean?`,
+    explanation: 'In everyday spoken English, native speakers almost always ask "What does X mean?" rather than "What is the meaning of X?".',
+    simpleExplanation: 'Native speakers naturally ask "What does X mean?" in conversation.',
+    explanationSi: 'සාමාන්‍ය ඉංග්‍රීසි කතාබහේදී "What is the meaning of X?" වෙනුවට "What does X mean?" ලෙස ඇසීම වඩාත් ස්වාභාවිකයි.',
+    grammar_rule: 'What does [word/phrase] mean?',
+    example: "What does 'low-key' mean?",
+    learning_tip: 'Use "What does ... mean?" whenever asking about a word or expression.',
+    confidence: 0.95
+  },
+  {
+    id: 'vt-bare-ing-past-time',
+    regex: /\b(I|he|she|we|they|you)\s+(watching|going|doing|eating|playing|working|studying|staying|reading|cooking|buying|making|visiting|walking|running|sleeping|talking|meeting)\b(?=[^.?!]{0,40}\b(yesterday|last\s+(?:night|week|month|year|weekend|sunday|saturday|friday)|ago)\b)/gi,
+    category: 'VERB_TENSE',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => {
+      const vMap: Record<string, string> = {
+        watching: 'watched',
+        going: 'went',
+        doing: 'did',
+        eating: 'ate',
+        playing: 'played',
+        working: 'worked',
+        studying: 'studied',
+        staying: 'stayed',
+        reading: 'read',
+        cooking: 'cooked',
+        buying: 'bought',
+        making: 'made',
+        visiting: 'visited',
+        walking: 'walked',
+        running: 'ran',
+        sleeping: 'slept',
+        talking: 'talked',
+        meeting: 'met'
+      };
+      return `${m[1]} ${vMap[m[2].toLowerCase()] || m[2]}`;
+    },
+    explanation: 'For a finished action in the past (with "yesterday" or "last week"), use the simple past verb ("watched") instead of a bare "-ing" form.',
+    simpleExplanation: 'Use the past tense ("watched") for things that happened yesterday.',
+    explanationSi: '"Yesterday" වැනි නිමවූ අතීත කාලයක් සමඟ "-ing" ක්‍රියාපදයක් තනිව නොයොදා සරල අතීත කාලය ("watched") භාවිත කරන්න.',
+    grammar_rule: 'Finished Past Action: Subject + Past Simple Verb + yesterday',
+    example: 'I watched a movie yesterday.',
+    learning_tip: 'Never use an "-ing" verb without am/is/are/was/were — and with "yesterday", prefer simple past ("watched").',
+    confidence: 0.99
+  },
+  {
+    id: 'vt-bare-ing-habitual',
+    regex: /(?:^|[.!?]\s+|\b(?:and|but|so|because)\s+)(I|we|they|you|he|she)\s+(?:(usually|often|always|normally|sometimes)\s+)?(watching|playing|reading|cooking|studying|eating|drinking|listening)\s+(?!(?:a|an|the|this|that|my|your|his|her|our|their)\b)([a-z]{3,})\b(?!\s*(?:yesterday|last\s+(?:night|week|month|year|weekend)|ago|right\s+now|at\s+the\s+moment))/gi,
+    category: 'VERB_TENSE',
+    severity: 'GRAMMAR_ERROR',
+    getSpan: (m) => {
+      const sub = m[2] ? `${m[1]} ${m[2]} ${m[3]}` : `${m[1]} ${m[3]}`;
+      const subIdx = m[0].indexOf(m[1]);
+      return { startOffset: subIdx, endOffset: subIdx + sub.length, original: sub };
+    },
+    getCorrection: (m) => {
+      const subj = m[1];
+      const adv = m[2] ? `${m[2]} ` : '';
+      const isThirdSing = /^(he|she)$/i.test(subj);
+      const baseMap: Record<string, [string, string]> = {
+        watching: ['watch', 'watches'],
+        playing: ['play', 'plays'],
+        reading: ['read', 'reads'],
+        cooking: ['cook', 'cooks'],
+        studying: ['study', 'studies'],
+        eating: ['eat', 'eats'],
+        drinking: ['drink', 'drinks'],
+        listening: ['listen', 'listens']
+      };
+      const forms = baseMap[m[3].toLowerCase()] || [m[3], m[3]];
+      return `${subj} ${adv}${isThirdSing ? forms[1] : forms[0]}`;
+    },
+    explanation: 'For general habits, hobbies, or things you usually do in your free time, use the simple present tense ("I watch movies") instead of "-ing".',
+    simpleExplanation: 'Use "I watch" (not "I watching") when talking about things you usually do.',
+    explanationSi: 'සාමාන්‍යයෙන් හෝ විවේක කාලයේදී කරන පුරුදු ගැන කතා කිරීමේදී "-ing" වෙනුවට සරල වර්තමාන කාලය ("I watch movies") භාවිත කරන්න.',
+    grammar_rule: 'Habits & Routines: Subject + Simple Present Verb (I watch / She watches)',
+    example: 'I watch movies in my free time.',
+    learning_tip: 'Use "I watch movies" for a habit, and "I\'m watching a movie" only when doing it right now.',
+    confidence: 0.98
+  },
+  {
+    id: 'vf-bare-ing-present',
+    regex: /(?:^|[.!?]\s+|\b(?:and|but|so|because)\s+)(I|he|she|we|they|you)\s+(watching|going|doing|eating|playing|working|studying|staying|reading|cooking|buying|making|visiting|walking|running|sleeping|talking)\b/gi,
+    category: 'VERB_FORMS',
+    severity: 'GRAMMAR_ERROR',
+    getSpan: (m) => {
+      const sub = `${m[1]} ${m[2]}`;
+      const startOffset = m[0].length - sub.length;
+      return { startOffset, endOffset: m[0].length, original: sub };
+    },
+    getCorrection: (m) => {
+      const s = m[1];
+      const sl = s.toLowerCase();
+      const aux = sl === 'i' ? "'m" : sl === 'he' || sl === 'she' ? "'s" : "'re";
+      return `${s}${aux} ${m[2]}`;
+    },
+    explanation: 'An "-ing" action verb always requires a form of "be" ("am / is / are" or "was / were") after the subject.',
+    simpleExplanation: 'Add "am / is / are" before an "-ing" verb (e.g., "I\'m watching").',
+    explanationSi: 'කර්තෘ පදයකට පසුව කෙලින්ම "-ing" ක්‍රියාපදයක් යෙදිය නොහැක — "am / is / are" එක් කරන්න ("I\'m watching").',
+    grammar_rule: 'Present Continuous: Subject + am / is / are + verb-ing',
+    example: "I'm watching a movie right now.",
+    learning_tip: 'Pair "I" + "-ing" with "I\'m": "I\'m watching", "I\'m going".',
+    confidence: 0.97
+  },
+  {
+    id: 'vt-didnt-understand-what-mean',
+    regex: /\b(didn'?t|did\s+not)\s+(understand|get|hear|catch|know|realise|realize)\s+(what|where|why|how)\s+(you|he|she|they|we)\s+(mean|say|want|ask)\b/gi,
+    category: 'VERB_TENSE',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => {
+      const pastMap: Record<string, string> = {
+        mean: 'meant',
+        say: 'said',
+        want: 'wanted',
+        ask: 'asked'
+      };
+      return `${m[1]} ${m[2]} ${m[3]} ${m[4]} ${pastMap[m[5].toLowerCase()] || m[5]}`;
+    },
+    explanation: 'Because "didn\'t understand" refers to what was just said in the past, use the past tense "meant" ("what you meant") instead of "mean".',
+    simpleExplanation: 'Use "meant" (past) when referring to what someone just said: "what you meant."',
+    explanationSi: 'මීට පෙර පැවසූ දෙයක් අදහස් කරන බැවින් "what you mean" වෙනුවට අතීත කාලයෙන් "what you meant" යෙදිය යුතුය.',
+    grammar_rule: 'Past Reference in Clauses: didn\'t understand + what you meant / said',
+    example: "Sorry, I didn't understand what you meant.",
+    learning_tip: 'When asking about an earlier comment, pair "didn\'t understand" with "what you meant".',
+    confidence: 0.97
+  },
+  {
+    id: 'art-copula-profession',
+    regex: /\b(I\s+am|I'm|he\s+is|he's|she\s+is|she's|you\s+are|you're|was|became)\s+(software\s+engineer|civil\s+engineer|mechanical\s+engineer|electrical\s+engineer|data\s+scientist|data\s+analyst|web\s+developer|mobile\s+developer|frontend\s+developer|backend\s+developer|full[\s-]stack\s+developer|ui\s+designer|ux\s+designer|university\s+student|college\s+student|high\s+school\s+student|medical\s+student|project\s+manager|product\s+manager|business\s+analyst|engineer|developer|programmer|designer|doctor|nurse|teacher|lecturer|professor|student|lawyer|accountant|manager|researcher|scientist|architect|consultant|entrepreneur|freelancer|intern|driver|chef|artist|writer)\b/gi,
+    category: 'ARTICLES',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => {
+      const role = m[2];
+      const vowelSound = /^(?:[aeiou])/i.test(role) && !/^uni/i.test(role);
+      return `${m[1]} ${vowelSound ? 'an' : 'a'} ${role}`;
+    },
+    explanation: 'In English, always use "a" or "an" before a singular job title or role (e.g., "I am a software engineer", "She is a doctor").',
+    simpleExplanation: 'Use "a" or "an" before jobs and roles: "I am a software engineer."',
+    explanationSi: 'රැකියාවක් හෝ භූමිකාවක් ඒකවචනයෙන් පැවසීමේදී ඊට පෙර "a" හෝ "an" යෙදීම අනිවාර්ය වේ ("I am a software engineer").',
+    grammar_rule: 'Professions & Roles: be + a / an + singular profession',
+    example: 'I am a software engineer working on web applications.',
+    more_examples: ['She is a university student.', 'My brother became an architect.'],
+    learning_tip: 'Whenever you state someone\'s job or student status, include "a" or "an" right before it.',
+    confidence: 0.99
+  },
+  {
+    id: 'art-go-to-the-place',
+    regex: /\b(go|going|went|goes|head|heading|headed|walk|walking|walked|drive|driving|drove)\s+to\s+(gym|cinema|park|mall|airport|bank|hospital|supermarket|market|store|shop|office|beach|library|station|museum|hotel|cafe|restaurant|doctor|dentist)\b/gi,
+    category: 'ARTICLES',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => `${m[1]} to the ${m[2]}`,
+    explanation: 'Common everyday places like "the gym", "the park", "the mall", or "the office" require the article "the" after "go to".',
+    simpleExplanation: 'Add "the" before everyday places: "going to the gym".',
+    explanationSi: '"Gym", "park", "mall", "office" වැනි පොදු ස්ථානවලට යාමේදී "to the..." ලෙස "the" යෙදිය යුතුය ("going to the gym").',
+    grammar_rule: 'Everyday Destinations: go to + the + place (the gym, the park, the airport)',
+    example: "I'm going to the gym this evening.",
+    more_examples: ['We went to the beach on Sunday.', 'She is heading to the airport now.'],
+    learning_tip: 'No "the" for school/work/home ("going home", "going to work"), but ALWAYS "the" for the gym, the park, the mall, and the office!',
+    confidence: 0.99
+  },
+  {
+    id: 'unnat-going-to-my-home',
+    regex: /\b(I\s+am\s+going|I'm\s+going|go|going|went|goes|head|heading|walk|walking|come|coming|came|return|returning|returned)\s+to\s+(?:my|our|your|his|her|their)\s+home\b/gi,
+    category: 'PREPOSITIONS',
+    severity: 'UNNATURAL',
+    getCorrection: (m) => {
+      const v = m[1];
+      if (/^i\s+am\s+going$/i.test(v)) return "I'm going home";
+      return `${v} home`;
+    },
+    explanation: 'While understandable, native speakers treat "home" as an adverb of direction after movement verbs — saying "I\'m going home" instead of "going to my home".',
+    simpleExplanation: 'Drop "to my" before "home": say "I\'m going home."',
+    explanationSi: 'ගෙදර යනවා යන්න ස්වාභාවික ඉංග්‍රීසියෙන් පවසන්නේ "to my" නොමැතිව "I\'m going home" ලෙසයි.',
+    grammar_rule: 'Natural Movement Expression: go / come / head + home (no "to my")',
+    example: "I'm going home right after work.",
+    more_examples: ['We went home around nine.', 'Are you heading home now?'],
+    learning_tip: 'With verbs of motion (go, come, walk, drive, head), attach "home" directly with nothing in between.',
+    confidence: 0.97
+  },
+  {
+    id: 'prep-go-to-home',
+    regex: /\b(go|going|went|goes|come|coming|came|get|got|getting|arrive|arrived|head|heading)\s+to\s+home\b/gi,
+    category: 'PREPOSITIONS',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => `${m[1]} home`,
+    explanation: 'Never use the preposition "to" before "home" after verbs of movement like "go", "went", "come", or "get".',
+    simpleExplanation: 'Do not use "to" before "home" — say "go home" or "went home".',
+    explanationSi: '"Home" ඉදිරියෙන් "to" නිපාතය යොදන්න එපා — "went home" හෝ "going home" ලෙස කියන්න.',
+    grammar_rule: 'Movement + home (NO "to"): go home, went home, get home',
+    example: 'I went home early yesterday.',
+    learning_tip: 'Say "at home" for location, and "go home" (no "to"!) for direction.',
+    confidence: 0.99
+  },
+  {
+    id: 'ss-subjectless-tired-opening',
+    regex: /^(tired|exhausted|sleepy|hungry|stressed|sore)\s+(after|from|before|because\s+of)\b/gi,
+    category: 'SENTENCE_STRUCTURE',
+    severity: 'GRAMMAR_ERROR',
+    getSpan: (m) => ({ startOffset: 0, endOffset: m[1].length, original: m[1] }),
+    getCorrection: (m) => `I feel ${m[1].toLowerCase()}`,
+    explanation: 'In complete spoken English, include a subject and verb ("I feel" or "I\'m") before an opening adjective like "tired".',
+    simpleExplanation: 'Start with "I feel" or "I\'m": "I feel tired after..."',
+    explanationSi: 'වාක්‍යයක් "Tired..." ලෙස කෙලින්ම ආරම්භ කරනවාට වඩා "I feel tired..." හෝ "I\'m tired..." ලෙස කර්තෘ සහ ක්‍රියාපදය සමඟ පැවසීම ව්‍යාකරණානුකූලව සම්පූර්ණ වේ.',
+    grammar_rule: 'Complete Clause Subject + Linking Verb: I feel / I am + adjective',
+    example: "I feel tired after a workout, but it's refreshing.",
+    learning_tip: 'Attach "I feel" or "I\'m" when describing how you feel.',
+    confidence: 0.95
+  },
+  {
+    id: 'art-prep-bare-workout-event',
+    regex: /\b(after|before|during)\s+(workout|meeting|lecture|exam|interview|session|match|nap|shower)\b/gi,
+    category: 'ARTICLES',
+    severity: 'GRAMMAR_ERROR',
+    getSpan: (m) => {
+      const startOffset = m[0].length - m[2].length;
+      return { startOffset, endOffset: m[0].length, original: m[2] };
+    },
+    getCorrection: (m) => {
+      const noun = m[2];
+      const vowel = /^(?:[aeiou])/i.test(noun);
+      return `${vowel ? 'an' : 'a'} ${noun}`;
+    },
+    explanation: 'Singular countable event nouns like "workout", "meeting", or "exam" need an article ("a / an / my / the") after prepositions like "after" or "before".',
+    simpleExplanation: 'Add "a" (or "an") before singular events: "after a workout", "before an exam".',
+    explanationSi: '"Workout", "meeting", "exam" වැනි ඒකවචන නාමපදවලට පෙර "a / an" යෙදිය යුතුය ("after a workout").',
+    grammar_rule: 'Preposition + a / an + singular countable event ("after a workout")',
+    example: 'I usually feel tired after a workout, but it is refreshing.',
+    learning_tip: 'Countable singular events need "a / an / the / my": a workout, a meeting, an exam.',
+    confidence: 0.96
+  },
+  {
+    id: 'art-a-plural-noun',
+    regex: /\b(a)\s+(friends|people|games|clothes|things|books|movies|days|hours|minutes|students|teachers|children|parents|colleagues|places|ideas|questions|problems|mistakes)\b/gi,
+    category: 'ARTICLES',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => m[2],
+    explanation: 'Do not use "a" before a plural noun (like "a friends"). Use the plural noun directly ("with friends") or singular ("with a friend").',
+    simpleExplanation: 'Never put "a" before a plural noun — say "with friends" (or "with a friend").',
+    explanationSi: 'බහුවචන නාමපදයකට පෙර "a" භාවිත නොකරන්න — "a friends" වෙනුවට "friends" (හෝ ඒකවචනයෙන් "a friend") ලෙස කියන්න.',
+    grammar_rule: 'No "a / an" before Plural Nouns',
+    example: 'We had a party at home while hanging out with friends.',
+    learning_tip: '"A" always means ONE — never pair it with a plural noun ending in -s like "friends" or "games".',
+    confidence: 0.98
+  },
+  {
+    id: 'ss-i-not-missing-aux',
+    regex: /\b(I|we|they|you)\s+not\s+(like|play|know|want|need|think|have|go|work|study|eat|drink|watch|use|prefer|survival|good|sure|ready|busy|happy|tired|fine|able)\b/gi,
+    category: 'SENTENCE_STRUCTURE',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => {
+      const subj = m[1];
+      const next = m[2].toLowerCase();
+      const adjOrNoun = ['survival', 'good', 'sure', 'ready', 'busy', 'happy', 'tired', 'fine', 'able'].includes(next);
+      if (adjOrNoun) {
+        const be = subj.toLowerCase() === 'i' ? 'am not' : 'are not';
+        return next === 'survival' ? `${subj} don't play ${m[2]}` : `${subj} ${be} ${m[2]}`;
+      }
+      return `${subj} don't ${m[2]}`;
+    },
+    explanation: 'English negative sentences need a helping verb ("don\'t" before action verbs, or "am not / are not" before adjectives) instead of putting "not" directly after the subject.',
+    simpleExplanation: 'Add "don\'t" or "am not" instead of "I not ...".',
+    explanationSi: 'නැත යන අර්ථය දැක්වීමට "I not..." ලෙස කෙලින්ම යොදන්න එපා — ක්‍රියාපදයකට පෙර "I don\'t..." සහ විශේෂණයකට පෙර "I am not..." භාවිත කරන්න.',
+    grammar_rule: 'Negatives: Subject + don\'t + verb / Subject + am/are not + adjective',
+    example: "I don't play survival mode because I already have everything I need.",
+    learning_tip: 'Never say "I not..." — always use "I don\'t..." (for actions) or "I\'m not..." (for states).',
+    confidence: 0.96
+  },
+  {
+    id: 'ss-resumptive-that-i-need-it',
+    regex: /\b(everything|something|anything|all)\s+that\s+(I|you|we|they|he|she)\s+(need|needed|want|wanted|like|liked|use|used)\s+(it|them)\b/gi,
+    category: 'SENTENCE_STRUCTURE',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => `${m[1]} that ${m[2]} ${m[3]}`,
+    explanation: 'When you already used "everything that...", do not repeat "it" or "them" at the end of the clause — "everything" is already the object.',
+    simpleExplanation: 'Remove the extra "it" at the end: say "everything that I need" (not "everything that I need it").',
+    explanationSi: '"Everything that I need" යන්නෙහි "everything" දැනටමත් කර්මය බැවින් අගට අමතර "it" යෙදීම අවශ්‍ය නොවේ.',
+    grammar_rule: 'Relative Clauses: No extra object pronoun ("it / them") at the end',
+    example: 'I almost have everything that I need.',
+    learning_tip: 'After "everything that I need", stop at the verb — drop the extra "it".',
+    confidence: 0.96
+  },
+  // 0. HIGH-PRIORITY REAL SPOKEN SYNTAX & STRUCTURAL PATTERNS (Reported Questions, Broken Modals, Incomplete Predicates)
+  {
+    id: 'ss-didnt-get-what-asking',
+    regex: /\b(didn't|did\s+not)\s+(get|understand)\s+(what|where|why|how)\s+(you|we|they)\s+([a-z]{3,}ing)\b/gi,
+    category: 'SENTENCE_STRUCTURE',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => `${m[1]} understand ${m[3]} ${m[4]} were ${m[5]}`,
+    explanation: 'A continuous verb ("asking", "saying") needs a helping verb ("were") after "you". Also, "didn\'t understand" sounds clearer and more complete than "didn\'t get" here.',
+    explanationSi: '"Asking" වැනි -ing ක්‍රියාපදයකට පෙර උපකාරක ක්‍රියාපදයක් ("were") අත්‍යවශ්‍ය වේ — එනම් "what you were asking" ලෙස යෙදිය යුතුය.',
+    grammar_rule: 'Embedded Continuous Clause: what + subject + was / were + verb-ing',
+    example: "Sorry, I didn't understand what you were asking.",
+    more_examples: [
+      "I couldn't hear what she was saying.",
+      "I didn't realise where they were going."
+    ],
+    learning_tip: 'Whenever you use a verb ending in "-ing" with a subject ("you asking"), always add am/is/are or was/were in front of it.',
+    confidence: 0.99
+  },
+  {
+    id: 'ss-missing-copula-anything-adj',
+    regex: /\b(think|feel|believe|know|guess)\s+(anything|nothing|everything|something)\s+(possible|impossible|wrong|right|easy|hard|difficult|good|bad|important|clear|okay|fine)\b/gi,
+    category: 'SENTENCE_STRUCTURE',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => `${m[1]} ${m[2]} is ${m[3]}`,
+    explanation: 'The clause after "think" needs a linking verb ("is") between the subject ("anything") and the adjective ("possible").',
+    simpleExplanation: 'Add "is" between "anything" and "possible": "anything is possible".',
+    explanationSi: '"Anything" සහ "possible" අතර "is" ක්‍රියාපදය යෙදිය යුතුය ("I don\'t think anything is possible").',
+    grammar_rule: 'Noun Clause: Subject + think + [Subject + is + Adjective]',
+    example: "Sometimes I don't think anything is possible, even though I keep trying.",
+    learning_tip: 'Every clause needs a verb — never join "anything" directly to "possible" without "is".',
+    confidence: 0.96
+  },
+  {
+    id: 'ss-to-so-much',
+    regex: /\bto\s+so\s+(much|many)\b/gi,
+    category: 'SENTENCE_STRUCTURE',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => (m[1].toLowerCase() === 'many' ? 'very many things' : 'right now'),
+    explanation: '"To so much" is incomplete/ungrammatical at the end of a sentence — either remove "to" ("...in my life right now") or include the verb after "to" (e.g., "to handle so much").',
+    simpleExplanation: 'Do not end a sentence with "to so much" — say "...in my life right now" or "...to do so much".',
+    explanationSi: 'වාක්‍යයක් අගට "to so much" ලෙස යෙදීම වැරදියි — "right now" හෝ "to handle so much" ලෙස නිවැරදි කරන්න.',
+    grammar_rule: 'Complete Infinitive or Adverbial Ending ("right now" / "to handle so much")',
+    example: "I feel like I have too much on my plate in my life right now.",
+    learning_tip: 'After "to", always follow with a base verb ("to do", "to achieve") or a place/person — never "so much".',
+    confidence: 0.94,
+    isProvisional: true
+  },
+  {
+    id: 'ss-wh-missing-do-base',
+    regex: /(?:^|[.!?]\s+)(what|where|why|when|how)\s+(you|we|they)\s+(mean|think|want|need|like|say|know|live|work|study|eat|cook|use|prefer|suggest|recommend)\b/gi,
+    category: 'SENTENCE_STRUCTURE',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => {
+      const leadSpace = m[0].match(/^([.!?]\s+)/)?.[1] || '';
+      return `${leadSpace}${m[1]} do ${m[2]} ${m[3]}`;
+    },
+    explanation: 'Direct present-simple questions with "what / where / why / how" require the helping verb "do" before "you / we / they" (e.g., "What do you mean?").',
+    simpleExplanation: 'Add "do" after "what / why / where" in questions: "What do you mean?"',
+    explanationSi: '"What / where / why" වලින් ආරම්භ වන ප්‍රශ්න වලදී "you / we / they" ඉදිරියෙන් "do" උපකාරක ක්‍රියාපදය අත්‍යවශ්‍ය වේ ("What do you mean?").',
+    grammar_rule: 'Wh-Question Formula: Wh-word + do + subject + base verb',
+    example: 'What do you mean by concepts in class?',
+    more_examples: ['Where do you live?', 'Why do you think that?'],
+    learning_tip: 'Whenever you ask a question starting with "What you...", pause and add "do": "What DO you mean?"',
+    confidence: 0.98
+  },
+  {
+    id: 'ss-wh-missing-aux-ing',
+    regex: /\b(what|where|why|how)\s+(you|we|they)\s+(asking|saying|doing|going|talking|cooking|making|studying|working|watching|thinking|looking|meaning|trying)\b/gi,
+    category: 'SENTENCE_STRUCTURE',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m, full) => {
+      const pastHint = /\b(didn't|did|was|were|yesterday|just|earlier|before|heard|asked|said|told)\b/i.test(full);
+      const isDirectQuestionStart = full.trim().toLowerCase().startsWith(m[0].toLowerCase());
+      const aux = pastHint ? 'were' : 'are';
+      return isDirectQuestionStart
+        ? `${m[1]} ${aux} ${m[2]} ${m[3]}`
+        : `${m[1]} ${m[2]} ${aux} ${m[3]}`;
+    },
+    explanation: 'You omitted the auxiliary verb ("are" or "were") before the "-ing" verb. Continuous tenses always require a form of "be".',
+    explanationSi: '"-ing" ක්‍රියාපදයක් සමඟ "are" හෝ "were" උපකාරක ක්‍රියාපදය අනිවාර්යයෙන්ම යෙදිය යුතුය.',
+    grammar_rule: 'Continuous Questions & Clauses: be (are / were) + verb-ing',
+    example: 'What are you doing this weekend? / I missed what you were saying.',
+    more_examples: ['Where are you going now?', 'I understand what you are trying to say.'],
+    learning_tip: 'Never leave a subject directly next to an "-ing" action verb — insert "am / is / are / was / were".',
+    confidence: 0.97
+  },
+  {
+    id: 'ss-wh-he-she-missing-aux-ing',
+    regex: /\b(what|where|why|how)\s+(he|she|it)\s+(asking|saying|doing|going|talking|cooking|making|studying|working|happening)\b/gi,
+    category: 'SENTENCE_STRUCTURE',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m, full) => {
+      const pastHint = /\b(didn't|did|was|were|yesterday|just|earlier)\b/i.test(full);
+      const isDirectStart = full.trim().toLowerCase().startsWith(m[0].toLowerCase());
+      const aux = pastHint ? 'was' : 'is';
+      return isDirectStart ? `${m[1]} ${aux} ${m[2]} ${m[3]}` : `${m[1]} ${m[2]} ${aux} ${m[3]}`;
+    },
+    explanation: 'The continuous verb needs the helping verb "is" or "was" after "he / she / it".',
+    explanationSi: '"He / she / it" සමඟ "-ing" ක්‍රියාපදය යෙදෙන විට "is" හෝ "was" අනිවාර්ය වේ.',
+    grammar_rule: 'Continuous Clause: he / she / it + is / was + verb-ing',
+    example: 'I asked what she was doing.',
+    learning_tip: 'Pair he/she/it + -ing with "is" (present) or "was" (past).',
+    confidence: 0.96
+  },
+  {
+    id: 'wo-maybe-will-noun-not',
+    regex: /\bmaybe\s+will\s+(school|class|classes|college|university|work|office|exam|exams|lecture|lectures|meeting|practice|training|rain)\s+not(\s+(?:tomorrow|today|tonight|next\s+\w+|later|this\s+\w+))?\b/gi,
+    category: 'WORD_ORDER',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => {
+      const noun = m[1].toLowerCase();
+      const timePart = m[2] || '';
+      if (noun === 'rain') {
+        return `it might not rain${timePart}`;
+      }
+      return `there might not be ${noun}${timePart}`;
+    },
+    explanation: 'In English, we don\'t combine "maybe will" or place "not" after the noun. Use "there might not be + noun" (or "school might be cancelled") to express uncertainty.',
+    explanationSi: 'සැකයක් හෝ සම්භාවිතාවක් දැක්වීමේදී "maybe will [noun] not" ලෙස නොකියා "there might not be [noun]" යන නිවැරදි වාක්‍ය රටාව භාවිත කරන්න.',
+    grammar_rule: 'Possibility + Existence: there might (not) be + noun + time',
+    example: 'I think there might not be school tomorrow.',
+    more_examples: [
+      'There might not be classes next Monday.',
+      'I think school might be cancelled tomorrow.'
+    ],
+    learning_tip: 'Replace "maybe will not" with the much cleaner "might not" — and use "there might not be..." for events like school or class.',
+    confidence: 0.98
+  },
+  {
+    id: 'wo-maybe-will-general',
+    regex: /\bmaybe\s+will\s+(not\s+)?([a-z]+)\b/gi,
+    category: 'WORD_ORDER',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => `it might ${m[1] ? 'not ' : ''}${m[2].toLowerCase()}`,
+    explanation: 'English requires a subject before a modal verb, and "maybe will" is usually replaced with "might" or "may" for natural probability.',
+    explanationSi: '"Maybe will" වෙනුවට කර්තෘ පදයක් සමඟ "might" භාවිත කිරීම නිවැරදි ඉංග්‍රීසි රටාවයි.',
+    grammar_rule: 'Modal Probability: Subject + might (not) + base verb',
+    example: 'I think it might rain tomorrow.',
+    more_examples: ['It might not happen today.', 'We might go out later.'],
+    learning_tip: 'Use "might" instead of combining "maybe" + "will".',
+    confidence: 0.94
+  },
+  {
+    id: 'ss-verb-bare-adjective',
+    regex: /\b(cook|make|prepare|eat|have|buy|order)\s+(big|small|special|heavy|light)(?=\s*[.!?]?$|\s+(?:today|tonight|tomorrow|later|for\s+(?:dinner|lunch|breakfast)))/gi,
+    category: 'SENTENCE_STRUCTURE',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => {
+      const verb = m[1];
+      const adj = m[2].toLowerCase();
+      if (/^(cook|prepare|eat|order)$/i.test(verb)) {
+        return `${verb} a ${adj} meal`;
+      }
+      return `${verb} something ${adj}`;
+    },
+    explanation: 'An adjective like "big" cannot stand alone as the object of "cook" — it needs a noun after it, such as "a big meal" or "something big".',
+    explanationSi: '"Big" යනු නාම විශේෂණයක් බැවින් එයට පසුව "meal" වැනි නාම පදයක් යෙදිය යුතුය (උදා: "cook a big meal").',
+    grammar_rule: 'Transitive Verb + Article + Adjective + Noun ("cook a big meal")',
+    example: 'I will cook a big meal for my family tonight.',
+    more_examples: [
+      'I am going to cook something special today.',
+      'We prepared a big dinner for the weekend.'
+    ],
+    learning_tip: 'After action verbs like "cook", "make", or "buy", attach a noun to adjectives: "a big meal", "something nice".',
+    confidence: 0.93,
+    isProvisional: true
+  },
+  {
+    id: 'ss-when-i-question-cook',
+    regex: /\b(so,?\s+)?when\s+I\s+question,?\s+I\s+(put|add|heat|use)\s+([^.?!]+?)(?:\s+and\s+cook)?(?=[.!?]?$)/gi,
+    category: 'SENTENCE_STRUCTURE',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => {
+      const lead = m[1] ? 'So, ' : '';
+      const rawVerb = m[2].toLowerCase();
+      const betterVerb = rawVerb === 'put' ? 'add' : rawVerb;
+      return `${lead}when I start cooking, I ${betterVerb} ${m[3].trim()}`;
+    },
+    explanation: '"When I question" does not fit the meaning of cooking (it may also be a mic slip for "when I start cooking"). Also, in recipes we usually say "add some ginger and cooking oil" rather than "put ... and cook".',
+    explanationSi: 'ඉවුම් පිහුම් විස්තර කිරීමේදී "when I start cooking, I add..." ලෙස පැහැදිලි ක්‍රියාපද භාවිත කිරීම වඩාත් නිවැරදි හා ස්වාභාවික වේ.',
+    grammar_rule: 'Time Clause + Recipe Collocation: When I start cooking, I add [ingredients].',
+    example: 'So, when I start cooking, I add some ginger and cooking oil.',
+    more_examples: [
+      'First, I heat the oil and add chopped ginger and garlic.',
+      'When I cook curry, I always start with oil and spices.'
+    ],
+    learning_tip: 'When describing cooking steps, use sequence words like "First, I heat..." and "then I add...".',
+    confidence: 0.88,
+    isProvisional: true
+  },
+  {
+    id: 'vf-missing-to-infinitive',
+    regex: /\b(want|wants|wanted|need|needs|needed|try|tried|plan|planned|planning|hope|hoped|decide|decided|forgot|forget)\s+(go|eat|cook|buy|sleep|study|work|see|meet|talk|speak|learn|play|watch|make|do|come|visit|travel)\b/gi,
+    category: 'VERB_FORMS',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => `${m[1]} to ${m[2]}`,
+    explanation: 'Verbs like "want", "need", "try", and "plan" must be followed by "to + base verb" (the full infinitive).',
+    explanationSi: '"Want", "need", "try" වැනි ක්‍රියාපද වලින් පසුව තවත් ක්‍රියාපදයක් එන විට අතරමැදට "to" යෙදිය යුතුය.',
+    grammar_rule: 'Infinitive Pattern: want / need / try / plan + to + base verb',
+    example: 'I want to cook something delicious tonight.',
+    more_examples: ['I need to study for my exam.', 'We plan to visit Kandy next month.'],
+    learning_tip: 'Connect two action verbs with "to": want TO go, need TO cook, try TO speak.',
+    confidence: 0.97
+  },
+  {
+    id: 'ss-double-neg-no-nothing',
+    regex: /\bno\s+nothing\b/gi,
+    category: 'SENTENCE_STRUCTURE',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: () => 'nothing',
+    explanation: 'Using "no" and "nothing" together creates a double negative. Use just "nothing" or "not anything".',
+    explanationSi: '"No" සහ "nothing" එකට යෙදීම ද්විත්ව නිෂේධනයකි (double negative). "Nothing" පමණක් යොදන්න.',
+    grammar_rule: 'Avoid Double Negatives: use "nothing" OR "not anything"',
+    example: 'Nothing special happened today.',
+    learning_tip: 'Keep only one negative word per clause: "Nothing happened" or "I didn\'t do anything."',
+    confidence: 0.98
+  },
+  {
+    id: 'ss-i-no-verb',
+    regex: /\b(I|we|they|you)\s+no\s+(have|want|like|know|think|understand|go|eat|see|need)\b/gi,
+    category: 'SENTENCE_STRUCTURE',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => `${m[1]} don't ${m[2]}`,
+    explanation: 'Use "don\'t" (not "no") before a verb to make a negative statement in the present simple.',
+    explanationSi: 'ක්‍රියාපදයක් නිෂේධ කිරීමට "no" නොව "don\'t" භාවිත කළ යුතුය.',
+    grammar_rule: "Present Simple Negative: Subject + don't + base verb",
+    example: "I don't have class tomorrow.",
+    learning_tip: 'Use "no" before nouns ("no time"), and "don\'t / doesn\'t" before verbs ("don\'t have").',
+    confidence: 0.98
+  },
+  {
+    id: 'sva-there-is-plural',
+    regex: /\bthere\s+is\s+(many|a\s+lot\s+of|several|two|three|four|five|some)\s+([a-z]{3,}s)\b/gi,
+    category: 'SVA',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => `there are ${m[1]} ${m[2]}`,
+    explanation: 'Use "there are" (plural) when referring to more than one item.',
+    explanationSi: 'බහුවචන නාම පදයක් සමඟ "there is" නොව "there are" භාවිත කළ යුතුය.',
+    grammar_rule: 'Plural Existence: there are + plural noun',
+    example: 'There are many good restaurants in this area.',
+    learning_tip: 'Match "there is" with singular nouns and "there are" with plural nouns.',
+    confidence: 0.96
+  },
+  {
+    id: 'unnat-actually-done-nothing-basically',
+    regex: /\b(I\s+(?:have|'ve)\s+actually\s+done\s+nothing\s+basically)\b/gi,
+    category: 'REPETITION',
+    severity: 'UNNATURAL',
+    getCorrection: () => "I've basically done nothing today",
+    explanation: 'Your grammar is understandable, though stacking both "actually" and "basically" in one short sentence sounds slightly cluttered. Keeping just one makes it much smoother.',
+    explanationSi: 'එකම කෙටි වාක්‍යයේ "actually" සහ "basically" දෙකම යෙදීම අනවශ්‍යයි — ඉන් එකක් පමණක් භාවිත කිරීම වඩාත් ස්වාභාවික වේ.',
+    grammar_rule: 'Concise Spoken Flow: use one softening adverb ("basically" OR "really"), not two',
+    example: "I haven't really done much today.",
+    more_examples: ["I've basically done nothing all day.", "Actually, I didn't do much today."],
+    learning_tip: 'Pick either "actually" OR "basically" per sentence to sound crisp and confident.',
+    confidence: 0.91
+  },
+
+  // 1. VERB FORMS (Irregular Past & Past Participles)
+  {
+    id: 'vf-buyed',
+    regex: /\bbuyed\b/gi,
+    category: 'VERB_FORMS',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: () => 'bought',
+    explanation: '"Buy" is an irregular verb. Its past tense is "bought", not "buyed".',
+    simpleExplanation: 'Use "bought" for the past tense of "buy".',
+    explanationSi: '"Buy" යනු අක්‍රමවත් ක්‍රියාපදයකි (irregular verb). එහි අතීත කාලය "bought" වේ.',
+    verbFormTable: { v1: 'Buy', v2: 'Bought', v3: 'Bought' },
+    grammar_rule: 'Irregular Past Tense: buy → bought → bought',
+    example: 'I bought a new jacket at the mall yesterday.',
+    more_examples: ['She bought groceries on her way home.', 'We bought tickets online.'],
+    learning_tip: 'Never add "-ed" to common irregular verbs like buy (bought), bring (brought), or think (thought).',
+    confidence: 0.99
+  },
+  {
+    id: 'vf-goed',
+    regex: /\bgoed\b/gi,
+    category: 'VERB_FORMS',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: () => 'went',
+    explanation: '"Go" is an irregular verb. Its past tense is "went", not "goed".',
+    explanationSi: '"Go" ක්‍රියාපදයේ අතීත කාලය "went" වේ ("goed" නොවේ).',
+    grammar_rule: 'Irregular Past Tense: go → went → gone',
+    example: 'We went to the beach last Sunday.',
+    learning_tip: 'Remember the trio: go – went – gone.',
+    confidence: 0.99
+  },
+  {
+    id: 'vf-eated',
+    regex: /\beated\b/gi,
+    category: 'VERB_FORMS',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: () => 'ate',
+    explanation: '"Eat" is an irregular verb. Its past tense is "ate", not "eated".',
+    explanationSi: '"Eat" හි අතීත කාලය "ate" වේ.',
+    grammar_rule: 'Irregular Past Tense: eat → ate → eaten',
+    example: 'We ate dinner at a nice restaurant.',
+    learning_tip: 'Remember: eat – ate – eaten.',
+    confidence: 0.99
+  },
+  {
+    id: 'vf-other-irreg',
+    regex: /\b(drinked|sleeped|catched|teached|thinked|runned|comed|writed|taked|maked|speaked|seed)\b/gi,
+    category: 'VERB_FORMS',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => {
+      const map: Record<string, string> = {
+        drinked: 'drank',
+        sleeped: 'slept',
+        catched: 'caught',
+        teached: 'taught',
+        thinked: 'thought',
+        runned: 'ran',
+        comed: 'came',
+        writed: 'wrote',
+        taked: 'took',
+        maked: 'made',
+        speaked: 'spoke',
+        seed: 'saw'
+      };
+      return map[m[1].toLowerCase()] || m[1];
+    },
+    explanation: 'This is an irregular English verb — it takes a special past-tense form instead of adding "-ed".',
+    explanationSi: 'මෙය අක්‍රමවත් ක්‍රියාපදයක් (irregular verb) බැවින් "-ed" එකතු නොකර නිවැරදි අතීත රූපය යෙදිය යුතුය.',
+    grammar_rule: 'Irregular Past Tense Forms',
+    example: 'She taught us a helpful method and I wrote it down.',
+    learning_tip: 'Practise high-frequency irregular verbs in short past-tense stories.',
+    confidence: 0.98
+  },
+  {
+    id: 'vf-have-went-past-time',
+    regex: /\b(?:have|has)\s+went\b(?=.{0,45}\b(?:yesterday|last\s+(?:week|month|year|night|friday|monday|sunday)|ago)\b)/gi,
+    category: 'VERB_TENSE',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: () => 'went',
+    explanation: 'You combined present perfect ("have") with an incorrect past form ("went") alongside a finished past time expression like "yesterday". Use simple past ("went") here.',
+    explanationSi: '"Yesterday" වැනි නිශ්චිත අතීත කාලයක් ඇති විට Present Perfect ("have") නොයොදා Simple Past ("went") පමණක් භාවිත කරන්න.',
+    grammar_rule: 'Simple Past with finished time ("yesterday", "last week", "two days ago")',
+    example: 'I went to Colombo yesterday.',
+    more_examples: ['I went to school yesterday.', 'She visited her grandmother last week.', 'They watched a movie two days ago.'],
+    learning_tip: 'When you say "yesterday", "last week", or "two days ago", use simple past directly.',
+    confidence: 0.98
+  },
+  {
+    id: 'vf-have-went',
+    regex: /\b(have|has|had)\s+went\b/gi,
+    category: 'VERB_FORMS',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => `${m[1]} gone`,
+    explanation: 'After "have / has / had", always use the past participle (V3: "gone"), not the simple past (V2: "went").',
+    simpleExplanation: 'After "have", we need the past participle (V3: "gone"), not the simple past (V2: "went").',
+    explanationSi: '"Have" යන helping verb එකෙන් පසුව සාමාන්‍යයෙන් භාවිතා කළ යුත්තේ verb එකේ past participle (V3 - "gone") ආකාරයයි.',
+    verbFormTable: { v1: 'Go', v2: 'Went', v3: 'Gone' },
+    grammar_rule: 'Perfect Tense: have / has / had + V3 (past participle)',
+    example: 'They have gone to the library already.',
+    more_examples: ['I have eaten lunch.', 'She has written three emails.'],
+    learning_tip: 'Remember: go (V1) → went (V2) → gone (V3 after have/has).',
+    confidence: 0.98
+  },
+  {
+    id: 'vf-was-go',
+    regex: /\b(?:was|were)\s+(go|went|come|eat|buy|meet|see|study|work)\b/gi,
+    category: 'VERB_TENSE',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => {
+      const map: Record<string, string> = {
+        go: 'went',
+        went: 'went',
+        come: 'came',
+        eat: 'ate',
+        buy: 'bought',
+        meet: 'met',
+        see: 'saw',
+        study: 'studied',
+        work: 'worked'
+      };
+      return map[m[1].toLowerCase()] || m[1];
+    },
+    explanation: 'Do not place "was/were" before a base action verb in simple past. Use the past verb directly (or "was + -ing" for ongoing actions).',
+    explanationSi: 'සරල අතීත ක්‍රියාවක් ප්‍රකාශ කිරීමේදී "was/were" සමඟ මූල ක්‍රියාපදය නොයොදා අතීත ක්‍රියාපදය ("went", "met") කෙලින්ම යොදන්න.',
+    grammar_rule: 'Simple Past: Subject + Past Verb (NOT: was + base verb)',
+    example: 'Today I went to university and met my friends.',
+    learning_tip: 'Use "I went" for completed actions, or "I was going" only if describing an action in progress.',
+    confidence: 0.96
+  },
+  {
+    id: 'vf-didnt-past',
+    regex: /\b(didn't|did\s+not)\s+(went|ate|bought|saw|came|met|took|made|got|had|knew|understood|thought|felt|said|told|gave|found|left|kept|slept|drank|wrote|spoke|ran|brought|caught|taught|heard)\b/gi,
+    category: 'VERB_FORMS',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => {
+      const base: Record<string, string> = {
+        went: 'go',
+        ate: 'eat',
+        bought: 'buy',
+        saw: 'see',
+        came: 'come',
+        met: 'meet',
+        took: 'take',
+        made: 'make',
+        got: 'get',
+        had: 'have',
+        knew: 'know',
+        understood: 'understand',
+        thought: 'think',
+        felt: 'feel',
+        said: 'say',
+        told: 'tell',
+        gave: 'give',
+        found: 'find',
+        left: 'leave',
+        kept: 'keep',
+        slept: 'sleep',
+        drank: 'drink',
+        wrote: 'write',
+        spoke: 'speak',
+        ran: 'run',
+        brought: 'bring',
+        caught: 'catch',
+        taught: 'teach',
+        heard: 'hear'
+      };
+      return `${m[1]} ${base[m[2].toLowerCase()] || m[2]}`;
+    },
+    explanation: 'Because "didn\'t" already carries the past tense, the main verb returns to its base form (V1).',
+    explanationSi: '"Didn\'t" මඟින් අතීත කාලය දැක්වෙන නිසා ඊළඟ ක්‍රියාපදය මූල රූපයෙන් (V1) තැබිය යුතුය.',
+    grammar_rule: "Negative Simple Past: didn't + base verb (V1)",
+    example: "I didn't go out last night because it rained.",
+    learning_tip: 'After "did" or "didn\'t", always reset the next verb to base form.',
+    confidence: 0.98
+  },
+  {
+    id: 'vf-i-am-agree',
+    regex: /\b(I)\s+am\s+agree\b/gi,
+    category: 'VERB_FORMS',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => `${m[1]} agree`,
+    explanation: '"Agree" is an action verb, not an adjective, so it does not take "am" before it.',
+    explanationSi: '"Agree" යනු ක්‍රියාපදයක් නිසා "I am agree" නොකියා "I agree" යයි කියන්න.',
+    grammar_rule: 'Subject + agree (NOT: subject + be + agree)',
+    example: 'I completely agree with your point.',
+    learning_tip: 'Say "I agree" or "I totally agree" — never "I am agree".',
+    confidence: 0.99
+  },
+
+  // 2. PREPOSITIONS
+  {
+    id: 'prep-went-to-shopping',
+    regex: /\b(go|went|going)\s+(to\s+(shopping|swimming|running|hiking|camping|fishing|sightseeing))\b/gi,
+    category: 'PREPOSITIONS',
+    severity: 'GRAMMAR_ERROR',
+    getSpan: (m) => {
+      const startOffset = m[0].length - m[2].length;
+      return { startOffset, endOffset: m[0].length, original: m[2] };
+    },
+    getCorrection: (m) => m[3],
+    explanation: 'We don\'t use "to" between "go/went" and "-ing" leisure activities like "shopping" or "swimming".',
+    simpleExplanation: 'Skip "to" before "-ing" activities: say "went shopping" instead of "went to shopping".',
+    explanationSi: '"Go / went" සමඟ "shopping", "swimming" වැනි -ing ක්‍රියාකාරකම් යෙදෙන විට අතරමැදට "to" නොයොදන්න.',
+    sinhalaTransferNote: 'සිංහලෙන් "ෂොපින් යන්න" යන අදහසට "went to shopping" ලෙස සිතුවත්, ඉංග්‍රීසියේ "to" යොදන්නේ ස්ථානයකට ("go to the mall") පමණි.',
+    grammar_rule: 'go + verb-ing (go shopping, go swimming, go hiking)',
+    example: 'I went shopping yesterday and bought some clothes.',
+    more_examples: ['We went swimming at the hotel pool.', 'Let\'s go hiking this weekend.'],
+    learning_tip: 'Use "go to + place" (go to the mall), but "go + -ing" (go shopping).',
+    confidence: 0.99
+  },
+  {
+    id: 'prep-interested-on',
+    regex: /\binterested\s+on\b/gi,
+    category: 'PREPOSITIONS',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: () => 'interested in',
+    explanation: 'The adjective "interested" always pairs with the preposition "in", not "on".',
+    explanationSi: '"Interested" සමඟ සෑමවිටම යෙදෙන්නේ "in" නිපාතයයි ("on" නොවේ).',
+    grammar_rule: 'interested + in + noun / verb-ing',
+    example: 'I am really interested in software engineering.',
+    learning_tip: 'Pair "interested in" together as one fixed chunk.',
+    confidence: 0.99
+  },
+  {
+    id: 'prep-depends-of',
+    regex: /\b(depend|depends|depending)\s+of\b/gi,
+    category: 'PREPOSITIONS',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => `${m[1]} on`,
+    explanation: 'In English, "depend" collocates with "on" (or "upon"), never "of".',
+    explanationSi: '"Depend" ක්‍රියාපදය සමඟ නිවැරදි නිපාතය "on" වේ.',
+    grammar_rule: 'depend + on',
+    example: 'It really depends on my schedule this week.',
+    learning_tip: 'Always say "it depends on..."',
+    confidence: 0.99
+  },
+  {
+    id: 'prep-listen-music',
+    regex: /\b(listen|listened|listening)\s+(music|songs|podcasts|the\s+radio)\b/gi,
+    category: 'PREPOSITIONS',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => `${m[1]} to ${m[2]}`,
+    explanation: 'The verb "listen" requires the preposition "to" before an object.',
+    explanationSi: '"Listen" ක්‍රියාපදයට පසුව වස්තුවක් ඇති විට "to" නිපාතය අනිවාර්ය වේ.',
+    grammar_rule: 'listen + to + object',
+    example: 'I usually listen to music while studying.',
+    learning_tip: 'Remember: hear something, but listen TO something.',
+    confidence: 0.97
+  },
+  {
+    id: 'prep-discuss-about',
+    regex: /\b(discuss|discussed|discussing)\s+about\b/gi,
+    category: 'PREPOSITIONS',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => m[1],
+    explanation: '"Discuss" already means "talk about", so adding "about" is redundant.',
+    explanationSi: '"Discuss" තුළම "ගැන කතා කරනවා" යන අර්ථය ඇති නිසා "about" නොයොදන්න.',
+    grammar_rule: 'discuss + topic (NO "about")',
+    example: 'We discussed artificial intelligence in our lecture.',
+    learning_tip: 'Say "talk about a topic" OR "discuss a topic" — never "discuss about".',
+    confidence: 0.98
+  },
+  {
+    id: 'prep-married-with',
+    regex: /\bmarried\s+with\b/gi,
+    category: 'PREPOSITIONS',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: () => 'married to',
+    explanation: 'In English, we say someone is "married to" another person, not "married with".',
+    explanationSi: 'කෙනෙකු සමඟ විවාහ වී සිටීම දැක්වීමට "married to" භාවිතා කරයි.',
+    grammar_rule: 'be married + to + person',
+    example: 'My cousin is married to a doctor.',
+    learning_tip: 'Use "married to" for the spouse, and "married with kids" only for children.',
+    confidence: 0.95
+  },
+
+  // 3. VERB TENSE (Past Context Mismatches)
+  {
+    id: 'vt-yesterday-present',
+    regex: /\b(yesterday|last\s+night|last\s+week|two\s+days\s+ago)(,?\s+)(I|we|they|he|she)\s+(am|is|go|goes|eat|eats|buy|buys|meet|meets|see|sees|have|has|do|does|study|studies|work|works)\b/gi,
+    category: 'VERB_TENSE',
+    severity: 'GRAMMAR_ERROR',
+    getSpan: (m) => {
+      const startOffset = m[0].length - m[4].length;
+      return { startOffset, endOffset: m[0].length, original: m[4] };
+    },
+    getCorrection: (m) => {
+      const past: Record<string, string> = {
+        am: 'was',
+        is: 'was',
+        go: 'went',
+        goes: 'went',
+        eat: 'ate',
+        eats: 'ate',
+        buy: 'bought',
+        buys: 'bought',
+        meet: 'met',
+        meets: 'met',
+        see: 'saw',
+        sees: 'saw',
+        have: 'had',
+        has: 'had',
+        do: 'did',
+        does: 'did',
+        study: 'studied',
+        studies: 'studied',
+        work: 'worked',
+        works: 'worked'
+      };
+      return past[m[4].toLowerCase()] || m[4];
+    },
+    explanation: 'Because the sentence refers to a finished past time (e.g., "yesterday"), the verb needs to be in the simple past tense.',
+    simpleExplanation: 'Because it happened yesterday, change the verb to past tense (e.g., "go" → "went").',
+    explanationSi: '"Yesterday" වැනි අතීත කාල වචනයක් ඇති බැවින් ක්‍රියාපදය අතීත කාලයෙන් (Simple Past) යෙදිය යුතුය.',
+    grammar_rule: 'Simple Past Tense with past time markers',
+    example: 'Yesterday I went shopping and bought some clothes.',
+    learning_tip: 'Spot time words like "yesterday" or "last week" and shift your verbs into past tense.',
+    confidence: 0.96
+  },
+  {
+    id: 'vt-verb-yesterday',
+    regex: /\b(I|we|they)\s+(go|am\s+going|eat|buy|meet|see)\s+([a-zA-Z0-9\s]{0,25}?)\b(yesterday|last\s+week|last\s+night)\b/gi,
+    category: 'VERB_TENSE',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => {
+      const past: Record<string, string> = {
+        go: 'went',
+        'am going': 'went',
+        eat: 'ate',
+        buy: 'bought',
+        meet: 'met',
+        see: 'saw'
+      };
+      const fixedVerb = past[m[2].toLowerCase().replace(/\s+/g, ' ')] || m[2];
+      return `${m[1]} ${fixedVerb} ${m[3]}${m[4]}`;
+    },
+    explanation: 'The action took place in the past ("yesterday / last week"), so the verb should be in the simple past tense.',
+    explanationSi: 'මෙම ක්‍රියාව අතීතයේ සිදුවූවක් බැවින් ක්‍රියාපදය අතීත කාලයට හැරවිය යුතුය.',
+    grammar_rule: 'Simple Past Tense: Subject + Past Verb + Past Time',
+    example: 'I went to the bookstore yesterday.',
+    learning_tip: 'Check the time marker at the end of your sentence to match your verb tense.',
+    confidence: 0.95
+  },
+  {
+    id: 'vt-and-meet-past',
+    regex: /\b(?:(?<=yesterday[^.?!]{1,50})|(?<=went[^.?!]{1,40})|(?<=visited[^.?!]{1,40}))and\s+(meet|buy|eat|see|go)\b/gi,
+    category: 'VERB_TENSE',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => {
+      const past: Record<string, string> = {
+        meet: 'met',
+        buy: 'bought',
+        eat: 'ate',
+        see: 'saw',
+        go: 'went'
+      };
+      return `and ${past[m[1].toLowerCase()] || m[1]}`;
+    },
+    explanation: 'The second action happened in the same past timeframe as the first action, so keep both verbs in the past tense.',
+    explanationSi: 'පළමු ක්‍රියාව අතීත කාලයෙන් ඇති නිසා "and" වලින් පසුව එන දෙවන ක්‍රියාවද අතීත කාලයෙන් තැබිය යුතුය.',
+    grammar_rule: 'Tense Consistency across coordinated verbs',
+    example: 'Yesterday I went to university and met my friends.',
+    learning_tip: 'When joining two past events with "and", make sure BOTH verbs are past tense.',
+    confidence: 0.94
+  },
+
+  // 4. SUBJECT-VERB AGREEMENT (SVA)
+  {
+    id: 'sva-he-she-dont',
+    regex: /\b(he|she|it)\s+don'?t\b/gi,
+    category: 'SVA',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => `${m[1]} doesn't`,
+    explanation: 'Third-person singular subjects ("he", "she", "it") require "doesn\'t", not "don\'t".',
+    explanationSi: 'තෙවන පාර්ශ්ව ඒකවචන (he, she, it) සමඟ "don\'t" නොව "doesn\'t" යෙදිය යුතුය.',
+    grammar_rule: "Third-Person Singular Negative: he / she / it + doesn't",
+    example: "She doesn't like coffee in the evening.",
+    learning_tip: 'Pair he/she/it with "doesn\'t" automatically.',
+    confidence: 0.99
+  },
+  {
+    id: 'sva-he-she-base',
+    regex: /\b(he|she)\s+(go|like|want|have|work|study|live|play)\b/gi,
+    category: 'SVA',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => {
+      const third: Record<string, string> = {
+        go: 'goes',
+        like: 'likes',
+        want: 'wants',
+        have: 'has',
+        work: 'works',
+        study: 'studies',
+        live: 'lives',
+        play: 'plays'
+      };
+      return `${m[1]} ${third[m[2].toLowerCase()] || `${m[2]}s`}`;
+    },
+    explanation: 'In the present simple, verbs following "he" or "she" need an "-s / -es" ending (or "has").',
+    explanationSi: 'වර්තමාන කාලයේදී "he / she" සමඟ ක්‍රියාපදයට "-s / -es" එකතු කළ යුතුය.',
+    grammar_rule: 'Present Simple SVA: he / she / it + verb-s/es',
+    example: 'She goes to the gym every morning.',
+    learning_tip: 'Listen for the "-s" sound after "he", "she", or a single person\'s name.',
+    confidence: 0.95
+  },
+  {
+    id: 'sva-people-is',
+    regex: /\b(people)\s+is\b/gi,
+    category: 'SVA',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => `${m[1]} are`,
+    explanation: '"People" is a plural noun and must agree with "are" (or "were"), not "is".',
+    explanationSi: '"People" බහුවචන නාම පදයක් නිසා "are" යෙදිය යුතුය.',
+    grammar_rule: 'Plural Agreement: people + are / were',
+    example: 'Many people are interested in remote work.',
+    learning_tip: 'Treat "people" just like "they" → people are.',
+    confidence: 0.99
+  },
+
+  // 5. PLURALS & UNCOUNTABLE NOUNS
+  {
+    id: 'pl-lots-of-works',
+    regex: /\b(lots\s+of|a\s+lot\s+of|many|much)\s+works\b/gi,
+    category: 'PLURALS',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: () => 'a lot of work',
+    explanation: '"Work" (meaning tasks or job duties) is uncountable in English, so we say "a lot of work", not "lots of works".',
+    simpleExplanation: '"Work" has no plural "-s" here — say "a lot of work".',
+    explanationSi: 'වැඩකටයුතු යන අර්ථයෙන් "work" ගිණිය නොහැකි නාම පදයක් බැවින් "-s" නොයොදා "a lot of work" යයි කියන්න.',
+    sinhalaTransferNote: 'සිංහලෙන් "වැඩ ගොඩක්" බහුවචන ලෙස හැඟුණත්, ඉංග්‍රීසියේ work, advice, information යනු uncountable (ගිණිය නොහැකි) නිසා "-s" නොයෙදේ.',
+    grammar_rule: 'Uncountable Nouns: work, information, advice, homework (no plural -s)',
+    example: 'I had a lot of work to finish before Friday.',
+    learning_tip: 'Use "a lot of work" or "many tasks" — never "lots of works".',
+    confidence: 0.98
+  },
+  {
+    id: 'pl-uncountables',
+    regex: /\b(informations|advices|furnitures|homeworks|equipments)\b/gi,
+    category: 'PLURALS',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => m[1].slice(0, -1),
+    explanation: 'This noun is uncountable in standard English and never takes a plural "-s".',
+    explanationSi: 'මෙය ගිණිය නොහැකි නාම පදයක් (uncountable noun) බැවින් අගට "-s" එකතු නොකරන්න.',
+    grammar_rule: 'Uncountable Nouns: no plural -s (use "some..." or "a piece of...")',
+    example: 'She gave me some really useful advice and information.',
+    learning_tip: 'Say "some advice" or "a piece of information" instead of adding -s.',
+    confidence: 0.99
+  },
+  {
+    id: 'pl-many-singular',
+    regex: /\bmany\s+(student|friend|book|person|thing|movie|country|place|problem)\b/gi,
+    category: 'PLURALS',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => {
+      const plural: Record<string, string> = {
+        person: 'people',
+        country: 'countries'
+      };
+      const w = m[1].toLowerCase();
+      return `many ${plural[w] || `${w}s`}`;
+    },
+    explanation: '"Many" is always followed by a plural countable noun.',
+    explanationSi: '"Many" වලින් පසුව සෑමවිටම බහුවචන නාම පදයක් යෙදිය යුතුය.',
+    grammar_rule: 'Quantifier Agreement: many + plural noun',
+    example: 'Many students attend that lecture every week.',
+    learning_tip: 'After "many", "several", or "a few", remember the plural -s.',
+    confidence: 0.97
+  },
+
+  // 6. ARTICLES
+  {
+    id: 'art-verb-bare-ai-or-tech-noun',
+    regex: /\b(developed|develop|built|build|building|created|create|creating|made|make|making|designed|design|wrote|write|launched|tested|added|add|using|used|use|bought|buy|read|watched|found|find|have|has|had|need|needs|needed|got|saw|starting|started)\s+(AI\s+(?:tool|app|model|system|assistant|chatbot|agent|project|feature|platform)|app|application|website|tool|feature|project|program|system|model|component|book|laptop|phone|car|movie|dress|shirt|job|idea|mistake|problem|question|plan|recipe|dish|meal|trip)\b/gi,
+    category: 'ARTICLES',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => {
+      const nounPhrase = m[2];
+      const startsVowelSound = /^(?:ai\b|[aeiou])/i.test(nounPhrase);
+      return `${m[1]} ${startsVowelSound ? 'an' : 'a'} ${nounPhrase}`;
+    },
+    explanation: 'A singular countable noun phrase (like "AI tool", "website", or "book") needs an article ("a", "an", or "the") before it. Use "an" before "AI" because it begins with a vowel sound ("ay-eye").',
+    simpleExplanation: 'Put "a" or "an" before a single countable noun (e.g., "an AI tool", "a book").',
+    explanationSi: 'ඒකවචන ගිණිය හැකි නාම පදයකට පෙර "a" හෝ "an" යෙදිය යුතුය. "AI" යන්න ස්වර ශබ්දයකින් ආරම්භ වන බැවින් "an AI tool" යයි කියන්න.',
+    grammar_rule: 'Indefinite Article: a / an + singular countable noun ("an AI tool", "a website")',
+    example: 'I developed an AI tool to help students practice English.',
+    more_examples: ['I built a website for my university project.', 'I bought a book yesterday.'],
+    learning_tip: 'Singular countable nouns rarely stand bare — add "a", "an", "the", or "my" in front of them.',
+    confidence: 0.94
+  },
+  {
+    id: 'art-a-vowel',
+    regex: /\ba\s+(AI\b|apple|hour|umbrella|interesting|awesome|amazing|exciting|important|exam|idea|email|app|application)\b/gi,
+    category: 'ARTICLES',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => `an ${m[1]}`,
+    explanation: 'Use "an" instead of "a" before words that begin with a vowel sound.',
+    explanationSi: 'ස්වර ශබ්දයකින් (vowel sound) ආරම්භ වන වචන වලට පෙර "a" නොව "an" යෙදිය යුතුය.',
+    grammar_rule: 'a + consonant sound · an + vowel sound',
+    example: 'We had an interesting lecture about AI today.',
+    learning_tip: 'Listen to the opening sound: "an hour", "an interesting book", but "a university".',
+    confidence: 0.98
+  },
+
+  // 7. CONDITIONALS
+  {
+    id: 'cond-if-will',
+    regex: /\bif\s+(I|you|we|they|he|she|it)\s+will\s+([a-z]+)\b/gi,
+    category: 'CONDITIONALS',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => `if ${m[1]} ${m[2]}`,
+    explanation: 'In first conditional "if"-clauses, use present simple instead of "will". Save "will" for the result clause.',
+    explanationSi: '"If" කොටස තුළ "will" භාවිතා නොකර සරල වර්තමාන කාලය (Present Simple) යොදන්න.',
+    grammar_rule: 'First Conditional: If + present simple, ... will + base verb',
+    example: 'If I go to Colombo tomorrow, I will call you.',
+    learning_tip: 'Keep "will" out of the "if" part: "If it rains, we will stay home."',
+    confidence: 0.97
+  },
+
+  // 8. WORD ORDER & DOUBLE COMPARATIVES
+  {
+    id: 'wo-like-very-much-it',
+    regex: /\blike\s+very\s+much\s+(it|that|this|them|him|her)\b/gi,
+    category: 'WORD_ORDER',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => `like ${m[1]} very much`,
+    explanation: 'In English, keep the object ("it", "that") right after the verb, and place "very much" at the end.',
+    explanationSi: 'ඉංග්‍රීසි වාක්‍ය රටාවේදී "like" ක්‍රියාපදයට පසුව "it" යොදා "very much" වාක්‍යය අගට තැබිය යුතුය.',
+    grammar_rule: 'Word Order: Verb + Object + Adverbial ("like it very much")',
+    example: 'I watched that film and I liked it very much.',
+    learning_tip: 'Never separate a verb from its direct object with "very much".',
+    confidence: 0.99
+  },
+  {
+    id: 'wo-double-comparative',
+    regex: /\bmore\s+(better|faster|cheaper|easier|higher|closer|bigger|nicer)\b/gi,
+    category: 'WORD_ORDER',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => m[1],
+    explanation: 'Adjectives ending in "-er" (or "better") are already comparative — adding "more" creates a double comparative.',
+    explanationSi: '"Better / faster" දැනටමත් සංසන්දනාත්මක රූප බැවින් ඊට පෙර "more" නොයොදන්න.',
+    grammar_rule: 'Use either "more + adjective" OR "adjective-er", never both',
+    example: 'Studying in a quiet room is much better for focus.',
+    learning_tip: 'If you want emphasis, say "much better" instead of "more better".',
+    confidence: 0.99
+  },
+
+  // 9. WORD CHOICE & COLLOCATIONS
+  {
+    id: 'wc-did-a-party',
+    regex: /\b(did|do|doing)\s+a\s+party\b/gi,
+    category: 'WORD_CHOICE',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => `${m[1].toLowerCase() === 'did' ? 'had' : m[1].toLowerCase() === 'doing' ? 'having' : 'have'} a party`,
+    explanation: 'In natural English, we "have a party" or "throw a party", not "do a party".',
+    explanationSi: 'සාදයක් පැවැත්වීම සඳහා "do a party" නොව "have a party" හෝ "throw a party" යයි කියනු ලැබේ.',
+    grammar_rule: 'Collocation: have / throw a party',
+    example: 'We had a small party to celebrate her birthday.',
+    learning_tip: 'Pair "party" with "have" or "throw".',
+    confidence: 0.98
+  },
+  {
+    id: 'wc-do-mistake',
+    regex: /\b(do|did|doing)\s+a\s+mistake\b/gi,
+    category: 'WORD_CHOICE',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => `${m[1].toLowerCase() === 'did' ? 'made' : m[1].toLowerCase() === 'doing' ? 'making' : 'make'} a mistake`,
+    explanation: 'The standard English collocation is "make a mistake", not "do a mistake".',
+    explanationSi: 'වැරැද්දක් සිදු කිරීම සඳහා "do a mistake" නොව "make a mistake" යයි යෙදේ.',
+    grammar_rule: 'Collocation: make a mistake',
+    example: 'Everyone makes mistakes when learning a language.',
+    learning_tip: 'Remember: do homework, but MAKE a mistake.',
+    confidence: 0.99
+  },
+  {
+    id: 'wc-i-am-success',
+    regex: /\b(I\s+am|he\s+is|she\s+is|we\s+are|they\s+are)\s+success\b/gi,
+    category: 'WORD_CHOICE',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => `${m[1]} successful`,
+    explanation: '"Success" is a noun. After "am / is / are", use the adjective form "successful".',
+    explanationSi: '"Success" යනු නාම පදයකි. "I am..." වලින් පසුව "successful" යන නාම විශේෂණය යෙදිය යුතුය.',
+    grammar_rule: 'Word Form: be + successful (adjective) vs. achieve success (noun)',
+    example: 'She worked hard and became very successful.',
+    learning_tip: 'Use "successful" to describe people ("I am successful") and "success" for outcomes ("a huge success").',
+    confidence: 0.98
+  },
+  {
+    id: 'wc-highly-interesting',
+    regex: /\bhighly\s+interesting\b/gi,
+    category: 'WORD_CHOICE',
+    severity: 'UNNATURAL',
+    getCorrection: () => 'very interesting',
+    explanation: '"Highly" collocates with words like "recommended", "skilled", or "unlikely", whereas "interesting" pairs naturally with "very", "really", or "genuinely" (or simply "fascinating").',
+    explanationSi: '"Interesting" සමඟ "highly" යෙදීම ස්වාභාවික නොවේ — "very interesting" හෝ "fascinating" භාවිත කරන්න.',
+    grammar_rule: 'Collocation: very / genuinely interesting (or "fascinating")',
+    example: 'That lecture on artificial intelligence was genuinely fascinating.',
+    learning_tip: 'Swap "highly interesting" for "fascinating" or "really interesting".',
+    confidence: 0.95
+  },
+  {
+    id: 'alt-take-a-decision',
+    regex: /\b(take|took|taking)\s+a\s+decision\b/gi,
+    category: 'WORD_CHOICE',
+    severity: 'ALTERNATIVE',
+    getCorrection: (m) => {
+      const v = m[1].toLowerCase();
+      return `${v === 'took' ? 'made' : v === 'taking' ? 'making' : 'make'} a decision`;
+    },
+    explanation: '"Take a decision" is accepted in UK and South Asian English, though "make a decision" is the most widely used international phrasing.',
+    explanationSi: '"Take a decision" බ්‍රිතාන්‍ය හා දකුණු ආසියානු ඉංග්‍රීසියේ භාවිත වුවත්, ජාත්‍යන්තරව වඩාත් පොදු යෙදුම "make a decision" වේ.',
+    grammar_rule: 'Optional Style Note: make a decision (most common globally)',
+    example: 'I need a little time to make a decision about my next course.',
+    learning_tip: 'Not an error — just a handy international collocation upgrade!',
+    confidence: 0.9
+  },
+  {
+    id: 'wc-strong-rain-big-traffic',
+    regex: /\b(strong\s+rain|big\s+traffic)\b/gi,
+    category: 'WORD_CHOICE',
+    severity: 'UNNATURAL',
+    getCorrection: (m) => (m[1].toLowerCase().includes('rain') ? 'heavy rain' : 'heavy traffic'),
+    explanation: 'Fluent speakers pair "rain" and "traffic" with "heavy" rather than "strong" or "big".',
+    explanationSi: 'වර්ෂාව සහ වාහන තදබදය විස්තර කිරීමට "heavy rain" සහ "heavy traffic" යෙදීම වඩාත් ස්වාභාවික වේ.',
+    grammar_rule: 'Natural Collocation: heavy rain / heavy traffic',
+    example: 'I got stuck in heavy traffic because of the heavy rain.',
+    learning_tip: 'Use "heavy" for intense rain, traffic, and workload.',
+    confidence: 0.95
+  },
+
+  // 10. LESS NATURAL (Distinct from Grammar Errors!)
+  {
+    id: 'unnat-having-a-doubt',
+    regex: /\b(?:am\s+having|have)\s+a\s+doubt\b/gi,
+    category: 'WORD_CHOICE',
+    severity: 'UNNATURAL',
+    getCorrection: () => 'have a question',
+    explanation: 'This is understood in South Asian English, but international fluent speakers say "I have a question" (since "doubt" implies distrust or disbelief).',
+    simpleExplanation: 'Say "I have a question" when asking for help or clarification.',
+    explanationSi: 'ප්‍රශ්නයක් ඇසීමට "I am having a doubt" වෙනුවට "I have a question" යෙදීම ජාත්‍යන්තර ඉංග්‍රීසියේ වඩාත් ස්වාභාවික වේ.',
+    sinhalaTransferNote: 'සිංහලෙන් "සැකයක් තියෙනවා" යන වචනාර්ථය නිසා "having a doubt" කිව්වත්, ඉංග්‍රීසියේ "doubt" අවිශ්වාසය හඟවන බැවින් "I have a question" යොදන්න.',
+    grammar_rule: 'Natural Expression: have a question (vs. doubt = disbelief)',
+    example: 'Excuse me, I have a quick question about this topic.',
+    learning_tip: 'Use "I have a question" when asking for clarification.',
+    confidence: 0.96
+  },
+  {
+    id: 'unnat-return-back',
+    regex: /\b(return|returned|returning)\s+back\b/gi,
+    category: 'WORD_CHOICE',
+    severity: 'UNNATURAL',
+    getCorrection: (m) => m[1],
+    explanation: '"Return" already means "come/go back", so adding "back" is redundant.',
+    explanationSi: '"Return" තුළම "ආපසු" යන අර්ථය ඇති නිසා "back" නැවත යෙදීම අනවශ්‍යයි.',
+    grammar_rule: 'Avoid redundancy: return (or go back)',
+    example: 'We returned home around 8 PM.',
+    learning_tip: 'Choose either "return home" or "go back home".',
+    confidence: 0.94
+  },
+
+  // 11. SENTENCE STRUCTURE (Standalone Fragment)
+  {
+    id: 'ss-because-fragment',
+    regex: /^because\s+[^,.?!]{4,45}[.!?]?$/i,
+    category: 'SENTENCE_STRUCTURE',
+    severity: 'GRAMMAR_ERROR',
+    getCorrection: (m) => `I did that ${m[0].charAt(0).toLowerCase()}${m[0].slice(1)}`,
+    explanation: 'Starting and ending a standalone sentence with "Because..." leaves it as a dependent fragment. Attach it to a main clause in formal or complete responses.',
+    explanationSi: '"Because..." යන්නෙන් පමණක් වාක්‍යය අවසන් කිරීම අසම්පූර්ණ වාක්‍යයකි (fragment). ප්‍රධාන වාක්‍ය කොටසක් සමඟ එය සම්බන්ධ කරන්න.',
+    grammar_rule: 'Complete Complex Sentence: Main Clause + because + Reason Clause',
+    example: 'I stayed home because I was tired.',
+    learning_tip: 'Try completing the thought: "I stayed home because I was tired."',
+    confidence: 0.88
+  },
+
+  // 12. REPETITION
+  {
+    id: 'rep-duplicate-phrase',
+    regex: /\b(I\s+think|actually|basically|like)[,\s]+\1\b/gi,
+    category: 'REPETITION',
+    severity: 'UNNATURAL',
+    getCorrection: (m) => m[1],
+    explanation: 'Repeating the same filler phrase back-to-back breaks spoken flow. Pause quietly for half a second instead.',
+    explanationSi: 'එකම වචනය නැවත නැවත කීම කථන චතුරතාව අඩු කරයි. ඒ වෙනුවට මොහොතක් නිහඬව සිතන්න.',
+    grammar_rule: 'Spoken Fluency: Eliminate immediate phrase repetition',
+    example: 'Personally, I think that approach works well.',
+    learning_tip: 'A calm half-second pause sounds more confident than repeating "I think, I think".',
+    confidence: 0.92
+  },
+
+  // 13. VOCABULARY UPGRADES (Strictly labelled ADVANCED — never Incorrect!)
+  {
+    id: 'voc-very-good',
+    regex: /\bvery\s+good\b/gi,
+    category: 'VOCABULARY',
+    severity: 'ADVANCED',
+    getCorrection: () => 'excellent',
+    explanation: '"Very good" is grammatically correct, and upgrading to "excellent", "fantastic", or "outstanding" makes your speaking sound richer.',
+    explanationSi: '"Very good" නිවැරදි වුවත්, "excellent" හෝ "outstanding" වැනි වචන භාවිතයෙන් ඔබේ ඉංග්‍රීසි වඩාත් උසස් ලෙස ඇසේ.',
+    grammar_rule: 'Vocabulary Upgrade: Avoid overusing "very + basic adjective"',
+    example: 'The lecture was genuinely fascinating and well-structured.',
+    more_examples: ['That movie was absolutely captivating.', 'She did an outstanding job.'],
+    learning_tip: 'Swap "very good" for "excellent", "wonderful", or "impressive".',
+    confidence: 0.9
+  },
+  {
+    id: 'voc-very-interesting',
+    regex: /\bvery\s+interesting\b/gi,
+    category: 'VOCABULARY',
+    severity: 'ADVANCED',
+    getCorrection: () => 'fascinating',
+    explanation: '"Very interesting" is completely correct! Using "fascinating" or "captivating" adds vivid natural nuance.',
+    explanationSi: '"Very interesting" වෙනුවට "fascinating" හෝ "captivating" යෙදීමෙන් අදහස වඩාත් ආකර්ෂණීය වේ.',
+    grammar_rule: 'Expressive Adjectives: very interesting → fascinating / captivating',
+    example: 'We had a fascinating discussion about artificial intelligence.',
+    learning_tip: 'Use "fascinating" for ideas/lectures and "captivating" for stories/movies.',
+    confidence: 0.9
+  }
+];
+
+export function preservesInitialCap(orig: string, replacement: string): string {
+  if (!orig || !replacement) return replacement;
+  if (orig[0] === orig[0].toUpperCase() && orig[0] !== orig[0].toLowerCase()) {
+    return replacement.charAt(0).toUpperCase() + replacement.slice(1);
+  }
+  return replacement;
+}
+
+/**
+ * Phase 3 — P1.2 Vocabulary & Natural-Expression Upgrade Detector
+ * Scans clear sentences for overused basic words ("very good", "very interesting", "big", "tired", etc.)
+ * and surfaces 3 nuance-labelled upgrades + a fluent natural-sentence rewrite (never marked as Incorrect!).
+ */
+interface VocabUpgradeSpec {
+  id: string;
+  regex: RegExp;
+  broadOnly?: boolean;
+  upgrades: { word: string; nuance: string }[];
+  explanation: string;
+  explanationSi: string;
+  example: string;
+  category: 'vocabulary' | 'collocation' | 'expression';
+}
+
+const VOCAB_UPGRADE_SPECS: VocabUpgradeSpec[] = [
+  {
+    id: 'vu-very-good',
+    regex: /\b(?:very|really|so)\s+good\b/gi,
+    upgrades: [
+      { word: 'excellent', nuance: 'common & polished' },
+      { word: 'outstanding', nuance: 'impressive quality' },
+      { word: 'fantastic', nuance: 'warm & enthusiastic' }
+    ],
+    explanation: 'Replacing "very good" with a vivid single adjective immediately makes your spoken English sound more fluent and expressive.',
+    explanationSi: '"Very good" වෙනුවට "excellent" හෝ "fantastic" යෙදීමෙන් ඔබේ කථනය වඩාත් චතුර ලෙස ඇසේ.',
+    example: 'The presentation was genuinely outstanding from start to finish.',
+    category: 'vocabulary'
+  },
+  {
+    id: 'vu-very-interesting',
+    regex: /\b(?:very|really|so|highly)\s+interesting\b/gi,
+    upgrades: [
+      { word: 'fascinating', nuance: 'deeply engaging' },
+      { word: 'captivating', nuance: 'holds full attention' },
+      { word: 'thought-provoking', nuance: 'sparks ideas' }
+    ],
+    explanation: 'Using "fascinating" or "captivating" avoids repetitive "very + adjective" phrasing and fits movies, books, and lectures.',
+    explanationSi: '"Very interesting" වෙනුවට "fascinating" හෝ "captivating" යෙදීමෙන් අදහස වඩාත් ප්‍රබල වේ.',
+    example: 'The movie was absolutely fascinating — I was captivated by its storyline.',
+    category: 'vocabulary'
+  },
+  {
+    id: 'vu-very-bad',
+    regex: /\b(?:very|really|so)\s+bad\b/gi,
+    upgrades: [
+      { word: 'terrible', nuance: 'strong everyday' },
+      { word: 'awful', nuance: 'expressive casual' },
+      { word: 'disappointing', nuance: 'polite & IELTS-ready' }
+    ],
+    explanation: '"Terrible", "awful", or "disappointing" carry much clearer emotional precision than "very bad".',
+    explanationSi: '"Very bad" වෙනුවට "terrible" හෝ "disappointing" යෙදීම වඩාත් නිවැරදි හා ස්වාභාවික වේ.',
+    example: 'The weather was terrible this morning, so we stayed indoors.',
+    category: 'vocabulary'
+  },
+  {
+    id: 'vu-very-tired',
+    regex: /\b(?:very|really|so)\s+tired\b/gi,
+    upgrades: [
+      { word: 'exhausted', nuance: 'completely drained' },
+      { word: 'worn out', nuance: 'natural phrasal' },
+      { word: 'drained', nuance: 'mentally or physically' }
+    ],
+    explanation: '"Exhausted" and "worn out" are natural everyday upgrades when you want to describe real fatigue.',
+    explanationSi: 'අධික වෙහෙස දැක්වීමට "very tired" වෙනුවට "exhausted" හෝ "worn out" යොදන්න.',
+    example: 'After three back-to-back lectures, I was completely exhausted.',
+    category: 'vocabulary'
+  },
+  {
+    id: 'vu-very-important',
+    regex: /\b(?:very|really|so)\s+important\b/gi,
+    upgrades: [
+      { word: 'essential', nuance: 'necessary' },
+      { word: 'crucial', nuance: 'decisive impact' },
+      { word: 'vital', nuance: 'high priority' }
+    ],
+    explanation: '"Crucial" and "essential" elevate both everyday explanations and IELTS Part 3 answers effortlessly.',
+    explanationSi: '"Very important" වෙනුවට "crucial" හෝ "essential" යෙදීම IELTS කථනයට ඉතා සුදුසුයි.',
+    example: 'Consistent daily practice is essential for speaking confidence.',
+    category: 'vocabulary'
+  },
+  {
+    id: 'vu-very-happy',
+    regex: /\b(?:very|really|so)\s+happy\b/gi,
+    upgrades: [
+      { word: 'delighted', nuance: 'warm & polished' },
+      { word: 'thrilled', nuance: 'excited joy' },
+      { word: 'over the moon', nuance: 'natural idiom' }
+    ],
+    explanation: 'Expressive words like "thrilled" or "delighted" make personal stories sound much livelier.',
+    explanationSi: 'සතුට ප්‍රකාශ කිරීමට "very happy" වෙනුවට "delighted" හෝ "thrilled" යොදන්න.',
+    example: 'I was thrilled when I heard the good news about my exam.',
+    category: 'expression'
+  },
+  {
+    id: 'vu-very-big',
+    regex: /\b(?:very|really|so)\s+big\b/gi,
+    upgrades: [
+      { word: 'huge', nuance: 'everyday natural' },
+      { word: 'massive', nuance: 'impressive scale' },
+      { word: 'enormous', nuance: 'vivid descriptive' }
+    ],
+    explanation: '"Huge" or "massive" sounds cleaner and more natural than "very big".',
+    explanationSi: '"Very big" වෙනුවට "huge" හෝ "massive" භාවිත කිරීම වඩාත් ස්වාභාවිකයි.',
+    example: 'We cooked a huge meal for the whole family on Sunday.',
+    category: 'vocabulary'
+  },
+  {
+    id: 'vu-too-much-work',
+    regex: /\b(?:too\s+much|a\s+lot\s+of|lots\s+of)\s+work\b/gi,
+    upgrades: [
+      { word: 'overwhelmed with work', nuance: 'natural expression' },
+      { word: 'a heavy workload', nuance: 'IELTS-ready collocation' },
+      { word: 'swamped with tasks', nuance: 'idiomatic casual' }
+    ],
+    explanation: 'Fluent speakers often say "I was overwhelmed with work" or "I had a heavy workload" instead of repeating "lots of work".',
+    explanationSi: 'වැඩ බහුල බව කියන්න "overwhelmed with work" හෝ "a heavy workload" භාවිත කළ හැකියි.',
+    example: 'Sorry I missed your call — I had a heavy workload all week.',
+    category: 'expression'
+  },
+  {
+    id: 'vu-very-nice',
+    regex: /\b(?:very|really|so)\s+nice\b/gi,
+    upgrades: [
+      { word: 'lovely', nuance: 'warm & natural' },
+      { word: 'wonderful', nuance: 'enthusiastic' },
+      { word: 'pleasant', nuance: 'calm & refined' }
+    ],
+    explanation: '"Nice" is one of the most overused adjectives in English — swapping in "lovely" or "wonderful" adds real warmth.',
+    explanationSi: '"Very nice" වෙනුවට "lovely" හෝ "wonderful" යෙදීමෙන් අදහස වඩාත් රසවත් වේ.',
+    example: 'We had a lovely evening catching up over coffee.',
+    category: 'vocabulary'
+  },
+  {
+    id: 'vu-standalone-good',
+    regex: /\b(good)\b/gi,
+    broadOnly: true,
+    upgrades: [
+      { word: 'enjoyable', nuance: 'for experiences' },
+      { word: 'impressive', nuance: 'for quality' },
+      { word: 'rewarding', nuance: 'for effort' }
+    ],
+    explanation: 'In Vocabulary Builder / Detailed mode, try swapping basic "good" for a more specific adjective that matches what you mean.',
+    explanationSi: 'සාමාන්‍ය "good" වචනය වෙනුවට අවස්ථාවට ගැලපෙන "enjoyable" හෝ "impressive" වැනි වචනයක් යොදන්න.',
+    example: 'It was a genuinely enjoyable afternoon with friends.',
+    category: 'vocabulary'
+  },
+  {
+    id: 'vu-standalone-nice',
+    regex: /\b(nice)\b/gi,
+    broadOnly: true,
+    upgrades: [
+      { word: 'pleasant', nuance: 'atmosphere / weather' },
+      { word: 'thoughtful', nuance: 'people / gestures' },
+      { word: 'cozy', nuance: 'places / cafes' }
+    ],
+    explanation: 'Choosing a more descriptive word than "nice" paints a clearer picture for your listener.',
+    explanationSi: '"Nice" වෙනුවට "pleasant" හෝ "cozy" වැනි පැහැදිලි විශේෂණ පදයක් භාවිත කරන්න.',
+    example: 'We found a cozy little cafe near the park.',
+    category: 'vocabulary'
+  }
+];
+
+export function detectVocabUpgrades(
+  text: string,
+  correctedSentence: string,
+  intensity: CorrectionIntensity = 'balanced',
+  mode: BuddyMode = 'friendly'
+): BuddyVocabUpgrade[] {
+  // Gentle mode stays focused on clarity unless user explicitly chose Vocabulary Builder mode
+  if (intensity === 'gentle' && mode !== 'vocabulary') return [];
+
+  const allowBroad = intensity === 'detailed' || mode === 'vocabulary';
+  const maxItems = mode === 'vocabulary' || intensity === 'detailed' ? 3 : 2;
+  const results: BuddyVocabUpgrade[] = [];
+  const usedSpans: [number, number][] = [];
+
+  for (const spec of VOCAB_UPGRADE_SPECS) {
+    if (spec.broadOnly && !allowBroad) continue;
+    spec.regex.lastIndex = 0;
+    const match = spec.regex.exec(text);
+    if (!match) continue;
+
+    const start = match.index;
+    const end = start + match[0].length;
+    const overlaps = usedSpans.some(([s, e]) => !(end <= s || start >= e));
+    if (overlaps) continue;
+    usedSpans.push([start, end]);
+
+    const topWord = spec.upgrades[0].word;
+    const escaped = match[0].replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const naturalSentence = correctedSentence.replace(
+      new RegExp(escaped, 'i'),
+      preservesInitialCap(match[0], topWord)
+    );
+
+    results.push({
+      id: `${spec.id}-${start}`,
+      original: match[0],
+      upgrades: spec.upgrades,
+      explanation: spec.explanation,
+      explanationSi: spec.explanationSi,
+      example: spec.example,
+      naturalSentence:
+        naturalSentence.toLowerCase() !== correctedSentence.toLowerCase()
+          ? naturalSentence
+          : undefined,
+      category: spec.category
+    });
+
+    if (results.length >= maxItems) break;
+  }
+
+  return results;
+}

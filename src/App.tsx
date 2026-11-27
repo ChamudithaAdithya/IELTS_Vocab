@@ -1,17 +1,6 @@
-import React, { useState, useEffect, Component, ErrorInfo, ReactNode } from 'react';
+import React, { useState, useEffect, Suspense, lazy, Component, ErrorInfo, ReactNode } from 'react';
 import { Sidebar, AppTab } from './components/Sidebar';
 import { TopBar } from './components/TopBar';
-import { WritingTutorView } from './components/WritingTutorView';
-import { SpeakingTutorView } from './components/tutor/SpeakingTutorView';
-import { SpeakingBuddyView } from './components/buddy/SpeakingBuddyView';
-import { ReadingTutorView } from './components/tutor/ReadingTutorView';
-import { ListeningTutorView } from './components/tutor/ListeningTutorView';
-import { AnalyticsView } from './components/tutor/AnalyticsView';
-import { CambridgeLibraryView } from './components/tutor/CambridgeLibraryView';
-import { WordBankView } from './components/WordBankView';
-import { FlashcardsView } from './components/FlashcardsView';
-import { QuizView } from './components/QuizView';
-import { LessonView } from './components/LessonView';
 import { SearchModal } from './components/SearchModal';
 import { VoiceSettingsModal } from './components/VoiceSettingsModal';
 import { loadTutorState } from './utils/tutorEngine';
@@ -19,6 +8,52 @@ import { loadProgress, saveProgress } from './utils/storage';
 import { LESSONS } from './data/lessons';
 import { UserProgress } from './types';
 import { Award, RotateCcw, ArrowUp } from 'lucide-react';
+
+// Route-Level Code Splitting: Each heavy IELTS / Lingo Buddy / Academic Dictionary module loads on demand
+const WritingTutorView = lazy(() =>
+  import('./components/WritingTutorView').then(m => ({ default: m.WritingTutorView }))
+);
+const SpeakingTutorView = lazy(() =>
+  import('./components/tutor/SpeakingTutorView').then(m => ({ default: m.SpeakingTutorView }))
+);
+const SpeakingBuddyView = lazy(() =>
+  import('./components/buddy/SpeakingBuddyView').then(m => ({ default: m.SpeakingBuddyView }))
+);
+const ReadingTutorView = lazy(() =>
+  import('./components/tutor/ReadingTutorView').then(m => ({ default: m.ReadingTutorView }))
+);
+const ListeningTutorView = lazy(() =>
+  import('./components/tutor/ListeningTutorView').then(m => ({ default: m.ListeningTutorView }))
+);
+const AnalyticsView = lazy(() =>
+  import('./components/tutor/AnalyticsView').then(m => ({ default: m.AnalyticsView }))
+);
+const CambridgeLibraryView = lazy(() =>
+  import('./components/tutor/CambridgeLibraryView').then(m => ({ default: m.CambridgeLibraryView }))
+);
+const WordBankView = lazy(() =>
+  import('./components/WordBankView').then(m => ({ default: m.WordBankView }))
+);
+const FlashcardsView = lazy(() =>
+  import('./components/FlashcardsView').then(m => ({ default: m.FlashcardsView }))
+);
+const QuizView = lazy(() =>
+  import('./components/QuizView').then(m => ({ default: m.QuizView }))
+);
+const LessonView = lazy(() =>
+  import('./components/LessonView').then(m => ({ default: m.LessonView }))
+);
+
+function RouteLoadingFallback() {
+  return (
+    <div className="min-h-[60vh] flex items-center justify-center p-8">
+      <div className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-white border border-slate-200/80 shadow-xs text-slate-600 text-xs font-semibold">
+        <span className="w-4 h-4 rounded-full border-2 border-indigo-600 border-t-transparent animate-spin" />
+        <span>Loading workspace...</span>
+      </div>
+    </div>
+  );
+}
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -338,6 +373,7 @@ function MainApp() {
 
         {/* Dedicated Main Content Router */}
         <main className="flex-1">
+          <Suspense fallback={<RouteLoadingFallback />}>
           {/* Category 1: Cambridge Real Exams (Standalone Full Page without Sidebar) */}
           {currentTab === 'cambridge' && (
             <CambridgeLibraryView
@@ -468,6 +504,7 @@ function MainApp() {
               onNavigateToSection={(s) => setCurrentTab(s as AppTab)}
             />
           )}
+          </Suspense>
         </main>
 
         {/* Global Footer (Hidden on Standalone IELTS Practice Pages) */}

@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { ALL_WORDS, LESSONS } from '../data/lessons';
 import { UserProgress } from '../types';
+import { playSpeech } from '../utils/speech';
 
 interface WordBankViewProps {
   showSinhala: boolean;
@@ -29,12 +30,7 @@ export const WordBankView: React.FC<WordBankViewProps> = ({
   const [filterStatus, setFilterStatus] = useState<'all' | 'saved' | 'mastered'>('all');
 
   const handlePronounce = (term: string) => {
-    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(term);
-    utterance.lang = 'en-GB';
-    utterance.rate = 0.9;
-    window.speechSynthesis.speak(utterance);
+    playSpeech(term);
   };
 
   const filteredWords = useMemo(() => {

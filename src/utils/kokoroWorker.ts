@@ -14,8 +14,45 @@ let ttsInstance: any = null;
 let activeBackend: 'webgpu' | 'wasm' | null = null;
 let initPromise: Promise<any> | null = null;
 
-function encodeFloat32ToWavBuffer(samples: Float32Array, sampleRate: number): ArrayBuffer {
+function encodeFloat32ToWavBuffer(rawSamples: Float32Array, sampleRate: number): ArrayBuffer {
+  const n = rawSamples.length;
+  if (n === 0) {
+    return new ArrayBuffer(44);
+  }
+
+  // 1. Sanitize NaN/Infinity & compute DC offset from vocoder output
+  const clean = new Float32Array(n);
+  let sum = 0;
+  for (let i = 0; i < n; i++) {
+    const v = rawSamples[i];
+    const safe = Number.isFinite(v) ? v : 0;
+    clean[i] = safe;
+    sum += safe;
+  }
+  const dcOffset = sum / n;
+  if (Math.abs(dcOffset) > 1e-5) {
+    for (let i = 0; i < n; i++) {
+      clean[i] -= dcOffset;
+    }
+  }
+
+  // 2. Trim initial ISTFTNet boundary rumble/buzz before voice onset (up to first 65ms)
+  const maxTrim = Math.min(n - 1, Math.round(sampleRate * 0.065));
+  const onsetGate = 0.008;
+  let trimStart = 0;
+  while (trimStart < maxTrim && Math.abs(clean[trimStart]) < onsetGate) {
+    trimStart++;
+  }
+  const leadPad = Math.round(sampleRate * 0.006);
+  trimStart = Math.max(0, trimStart - leadPad);
+
+  const samples = trimStart > 0 ? clean.subarray(trimStart) : clean;
   const numSamples = samples.length;
+
+  // 3. Smooth 14ms half-cosine fade-in & 10ms fade-out to eliminate vocoder window-edge buzz/clicks
+  const fadeInLen = Math.min(numSamples, Math.round(sampleRate * 0.014));
+  const fadeOutLen = Math.min(numSamples, Math.round(sampleRate * 0.01));
+
   const buffer = new ArrayBuffer(44 + numSamples * 2);
   const view = new DataView(buffer);
 
@@ -30,7 +67,7 @@ function encodeFloat32ToWavBuffer(samples: Float32Array, sampleRate: number): Ar
   writeStr(8, 'WAVE');
   writeStr(12, 'fmt ');
   view.setUint32(16, 16, true); // PCM chunk size
-  view.setUint16(20, 1, true); // Linear PCM
+  view.setUint16(20, 1, true); // Linear 16-bit PCM (avoids unclamped 32-bit IEEE float WAV distortion)
   view.setUint16(22, 1, true); // Mono
   view.setUint32(24, sampleRate, true);
   view.setUint32(28, sampleRate * 2, true);
@@ -41,24 +78,18 @@ function encodeFloat32ToWavBuffer(samples: Float32Array, sampleRate: number): Ar
 
   let offset = 44;
   for (let i = 0; i < numSamples; i++) {
-    const s = Math.max(-1, Math.min(1, samples[i]));
+    let gain = 1.0;
+    if (i < fadeInLen && fadeInLen > 1) {
+      gain = 0.5 * (1 - Math.cos((Math.PI * i) / fadeInLen));
+    } else if (i >= numSamples - fadeOutLen && fadeOutLen > 1) {
+      const rem = numSamples - 1 - i;
+      gain = 0.5 * (1 - Math.cos((Math.PI * rem) / fadeOutLen));
+    }
+    const s = Math.max(-0.98, Math.min(0.98, samples[i] * gain));
     view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
     offset += 2;
   }
   return buffer;
-}
-
-async function detectWebGpuSupport(): Promise<boolean> {
-  try {
-    const nav = typeof navigator !== 'undefined' ? (navigator as any) : null;
-    if (!nav || !nav.gpu || typeof nav.gpu.requestAdapter !== 'function') {
-      return false;
-    }
-    const adapter = await nav.gpu.requestAdapter();
-    return Boolean(adapter);
-  } catch {
-    return false;
-  }
 }
 
 async function loadKokoroModule(): Promise<any> {
@@ -90,7 +121,6 @@ async function ensureKokoroLoaded(): Promise<any> {
     });
 
     const { KokoroTTS } = await loadKokoroModule();
-    const hasWebGpu = await detectWebGpuSupport();
 
     const fileProgress = new Map<string, { loaded: number; total: number }>();
     const onProgress = (info: any) => {
@@ -113,27 +143,23 @@ async function ensureKokoroLoaded(): Promise<any> {
       }
     };
 
-    // Try WebGPU (fp32) first when GPU adapter is present; fall back cleanly to WASM (q8 ~86MB)
-    if (hasWebGpu) {
-      try {
-        ttsInstance = await KokoroTTS.from_pretrained(KOKORO_MODEL_ID, {
-          dtype: 'fp32',
-          device: 'webgpu',
-          progress_callback: onProgress
-        });
-        activeBackend = 'webgpu';
-      } catch {
-        ttsInstance = null;
-      }
-    }
+    // Use deterministic WASM (q8) rather than WebGPU fp32: WebGPU JIT shader compilation & GPU float
+    // precision mismatches in Kokoro's ISTFTNet vocoder cause ~200Hz bee-like buzzing on early responses.
+    ttsInstance = await KokoroTTS.from_pretrained(KOKORO_MODEL_ID, {
+      dtype: 'q8',
+      device: 'wasm',
+      progress_callback: onProgress
+    });
+    activeBackend = 'wasm';
 
-    if (!ttsInstance) {
-      ttsInstance = await KokoroTTS.from_pretrained(KOKORO_MODEL_ID, {
-        dtype: 'q8',
-        device: 'wasm',
-        progress_callback: onProgress
+    // Silent throwaway warmup pass so ONNX WASM kernels & memory buffers are warm before Turn 1
+    try {
+      await ttsInstance.generate('Hello there, nice to meet you today.', {
+        voice: 'af_heart',
+        speed: 1.0
       });
-      activeBackend = 'wasm';
+    } catch {
+      // Non-fatal warmup
     }
 
     self.postMessage({
@@ -141,7 +167,7 @@ async function ensureKokoroLoaded(): Promise<any> {
       state: 'ready',
       progress: 100,
       backend: activeBackend,
-      detail: `Kokoro-82M Ready (${activeBackend === 'webgpu' ? 'WebGPU Accelerated' : 'WASM q8'})`
+      detail: 'Kokoro-82M Ready (WASM q8)'
     });
     return ttsInstance;
   })();
@@ -184,14 +210,15 @@ self.onmessage = (event: MessageEvent) => {
         });
 
         let wavBuffer: ArrayBuffer;
-        if (result && typeof result.toWav === 'function') {
+        if (result && result.audio instanceof Float32Array) {
+          // Always encode sanitized, fade-smoothed 16-bit PCM WAV rather than RawAudio.toWav()'s unclamped 32-bit float WAV
+          wavBuffer = encodeFloat32ToWavBuffer(result.audio, result.sampling_rate || 24000);
+        } else if (result && typeof result.toWav === 'function') {
           const rawWav = result.toWav();
           wavBuffer =
             rawWav instanceof ArrayBuffer
               ? rawWav
               : rawWav.buffer.slice(rawWav.byteOffset, rawWav.byteOffset + rawWav.byteLength);
-        } else if (result && result.audio instanceof Float32Array) {
-          wavBuffer = encodeFloat32ToWavBuffer(result.audio, result.sampling_rate || 24000);
         } else {
           throw new Error('Unexpected audio output from Kokoro-82M.');
         }

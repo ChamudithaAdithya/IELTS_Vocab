@@ -1,28 +1,28 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { 
-  Volume2, 
-  Play, 
-  Pause, 
-  CheckCircle2, 
-  XCircle, 
-  ArrowLeft, 
-  Headphones, 
-  Clock, 
-  Award, 
-  RotateCcw, 
-  Sparkles, 
-  FileText, 
-  VolumeX, 
-  Target, 
-  ArrowRight, 
-  ShieldAlert, 
-  FastForward, 
-  Rewind, 
-  Check, 
-  ChevronDown, 
+import {
+  Volume2,
+  Play,
+  Pause,
+  CheckCircle2,
+  XCircle,
+  ArrowLeft,
+  Headphones,
+  Clock,
+  Award,
+  RotateCcw,
+  Sparkles,
+  FileText,
+  VolumeX,
+  Target,
+  ArrowRight,
+  ShieldAlert,
+  FastForward,
+  Rewind,
+  Check,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
-  Layers, 
+  Layers,
   X,
   HelpCircle,
   Maximize2,
@@ -31,6 +31,7 @@ import {
 import { CAMBRIDGE_LISTENING_TESTS } from '../../data/listeningTests';
 import type { ListeningItem, ListeningAIReport, ListeningQuestion } from '../../types/tutor';
 import { evaluateListeningPerformance } from '../../utils/listeningEvaluator';
+import { playSpeech, stopAllSpeech } from '../../utils/speech';
 
 export interface ListeningTutorViewProps {
   showSinhala: boolean;
@@ -46,8 +47,8 @@ export interface QuestionGroup {
   questions: ListeningQuestion[];
 }
 
-export const ListeningTutorView: React.FC<ListeningTutorViewProps> = ({ 
-  showSinhala, 
+export const ListeningTutorView: React.FC<ListeningTutorViewProps> = ({
+  showSinhala,
   onBackToHub,
   initialTestId
 }) => {
@@ -148,9 +149,7 @@ export const ListeningTutorView: React.FC<ListeningTutorViewProps> = ({
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
     }
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-    }
+    stopAllSpeech();
     setSelectedTest(targetTest);
     setSelectedBook(targetTest.bookNumber || 1);
     setSelectedTestNum(targetTest.testNumber || 1);
@@ -221,6 +220,7 @@ export const ListeningTutorView: React.FC<ListeningTutorViewProps> = ({
     if (!audioRef.current) return;
     if (isPlaying) {
       audioRef.current.pause();
+      stopAllSpeech();
       setIsPlaying(false);
     } else {
       audioRef.current.play().then(() => setIsPlaying(true)).catch(() => {
@@ -237,15 +237,12 @@ export const ListeningTutorView: React.FC<ListeningTutorViewProps> = ({
   };
 
   const fallbackSpeakTranscript = () => {
-    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
-    const utter = new SpeechSynthesisUtterance(selectedTest.audioSimText);
-    utter.lang = 'en-GB';
-    utter.rate = playbackRate;
-    utter.onend = () => setIsPlaying(false);
-    utter.onerror = () => setIsPlaying(false);
     setIsPlaying(true);
-    window.speechSynthesis.speak(utter);
+    playSpeech(selectedTest.audioSimText, {
+      rate: playbackRate,
+      onEnd: () => setIsPlaying(false),
+      onError: () => setIsPlaying(false),
+    });
   };
 
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -295,9 +292,7 @@ export const ListeningTutorView: React.FC<ListeningTutorViewProps> = ({
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
     }
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-    }
+    stopAllSpeech();
     setUserAnswers({});
     setAiReport(null);
     setShowAiModal(false);
@@ -392,19 +387,18 @@ export const ListeningTutorView: React.FC<ListeningTutorViewProps> = ({
       <div
         key={q.number}
         id={`q-box-${q.number}`}
-        className={`p-2.5 sm:p-3 rounded-xl border transition-all text-xs ${
-          feedback
+        className={`p-2.5 sm:p-3 rounded-xl border transition-all text-xs ${feedback
             ? feedback.isCorrect
               ? 'bg-emerald-50/60 border-emerald-300'
               : feedback.errorType === 'distractor_trap'
-              ? 'bg-amber-50/70 border-amber-300'
-              : 'bg-rose-50/60 border-rose-300'
+                ? 'bg-amber-50/70 border-amber-300'
+                : 'bg-rose-50/60 border-rose-300'
             : isFocused
-            ? 'bg-indigo-50/70 border-indigo-400 ring-2 ring-indigo-500/20 shadow-2xs'
-            : userAns
-            ? 'bg-indigo-50/30 border-indigo-200'
-            : 'bg-white border-slate-200/90 hover:border-slate-300'
-        }`}
+              ? 'bg-indigo-50/70 border-indigo-400 ring-2 ring-indigo-500/20 shadow-2xs'
+              : userAns
+                ? 'bg-indigo-50/30 border-indigo-200'
+                : 'bg-white border-slate-200/90 hover:border-slate-300'
+          }`}
       >
         {/* Question Header */}
         <div className="flex items-start justify-between gap-2 mb-1.5">
@@ -531,13 +525,12 @@ export const ListeningTutorView: React.FC<ListeningTutorViewProps> = ({
   };
 
   return (
-    <div 
+    <div
       ref={containerRef}
-      className={`${
-        isFullscreen
+      className={`${isFullscreen
           ? 'fixed inset-0 z-50 h-screen w-screen bg-slate-100'
           : 'h-[calc(100vh-3.5rem)] bg-slate-100/70'
-      } flex flex-col overflow-hidden font-sans select-none animate-in fade-in`}
+        } flex flex-col overflow-hidden font-sans select-none animate-in fade-in`}
     >
       {/* Hidden Audio Element */}
       {selectedTest.audioUrl && (
@@ -622,9 +615,8 @@ export const ListeningTutorView: React.FC<ListeningTutorViewProps> = ({
           <button
             type="button"
             onClick={togglePlayAudio}
-            className={`w-7 h-7 rounded-lg text-white flex items-center justify-center transition-all cursor-pointer shadow-sm shrink-0 ${
-              isPlaying ? 'bg-amber-500 hover:bg-amber-400' : 'bg-indigo-600 hover:bg-indigo-500'
-            }`}
+            className={`w-7 h-7 rounded-lg text-white flex items-center justify-center transition-all cursor-pointer shadow-sm shrink-0 ${isPlaying ? 'bg-amber-500 hover:bg-amber-400' : 'bg-indigo-600 hover:bg-indigo-500'
+              }`}
             title={isPlaying ? 'Pause Audio' : 'Play Official Audio'}
           >
             {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 ml-0.5" />}
@@ -689,11 +681,10 @@ export const ListeningTutorView: React.FC<ListeningTutorViewProps> = ({
             <button
               type="button"
               onClick={() => setShowTranscript(prev => !prev)}
-              className={`px-2 py-0.5 rounded text-[10px] font-bold border cursor-pointer shrink-0 ${
-                showTranscript
+              className={`px-2 py-0.5 rounded text-[10px] font-bold border cursor-pointer shrink-0 ${showTranscript
                   ? 'bg-white text-slate-900 border-white'
                   : 'bg-slate-700/80 text-slate-300 border-slate-600 hover:text-white'
-              }`}
+                }`}
             >
               {showTranscript ? 'Hide Script' : 'Script'}
             </button>
@@ -753,11 +744,10 @@ export const ListeningTutorView: React.FC<ListeningTutorViewProps> = ({
           <button
             type="button"
             onClick={toggleFullscreen}
-            className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border ${
-              isFullscreen
+            className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border ${isFullscreen
                 ? 'bg-amber-400 text-slate-950 border-amber-300 hover:bg-amber-300 shadow-sm'
                 : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700 hover:text-white'
-            }`}
+              }`}
             title={isFullscreen ? 'Exit Fullscreen (Esc)' : 'Enter Fullscreen CD-IELTS Mode'}
           >
             {isFullscreen ? (
@@ -797,11 +787,10 @@ export const ListeningTutorView: React.FC<ListeningTutorViewProps> = ({
             <button
               type="button"
               onClick={() => setLayoutMode('one-screen')}
-              className={`px-2 py-0.5 rounded text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer ${
-                layoutMode === 'one-screen'
+              className={`px-2 py-0.5 rounded text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer ${layoutMode === 'one-screen'
                   ? 'bg-white text-indigo-950 shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900'
-              }`}
+                }`}
               title="All 10 questions side-by-side in one screen (Zero Scrolling)"
             >
               <Layers className="w-3 h-3 text-indigo-600" />
@@ -811,11 +800,10 @@ export const ListeningTutorView: React.FC<ListeningTutorViewProps> = ({
             <button
               type="button"
               onClick={() => setLayoutMode('by-task')}
-              className={`px-2 py-0.5 rounded text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer ${
-                layoutMode === 'by-task'
+              className={`px-2 py-0.5 rounded text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer ${layoutMode === 'by-task'
                   ? 'bg-white text-indigo-950 shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900'
-              }`}
+                }`}
               title="Split by Task (Q1-5 / Q6-10 tabs)"
             >
               <FileText className="w-3 h-3 text-indigo-600" />
@@ -825,11 +813,10 @@ export const ListeningTutorView: React.FC<ListeningTutorViewProps> = ({
             <button
               type="button"
               onClick={() => setLayoutMode('single')}
-              className={`px-2 py-0.5 rounded text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer ${
-                layoutMode === 'single'
+              className={`px-2 py-0.5 rounded text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer ${layoutMode === 'single'
                   ? 'bg-white text-indigo-950 shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900'
-              }`}
+                }`}
               title="Single question focus mode (Use Left/Right arrow keys)"
             >
               <Target className="w-3 h-3 text-indigo-600" />
@@ -841,11 +828,10 @@ export const ListeningTutorView: React.FC<ListeningTutorViewProps> = ({
           <button
             type="button"
             onClick={toggleFullscreen}
-            className={`px-2 py-1 rounded-lg text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer border ${
-              isFullscreen
+            className={`px-2 py-1 rounded-lg text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer border ${isFullscreen
                 ? 'bg-amber-100 text-amber-900 border-amber-300 shadow-2xs'
                 : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
-            }`}
+              }`}
             title={isFullscreen ? 'Exit Fullscreen (Esc)' : 'Enter Fullscreen CD-IELTS Exam Mode'}
           >
             {isFullscreen ? (
@@ -908,11 +894,10 @@ export const ListeningTutorView: React.FC<ListeningTutorViewProps> = ({
                     key={idx}
                     type="button"
                     onClick={() => setActiveTaskTab(idx)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
-                      activeTaskTab === idx
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${activeTaskTab === idx
                         ? 'bg-indigo-600 text-white shadow-xs'
                         : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
-                    }`}
+                      }`}
                   >
                     <span>Task {idx + 1}: Questions {group.startNum}–{group.endNum}</span>
                     <span className="text-[10px] opacity-80 font-mono">
@@ -976,15 +961,13 @@ export const ListeningTutorView: React.FC<ListeningTutorViewProps> = ({
                             type="button"
                             disabled={!!aiReport}
                             onClick={() => handleSelectOption(q.number, letter)}
-                            className={`p-3 rounded-xl border text-left flex items-center gap-3 transition-all cursor-pointer ${
-                              isSelected
+                            className={`p-3 rounded-xl border text-left flex items-center gap-3 transition-all cursor-pointer ${isSelected
                                 ? 'bg-indigo-50 border-indigo-600 text-indigo-950 font-bold ring-2 ring-indigo-500/20'
                                 : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-800'
-                            }`}
+                              }`}
                           >
-                            <span className={`w-6 h-6 rounded-md font-mono text-xs font-bold flex items-center justify-center border ${
-                              isSelected ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-slate-100 text-slate-700 border-slate-300'
-                            }`}>
+                            <span className={`w-6 h-6 rounded-md font-mono text-xs font-bold flex items-center justify-center border ${isSelected ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-slate-100 text-slate-700 border-slate-300'
+                              }`}>
                               {letter}
                             </span>
                             <span className="text-sm font-medium">{cleanText}</span>
@@ -1081,11 +1064,10 @@ export const ListeningTutorView: React.FC<ListeningTutorViewProps> = ({
                 key={item.id}
                 type="button"
                 onClick={() => switchTest(item)}
-                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  isSel
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${isSel
                     ? 'bg-indigo-600 text-white shadow-xs'
                     : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
-                }`}
+                  }`}
               >
                 Part {item.section}
               </button>
@@ -1183,13 +1165,12 @@ export const ListeningTutorView: React.FC<ListeningTutorViewProps> = ({
                     <ShieldAlert className="w-4 h-4 text-amber-500" />
                     Distractor Trap Susceptibility:
                   </span>
-                  <span className={`px-2 py-0.5 rounded text-[11px] font-mono ${
-                    aiReport.distractorVulnerability === 'Low'
+                  <span className={`px-2 py-0.5 rounded text-[11px] font-mono ${aiReport.distractorVulnerability === 'Low'
                       ? 'bg-emerald-100 text-emerald-800'
                       : aiReport.distractorVulnerability === 'Medium'
-                      ? 'bg-amber-100 text-amber-800'
-                      : 'bg-rose-100 text-rose-800'
-                  }`}>
+                        ? 'bg-amber-100 text-amber-800'
+                        : 'bg-rose-100 text-rose-800'
+                    }`}>
                     {aiReport.distractorVulnerability} Risk
                   </span>
                 </div>
@@ -1212,13 +1193,12 @@ export const ListeningTutorView: React.FC<ListeningTutorViewProps> = ({
                   {aiReport.questionBreakdown.map(b => (
                     <div
                       key={b.number}
-                      className={`p-3 rounded-xl border text-xs space-y-1 ${
-                        b.isCorrect
+                      className={`p-3 rounded-xl border text-xs space-y-1 ${b.isCorrect
                           ? 'bg-emerald-50/50 border-emerald-200'
                           : b.errorType === 'distractor_trap'
-                          ? 'bg-amber-50/60 border-amber-200'
-                          : 'bg-rose-50/50 border-rose-200'
-                      }`}
+                            ? 'bg-amber-50/60 border-amber-200'
+                            : 'bg-rose-50/50 border-rose-200'
+                        }`}
                     >
                       <div className="flex items-center justify-between font-mono">
                         <span className="font-bold text-slate-900">

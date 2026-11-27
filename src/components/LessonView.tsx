@@ -104,12 +104,11 @@ export const LessonView: React.FC<LessonViewProps> = ({
     };
 
     updateVoices();
-    window.speechSynthesis.onvoiceschanged = updateVoices;
+    window.speechSynthesis.addEventListener?.('voiceschanged', updateVoices);
 
     return () => {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-      }
+      window.speechSynthesis.removeEventListener?.('voiceschanged', updateVoices);
+      stopAllSpeech();
     };
   }, []);
 

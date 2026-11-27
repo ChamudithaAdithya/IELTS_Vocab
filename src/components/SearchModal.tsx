@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, X, Volume2 } from 'lucide-react';
 import { ALL_WORDS } from '../data/lessons';
+import { playSpeech } from '../utils/speech';
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -34,12 +35,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
   const handlePronounce = (e: React.MouseEvent, text: string) => {
     e.stopPropagation();
-    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-GB';
-    utterance.rate = 0.9;
-    window.speechSynthesis.speak(utterance);
+    playSpeech(text);
   };
 
   const results = !query.trim()
