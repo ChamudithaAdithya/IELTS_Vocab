@@ -60,6 +60,8 @@ let currentStatus: KokoroEngineStatus = {
 const statusListeners = new Set<(status: KokoroEngineStatus) => void>();
 let workerInstance: Worker | null = null;
 let reqCounter = 0;
+let lastWorkerActivityAt = 0;
+let watchdogTimer: ReturnType<typeof setInterval> | null = null;
 
 const pendingRequests = new Map<
   number,
@@ -79,6 +81,65 @@ function emitStatus(next: KokoroEngineStatus): void {
       fn(next);
     } catch {}
   });
+}
+
+function stopWatchdogIfIdle(): void {
+  if (currentStatus.state !== 'loading' && pendingRequests.size === 0 && watchdogTimer !== null) {
+    clearInterval(watchdogTimer);
+    watchdogTimer = null;
+  }
+}
+
+function resetDeadWorker(reason: string): void {
+  if (watchdogTimer !== null) {
+    clearInterval(watchdogTimer);
+    watchdogTimer = null;
+  }
+  if (workerInstance) {
+    try {
+      workerInstance.onmessage = null;
+      workerInstance.onerror = null;
+      workerInstance.onmessageerror = null;
+      workerInstance.terminate();
+    } catch {}
+    workerInstance = null;
+  }
+  if (pendingRequests.size > 0) {
+    const err = new Error(reason);
+    pendingRequests.forEach(entry => {
+      try {
+        entry.reject(err);
+      } catch {}
+    });
+    pendingRequests.clear();
+  }
+  emitStatus({
+    state: 'error',
+    progress: 0,
+    backend: null,
+    detail: reason
+  });
+}
+
+function ensureWorkerWatchdog(): void {
+  lastWorkerActivityAt = Date.now();
+  if (watchdogTimer !== null) return;
+  watchdogTimer = setInterval(() => {
+    if (currentStatus.state !== 'loading' && pendingRequests.size === 0) {
+      stopWatchdogIfIdle();
+      return;
+    }
+    const silentMs = Date.now() - lastWorkerActivityAt;
+    // Mobile OSes (iOS Jetsam / Android OOM) silently kill Web Workers without firing `onerror`.
+    // Detect silent Worker termination during download (>45s) or WASM compilation/synthesis (>55s).
+    const limitMs =
+      currentStatus.state === 'loading' && currentStatus.progress < 90 ? 45000 : 55000;
+    if (silentMs > limitMs) {
+      resetDeadWorker(
+        'Kokoro-82M hit mobile browser memory limits during setup — close extra tabs to retry or use OS / Edge Voice.'
+      );
+    }
+  }, 2500);
 }
 
 export function getKokoroStatus(): KokoroEngineStatus {
@@ -105,8 +166,13 @@ function getOrCreateKokoroWorker(): Worker | null {
     });
 
     w.onmessage = (e: MessageEvent) => {
+      lastWorkerActivityAt = Date.now();
       const msg = e.data;
       if (!msg || typeof msg !== 'object') return;
+
+      if (msg.type === 'heartbeat') {
+        return;
+      }
 
       if (msg.type === 'status') {
         emitStatus({
@@ -115,6 +181,11 @@ function getOrCreateKokoroWorker(): Worker | null {
           backend: msg.backend || currentStatus.backend,
           detail: msg.detail || ''
         });
+        if (msg.state === 'loading') {
+          ensureWorkerWatchdog();
+        } else {
+          stopWatchdogIfIdle();
+        }
         return;
       }
 
@@ -125,6 +196,7 @@ function getOrCreateKokoroWorker(): Worker | null {
           const blob = new Blob([msg.wavBuffer], { type: 'audio/wav' });
           entry.resolve(blob);
         }
+        stopWatchdogIfIdle();
         return;
       }
 
@@ -134,15 +206,16 @@ function getOrCreateKokoroWorker(): Worker | null {
           pendingRequests.delete(msg.requestId);
           entry.reject(new Error(msg.error || 'Kokoro generation failed'));
         }
+        stopWatchdogIfIdle();
       }
     };
 
     w.onerror = (err) => {
-      emitStatus({
-        state: 'error',
-        progress: 0,
-        detail: err?.message || 'Kokoro Web Worker failed to start.'
-      });
+      resetDeadWorker(err?.message || 'Kokoro Web Worker stopped unexpectedly on this device.');
+    };
+
+    w.onmessageerror = () => {
+      resetDeadWorker('Kokoro Web Worker message transfer failed.');
     };
 
     workerInstance = w;
@@ -160,6 +233,7 @@ function getOrCreateKokoroWorker(): Worker | null {
 export function warmUpKokoroTts(): void {
   const w = getOrCreateKokoroWorker();
   if (!w) return;
+  ensureWorkerWatchdog();
   w.postMessage({ type: 'warmup' });
 }
 
@@ -225,6 +299,7 @@ export async function synthesizeKokoroWavBlob(
       }
     });
 
+    ensureWorkerWatchdog();
     w.postMessage({
       type: 'generate',
       requestId,

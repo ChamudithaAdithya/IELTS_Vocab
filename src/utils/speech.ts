@@ -1390,9 +1390,10 @@ export async function playKokoroSpeech(
     return;
   }
 
+  const kokoroSynthTimeoutMs = isMobileBrowser() ? 9000 : 5500;
   const wavBlob = options.strictNoFallback
     ? await synthesizeKokoroWavBlob(cleanText, voice, effectiveRate, controller.signal)
-    : await synthesizeKokoroWithTimeout(cleanText, voice, effectiveRate, controller.signal, 5500);
+    : await synthesizeKokoroWithTimeout(cleanText, voice, effectiveRate, controller.signal, kokoroSynthTimeoutMs);
   if (currentTtsAbortController === controller) currentTtsAbortController = null;
   if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) return;
 
@@ -1968,6 +1969,7 @@ export function createRealtimeTtsQueue(options: {
           return;
         }
 
+        const mobileKokoro = isMobileBrowser();
         items.push({
           text: clean,
           index: idx,
@@ -1977,7 +1979,7 @@ export function createRealtimeTtsQueue(options: {
             options.voiceConfig.kokoroVoice,
             options.voiceConfig.rate,
             controller.signal,
-            isImmediateHead ? 2400 : 4500,
+            mobileKokoro ? 8000 : isImmediateHead ? 2400 : 4500,
             idx === 0 ? (d) => markFirstAudio(d) : undefined
           )
         });
