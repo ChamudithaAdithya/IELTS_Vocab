@@ -72,6 +72,8 @@ import {
   FREE_NEURAL_VOICES,
   getEnglishVoices,
   getKokoroStatus,
+  isMobileBrowser,
+  isStaticHostWithoutTtsProxy,
   KOKORO_NATURAL_VOICES,
   loadBuddyVoiceConfig,
   playFreeNeuralSpeech,
@@ -618,14 +620,17 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     if (vCfg.provider === 'neural-free') {
       const vMeta = FREE_NEURAL_VOICES.find(v => v.id === vCfg.freeNeuralVoice);
       const label = vMeta?.label || vCfg.freeNeuralVoice;
+      const staticHost = isStaticHostWithoutTtsProxy();
       setVoiceTestFeedback({
         tone: 'loading',
-        message: `Connecting to Edge Neural HD · ${label}...`
+        message: staticHost
+          ? 'Testing Natural Device Voice (GitHub Pages mode)...'
+          : `Connecting to Edge Neural HD · ${label}...`
       });
       void playFreeNeuralSpeech(sample, {
         voice: vCfg.freeNeuralVoice,
         rate: vCfg.rate,
-        strictNoFallback: true,
+        strictNoFallback: !staticHost,
         onAudioLevel: (lvl) => {
           audioLevelRef.current = lvl;
         },
@@ -634,7 +639,9 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
           setOrbState('speaking');
           setVoiceTestFeedback({
             tone: 'ok',
-            message: `✓ Working! Playing Edge Neural HD · ${label}`
+            message: staticHost
+              ? '✓ Working! Playing Natural Device Voice'
+              : `✓ Working! Playing Edge Neural HD · ${label}`
           });
         },
         onEnd: () => {
@@ -648,7 +655,9 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
           setOrbState('idle');
           setVoiceTestFeedback({
             tone: 'error',
-            message: `Edge Neural HD could not connect (make sure Vite dev server is running, or switch to Kokoro AI / OS Voice).`
+            message: staticHost
+              ? 'Device speech synthesis did not respond — check your phone mute switch and media volume.'
+              : `Edge Neural HD could not connect (make sure Vite dev server is running, or switch to Kokoro AI / OS Voice).`
           });
         }
       });
@@ -1349,46 +1358,44 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
     speculativeSttPromiseRef.current = null;
     speculativeSttAbortRef.current = null;
 
-    // Stop SpeechRecognition gracefully: when manually stopped or while provisional interim words
-    // are still settling, keep `onresult` alive briefly (up to 360ms or until `onend`) so Chrome's
-    // final cloud STT packet is NEVER discarded!
+    // Stop SpeechRecognition gracefully and ALWAYS await `onend` (up to 360ms when flushing interim
+    // words, or up to 220ms on mobile / 100ms on desktop) so iOS `AVAudioSession` & Android
+    // `SpeechRecognizer` release audio focus BEFORE Text-to-Speech begins speaking!
     if (recognitionRef.current) {
       const rec = recognitionRef.current;
       recognitionRef.current = null;
       const needsFinalFlush =
         reason === 'manual' || interimBufferRef.current.trim().length > 0;
+      const maxStopWaitMs = needsFinalFlush ? 360 : isMobileBrowser() ? 220 : 100;
 
-      if (needsFinalFlush) {
-        await new Promise<void>((resolve) => {
-          let settled = false;
-          const finishFlush = () => {
-            if (settled) return;
-            settled = true;
-            clearTimeout(flushGuard);
-            try {
-              rec.onresult = null;
-              rec.onerror = null;
-              rec.onend = null;
-            } catch {}
-            resolve();
-          };
-          const flushGuard = setTimeout(finishFlush, 360);
-          rec.onend = finishFlush;
-          rec.onerror = finishFlush;
-          try {
-            rec.stop();
-          } catch {
-            finishFlush();
-          }
-        });
-      } else {
+      if (!needsFinalFlush) {
         try {
           rec.onresult = null;
-          rec.onerror = null;
-          rec.onend = null;
-          rec.stop();
         } catch {}
       }
+
+      await new Promise<void>((resolve) => {
+        let settled = false;
+        const finishFlush = () => {
+          if (settled) return;
+          settled = true;
+          clearTimeout(flushGuard);
+          try {
+            rec.onresult = null;
+            rec.onerror = null;
+            rec.onend = null;
+          } catch {}
+          resolve();
+        };
+        const flushGuard = setTimeout(finishFlush, maxStopWaitMs);
+        rec.onend = finishFlush;
+        rec.onerror = finishFlush;
+        try {
+          rec.stop();
+        } catch {
+          finishFlush();
+        }
+      });
     }
 
     // Snapshot complete live streaming transcript AFTER final SpeechRecognition flush!
@@ -1428,7 +1435,9 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
       recordedAudioUrl = URL.createObjectURL(conditionedPcmResult.wavBlob);
     }
 
-    cleanupMediaCapture(false);
+    // On mobile browsers, release any open getUserMedia mic tracks before TTS starts so iOS/Android
+    // switches hardware routing from ducked `PlayAndRecord` earpiece mode back to full loudspeaker!
+    cleanupMediaCapture(isMobileBrowser());
     setLiveFinalText('');
     setLiveInterimText('');
 
@@ -2144,6 +2153,7 @@ export const SpeakingBuddyView: React.FC<SpeakingBuddyViewProps> = ({ showSinhal
   };
 
   const handleNewChat = (customPrompt?: string) => {
+    unlockAudioOutput();
     stopAllAudioAndCapture();
     setOrbState('idle');
     setLifecyclePhase('PHASE_01_IDLE');

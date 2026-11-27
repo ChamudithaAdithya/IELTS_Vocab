@@ -266,30 +266,96 @@ export function resolveVoice(customURI?: string): SpeechSynthesisVoice | null {
 /* ------------------------------------------------------------------ */
 
 let currentSpeechSessionId = 0;
+let sharedPlaybackAudio: HTMLAudioElement | null = null;
 let currentAudioElement: HTMLAudioElement | null = null;
 let currentBlobUrl: string | null = null;
 let currentTtsAbortController: AbortController | null = null;
 let ttsAnalyserRaf: number | null = null;
 let isCloudAudioCancelled = false;
-/** Module-level anchor prevents Chrome/Edge from garbage-collecting active utterances mid-speech! */
+/** Module-level anchor prevents Chrome/Edge/WebKit from garbage-collecting active utterances mid-speech! */
 let activeUtterances: SpeechSynthesisUtterance[] = [];
 let speechStartTimer: ReturnType<typeof setTimeout> | null = null;
 let speechCancelDelayTimer: ReturnType<typeof setTimeout> | null = null;
 let lastSpeechCancelAt = 0;
 let audioUnlocked = false;
+let audioUnlockInFlight = false;
+let speechSynthesisUnlocked = false;
+let isPrimingSpeechSynthesis = false;
 let decodeEnvelopeCtx: AudioContext | null = null;
 
-// 44-byte valid silent 8kHz mono PCM WAV used once on first user gesture to unlock HTMLAudioElement autoplay
+// 44-byte valid silent PCM WAV used on user gesture to unlock the shared HTMLAudioElement on iOS/Android
 const SILENT_UNLOCK_WAV_URI =
   'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
 
 const cloudNaturalAudioCache = new Map<string, Blob>();
 const MAX_CLOUD_NATURAL_CACHE = 48;
 
-function isStaticHostWithoutTtsProxy(): boolean {
+export function isStaticHostWithoutTtsProxy(): boolean {
   if (typeof window === 'undefined') return false;
   const host = (window.location.hostname || '').toLowerCase();
   return host.endsWith('.github.io') || host.endsWith('.pages.dev');
+}
+
+export function isMobileBrowser(): boolean {
+  if (typeof navigator === 'undefined') return false;
+  const ua = navigator.userAgent || '';
+  return (
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(ua) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+  );
+}
+
+function isIOSWebKit(): boolean {
+  if (typeof navigator === 'undefined') return false;
+  const ua = navigator.userAgent || '';
+  return (
+    /iPad|iPhone|iPod/i.test(ua) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+  );
+}
+
+function normalizeLangTag(lang?: string, fallback: string = 'en-GB'): string {
+  const cleaned = (lang || '').trim().replace(/_/g, '-');
+  return cleaned || fallback;
+}
+
+/**
+ * Returns a single persistent, gesture-blessed HTMLAudioElement instance.
+ * iOS Safari / WebKit unlocks HTMLAudioElement playback per element instance rather than
+ * globally — reusing this blessed element allows async TTS playback after fetch/VAD/worker!
+ */
+function getSharedPlaybackAudio(): HTMLAudioElement {
+  if (!sharedPlaybackAudio) {
+    const a = new Audio();
+    a.preload = 'auto';
+    (a as any).playsInline = true;
+    try {
+      a.setAttribute('playsinline', 'true');
+      a.setAttribute('webkit-playsinline', 'true');
+    } catch {}
+    sharedPlaybackAudio = a;
+  }
+  return sharedPlaybackAudio;
+}
+
+function preparePlaybackAudio(src: string): HTMLAudioElement {
+  const audio = getSharedPlaybackAudio();
+  audio.onplay = null;
+  audio.onended = null;
+  audio.onerror = null;
+  audio.onstalled = null;
+  try {
+    if (!audio.paused) {
+      audio.pause();
+    }
+  } catch {}
+  audio.muted = false;
+  audio.volume = 1.0;
+  audio.playbackRate = 1.0;
+  audio.preload = 'auto';
+  audio.src = src;
+  currentAudioElement = audio;
+  return audio;
 }
 
 function cleanupTtsAnalyser(): void {
@@ -311,60 +377,112 @@ function clearSpeechTimers(): void {
 }
 
 /**
- * Call inside a user gesture (Orb tap / Speak click / Send) to warm up HTMLAudioElement & SpeechSynthesis
- * so subsequent async/hands-free AI replies are never silently blocked by browser autoplay policy.
+ * Call inside a real user gesture (`touchend` / `click` / `keydown`) to unlock BOTH:
+ *  1. The shared `HTMLAudioElement` singleton (for async Blob/stream TTS on iOS & Android)
+ *  2. `window.speechSynthesis` (iOS Safari drops async `speak()` calls unless primed in a tap!)
  */
 export function unlockAudioOutput(): void {
   if (typeof window === 'undefined') return;
-  if (!audioUnlocked) {
-    audioUnlocked = true;
+
+  if (!audioUnlocked && !audioUnlockInFlight && !currentAudioElement) {
+    audioUnlockInFlight = true;
     try {
-      const silentAudio = new Audio(SILENT_UNLOCK_WAV_URI);
-      silentAudio.volume = 0.01;
-      const p = silentAudio.play();
+      const audio = getSharedPlaybackAudio();
+      audio.muted = false;
+      audio.volume = 0.01;
+      audio.src = SILENT_UNLOCK_WAV_URI;
+      const p = audio.play();
       if (p !== undefined) {
         p.then(() => {
-          silentAudio.pause();
+          audioUnlocked = true;
+          audioUnlockInFlight = false;
+          if (currentAudioElement !== audio) {
+            try {
+              audio.pause();
+              audio.currentTime = 0;
+              audio.volume = 1.0;
+            } catch {}
+          }
         }).catch(() => {
-          audioUnlocked = false;
+          audioUnlockInFlight = false;
+          if (currentAudioElement !== audio) {
+            audioUnlocked = false;
+          }
         });
+      } else {
+        audioUnlocked = true;
+        audioUnlockInFlight = false;
       }
     } catch {
+      audioUnlockInFlight = false;
       audioUnlocked = false;
     }
-    try {
-      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
-      if (AudioCtx && !decodeEnvelopeCtx) {
-        decodeEnvelopeCtx = new AudioCtx();
-      }
-      if (decodeEnvelopeCtx && decodeEnvelopeCtx.state === 'suspended') {
-        decodeEnvelopeCtx.resume().catch(() => {});
-      }
-    } catch {}
   }
+
+  try {
+    const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+    if (AudioCtx && !decodeEnvelopeCtx) {
+      decodeEnvelopeCtx = new AudioCtx();
+    }
+    if (decodeEnvelopeCtx && decodeEnvelopeCtx.state === 'suspended') {
+      decodeEnvelopeCtx.resume().catch(() => {});
+    }
+  } catch {}
+
   if ('speechSynthesis' in window) {
     try {
       getBrowserVoices();
       if (window.speechSynthesis.paused) {
         window.speechSynthesis.resume();
       }
-    } catch {}
+      if (!speechSynthesisUnlocked && !isPrimingSpeechSynthesis) {
+        if (window.speechSynthesis.speaking) {
+          speechSynthesisUnlocked = true;
+        } else {
+          isPrimingSpeechSynthesis = true;
+          const warmUtt = new SpeechSynthesisUtterance(' ');
+          warmUtt.volume = 0;
+          warmUtt.rate = 2;
+          warmUtt.lang = 'en-US';
+          activeUtterances = [warmUtt];
+          const donePrime = () => {
+            isPrimingSpeechSynthesis = false;
+            speechSynthesisUnlocked = true;
+          };
+          warmUtt.onstart = () => {
+            speechSynthesisUnlocked = true;
+          };
+          warmUtt.onend = donePrime;
+          warmUtt.onerror = () => {
+            isPrimingSpeechSynthesis = false;
+          };
+          setTimeout(() => {
+            isPrimingSpeechSynthesis = false;
+          }, 180);
+          window.speechSynthesis.speak(warmUtt);
+        }
+      }
+    } catch {
+      isPrimingSpeechSynthesis = false;
+    }
   }
 }
 
-// Automatically unlock audio output on the first pointer/key/touch gesture anywhere in the app
+// Unlock audio on valid user-activation gestures (`touchend` / `click` / `keydown`).
+// Note: iOS Safari rejects `touchstart`/`pointerdown` for audio unlock and only accepts `touchend`/`click`!
 if (typeof window !== 'undefined') {
   const autoUnlock = () => {
-    unlockAudioOutput();
-    if (audioUnlocked) {
-      window.removeEventListener('pointerdown', autoUnlock);
-      window.removeEventListener('keydown', autoUnlock);
-      window.removeEventListener('touchstart', autoUnlock);
+    if (audioUnlocked && (speechSynthesisUnlocked || !('speechSynthesis' in window))) {
+      window.removeEventListener('touchend', autoUnlock, true);
+      window.removeEventListener('click', autoUnlock, true);
+      window.removeEventListener('keydown', autoUnlock, true);
+      return;
     }
+    unlockAudioOutput();
   };
-  window.addEventListener('pointerdown', autoUnlock, { passive: true });
-  window.addEventListener('keydown', autoUnlock, { passive: true });
-  window.addEventListener('touchstart', autoUnlock, { passive: true });
+  window.addEventListener('touchend', autoUnlock, { capture: true, passive: true });
+  window.addEventListener('click', autoUnlock, { capture: true, passive: true });
+  window.addEventListener('keydown', autoUnlock, { capture: true, passive: true });
 }
 
 export function stopAllSpeech(): void {
@@ -373,7 +491,9 @@ export function stopAllSpeech(): void {
   isCloudAudioCancelled = true;
   clearSpeechTimers();
   cleanupTtsAnalyser();
-  activeUtterances = [];
+  if (!isPrimingSpeechSynthesis) {
+    activeUtterances = [];
+  }
 
   if (currentTtsAbortController) {
     try { currentTtsAbortController.abort(); } catch {}
@@ -402,13 +522,17 @@ export function stopAllSpeech(): void {
 
   if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
     try {
-      // NEVER call speechSynthesis.pause() here — in Chrome/Edge on Windows it leaves
-      // the speech queue stuck paused and causes subsequent speak() calls to play silently!
-      if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
-        lastSpeechCancelAt = Date.now();
-        window.speechSynthesis.cancel();
-      } else if (window.speechSynthesis.paused) {
-        window.speechSynthesis.resume();
+      // Do NOT cancel the 10ms zero-volume gesture warm-up utterance — let it finish unlocking WebKit!
+      if (!isPrimingSpeechSynthesis) {
+        const shouldCancel =
+          window.speechSynthesis.speaking ||
+          (!isIOSWebKit() && window.speechSynthesis.pending);
+        if (shouldCancel) {
+          lastSpeechCancelAt = Date.now();
+          window.speechSynthesis.cancel();
+        } else if (window.speechSynthesis.paused) {
+          window.speechSynthesis.resume();
+        }
       }
     } catch {}
   }
@@ -567,12 +691,7 @@ function playNaturalCloudSpeech(
     const blobUrl = URL.createObjectURL(blob);
     currentBlobUrl = blobUrl;
 
-    const audio = new Audio();
-    audio.volume = 1.0;
-    audio.muted = false;
-    audio.preload = 'auto';
-    audio.src = blobUrl;
-    currentAudioElement = audio;
+    const audio = preparePlaybackAudio(blobUrl);
 
     if (effectiveRate && effectiveRate !== 1.0) {
       audio.playbackRate = Math.max(0.7, Math.min(1.4, effectiveRate));
@@ -591,6 +710,7 @@ function playNaturalCloudSpeech(
     };
 
     audio.onplay = () => {
+      audioUnlocked = true;
       if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) {
         audio.pause();
         return;
@@ -645,6 +765,13 @@ function resolveGuaranteedLocalVoice(): SpeechSynthesisVoice | null {
   );
 }
 
+/**
+ * Tiered Cross-Platform Browser SpeechSynthesis:
+ *  - fallbackTier 0: Preferred Natural / Siri / Enhanced / Google voice
+ *  - fallbackTier 1: Guaranteed `localService` English voice
+ *  - fallbackTier 2: Pure OS default system voice (`utterance.voice` omitted, BCP-47 `utterance.lang` only)
+ *    which rescues Android OEM & iOS WebKit engines when specific `SpeechSynthesisVoice` objects stall.
+ */
 function playBrowserSpeech(
   text: string,
   voiceURI: string,
@@ -655,7 +782,7 @@ function playBrowserSpeech(
     onEnd?: () => void;
     onError?: (err: any) => void;
   },
-  forceLocalOnly: boolean = false
+  fallbackTier: 0 | 1 | 2 = 0
 ): void {
   if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
     options.onError?.(new Error('Speech synthesis not supported'));
@@ -665,7 +792,9 @@ function playBrowserSpeech(
   const sessionId = ++currentSpeechSessionId;
   isCloudAudioCancelled = false;
   clearSpeechTimers();
-  activeUtterances = [];
+  if (!isPrimingSpeechSynthesis) {
+    activeUtterances = [];
+  }
 
   const chunks = splitIntoAudioChunks(text, 180);
   if (chunks.length === 0) {
@@ -676,15 +805,26 @@ function playBrowserSpeech(
   const storedSettings = loadVoiceSettings();
   const effectiveRate = options.rate ?? storedSettings.rate ?? 0.94;
   const effectivePitch = options.pitch ?? storedSettings.pitch ?? 1.0;
+  const defaultFallbackLang =
+    voiceURI === 'cloud-natural-us'
+      ? 'en-US'
+      : voiceURI === 'cloud-natural-au'
+      ? 'en-AU'
+      : isIOSWebKit()
+      ? 'en-US'
+      : 'en-GB';
 
-  // Only cancel if speechSynthesis is actively speaking/pending, and wait 65ms after any cancel()
-  // so Chromium's async cancel IPC NEVER swallows our newly queued utterance!
   try {
-    if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
-      lastSpeechCancelAt = Date.now();
-      window.speechSynthesis.cancel();
-    } else if (window.speechSynthesis.paused) {
-      window.speechSynthesis.resume();
+    if (!isPrimingSpeechSynthesis) {
+      const shouldCancel =
+        window.speechSynthesis.speaking ||
+        (!isIOSWebKit() && window.speechSynthesis.pending);
+      if (shouldCancel) {
+        lastSpeechCancelAt = Date.now();
+        window.speechSynthesis.cancel();
+      } else if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+      }
     }
   } catch {}
 
@@ -704,40 +844,43 @@ function playBrowserSpeech(
     utterance.pitch = effectivePitch;
     utterance.volume = 1.0;
 
-    const chosenVoice = forceLocalOnly
-      ? resolveGuaranteedLocalVoice()
-      : resolveVoice(voiceURI || storedSettings.voiceURI);
+    const chosenVoice =
+      fallbackTier === 2
+        ? null
+        : fallbackTier === 1
+        ? resolveGuaranteedLocalVoice()
+        : resolveVoice(voiceURI || storedSettings.voiceURI);
 
     if (chosenVoice) {
       utterance.voice = chosenVoice;
-      utterance.lang = chosenVoice.lang;
+      utterance.lang = normalizeLangTag(chosenVoice.lang, defaultFallbackLang);
     } else {
-      utterance.lang = 'en-GB';
+      utterance.lang = defaultFallbackLang;
     }
 
-    // Anchor utterance in module array so Chrome NEVER garbage-collects it mid-sentence!
+    // Anchor utterance in module array so Chrome/WebKit NEVER garbage-collects it mid-sentence!
     activeUtterances = [utterance];
 
     let started = false;
 
-    // Watchdog: if a remote browser voice (e.g. Google UK) stalls silently for >1.9s,
-    // automatically retry with a guaranteed local OS voice so the user ALWAYS hears audio!
     clearSpeechTimers();
     speechStartTimer = setTimeout(() => {
       if (!started && sessionId === currentSpeechSessionId && !isCloudAudioCancelled) {
-        if (!forceLocalOnly) {
+        if (fallbackTier < 2) {
           const remaining = chunks.slice(chunkIdx - 1).join(' ');
-          playBrowserSpeech(remaining, voiceURI, options, true);
+          const nextTier = (fallbackTier + 1) as 1 | 2;
+          playBrowserSpeech(remaining, voiceURI, options, nextTier);
         } else {
-          // Even local voice failed to start — cleanly exit Speaking state so orb never hangs!
           activeUtterances = [];
           try { window.speechSynthesis.cancel(); } catch {}
           options.onError?.(new Error('Browser speech failed to start'));
         }
       }
-    }, 1900);
+    }, fallbackTier === 0 ? 1500 : fallbackTier === 1 ? 1300 : 2200);
 
     utterance.onstart = () => {
+      speechSynthesisUnlocked = true;
+      isPrimingSpeechSynthesis = false;
       if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) {
         try { window.speechSynthesis.cancel(); } catch {}
         return;
@@ -761,10 +904,10 @@ function playBrowserSpeech(
       if (e.error === 'canceled' || e.error === 'interrupted') {
         return;
       }
-      // If a remote Google voice errored (e.g. synthesis-failed / network), retry with local OS voice!
-      if (!forceLocalOnly) {
+      if (fallbackTier < 2) {
         const remaining = chunks.slice(chunkIdx - 1).join(' ');
-        playBrowserSpeech(remaining, voiceURI, options, true);
+        const nextTier = (fallbackTier + 1) as 1 | 2;
+        playBrowserSpeech(remaining, voiceURI, options, nextTier);
         return;
       }
       activeUtterances = [];
@@ -783,7 +926,11 @@ function playBrowserSpeech(
   };
 
   const elapsedSinceCancel = Date.now() - lastSpeechCancelAt;
-  const settleWaitMs = elapsedSinceCancel < 70 ? 70 - elapsedSinceCancel : 0;
+  const requiredSettleMs = isIOSWebKit() ? 20 : 70;
+  const settleWaitMs =
+    lastSpeechCancelAt > 0 && elapsedSinceCancel < requiredSettleMs
+      ? requiredSettleMs - elapsedSinceCancel
+      : 0;
   if (settleWaitMs > 0) {
     speechCancelDelayTimer = setTimeout(() => {
       if (sessionId === currentSpeechSessionId && !isCloudAudioCancelled) {
@@ -1114,12 +1261,7 @@ export async function playFreeNeuralSpeech(
   const blobUrl = cachedBlob ? URL.createObjectURL(cachedBlob) : null;
   if (blobUrl) currentBlobUrl = blobUrl;
 
-  const audio = new Audio();
-  audio.volume = 1.0;
-  audio.muted = false;
-  audio.preload = 'auto';
-  audio.src = blobUrl || streamUrl;
-  currentAudioElement = audio;
+  const audio = preparePlaybackAudio(blobUrl || streamUrl);
 
   let hasStartedPlaying = false;
   let fallbackFired = false;
@@ -1154,6 +1296,7 @@ export async function playFreeNeuralSpeech(
   }
 
   audio.onplay = () => {
+    audioUnlocked = true;
     if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) {
       audio.pause();
       return;
@@ -1261,14 +1404,10 @@ export async function playKokoroSpeech(
   const blobUrl = URL.createObjectURL(wavBlob);
   currentBlobUrl = blobUrl;
 
-  const audio = new Audio();
-  audio.volume = 1.0;
-  audio.muted = false;
-  audio.preload = 'auto';
-  audio.src = blobUrl;
-  currentAudioElement = audio;
+  const audio = preparePlaybackAudio(blobUrl);
 
   audio.onplay = () => {
+    audioUnlocked = true;
     if (sessionId !== currentSpeechSessionId || isCloudAudioCancelled) {
       audio.pause();
       return;
@@ -1509,12 +1648,7 @@ export function createRealtimeTtsQueue(options: {
         return;
       }
 
-      const audio = new Audio();
-      audio.volume = 1.0;
-      audio.muted = false;
-      audio.preload = 'auto';
-      audio.src = url;
-      currentAudioElement = audio;
+      const audio = preparePlaybackAudio(url);
 
       let settled = false;
       let started = false;
@@ -1547,6 +1681,7 @@ export function createRealtimeTtsQueue(options: {
       }, 3400);
 
       audio.onplay = () => {
+        audioUnlocked = true;
         if (!isAlive()) {
           audio.pause();
           finishStream(false);
@@ -1584,12 +1719,7 @@ export function createRealtimeTtsQueue(options: {
       const blobUrl = URL.createObjectURL(blob);
       currentBlobUrl = blobUrl;
 
-      const audio = new Audio();
-      audio.volume = 1.0;
-      audio.muted = false;
-      audio.preload = 'auto';
-      audio.src = blobUrl;
-      currentAudioElement = audio;
+      const audio = preparePlaybackAudio(blobUrl);
 
       const cleanupUrl = () => {
         cleanupTtsAnalyser();
@@ -1602,6 +1732,7 @@ export function createRealtimeTtsQueue(options: {
       };
 
       audio.onplay = () => {
+        audioUnlocked = true;
         if (!isAlive()) {
           audio.pause();
           cleanupUrl();
@@ -1631,7 +1762,7 @@ export function createRealtimeTtsQueue(options: {
       });
     });
 
-  const playBrowserOnce = (text: string, forceLocal: boolean = false): Promise<void> =>
+  const playBrowserOnce = (text: string, fallbackTier: 0 | 1 | 2 = 0): Promise<void> =>
     new Promise((resolve) => {
       if (!isAlive() || typeof window === 'undefined' || !('speechSynthesis' in window)) {
         resolve();
@@ -1646,14 +1777,18 @@ export function createRealtimeTtsQueue(options: {
         const utt = new SpeechSynthesisUtterance(text);
         utt.rate = options.voiceConfig.rate || 1.0;
         utt.volume = 1.0;
-        const chosen = forceLocal
-          ? resolveGuaranteedLocalVoice()
-          : resolveVoice(options.voiceConfig.osVoiceURI || undefined);
+        const fallbackLang = isIOSWebKit() ? 'en-US' : 'en-GB';
+        const chosen =
+          fallbackTier === 2
+            ? null
+            : fallbackTier === 1
+            ? resolveGuaranteedLocalVoice()
+            : resolveVoice(options.voiceConfig.osVoiceURI || undefined);
         if (chosen) {
           utt.voice = chosen;
-          utt.lang = chosen.lang;
+          utt.lang = normalizeLangTag(chosen.lang, fallbackLang);
         } else {
-          utt.lang = 'en-GB';
+          utt.lang = fallbackLang;
         }
         activeUtterances = [utt];
         let started = false;
@@ -1666,24 +1801,27 @@ export function createRealtimeTtsQueue(options: {
         };
         const startGuard = setTimeout(() => {
           if (!started && !done && isAlive()) {
-            if (!forceLocal) {
+            if (fallbackTier < 2) {
               done = true;
               try {
                 lastSpeechCancelAt = Date.now();
                 window.speechSynthesis.cancel();
               } catch {}
-              void playBrowserOnce(text, true).then(resolve);
+              const nextTier = (fallbackTier + 1) as 1 | 2;
+              void playBrowserOnce(text, nextTier).then(resolve);
             } else {
               finish();
             }
           }
-        }, 2000);
+        }, fallbackTier === 0 ? 1500 : fallbackTier === 1 ? 1300 : 2200);
         const watchdog = setTimeout(() => {
           clearTimeout(startGuard);
           finish();
         }, 14000);
         utt.onstart = () => {
           started = true;
+          speechSynthesisUnlocked = true;
+          isPrimingSpeechSynthesis = false;
           clearTimeout(startGuard);
           markFirstAudio('browser-speech');
           if (!startedOnce) {
@@ -1700,9 +1838,10 @@ export function createRealtimeTtsQueue(options: {
         utt.onerror = (e) => {
           clearTimeout(startGuard);
           clearTimeout(watchdog);
-          if (!forceLocal && e.error !== 'canceled' && e.error !== 'interrupted' && isAlive()) {
+          if (fallbackTier < 2 && e.error !== 'canceled' && e.error !== 'interrupted' && isAlive()) {
             done = true;
-            void playBrowserOnce(text, true).then(resolve);
+            const nextTier = (fallbackTier + 1) as 1 | 2;
+            void playBrowserOnce(text, nextTier).then(resolve);
             return;
           }
           finish();
@@ -1718,8 +1857,9 @@ export function createRealtimeTtsQueue(options: {
       };
 
       const elapsed = Date.now() - lastSpeechCancelAt;
-      if (elapsed < 70) {
-        setTimeout(runSpeak, 70 - elapsed);
+      const requiredSettleMs = isIOSWebKit() ? 20 : 70;
+      if (lastSpeechCancelAt > 0 && elapsed < requiredSettleMs) {
+        setTimeout(runSpeak, requiredSettleMs - elapsed);
       } else {
         runSpeak();
       }
